@@ -1,0 +1,11 @@
+{
+  "atualizado_em": "2026-07-31",
+  "registros": [
+    {"indicador": "Selic", "referencia": "R5/2026", "data_coleta": "2026-07-24", "mediana": 13.75, "media": 13.80, "minimo": 13.50, "maximo": 14.00, "desvio_padrao": 0.10, "num_respondentes": 148},
+    {"indicador": "Selic", "referencia": "R5/2026", "data_coleta": "2026-07-31", "mediana": 14.00, "media": 14.02, "minimo": 13.75, "maximo": 14.25, "desvio_padrao": 0.07, "num_respondentes": 151},
+    {"indicador": "IPCA", "referencia": "2026", "data_coleta": "2026-07-24", "mediana": 5.15, "media": 5.14, "minimo": 4.40, "maximo": 5.70, "desvio_padrao": 0.23, "num_respondentes": 150},
+    {"indicador": "IPCA", "referencia": "2026", "data_coleta": "2026-07-31", "mediana": 5.03, "media": 5.02, "minimo": 4.30, "maximo": 5.62, "desvio_padrao": 0.22, "num_respondentes": 152},
+    {"indicador": "Câmbio", "referencia": "2026", "data_coleta": "2026-07-24", "mediana": 5.25, "media": 5.24, "minimo": 4.85, "maximo": 5.65, "desvio_padrao": 0.13, "num_respondentes": 118},
+    {"indicador": "Câmbio", "referencia": "2026", "data_coleta": "2026-07-31", "mediana": 5.20, "media": 5.20, "minimo": 4.85, "maximo": 5.60, "desvio_padrao": 0.13, "num_respondentes": 122}
+  ]
+}
