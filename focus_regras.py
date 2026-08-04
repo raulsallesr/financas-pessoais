@@ -26,6 +26,22 @@ _ANALOGIAS = {
         "mercadoria estrangeira, ele sobe quando há mais gente querendo "
         "comprar dólar do que vender."
     ),
+    "PIB Total": (
+        "O PIB mede o tamanho da economia: pense nele como o 'bolo' que o "
+        "país inteiro produz em um ano -- quando a expectativa de "
+        "crescimento sobe, o bolo esperado para este ano fica maior."
+    ),
+    "IGP-M": (
+        "O IGP-M é outro termômetro de preços, mas olha mais para o atacado "
+        "e o câmbio -- é o índice mais usado para reajustar contrato de "
+        "aluguel, e pode se mover de forma bem diferente do IPCA."
+    ),
+    "Dívida líquida do setor público": (
+        "Pense nisso como o cartão de crédito do país: mostra quanto o "
+        "governo deve, em proporção a tudo que o país produz (o PIB) -- "
+        "quanto maior essa conta, mais caro costuma ficar para o governo "
+        "tomar dinheiro emprestado."
+    ),
 }
 
 

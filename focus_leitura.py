@@ -100,6 +100,9 @@ def buscar_leituras_atuais(ano_referencia: int | None = None) -> list[LeituraInd
         buscar_selic_proxima_reuniao(),
         buscar_anual("IPCA", ano),
         buscar_anual("Câmbio", ano),
+        buscar_anual("PIB Total", ano),
+        buscar_anual("IGP-M", ano),
+        buscar_anual("Dívida líquida do setor público", ano),
     ]
 
 

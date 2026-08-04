@@ -45,3 +45,27 @@ def test_efeitos_indicador_desconhecido_retorna_vazio():
 
 def test_efeitos_direcao_estavel_nao_cadastrada_retorna_vazio():
     assert efeitos_por_indicador("Selic", Direcao.ESTAVEL) == []
+
+
+def test_efeitos_pib_total_subiu_favorece_bolsa():
+    efeitos = efeitos_por_indicador("PIB Total", Direcao.SUBIU)
+    classes = {efeito.classe: efeito.sentido for efeito in efeitos}
+    assert classes[ClasseAtivo.BOLSA] == "positivo"
+
+
+def test_efeitos_pib_total_caiu_prejudica_bolsa():
+    efeitos = efeitos_por_indicador("PIB Total", Direcao.CAIU)
+    classes = {efeito.classe: efeito.sentido for efeito in efeitos}
+    assert classes[ClasseAtivo.BOLSA] == "negativo"
+
+
+def test_efeitos_divida_publica_subiu_pressiona_cambio_e_prefixado():
+    efeitos = efeitos_por_indicador("Dívida líquida do setor público", Direcao.SUBIU)
+    classes = {efeito.classe: efeito.sentido for efeito in efeitos}
+    assert classes[ClasseAtivo.CAMBIO] == "positivo"
+    assert classes[ClasseAtivo.PRE_FIXADO] == "negativo"
+
+
+def test_efeitos_igpm_nao_tem_regra_de_classe_de_ativo():
+    assert efeitos_por_indicador("IGP-M", Direcao.SUBIU) == []
+    assert efeitos_por_indicador("IGP-M", Direcao.CAIU) == []

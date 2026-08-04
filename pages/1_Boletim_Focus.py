@@ -9,7 +9,7 @@ import pandas as pd
 import streamlit as st
 
 from financas_taxonomia import UNIDADE_INDICADOR
-from focus_data import comparar, leitura_anterior, leitura_mais_recente
+from focus_data import comparar, leitura_anterior, leitura_mais_recente, serie_historica
 from focus_leitura import ErroBuscaFocus, atualizar_e_obter_historico, carregar_cache
 from focus_regras import explicar_leigo, resumo_efeitos
 
@@ -76,6 +76,30 @@ for comparativo in comparativos:
             for efeito in efeitos:
                 icone = {"positivo": "🟢", "negativo": "🔴", "neutro": "⚪"}.get(efeito.sentido, "⚪")
                 st.markdown(f"- {icone} **{efeito.classe.value}**: {efeito.explicacao}")
+
+st.subheader("Como evoluiu nas últimas semanas")
+for indicador in indicadores:
+    serie = serie_historica(historico, indicador)
+    unidade = UNIDADE_INDICADOR.get(indicador, "")
+    st.caption(f"{indicador} ({unidade})")
+    if len(serie) < 2:
+        st.caption(
+            "Ainda não há histórico suficiente (pelo menos 2 atualizações) "
+            "para mostrar uma tendência aqui."
+        )
+        continue
+    df_serie = pd.DataFrame(
+        {"mediana": [leitura.mediana for leitura in serie]},
+        index=[leitura.data_coleta for leitura in serie],
+    )
+    st.line_chart(df_serie)
+    if indicador == "Selic":
+        st.caption(
+            "A 'próxima reunião do Copom' muda com o tempo -- quando o "
+            "Copom se reúne, a linha pode dar um salto que não é uma "
+            "mudança real de expectativa, e sim a troca de qual reunião "
+            "está sendo observada."
+        )
 
 st.subheader("Tabela detalhada")
 linhas_tabela = [

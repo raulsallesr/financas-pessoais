@@ -83,6 +83,28 @@ def test_erro_de_rede_gera_erro_busca_focus(mock_get):
         pass
 
 
+@patch("focus_leitura.requests.get")
+def test_buscar_anual_codifica_indicador_acentuado_corretamente(mock_get):
+    mock_get.return_value.raise_for_status.return_value = None
+    mock_get.return_value.json.return_value = {
+        "value": [
+            {
+                "Indicador": "Dívida líquida do setor público", "Data": "2026-07-31",
+                "Media": 69.968, "Mediana": 69.9, "DesvioPadrao": 1.1321,
+                "Minimo": 66.0, "Maximo": 73.9, "numeroRespondentes": 58,
+            },
+        ]
+    }
+    leitura = focus_leitura.buscar_anual("Dívida líquida do setor público", 2026)
+
+    url_chamada = mock_get.call_args.args[0]
+    assert "+" not in url_chamada  # a API do BACEN rejeita "+" como espaço
+    assert "%20" in url_chamada  # espaços sempre como %20
+    assert "%C3%AD" in url_chamada  # "í" corretamente percent-encoded
+    assert leitura.mediana == 69.9
+    assert leitura.referencia == "2026"
+
+
 def test_carregar_cache_sem_arquivo_retorna_lista_vazia(tmp_path, monkeypatch):
     monkeypatch.setattr(focus_leitura, "CACHE_PATH", tmp_path / "nao_existe.json")
     assert focus_leitura.carregar_cache() == []

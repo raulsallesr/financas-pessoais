@@ -66,3 +66,14 @@ def leitura_anterior(
     if not candidatos:
         return None
     return max(candidatos, key=lambda leitura: leitura.data_coleta)
+
+
+def serie_historica(historico: list[LeituraIndicador], indicador: str) -> list[LeituraIndicador]:
+    """Todas as leituras de um indicador, ordenadas por data de coleta (para gráfico de tendência).
+
+    Não filtra por `referencia`: para a Selic, a "próxima reunião do Copom"
+    muda com o tempo, então a série mostra a leitura mais próxima disponível
+    em cada semana, não uma única reunião fixa do início ao fim.
+    """
+    leituras = [leitura for leitura in historico if leitura.indicador == indicador]
+    return sorted(leituras, key=lambda leitura: leitura.data_coleta)

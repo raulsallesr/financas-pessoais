@@ -1,6 +1,6 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1 pronto e validado ponta a ponta — 2026-08-03
+- **Status**: v1.1 pronto e validado ponta a ponta — 2026-08-04
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
   (`https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata`),
@@ -34,22 +34,41 @@
 
 ## Estado atual
 
-- v1 implementado: Selic (próxima reunião do Copom), IPCA e câmbio (ano
+- v1 (2026-08-03): Selic (próxima reunião do Copom), IPCA e câmbio (ano
   corrente), comparação semana-a-semana, narrativa e efeitos por classe de
-  ativo.
-- Endpoints e campos confirmados ao vivo em 2026-08-03 via curl:
-  `ExpectativasMercadoSelic` (campo `Reuniao`, ex. `"R5/2026"`) e
-  `ExpectativasMercadoAnuais` (campo `DataReferencia`, ex. `"2026"`);
-  `baseCalculo=0` = todos os respondentes (o número usado no Boletim Focus
-  oficial).
-- 30 testes pytest passando; app testado ao vivo no navegador (Selic 14,00%,
-  IPCA 5,03%, Câmbio R$5,20 em 2026-08-03 — bate com o print manual que já
-  existia no deck antigo do hub da Fits).
-- **Bug encontrado e corrigido na validação**: a API da BACEN (Olinda) não
-  decodifica corretamente o `+` que a biblioteca `requests` usa por padrão
-  para espaços em query params — devolve 400 ("types not compatible") mesmo
-  em filtros OData válidos. `focus_leitura._get()` agora monta a query string
-  manualmente com `urllib.parse.quote` (força `%20`).
+  ativo. Endpoints confirmados ao vivo via curl: `ExpectativasMercadoSelic`
+  (campo `Reuniao`, ex. `"R5/2026"`) e `ExpectativasMercadoAnuais` (campo
+  `DataReferencia`, ex. `"2026"`); `baseCalculo=0` = todos os respondentes.
+  **Bug encontrado e corrigido**: a API do BACEN (Olinda) não decodifica
+  corretamente o `+` que a lib `requests` usa por padrão para espaços em
+  query params — devolve 400 ("types not compatible") mesmo em filtros OData
+  válidos. `focus_leitura._get()` monta a query string manualmente com
+  `urllib.parse.quote` (força `%20`).
+- **v1.1 (2026-08-04)** — higiene + série histórica + mais indicadores:
+  - `.venv` dedicado criado (o projeto rodava contra o Python global da
+    máquina, com dezenas de libs não relacionadas — risco de dependência
+    cruzada). Ver "Como rodar" no README.
+  - Primeiro commit git feito (baseline v1), segundo commit com esta v1.1.
+  - `focus_data.serie_historica()` + seção "Como evoluiu nas últimas
+    semanas" em `pages/1_Boletim_Focus.py` (um `st.line_chart` por
+    indicador, com aviso específico de que a "próxima reunião do Copom" da
+    Selic muda com o tempo e pode gerar um salto que não é mudança real de
+    expectativa).
+  - 3 indicadores novos: `PIB Total`, `IGP-M`, `Dívida líquida do setor
+    público` (confirmados ao vivo via curl no endpoint
+    `ExpectativasMercadoAnuais`). `IGP-M` deliberadamente **sem** regra de
+    efeito por classe de ativo em `motor_indicadores.py` — não tem uma
+    relação direta e didaticamente honesta com nenhuma das 5 classes atuais
+    (ele indexa aluguel, não título público); a UI já trata lista de
+    efeitos vazia sem quebrar.
+  - Auditoria em 2026-08-04 confirmou que as "modificações do Codex" que o
+    Raul mencionou não estão neste repositório (byte-a-byte idêntico ao v1)
+    — decisão dele foi seguir com as melhorias sem investigar isso.
+  - 37 testes pytest passando (30 do v1 + 7 novos); testado ao vivo (Selic
+    14,00%, IPCA 5,03%, Câmbio R$5,20, PIB Total 1,99%, IGP-M 4,54%, Dívida
+    líquida 69,90% do PIB em 2026-08-04) e o gráfico de série histórica
+    confirmado com um snapshot sintético de 2 semanas (removido depois —
+    cache real fica só com dados reais).
 
 ## Bloqueios
 
@@ -57,11 +76,10 @@
 
 ## Próximos passos
 
-- [ ] Rodar `git add` + primeiro commit (feito localmente, mas o commit em si
-      fica a critério do Raul).
-- [ ] v2: mais indicadores (PIB, IGP-M), gráfico de série histórica.
 - [ ] Página de carteira (organizar investimentos reais do usuário).
 - [ ] Calculadora de projeção de rentabilidade (juros compostos, aportes).
+- [ ] Deploy público (Streamlit Community Cloud) — avaliado e descartado por
+      ora; reconsiderar se o uso semanal justificar acesso do celular.
 
 ## Conceitos relacionados
 

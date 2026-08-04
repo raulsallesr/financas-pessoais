@@ -132,6 +132,51 @@ _REGRAS = {
             "como um todo.",
         ),
     ],
+    ("PIB Total", Direcao.SUBIU): [
+        EfeitoClasseAtivo(
+            ClasseAtivo.BOLSA, "positivo",
+            "Quando a expectativa de crescimento da economia sobe, as "
+            "empresas listadas tendem a faturar e lucrar mais, o que "
+            "historicamente favorece a bolsa.",
+        ),
+    ],
+    ("PIB Total", Direcao.CAIU): [
+        EfeitoClasseAtivo(
+            ClasseAtivo.BOLSA, "negativo",
+            "Quando a expectativa de crescimento da economia cai, o "
+            "faturamento e os lucros futuros das empresas listadas tendem a "
+            "ficar mais fracos, um vento contrário historicamente para a "
+            "bolsa.",
+        ),
+    ],
+    ("Dívida líquida do setor público", Direcao.SUBIU): [
+        EfeitoClasseAtivo(
+            ClasseAtivo.CAMBIO, "positivo",
+            "Uma dívida pública maior do que o esperado tende a aumentar a "
+            "percepção de risco do país, o que historicamente pressiona o "
+            "dólar para cima.",
+        ),
+        EfeitoClasseAtivo(
+            ClasseAtivo.PRE_FIXADO, "negativo",
+            "Mais risco fiscal tende a fazer o mercado exigir uma taxa maior "
+            "para financiar o governo por muitos anos, o que pressiona o "
+            "preço dos prefixados para baixo.",
+        ),
+    ],
+    ("Dívida líquida do setor público", Direcao.CAIU): [
+        EfeitoClasseAtivo(
+            ClasseAtivo.CAMBIO, "negativo",
+            "Uma dívida pública menor do que o esperado tende a reduzir a "
+            "percepção de risco do país, historicamente um alívio para o "
+            "dólar.",
+        ),
+        EfeitoClasseAtivo(
+            ClasseAtivo.PRE_FIXADO, "positivo",
+            "Menos risco fiscal tende a permitir que o governo se financie "
+            "por muitos anos a uma taxa menor, o que favorece o preço dos "
+            "prefixados.",
+        ),
+    ],
 }
 
 

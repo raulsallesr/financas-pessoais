@@ -5,7 +5,14 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from financas_taxonomia import Direcao
-from focus_data import LeituraIndicador, calcular_delta, comparar, leitura_anterior, leitura_mais_recente
+from focus_data import (
+    LeituraIndicador,
+    calcular_delta,
+    comparar,
+    leitura_anterior,
+    leitura_mais_recente,
+    serie_historica,
+)
 
 
 def _leitura(mediana, dias_atras=0, indicador="Selic", referencia="R5/2026"):
@@ -91,3 +98,19 @@ def test_leitura_anterior_ignora_indicador_diferente():
     ]
     atual = historico[1]
     assert leitura_anterior(historico, atual) is None
+
+
+def test_serie_historica_ordena_por_data_e_filtra_indicador():
+    historico = [
+        _leitura(14.0, dias_atras=0, indicador="Selic", referencia="R5/2026"),
+        _leitura(5.0, dias_atras=0, indicador="IPCA", referencia="2026"),
+        _leitura(13.5, dias_atras=14, indicador="Selic", referencia="R5/2026"),
+        _leitura(13.75, dias_atras=7, indicador="Selic", referencia="R5/2026"),
+    ]
+    serie = serie_historica(historico, "Selic")
+    assert [leitura.mediana for leitura in serie] == [13.5, 13.75, 14.0]
+
+
+def test_serie_historica_indicador_sem_leituras_retorna_lista_vazia():
+    historico = [_leitura(5.0, indicador="IPCA", referencia="2026")]
+    assert serie_historica(historico, "Selic") == []

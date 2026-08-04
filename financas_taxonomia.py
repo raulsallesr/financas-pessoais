@@ -26,4 +26,7 @@ UNIDADE_INDICADOR = {
     "Selic": "% a.a.",
     "IPCA": "% no ano",
     "Câmbio": "R$",
+    "PIB Total": "% no ano",
+    "IGP-M": "% no ano",
+    "Dívida líquida do setor público": "% do PIB",
 }

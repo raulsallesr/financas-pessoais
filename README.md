@@ -5,15 +5,20 @@ começando pelo **Boletim Focus** do Banco Central — a pesquisa semanal de
 expectativas de mercado (Selic, IPCA, câmbio, PIB...) publicada toda
 segunda-feira.
 
-## O que faz hoje (v1)
+## O que faz hoje (v1.1)
 
-- Busca Selic, IPCA e câmbio direto da API pública do BACEN (Sistema de
-  Expectativas de Mercado / Olinda), sem precisar de PDF nem chave de acesso.
+- Busca Selic, IPCA, câmbio, PIB Total, IGP-M e dívida líquida do setor
+  público direto da API pública do BACEN (Sistema de Expectativas de Mercado
+  / Olinda), sem precisar de PDF nem chave de acesso.
 - Compara a leitura mais recente com a semana anterior.
+- Mostra um gráfico de série histórica por indicador (evolução ao longo de
+  todas as semanas já salvas no cache local).
 - Explica em linguagem simples, com analogias, o que mudou.
 - Mostra efeitos historicamente esperados por classe de investimento
   (pós-fixado, prefixado, IPCA+, bolsa, câmbio) — conteúdo educacional, não é
-  recomendação de investimento personalizada.
+  recomendação de investimento personalizada. IGP-M não tem efeito mapeado de
+  propósito (não tem uma relação direta e didaticamente honesta com nenhuma
+  das classes atuais).
 
 ## Como rodar
 
@@ -29,10 +34,9 @@ Depois abra a página "Boletim Focus" na barra lateral e clique em
 
 ## Roadmap
 
-- v2: mais indicadores (PIB, IGP-M, dívida pública), gráfico de série
-  histórica.
 - Depois: página de carteira (organizar seus investimentos) e calculadora de
   projeção de rentabilidade (juros compostos, aportes).
+- Avaliado e descartado por ora: deploy público (Streamlit Community Cloud).
 
 ## Fonte oficial dos dados
 
