@@ -5,32 +5,46 @@ começando pelo **Boletim Focus** do Banco Central — a pesquisa semanal de
 expectativas de mercado (Selic, IPCA, câmbio, PIB...) publicada toda
 segunda-feira.
 
-## O que faz hoje (v1.1)
+## O que faz hoje (v1.3)
 
 - Busca Selic, IPCA, câmbio, PIB Total, IGP-M e dívida líquida do setor
   público direto da API pública do BACEN (Sistema de Expectativas de Mercado
   / Olinda), sem precisar de PDF nem chave de acesso.
-- Compara a leitura mais recente com a semana anterior.
-- Mostra um gráfico de série histórica por indicador (evolução ao longo de
-  todas as semanas já salvas no cache local).
-- Explica em linguagem simples, com analogias, o que mudou.
+- Resume primeiro o que mais importa: Selic, IPCA e câmbio, com comparação
+  entre as duas datas disponíveis e destaque para a principal mudança.
+- Permite explorar os impactos por classe de investimento e escolher qual
+  série histórica visualizar; indicadores secundários, explicações e dados
+  completos ficam disponíveis sob demanda.
 - Mostra efeitos historicamente esperados por classe de investimento
   (pós-fixado, prefixado, IPCA+, bolsa, câmbio) — conteúdo educacional, não é
-  recomendação de investimento personalizada. IGP-M não tem efeito mapeado de
-  propósito (não tem uma relação direta e didaticamente honesta com nenhuma
-  das classes atuais).
+  recomendação personalizada.
+- Reúne três manchetes relevantes de InfoMoney e Brazil Journal via RSS, com
+  cache, deduplicação e fallback independente por fonte. O app exibe apenas
+  título, fonte, horário e link para a publicação original.
 
 ## Como rodar
 
+Desde 2026-08-04 este projeto mora dentro do hub da Fits, que é uma pasta
+sincronizada pelo OneDrive. **Crie o `.venv` fora dessa árvore** — instalar
+pacotes com o `.venv` dentro de uma pasta sincronizada pode travar no meio
+(o OneDrive intercepta rename/hardlink que o `pip` usa para instalar cada
+wheel, e a instalação quebra com `AssertionError` ou termina faltando
+módulo):
+
 ```
-python -m venv .venv
-.venv\Scripts\activate
+python -m venv "%USERPROFILE%\.venvs\financas-pessoais"
+%USERPROFILE%\.venvs\financas-pessoais\Scripts\activate
 pip install -r requirements.txt
 streamlit run app_financas.py
 ```
 
+(No PowerShell, ative com
+`& "$env:USERPROFILE\.venvs\financas-pessoais\Scripts\Activate.ps1"`.) O
+`cd` continua sendo a pasta deste projeto — só o `.venv` em si vive fora do
+OneDrive.
+
 Depois abra a página "Boletim Focus" na barra lateral e clique em
-"Atualizar com dados mais recentes".
+"Atualizar dados".
 
 ## Trabalhando de mais de uma máquina (casa + trabalho)
 

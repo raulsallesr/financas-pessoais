@@ -49,6 +49,8 @@ def test_explicar_leigo_com_alta():
     comparativo = comparar(atual, anterior)
     texto = explicar_leigo(comparativo)
     assert "subiu" in texto
+    assert "entre 24/07/2026 e 31/07/2026" in texto
+    assert "esta semana" not in texto
     assert not VERBOS_PROIBIDOS.search(texto)
 
 

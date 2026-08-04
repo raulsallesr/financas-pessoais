@@ -42,7 +42,11 @@ def calcular_delta(atual: LeituraIndicador, anterior: LeituraIndicador | None) -
 
 def comparar(atual: LeituraIndicador, anterior: LeituraIndicador | None) -> ComparativoIndicador:
     delta = calcular_delta(atual, anterior)
-    direcao = classificar_direcao(delta) if anterior is not None else Direcao.ESTAVEL
+    direcao = (
+        classificar_direcao(delta, atual.indicador)
+        if anterior is not None
+        else Direcao.ESTAVEL
+    )
     return ComparativoIndicador(atual=atual, anterior=anterior, delta=delta, direcao=direcao)
 
 

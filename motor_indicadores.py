@@ -13,7 +13,15 @@ from dataclasses import dataclass
 
 from financas_taxonomia import ClasseAtivo, Direcao
 
-LIMIAR_ESTAVEL = 0.05  # variação abaixo disso não muda a leitura de direção
+LIMIAR_ESTAVEL_PADRAO = 0.05
+LIMIARES_ESTAVEL = {
+    "Selic": 0.10,
+    "IPCA": 0.05,
+    "Câmbio": 0.05,
+    "PIB Total": 0.05,
+    "IGP-M": 0.10,
+    "Dívida líquida do setor público": 0.25,
+}
 
 
 @dataclass(frozen=True)
@@ -44,10 +52,11 @@ _REGRAS = {
             "historicamente um vento contrário para a bolsa no curto prazo.",
         ),
         EfeitoClasseAtivo(
-            ClasseAtivo.CAMBIO, "positivo",
+            ClasseAtivo.CAMBIO, "negativo",
             "Um juro doméstico mais alto tende a atrair capital estrangeiro "
             "em busca de retorno, o que historicamente pressiona o real a se "
-            "valorizar frente ao dólar.",
+            "valorizar frente ao dólar e pode reduzir, em reais, o valor de "
+            "uma exposição comprada em moeda estrangeira.",
         ),
     ],
     ("Selic", Direcao.CAIU): [
@@ -68,18 +77,20 @@ _REGRAS = {
             "historicamente tende a favorecer a renda variável.",
         ),
         EfeitoClasseAtivo(
-            ClasseAtivo.CAMBIO, "negativo",
+            ClasseAtivo.CAMBIO, "positivo",
             "Juro doméstico mais baixo tende a reduzir o atrativo do real "
             "para capital estrangeiro, historicamente pressionando o dólar "
-            "para cima.",
+            "para cima e elevando, em reais, o valor de uma exposição "
+            "comprada em moeda estrangeira.",
         ),
     ],
     ("IPCA", Direcao.SUBIU): [
         EfeitoClasseAtivo(
-            ClasseAtivo.IPCA_MAIS, "positivo",
-            "Com a expectativa de inflação subindo, títulos atrelados ao "
-            "IPCA tendem a ficar mais procurados, porque protegem o poder de "
-            "compra de quem já está posicionado neles.",
+            ClasseAtivo.IPCA_MAIS, "neutro",
+            "No vencimento, o principal é corrigido pela inflação, mas o "
+            "preço do título no curto prazo depende também da taxa real "
+            "exigida pelo mercado. Inflação esperada maior, sozinha, não "
+            "define se a marcação a mercado sobe ou cai.",
         ),
         EfeitoClasseAtivo(
             ClasseAtivo.PRE_FIXADO, "negativo",
@@ -96,9 +107,11 @@ _REGRAS = {
     ],
     ("IPCA", Direcao.CAIU): [
         EfeitoClasseAtivo(
-            ClasseAtivo.IPCA_MAIS, "negativo",
-            "Com a expectativa de inflação caindo, a proteção extra do "
-            "IPCA+ tende a perder um pouco do apelo relativo.",
+            ClasseAtivo.IPCA_MAIS, "neutro",
+            "Inflação esperada menor reduz a correção projetada do principal "
+            "no vencimento, mas o preço no curto prazo depende também da "
+            "taxa real exigida pelo mercado. O efeito de marcação a mercado "
+            "continua misto.",
         ),
         EfeitoClasseAtivo(
             ClasseAtivo.PRE_FIXADO, "positivo",
@@ -180,10 +193,19 @@ _REGRAS = {
 }
 
 
-def classificar_direcao(delta: float) -> Direcao:
-    if delta > LIMIAR_ESTAVEL:
+def limiar_estavel(indicador: str | None = None) -> float:
+    if indicador is None:
+        return LIMIAR_ESTAVEL_PADRAO
+    return LIMIARES_ESTAVEL.get(indicador, LIMIAR_ESTAVEL_PADRAO)
+
+
+def classificar_direcao(
+    delta: float, indicador: str | None = None
+) -> Direcao:
+    limiar = limiar_estavel(indicador)
+    if delta > limiar:
         return Direcao.SUBIU
-    if delta < -LIMIAR_ESTAVEL:
+    if delta < -limiar:
         return Direcao.CAIU
     return Direcao.ESTAVEL
 

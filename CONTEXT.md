@@ -1,6 +1,6 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.2 (multi-máquina) pronto — 2026-08-04
+- **Status**: v1.3 (redesign Focus + contexto em manchetes) pronto — 2026-08-04
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -11,8 +11,22 @@
 
 ## Arquitetura
 
-- Projeto pessoal, **sem relação com FitBank/Fits** — repositório próprio,
-  separado do hub de tesouraria.
+- Projeto pessoal, **sem relação com FitBank/Fits** — repositório próprio
+  (git e remote independentes, `origin` continua
+  `https://github.com/raulsallesr/financas-pessoais.git`). Desde 2026-08-04
+  a pasta mora fisicamente dentro do hub da Fits
+  (`01_Projetos/Financas-Pessoais/`, movida de `Documents/financas-pessoais`)
+  para dar acesso de arquivo ao Codex; o `.gitignore` do hub ignora esta
+  pasta inteira.
+- **Fluxo de código (atualizado 2026-08-04): Claude e Codex escrevem direto,
+  com a mesma autorização** — sem brief, sem tier de risco, sem revisão do
+  Claude como porta de entrada; uma conversa direta com o Raul já autoriza.
+  Exceção permanente registrada em `AGENTS.md` do hub (seção "Exceção
+  permanente — `01_Projetos/Financas-Pessoais/`") e em `CLAUDE.md` deste
+  projeto. As restrições são usar só o git deste projeto (nunca o do hub) e
+  rodar os testes antes de considerar pronto. Commit e `git push` estão
+  permanentemente autorizados após o gate passar, sem nova confirmação a
+  cada tarefa (decisão explícita do Raul, 2026-08-04).
 - Streamlit multipage: `app_financas.py` é a home; `pages/1_Boletim_Focus.py`
   é a primeira feature. Nasce como hub multipage (não app isolado) porque a
   visão é crescer para carteira + calculadora de projeção mais adiante —
@@ -26,11 +40,18 @@
   - `focus_leitura.py` — adaptador da API Olinda + cache local em
     `dados/focus_cache.json`.
   - `focus_regras.py` — narrativa em linguagem simples + analogias.
+  - `focus_apresentacao.py` — priorização, destaques e formatação da camada
+    visual (sem Streamlit).
+  - `pagina_focus.py` — composição da experiência e dos estados da página;
+    `pages/1_Boletim_Focus.py` é apenas o entrypoint multipage.
+  - `ui_estilos.py` — tokens e CSS responsivo/acessível compartilhável.
+  - `noticias_data.py` — normalização, relevância, deduplicação e seleção
+    diversificada das manchetes (sem I/O).
+  - `noticias_feed.py` — adaptador RSS isolado para InfoMoney e Brazil
+    Journal, com timeout, limite de resposta, allowlist e fallback por fonte.
 - Guardrail de conteúdo: o motor de regras nunca recebe dados do usuário e
   nunca usa linguagem imperativa ("invista", "compre") — só descritiva/
   histórica. `tests/test_focus_regras.py` faz lint de vocabulário proibido.
-- Fluxo de código: Claude Code escreve direto (sem protocolo de brief/Codex
-  do hub da Fits — aqui é só o Raul).
 - **Multi-máquina (trabalho + casa)**: mesma conta Claude, mas sem memória de
   conversa compartilhada entre sessões/máquinas — o git é a única fonte de
   verdade. Por isso: `CLAUDE.md` (instruções fixas, lido automaticamente por
@@ -78,6 +99,27 @@
     líquida 69,90% do PIB em 2026-08-04) e o gráfico de série histórica
     confirmado com um snapshot sintético de 2 semanas (removido depois —
     cache real fica só com dados reais).
+- **v1.3 (2026-08-04)** — experiência em camadas + contexto externo:
+  - A página abre com uma síntese visual e somente os três indicadores
+    prioritários (Selic, IPCA e câmbio). Impactos por classe, um único
+    histórico selecionável, manchetes e detalhes formam as camadas seguintes;
+    tabela, indicadores secundários e explicações completas ficam recolhidos.
+  - Estados de impacto usam texto e cor, nunca cor isolada; estilos têm
+    contraste validado, foco visível, alvos de 44 px, suporte a tema
+    claro/escuro, redução de movimento e layout responsivo.
+  - Motor semântico corrigido: estabilidade usa limiar específico por
+    indicador; exposição cambial diante da Selic e títulos IPCA+ deixaram de
+    simplificar relações ambíguas; narrativa informa o intervalo exato entre
+    as leituras, sem assumir que houve atualização semanal.
+  - Feed RSS de InfoMoney + Brazil Journal exibe três manchetes relevantes
+    sem republicar conteúdo, com cache de 15 minutos, deduplicação, diversidade
+    de fontes, validação de URL e degradação independente. Integração ao vivo
+    confirmou 20 itens e nenhuma fonte indisponível em 2026-08-04.
+  - Streamlit fixado em `>=1.49,<1.57` para manter compatibilidade com o
+    caminho longo do projeto no OneDrive/Windows. Ambiente validado fora do
+    OneDrive em `%USERPROFILE%\.venvs\financas-pessoais`.
+  - Gate final: 50 testes pytest passando, incluindo `AppTest` da hierarquia,
+    gráfico único, manchetes e estados de fallback; `py_compile` limpo.
 
 ## Bloqueios
 

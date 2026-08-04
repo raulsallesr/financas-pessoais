@@ -30,19 +30,33 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
   recomendação personalizada. `tests/test_focus_regras.py` faz lint disso
   automaticamente; se adicionar indicador/regra nova, roda esse teste antes
   de considerar terminado.
-- Todo código roda dentro do `.venv` do projeto (`python -m venv .venv` —
-  precisa ser recriado em cada máquina, não é versionado) — nunca contra o
-  Python global.
-- Fluxo de código: Claude escreve direto. O protocolo de brief → Codex é
-  específico do hub interno da Fits, não se aplica aqui.
+- Todo código roda dentro de um `.venv` (precisa ser recriado em cada
+  máquina, não é versionado) — nunca contra o Python global. **Desde
+  2026-08-04 crie o `.venv` fora da pasta do projeto**, porque ela vive
+  dentro do hub sincronizado pelo OneDrive e instalar pacotes ali dentro
+  pode travar no meio (`pip` usa rename/hardlink para instalar wheels, o
+  OneDrive intercepta e a instalação quebra com `AssertionError`). Ver
+  "Como rodar" no `README.md` para o comando validado em
+  `%USERPROFILE%\.venvs\financas-pessoais`.
+- Fluxo de código: **Claude e Codex escrevem direto**, com a mesma
+  autorização — sem brief, sem tier de risco, sem porta de revisão prévia.
+  O protocolo de brief → Codex é específico do hub interno da Fits e não se
+  aplica aqui (decisão do Raul, 2026-08-04, exceção permanente registrada em
+  `AGENTS.md` do hub, seção "Exceção permanente —
+  `01_Projetos/Financas-Pessoais/`"). Uma conversa direta com o Raul já é
+  autorização suficiente para qualquer um dos dois editar este repositório.
+  Restrições que continuam valendo para os dois: usar só o git deste
+  projeto (nunca o do hub) e rodar os testes antes de considerar pronto.
+  Commit e `git push` estão permanentemente autorizados depois do gate
+  passar, sem nova confirmação a cada tarefa (decisão do Raul, 2026-08-04).
 
 ## Ao terminar qualquer tarefa
 
 1. Roda a suíte inteira (`pytest tests/`) antes de considerar pronto.
 2. Atualiza `CONTEXT.md` (o que mudou, por quê, o que ficou pra próxima) —
    é o que permite a outra máquina continuar sem essa conversa.
-3. Commit + `git push` (peça confirmação ao Raul antes do push, como em
-   qualquer repositório — ele decide o momento, mesmo sendo repo pessoal).
+3. Commit + `git push` no remote próprio do projeto; a autorização é
+   permanente e não precisa ser solicitada novamente.
 
 ## Onde queremos chegar
 

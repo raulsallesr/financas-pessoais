@@ -58,18 +58,28 @@ def explicar_leigo(comparativo: ComparativoIndicador) -> str:
 
     if comparativo.direcao == Direcao.ESTAVEL:
         return (
-            f"A expectativa de {indicador} ficou praticamente estável esta "
-            f"semana ({comparativo.atual.mediana:.2f}{unidade}, quase igual "
-            f"à leitura anterior). {analogia}"
+            f"A expectativa de {indicador} ficou praticamente estável "
+            f"{_intervalo_leituras(comparativo)} "
+            f"({comparativo.atual.mediana:.2f}{unidade}, quase igual à "
+            f"leitura anterior). {analogia}"
         )
 
     verbo = "subiu" if comparativo.direcao == Direcao.SUBIU else "caiu"
     return (
         f"A expectativa de {indicador} {verbo} de "
         f"{comparativo.anterior.mediana:.2f}{unidade} para "
-        f"{comparativo.atual.mediana:.2f}{unidade} esta semana. {analogia}"
+        f"{comparativo.atual.mediana:.2f}{unidade} "
+        f"{_intervalo_leituras(comparativo)}. {analogia}"
     )
 
 
 def resumo_efeitos(comparativo: ComparativoIndicador) -> list[EfeitoClasseAtivo]:
     return efeitos_por_indicador(comparativo.atual.indicador, comparativo.direcao)
+
+
+def _intervalo_leituras(comparativo: ComparativoIndicador) -> str:
+    if comparativo.anterior is None:
+        return ""
+    inicio = comparativo.anterior.data_coleta.strftime("%d/%m/%Y")
+    fim = comparativo.atual.data_coleta.strftime("%d/%m/%Y")
+    return f"entre {inicio} e {fim}"

@@ -62,6 +62,25 @@ def test_comparar_classifica_direcao_estavel():
     assert comparativo.direcao == Direcao.ESTAVEL
 
 
+def test_comparar_respeita_limiar_do_indicador():
+    atual_selic = _leitura(14.08, indicador="Selic")
+    anterior_selic = _leitura(
+        14.00, dias_atras=7, indicador="Selic"
+    )
+    atual_ipca = _leitura(
+        5.08, indicador="IPCA", referencia="2026"
+    )
+    anterior_ipca = _leitura(
+        5.00,
+        dias_atras=7,
+        indicador="IPCA",
+        referencia="2026",
+    )
+
+    assert comparar(atual_selic, anterior_selic).direcao == Direcao.ESTAVEL
+    assert comparar(atual_ipca, anterior_ipca).direcao == Direcao.SUBIU
+
+
 def test_comparar_sem_anterior_e_estavel():
     atual = _leitura(14.0)
     comparativo = comparar(atual, None)
