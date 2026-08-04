@@ -86,6 +86,11 @@ def test_pagina_focus_renderiza_hierarquia_e_um_unico_grafico():
         patch.object(
             pagina_focus, "_carregar_noticias", return_value=_noticias()
         ),
+        patch.object(
+            pagina_focus,
+            "data_ultima_atualizacao_cache",
+            return_value=date(2026, 8, 4),
+        ),
     ):
         app = AppTest.from_file(pagina, default_timeout=15).run()
 
@@ -103,3 +108,36 @@ def test_pagina_focus_renderiza_hierarquia_e_um_unico_grafico():
     ]
     assert len(app.get("vega_lite_chart")) == 1
     assert len(app.get("link_button")) == 3
+
+
+def test_pagina_focus_busca_primeiro_historico_automaticamente():
+    pagina = (
+        Path(__file__).resolve().parent.parent
+        / "pages"
+        / "1_Boletim_Focus.py"
+    )
+    with (
+        patch.object(pagina_focus, "carregar_cache", return_value=[]),
+        patch.object(
+            pagina_focus,
+            "data_ultima_atualizacao_cache",
+            return_value=None,
+        ),
+        patch.object(
+            pagina_focus,
+            "atualizar_e_obter_historico",
+            return_value=_historico(),
+        ) as atualizar,
+        patch.object(
+            pagina_focus, "_carregar_noticias", return_value=_noticias()
+        ),
+    ):
+        app = AppTest.from_file(pagina, default_timeout=15).run()
+
+    assert not app.exception
+    atualizar.assert_called_once_with()
+    assert [metrica.label for metrica in app.metric[:3]] == [
+        "Selic",
+        "IPCA",
+        "Câmbio",
+    ]

@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 import re
-from datetime import UTC
+from datetime import UTC, date
 from zoneinfo import ZoneInfo
 
 import pandas as pd
 import streamlit as st
 
 from financas_taxonomia import UNIDADE_INDICADOR
+from focus_atualizacao import (
+    avaliar_atualidade,
+    deve_verificar_automaticamente,
+)
 from focus_apresentacao import (
     INDICADORES_PRIORITARIOS,
     escolher_destaque,
@@ -28,8 +32,10 @@ from focus_data import (
 )
 from focus_leitura import (
     ErroBuscaFocus,
+    ErroCacheFocus,
     atualizar_e_obter_historico,
     carregar_cache,
+    data_ultima_atualizacao_cache,
 )
 from focus_regras import explicar_leigo, resumo_efeitos
 from noticias_data import Noticia, selecionar_destaques
@@ -145,22 +151,63 @@ def _renderizar_cabecalho() -> bool:
 
 
 def _obter_historico(atualizar: bool) -> list[LeituraIndicador]:
-    if not atualizar:
-        return carregar_cache()
+    try:
+        historico = carregar_cache()
+    except ErroCacheFocus:
+        historico = []
+        st.warning(
+            "O histórico local precisa ser reconstruído. O app tentará "
+            "buscar uma cópia íntegra no BACEN."
+        )
+
+    try:
+        ultima_verificacao = data_ultima_atualizacao_cache()
+    except ErroCacheFocus:
+        ultima_verificacao = None
+
+    hoje = date.today()
+    atualizar_automaticamente = (
+        not atualizar
+        and deve_verificar_automaticamente(ultima_verificacao, hoje)
+    )
+    if atualizar_automaticamente:
+        chave_tentativa = hoje.isoformat()
+        if st.session_state.get("focus_auto_tentado_em") == chave_tentativa:
+            return historico
+        st.session_state["focus_auto_tentado_em"] = chave_tentativa
+
+    if not atualizar and not atualizar_automaticamente:
+        return historico
+
+    mensagem = (
+        "Verificando automaticamente os dados mais recentes no BACEN..."
+        if atualizar_automaticamente
+        else "Buscando expectativas mais recentes no BACEN..."
+    )
     with st.spinner(
-        "Buscando expectativas mais recentes no BACEN...",
+        mensagem,
         show_time=True,
     ):
         try:
             historico = atualizar_e_obter_historico()
             st.toast(
-                "Dados do Focus atualizados.",
+                (
+                    "Dados do Focus verificados automaticamente."
+                    if atualizar_automaticamente
+                    else "Dados do Focus atualizados."
+                ),
                 icon=":material/check_circle:",
             )
             return historico
-        except ErroBuscaFocus as erro:
-            st.error(str(erro))
-            return carregar_cache()
+        except (ErroBuscaFocus, ErroCacheFocus) as erro:
+            if historico:
+                st.warning(
+                    "Não foi possível verificar o BACEN agora. "
+                    "Mantivemos a última coleta salva."
+                )
+            else:
+                st.error(str(erro))
+            return historico
 
 
 def _renderizar_resumo(
@@ -169,9 +216,16 @@ def _renderizar_resumo(
     data_mais_recente = max(
         comparativo.atual.data_coleta for comparativo in comparativos
     )
+    atualidade = avaliar_atualidade(data_mais_recente, date.today())
+    st.badge(
+        atualidade.rotulo,
+        icon=f":material/{atualidade.icone}:",
+        color=atualidade.cor,
+    )
     st.caption(
         f"Última coleta disponível: "
         f"{data_mais_recente.strftime('%d/%m/%Y')} · "
+        f"{atualidade.descricao} · "
         "Fonte oficial dos indicadores: Banco Central."
     )
     destaque = escolher_destaque(comparativos)

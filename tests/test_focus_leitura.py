@@ -8,7 +8,27 @@ import requests
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import focus_leitura
-from focus_leitura import ErroBuscaFocus, _chave_ordenacao_reuniao, _linha_para_leitura
+from focus_leitura import (
+    ErroBuscaFocus,
+    ErroCacheFocus,
+    _amostrar_uma_leitura_por_semana,
+    _chave_ordenacao_reuniao,
+    _linha_para_leitura,
+)
+
+
+def _linha(indicador, data_coleta, mediana=5.0, **campos):
+    return {
+        "Indicador": indicador,
+        "Data": data_coleta,
+        "Media": mediana,
+        "Mediana": mediana,
+        "DesvioPadrao": 0.1,
+        "Minimo": mediana - 0.2,
+        "Maximo": mediana + 0.2,
+        "numeroRespondentes": 100,
+        **campos,
+    }
 
 
 def test_chave_ordenacao_reuniao_ordena_cronologicamente():
@@ -122,3 +142,126 @@ def test_salvar_e_carregar_cache_ida_e_volta(tmp_path, monkeypatch):
     assert len(recarregado) == 1
     assert recarregado[0].mediana == 14.0
     assert recarregado[0].referencia == "R5/2026"
+    assert focus_leitura.data_ultima_atualizacao_cache() == date.today()
+    assert not list(tmp_path.glob(".focus_cache_*.tmp"))
+
+
+def test_cache_invalido_gera_erro_controlado(tmp_path, monkeypatch):
+    caminho = tmp_path / "focus_cache.json"
+    caminho.write_text("{incompleto", encoding="utf-8")
+    monkeypatch.setattr(focus_leitura, "CACHE_PATH", caminho)
+
+    try:
+        focus_leitura.carregar_cache()
+        assert False, "deveria ter levantado ErroCacheFocus"
+    except ErroCacheFocus:
+        pass
+
+
+def test_amostra_mantem_apenas_a_coleta_mais_recente_de_cada_semana():
+    linhas = [
+        _linha("IPCA", "2026-07-27", 5.1),
+        _linha("IPCA", "2026-07-31", 5.0),
+        _linha("IPCA", "2026-08-03", 4.9),
+        _linha("IPCA", "2026-08-04", 4.8),
+    ]
+    amostra = _amostrar_uma_leitura_por_semana(linhas, "2026", 12)
+
+    assert [leitura.data_coleta for leitura in amostra] == [
+        date(2026, 7, 31),
+        date(2026, 8, 4),
+    ]
+
+
+def test_buscar_historico_recente_traz_semanas_para_todos_indicadores():
+    selic_atual = _linha_para_leitura(
+        _linha("Selic", "2026-08-04", 14.0),
+        "R5/2026",
+    )
+
+    def resposta(endpoint, params):
+        filtro = params["$filter"]
+        if endpoint == "ExpectativasMercadoSelic":
+            return [
+                _linha("Selic", "2026-07-24", 13.75, Reuniao="R5/2026"),
+                _linha("Selic", "2026-07-31", 14.0, Reuniao="R5/2026"),
+                _linha("Selic", "2026-08-04", 14.0, Reuniao="R5/2026"),
+            ]
+        indicador = next(
+            item
+            for item in focus_leitura.INDICADORES_ANUAIS
+            if f"Indicador eq '{item}'" in filtro
+        )
+        return [
+            _linha(indicador, "2026-07-24", 4.8),
+            _linha(indicador, "2026-07-31", 4.9),
+            _linha(indicador, "2026-08-04", 5.0),
+        ]
+
+    with (
+        patch.object(
+            focus_leitura,
+            "buscar_selic_proxima_reuniao",
+            return_value=selic_atual,
+        ),
+        patch.object(focus_leitura, "_get", side_effect=resposta),
+    ):
+        historico = focus_leitura.buscar_historico_recente(
+            2026,
+            max_semanas=3,
+        )
+
+    assert len(historico) == 18
+    assert {
+        leitura.indicador for leitura in historico
+    } == {"Selic", *focus_leitura.INDICADORES_ANUAIS}
+
+
+def test_atualizacao_faz_backfill_quando_cache_ainda_nao_tem_historico():
+    leitura = _linha_para_leitura(
+        _linha("IPCA", "2026-08-04", 5.0),
+        "2026",
+    )
+    with (
+        patch.object(focus_leitura, "carregar_cache", return_value=[]),
+        patch.object(
+            focus_leitura,
+            "buscar_historico_recente",
+            return_value=[leitura],
+        ) as buscar,
+        patch.object(focus_leitura, "salvar_cache") as salvar,
+    ):
+        resultado = focus_leitura.atualizar_e_obter_historico()
+
+    assert resultado == [leitura]
+    buscar.assert_called_once_with()
+    salvar.assert_called_once_with([leitura])
+
+
+def test_atualizacao_retorna_historico_sem_duplicatas():
+    leitura = _linha_para_leitura(
+        _linha("IPCA", "2026-08-04", 5.0),
+        "2026",
+    )
+    historico = [leitura]
+    with (
+        patch.object(
+            focus_leitura,
+            "carregar_cache",
+            return_value=historico,
+        ),
+        patch.object(
+            focus_leitura,
+            "historico_precisa_backfill",
+            return_value=False,
+        ),
+        patch.object(
+            focus_leitura,
+            "buscar_leituras_atuais",
+            return_value=[leitura],
+        ),
+        patch.object(focus_leitura, "salvar_cache"),
+    ):
+        resultado = focus_leitura.atualizar_e_obter_historico()
+
+    assert resultado == [leitura]

@@ -1,6 +1,6 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.3 (redesign Focus + contexto em manchetes) pronto — 2026-08-04
+- **Status**: v1.4 (automação + histórico útil + home) pronto — 2026-08-04
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -37,6 +37,8 @@
   - `motor_indicadores.py` — motor genérico indicador+direção → efeito por
     classe de ativo (reaproveitável por features futuras).
   - `focus_data.py` — dataclasses e cálculo de delta/tendência (sem I/O).
+  - `focus_atualizacao.py` — regras puras de verificação automática e
+    diagnóstico da idade dos dados em dias úteis.
   - `focus_leitura.py` — adaptador da API Olinda + cache local em
     `dados/focus_cache.json`.
   - `focus_regras.py` — narrativa em linguagem simples + analogias.
@@ -44,11 +46,15 @@
     visual (sem Streamlit).
   - `pagina_focus.py` — composição da experiência e dos estados da página;
     `pages/1_Boletim_Focus.py` é apenas o entrypoint multipage.
+  - `pagina_home.py` — composição da home; `app_financas.py` é apenas o
+    entrypoint principal.
   - `ui_estilos.py` — tokens e CSS responsivo/acessível compartilhável.
   - `noticias_data.py` — normalização, relevância, deduplicação e seleção
     diversificada das manchetes (sem I/O).
   - `noticias_feed.py` — adaptador RSS isolado para InfoMoney e Brazil
     Journal, com timeout, limite de resposta, allowlist e fallback por fonte.
+  - `atualizar_focus_cache.py` — entrada sem Streamlit usada pela automação
+    agendada em `.github/workflows/atualizar-focus.yml`.
 - Guardrail de conteúdo: o motor de regras nunca recebe dados do usuário e
   nunca usa linguagem imperativa ("invista", "compre") — só descritiva/
   histórica. `tests/test_focus_regras.py` faz lint de vocabulário proibido.
@@ -120,17 +126,43 @@
     OneDrive em `%USERPROFILE%\.venvs\financas-pessoais`.
   - Gate final: 50 testes pytest passando, incluindo `AppTest` da hierarquia,
     gráfico único, manchetes e estados de fallback; `py_compile` limpo.
+- **v1.4 (2026-08-04)** — rotina autônoma e entrada mais clara:
+  - Ao abrir o panorama, o app verifica o BACEN no máximo uma vez por dia
+    útil; primeira execução e cache incompleto disparam backfill de até 12
+    semanas. Falha de rede preserva a última fotografia e mostra o estado
+    sem interromper a leitura.
+  - Cache JSON passou a validar estrutura e formato da API e a ser escrito
+    atomicamente (`fsync` + replace no mesmo diretório), reduzindo o risco de
+    truncamento por interrupção/OneDrive.
+  - Histórico real preenchido com 72 registros: 12 coletas semanais para
+    cada um dos 6 indicadores, de 15/05/2026 a 31/07/2026.
+  - GitHub Actions consulta o BACEN toda segunda-feira às 12h30 de Brasília e
+    versiona apenas `dados/focus_cache.json` quando houver mudança; também
+    aceita execução manual.
+  - Home redesenhada como porta de entrada: estado da coleta, CTA direto,
+    explicação da rotina em três passos e próximos módulos sob demanda.
+  - Gate ampliado para 62 testes, cobrindo atualização automática, idade em
+    dias úteis, backfill, deduplicação, cache inválido/atômico, CLI e home.
+
+## Fila priorizada
+
+Critério: primeiro confiabilidade e utilidade recorrente; depois módulos que
+exigem dados pessoais ou uma escolha de canal externo.
+
+| Prioridade | Estado | Melhoria | Impacto | Esforço |
+|---|---|---|---|---|
+| P0 | Entregue v1.4 | Atualização automática, backfill e cache atômico | Alto | Médio |
+| P0 | Entregue v1.4 | Coletor semanal no GitHub Actions | Alto | Baixo |
+| P1 | Próxima | “O que mudou desde minha última visita” com destaques materiais | Alto | Médio |
+| P1 | Próxima | Carteira MVP local, separada do motor educacional | Alto | Alto |
+| P1 | Fila | Simulador de aportes e juros compostos | Alto | Médio |
+| P2 | Fila | Alertas externos apenas para mudança relevante | Médio | Médio; depende do canal |
+| P2 | Fila | Mais fontes editoriais com feed/licença compatíveis | Médio | Baixo |
+| P3 | Adiado | Deploy público/mobile | Médio | Alto |
 
 ## Bloqueios
 
 - Nenhum no momento.
-
-## Próximos passos
-
-- [ ] Página de carteira (organizar investimentos reais do usuário).
-- [ ] Calculadora de projeção de rentabilidade (juros compostos, aportes).
-- [ ] Deploy público (Streamlit Community Cloud) — avaliado e descartado por
-      ora; reconsiderar se o uso semanal justificar acesso do celular.
 
 ## Conceitos relacionados
 

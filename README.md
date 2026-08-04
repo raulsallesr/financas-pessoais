@@ -5,11 +5,16 @@ começando pelo **Boletim Focus** do Banco Central — a pesquisa semanal de
 expectativas de mercado (Selic, IPCA, câmbio, PIB...) publicada toda
 segunda-feira.
 
-## O que faz hoje (v1.3)
+## O que faz hoje (v1.4)
 
 - Busca Selic, IPCA, câmbio, PIB Total, IGP-M e dívida líquida do setor
   público direto da API pública do BACEN (Sistema de Expectativas de Mercado
   / Olinda), sem precisar de PDF nem chave de acesso.
+- Verifica novas leituras automaticamente uma vez por dia útil. Na primeira
+  execução, preenche até 12 semanas recentes para o gráfico já nascer útil;
+  se o BACEN estiver indisponível, preserva e identifica a última coleta.
+- Mantém o histórico atualizado no GitHub toda segunda-feira por uma rotina
+  agendada, mesmo quando o app não é aberto.
 - Resume primeiro o que mais importa: Selic, IPCA e câmbio, com comparação
   entre as duas datas disponíveis e destaque para a principal mudança.
 - Permite explorar os impactos por classe de investimento e escolher qual
@@ -43,8 +48,9 @@ streamlit run app_financas.py
 `cd` continua sendo a pasta deste projeto — só o `.venv` em si vive fora do
 OneDrive.
 
-Depois abra a página "Boletim Focus" na barra lateral e clique em
-"Atualizar dados".
+Depois use **Abrir panorama** na home. A atualização acontece
+automaticamente; o botão **Atualizar dados** continua disponível para uma
+verificação manual.
 
 ## Trabalhando de mais de uma máquina (casa + trabalho)
 
@@ -52,7 +58,9 @@ O `.venv` é local a cada máquina (não é versionado — recrie com os passos
 acima em cada lugar). Já o histórico de dados do Focus
 (`dados/focus_cache.json`) **é versionado de propósito** — é só dado público
 do BACEN, sem nada sensível — para as duas máquinas acumularem o mesmo
-histórico em vez de cada uma ter o seu.
+histórico em vez de cada uma ter o seu. A rotina
+`.github/workflows/atualizar-focus.yml` também atualiza esse arquivo toda
+segunda-feira; por isso, faça `git pull` antes de trabalhar.
 
 Rotina simples para não perder nada:
 

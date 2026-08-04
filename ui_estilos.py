@@ -69,6 +69,11 @@ def aplicar_estilos() -> None:
             border-left: 5px solid var(--fp-primary);
         }
 
+        .st-key-home_feature_focus
+        div[data-testid="stVerticalBlockBorderWrapper"] {
+            border-left: 5px solid var(--fp-primary);
+        }
+
         .stButton button,
         .stLinkButton a,
         [data-testid="stPopover"] button {
