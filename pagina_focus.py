@@ -25,9 +25,7 @@ from focus_apresentacao import (
 from focus_data import (
     ComparativoIndicador,
     LeituraIndicador,
-    comparar,
-    leitura_anterior,
-    leitura_mais_recente,
+    montar_comparativos,
     serie_historica,
 )
 from focus_leitura import (
@@ -58,21 +56,7 @@ def _carregar_noticias() -> ResultadoNoticias:
 def _montar_comparativos(
     historico: list[LeituraIndicador],
 ) -> list[ComparativoIndicador]:
-    indicadores = {leitura.indicador for leitura in historico}
-    comparativos: list[ComparativoIndicador] = []
-    for indicador in indicadores:
-        leituras = [
-            leitura
-            for leitura in historico
-            if leitura.indicador == indicador
-        ]
-        atual = leitura_mais_recente(leituras)
-        if atual is None:
-            continue
-        comparativos.append(
-            comparar(atual, leitura_anterior(historico, atual))
-        )
-    return ordenar_comparativos(comparativos)
+    return ordenar_comparativos(montar_comparativos(historico))
 
 
 def _renderizar_metrica(

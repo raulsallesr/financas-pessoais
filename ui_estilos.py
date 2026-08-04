@@ -70,6 +70,10 @@ def aplicar_estilos() -> None:
         }
 
         .st-key-home_feature_focus
+        div[data-testid="stVerticalBlockBorderWrapper"],
+        .st-key-home_feature_macro
+        div[data-testid="stVerticalBlockBorderWrapper"],
+        .st-key-macro_cenario
         div[data-testid="stVerticalBlockBorderWrapper"] {
             border-left: 5px solid var(--fp-primary);
         }

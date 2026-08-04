@@ -5,7 +5,7 @@ começando pelo **Boletim Focus** do Banco Central — a pesquisa semanal de
 expectativas de mercado (Selic, IPCA, câmbio, PIB...) publicada toda
 segunda-feira.
 
-## O que faz hoje (v1.4)
+## O que faz hoje (v1.5)
 
 - Busca Selic, IPCA, câmbio, PIB Total, IGP-M e dívida líquida do setor
   público direto da API pública do BACEN (Sistema de Expectativas de Mercado
@@ -26,6 +26,14 @@ segunda-feira.
 - Reúne três manchetes relevantes de InfoMoney e Brazil Journal via RSS, com
   cache, deduplicação e fallback independente por fonte. O app exibe apenas
   título, fonte, horário e link para a publicação original.
+- O **Radar Macro** combina Focus, dólar PTAX, petróleo Brent, Bitcoin e
+  temas das manchetes em um cenário direcional de 4–12 semanas. Mostra
+  confiança, sinais, classes relativamente favorecidas/pressionadas e o que
+  faria a leitura mudar — sem alvo de preço nem ordem de compra/venda.
+- Compara dólar, Brent e Bitcoin no mesmo gráfico de linhas em base 100 e
+  mantém preço real, data da observação e tabela acessível sob demanda.
+
+A metodologia e seus limites estão em `METODOLOGIA_RADAR.md`.
 
 ## Como rodar
 
@@ -50,7 +58,7 @@ OneDrive.
 
 Depois use **Abrir panorama** na home. A atualização acontece
 automaticamente; o botão **Atualizar dados** continua disponível para uma
-verificação manual.
+verificação manual. A home também oferece acesso direto ao **Radar Macro**.
 
 ## Trabalhando de mais de uma máquina (casa + trabalho)
 
@@ -85,3 +93,12 @@ mantém o contexto entre casa e trabalho.
 
 BACEN — Sistema de Expectativas de Mercado (Boletim Focus):
 https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata
+
+Demais séries do Radar:
+
+- PTAX/BACEN:
+  https://dadosabertos.bcb.gov.br/dataset/dolar-americano-usd-todos-os-boletins-diarios
+- Brent/EIA via FRED:
+  https://fred.stlouisfed.org/series/DCOILBRENTEU
+- BTC/BRL/Binance:
+  https://data-api.binance.vision

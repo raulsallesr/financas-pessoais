@@ -75,6 +75,35 @@ def render() -> None:
                 use_container_width=True,
             )
 
+    with st.container(border=True, key="home_feature_macro"):
+        conteudo, acao = st.columns(
+            [3, 1],
+            gap="large",
+            vertical_alignment="center",
+        )
+        with conteudo:
+            st.badge(
+                "Novo · leitura explicável",
+                icon=":material/monitoring:",
+                color="blue",
+            )
+            st.subheader("Radar Macro")
+            st.write(
+                "Dólar, Brent, Bitcoin, Focus e temas das manchetes reunidos "
+                "em um cenário-base com sinais e condições de invalidação."
+            )
+            st.caption(
+                "Projeção direcional de 4–12 semanas, sem alvo de preço nem "
+                "recomendação personalizada."
+            )
+        with acao:
+            st.page_link(
+                "pages/2_Radar_Macro.py",
+                label="Abrir radar",
+                icon=":material/arrow_forward:",
+                use_container_width=True,
+            )
+
     st.subheader("Uma rotina simples")
     etapas = st.columns(3, gap="medium")
     conteudos = (

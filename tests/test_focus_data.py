@@ -11,6 +11,7 @@ from focus_data import (
     comparar,
     leitura_anterior,
     leitura_mais_recente,
+    montar_comparativos,
     serie_historica,
 )
 
@@ -133,3 +134,27 @@ def test_serie_historica_ordena_por_data_e_filtra_indicador():
 def test_serie_historica_indicador_sem_leituras_retorna_lista_vazia():
     historico = [_leitura(5.0, indicador="IPCA", referencia="2026")]
     assert serie_historica(historico, "Selic") == []
+
+
+def test_montar_comparativos_cria_um_resultado_por_indicador():
+    historico = [
+        _leitura(
+            4.8,
+            dias_atras=7,
+            indicador="IPCA",
+            referencia="2026",
+        ),
+        _leitura(5.0, indicador="IPCA", referencia="2026"),
+        _leitura(
+            5.1,
+            dias_atras=7,
+            indicador="Câmbio",
+            referencia="2026",
+        ),
+        _leitura(5.2, indicador="Câmbio", referencia="2026"),
+    ]
+    comparativos = montar_comparativos(historico)
+    assert {item.atual.indicador for item in comparativos} == {
+        "IPCA",
+        "Câmbio",
+    }

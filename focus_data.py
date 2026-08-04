@@ -81,3 +81,22 @@ def serie_historica(historico: list[LeituraIndicador], indicador: str) -> list[L
     """
     leituras = [leitura for leitura in historico if leitura.indicador == indicador]
     return sorted(leituras, key=lambda leitura: leitura.data_coleta)
+
+
+def montar_comparativos(
+    historico: list[LeituraIndicador],
+) -> list[ComparativoIndicador]:
+    """Monta a leitura atual de cada indicador contra a referência anterior."""
+    comparativos: list[ComparativoIndicador] = []
+    for indicador in {leitura.indicador for leitura in historico}:
+        leituras = [
+            leitura
+            for leitura in historico
+            if leitura.indicador == indicador
+        ]
+        atual = leitura_mais_recente(leituras)
+        if atual is not None:
+            comparativos.append(
+                comparar(atual, leitura_anterior(historico, atual))
+            )
+    return comparativos

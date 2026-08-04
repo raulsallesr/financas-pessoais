@@ -1,6 +1,6 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.4 (automação + histórico útil + home) pronto — 2026-08-04
+- **Status**: v1.5 (Radar Macro explicável + preços) pronto — 2026-08-04
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -53,6 +53,16 @@
     diversificada das manchetes (sem I/O).
   - `noticias_feed.py` — adaptador RSS isolado para InfoMoney e Brazil
     Journal, com timeout, limite de resposta, allowlist e fallback por fonte.
+  - `mercado_data.py` — dataclasses, consolidação, variação de 30 dias e
+    normalização base 100 (sem I/O).
+  - `mercado_fontes.py` — adaptadores independentes para PTAX/BACEN,
+    Brent/EIA via FRED e BTC/BRL/Binance.
+  - `macro_modelo.py` — sinais, eixos, cenário condicionado, perspectivas,
+    confiança e temas editoriais (motor puro e explicável).
+  - `pagina_macro.py` — composição visual do Radar;
+    `pages/2_Radar_Macro.py` é o entrypoint multipage.
+  - `METODOLOGIA_RADAR.md` — contrato, fontes, limites e próximos gates do
+    motor macro.
   - `atualizar_focus_cache.py` — entrada sem Streamlit usada pela automação
     agendada em `.github/workflows/atualizar-focus.yml`.
 - Guardrail de conteúdo: o motor de regras nunca recebe dados do usuário e
@@ -143,6 +153,25 @@
     explicação da rotina em três passos e próximos módulos sob demanda.
   - Gate ampliado para 62 testes, cobrindo atualização automática, idade em
     dias úteis, backfill, deduplicação, cache inválido/atômico, CLI e home.
+- **v1.5 (2026-08-04)** — Radar Macro explicável:
+  - Nova página cruza expectativas do Focus com preço e momentum de dólar
+    PTAX, Brent e Bitcoin em cinco eixos: inflação/custos, condições
+    monetárias, atividade, fiscal e apetite a risco.
+  - Saída é cenário direcional condicionado de 4–12 semanas, com confiança
+    máxima moderada, evidências, classes com vento favorável/pressão,
+    ressalvas e três condições explícitas de invalidação. Não há alvo de
+    preço nem recomendação personalizada.
+  - Manchetes entram somente como frequência de temas nos metadados RSS; o
+    app explicita que não raspou nem leu o corpo integral das matérias.
+  - Gráfico principal normaliza as três séries em base 100; preço real,
+    data, fonte e tabela ficam disponíveis. Séries defasadas deixam de
+    sustentar a confiança.
+  - Integração ao vivo em 2026-08-04: PTAX R$ 5,1053 (04/08, -1,28% em 30
+    dias), Brent US$ 91,82 (27/07, +30,87%) e BTC/BRL R$ 331.016 (04/08,
+    -1,35%); nenhuma das cinco fontes ficou indisponível. Cenário produzido:
+    “Juros altos, mas inflação sem aceleração clara”, confiança moderada.
+  - Gate ampliado para 76 testes, incluindo os três adaptadores, fallback
+    independente, normalização, motor/guardrail e `AppTest` da nova página.
 
 ## Fila priorizada
 
@@ -153,11 +182,14 @@ exigem dados pessoais ou uma escolha de canal externo.
 |---|---|---|---|---|
 | P0 | Entregue v1.4 | Atualização automática, backfill e cache atômico | Alto | Médio |
 | P0 | Entregue v1.4 | Coletor semanal no GitHub Actions | Alto | Baixo |
-| P1 | Próxima | “O que mudou desde minha última visita” com destaques materiais | Alto | Médio |
-| P1 | Próxima | Carteira MVP local, separada do motor educacional | Alto | Alto |
-| P1 | Fila | Simulador de aportes e juros compostos | Alto | Médio |
+| P0 | Entregue v1.5 | Radar Macro + PTAX, Brent, BTC e linhas base 100 | Alto | Alto |
+| P1 | Próxima | Backtest temporal e placar de acerto por horizonte/regime | Muito alto | Alto |
+| P1 | Próxima | IPCA realizado, atividade, emprego e curva de juros | Alto | Alto |
+| P1 | Fila | “O que mudou desde minha última visita” | Alto | Médio |
+| P2 | Fila | Resumo semântico com fonte licenciada e provedor autorizado | Alto | Alto |
+| P2 | Fila | Carteira MVP local, separada do motor educacional | Alto | Alto |
+| P2 | Fila | Simulador de aportes e juros compostos | Alto | Médio |
 | P2 | Fila | Alertas externos apenas para mudança relevante | Médio | Médio; depende do canal |
-| P2 | Fila | Mais fontes editoriais com feed/licença compatíveis | Médio | Baixo |
 | P3 | Adiado | Deploy público/mobile | Médio | Alto |
 
 ## Bloqueios
