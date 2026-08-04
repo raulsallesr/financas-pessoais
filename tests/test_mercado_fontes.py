@@ -1,4 +1,5 @@
 import sys
+from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
@@ -38,10 +39,16 @@ def test_buscar_dolar_ptax_converte_cotacao_oficial(mock_get):
             ]
         }
     )
-    serie = mercado_fontes.buscar_dolar_ptax()
+    serie = mercado_fontes.buscar_dolar_ptax(
+        inicio=date(2026, 1, 1),
+        fim=date(2026, 8, 4),
+    )
     assert serie.codigo == "USDBRL"
     assert serie.pontos[-1].valor == 5.1053
     assert serie.fonte == "Banco Central"
+    assert mock_get.call_args.kwargs["params"]["@dataInicial"] == (
+        "'01-01-2026'"
+    )
 
 
 @patch("mercado_fontes.requests.get")
@@ -71,6 +78,40 @@ def test_buscar_bitcoin_usa_fechamento_diario_em_reais(mock_get):
     serie = mercado_fontes.buscar_bitcoin()
     assert serie.codigo == "BTCBRL"
     assert serie.pontos[-1].valor == 330872.0
+    assert mock_get.call_args.kwargs["params"]["limit"] == 1000
+
+
+@patch("mercado_fontes.requests.get")
+def test_buscar_cdi_compoe_taxas_diarias_em_indice(mock_get):
+    mock_get.return_value = _resposta(
+        json_data=[
+            {"data": "02/01/2026", "valor": "0.05"},
+            {"data": "05/01/2026", "valor": "0.10"},
+        ]
+    )
+    serie = mercado_fontes.buscar_cdi(
+        inicio=date(2026, 1, 1),
+        fim=date(2026, 8, 4),
+    )
+    assert serie.codigo == "CDI"
+    assert [ponto.valor for ponto in serie.pontos] == [100.0, 100.1]
+    assert mock_get.call_args.kwargs["params"]["dataInicial"] == "01/01/2026"
+
+
+@patch("mercado_fontes.requests.get")
+def test_buscar_selic_usa_serie_diaria_oficial(mock_get):
+    mock_get.return_value = _resposta(
+        json_data=[
+            {"data": "02/01/2026", "valor": "0.05"},
+            {"data": "05/01/2026", "valor": "0.06"},
+        ]
+    )
+    serie = mercado_fontes.buscar_selic(
+        inicio=date(2026, 1, 1),
+        fim=date(2026, 8, 4),
+    )
+    assert serie.codigo == "SELIC"
+    assert "bcdata.sgs.11" in mock_get.call_args.args[0]
 
 
 @patch("mercado_fontes.requests.get")
@@ -108,11 +149,23 @@ def test_busca_conjunta_preserva_fontes_que_responderam():
             "buscar_bitcoin",
             side_effect=ErroFonteMercado("falhou"),
         ),
+        patch.object(
+            mercado_fontes,
+            "buscar_cdi",
+            side_effect=ErroFonteMercado("falhou"),
+        ),
+        patch.object(
+            mercado_fontes,
+            "buscar_selic",
+            side_effect=ErroFonteMercado("falhou"),
+        ),
     ):
         resultado = mercado_fontes.buscar_mercados()
 
     assert resultado.series == (serie,)
     assert resultado.fontes_indisponiveis == (
         "Bitcoin",
+        "CDI",
         "Petróleo Brent",
+        "Selic",
     )

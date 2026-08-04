@@ -75,9 +75,7 @@ def _noticias():
 
 def test_pagina_focus_renderiza_hierarquia_e_um_unico_grafico():
     pagina = (
-        Path(__file__).resolve().parent.parent
-        / "pages"
-        / "1_Boletim_Focus.py"
+        Path(__file__).resolve().parent / "apps" / "focus_section.py"
     )
     with (
         patch.object(
@@ -95,7 +93,7 @@ def test_pagina_focus_renderiza_hierarquia_e_um_unico_grafico():
         app = AppTest.from_file(pagina, default_timeout=15).run()
 
     assert not app.exception
-    assert app.title[0].value == "Seu dinheiro em contexto"
+    assert app.header[0].value == "Seu dinheiro em contexto"
     subtitulos = [elemento.value for elemento in app.subheader]
     assert "Três números para começar" in subtitulos
     assert "O que isso pode afetar" in subtitulos
@@ -112,9 +110,7 @@ def test_pagina_focus_renderiza_hierarquia_e_um_unico_grafico():
 
 def test_pagina_focus_busca_primeiro_historico_automaticamente():
     pagina = (
-        Path(__file__).resolve().parent.parent
-        / "pages"
-        / "1_Boletim_Focus.py"
+        Path(__file__).resolve().parent / "apps" / "focus_section.py"
     )
     with (
         patch.object(pagina_focus, "carregar_cache", return_value=[]),

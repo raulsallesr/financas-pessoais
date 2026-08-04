@@ -38,7 +38,6 @@ from focus_leitura import (
 from focus_regras import explicar_leigo, resumo_efeitos
 from noticias_data import Noticia, selecionar_destaques
 from noticias_feed import ResultadoNoticias, buscar_noticias
-from ui_estilos import aplicar_estilos
 
 _ROTULOS_EFEITO = {
     "positivo": ("Tende a favorecer", "trending_up", "blue"),
@@ -106,7 +105,7 @@ def _renderizar_cabecalho() -> bool:
     cabecalho, acoes = st.columns([4, 1], vertical_alignment="bottom")
     with cabecalho:
         st.caption("PANORAMA ECONÔMICO")
-        st.title("Seu dinheiro em contexto")
+        st.header("Seu dinheiro em contexto")
         st.write(
             "Entenda o que mudou nas expectativas e explore os possíveis "
             "efeitos sem transformar cenário em certeza."
@@ -469,13 +468,7 @@ def _renderizar_detalhes(
                 st.write(explicar_leigo(comparativo))
 
 
-def render() -> None:
-    st.set_page_config(
-        page_title="Seu dinheiro em contexto",
-        page_icon=":material/insights:",
-        layout="wide",
-    )
-    aplicar_estilos()
+def render_secao() -> None:
     atualizar = _renderizar_cabecalho()
     historico = _obter_historico(atualizar)
     if not historico:
@@ -483,12 +476,12 @@ def render() -> None:
             "Ainda não há uma leitura salva. Use **Atualizar dados** para "
             "criar a primeira fotografia das expectativas."
         )
-        st.stop()
+        return
 
     comparativos = _montar_comparativos(historico)
     if not comparativos:
         st.warning("O histórico salvo não contém indicadores reconhecíveis.")
-        st.stop()
+        return
 
     destaque = _renderizar_resumo(comparativos)
     _renderizar_metricas(comparativos, historico)

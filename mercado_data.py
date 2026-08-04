@@ -1,4 +1,4 @@
-"""Tipos e cálculos puros para séries de preços de mercado."""
+"""Tipos e cálculos puros para séries de preços e índices de mercado."""
 
 from __future__ import annotations
 
@@ -107,3 +107,25 @@ def pontos_base_100(
         )
         for ponto in serie.pontos
     )
+
+
+def acumular_taxas_diarias(
+    pontos: list[PontoMercado],
+) -> tuple[PontoMercado, ...]:
+    """Transforma taxas percentuais diárias em um índice acumulado base 100.
+
+    O primeiro dia útil é a base comum, como ocorre com o primeiro preço das
+    demais séries. Cada taxa posterior é composta sobre o índice anterior.
+    """
+    ordenados = consolidar_pontos(pontos)
+    if not ordenados:
+        return ()
+
+    indice = 100.0
+    acumulados = [PontoMercado(data=ordenados[0].data, valor=indice)]
+    for ponto in ordenados[1:]:
+        indice *= 1 + (ponto.valor / 100)
+        acumulados.append(
+            PontoMercado(data=ponto.data, valor=round(indice, 6))
+        )
+    return tuple(acumulados)

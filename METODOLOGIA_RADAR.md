@@ -16,6 +16,11 @@ personalizada.
   publicação, por isso a data fica visível.
 - **Bitcoin:** último preço do candle diário BTC/BRL da API pública de
   mercado da Binance; o candle do dia corrente ainda pode estar aberto.
+- **CDI e Selic realizados:** séries diárias 12 e 11 do SGS/Banco Central,
+  respectivamente. As taxas percentuais ao dia são compostas em índices
+  acumulados. Elas entram no gráfico comparativo, mas não criam sinais
+  adicionais no cenário — o eixo monetário continua usando a expectativa de
+  Selic do Focus para evitar dupla contagem.
 - **Notícias:** somente título, categoria, fonte e horário dos feeds RSS de
   InfoMoney e Brazil Journal. O corpo das matérias não é raspado nem tratado
   como se tivesse sido lido.
@@ -31,6 +36,10 @@ personalizada.
 4. Séries excessivamente defasadas deixam de sustentar o cenário.
 5. A confiança máxima desta versão é **moderada**. Sem cobertura suficiente,
    a saída é marcada como baixa.
+
+No gráfico de desempenho, dólar, Brent, Bitcoin, CDI e Selic usam o primeiro
+ponto útil disponível do ano como base 100. Isso permite comparar variação
+acumulada, não os níveis absolutos de séries com unidades diferentes.
 
 ## Limites honestos
 

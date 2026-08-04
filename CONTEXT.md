@@ -1,6 +1,7 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.5 (Radar Macro explicável + preços) pronto — 2026-08-04
+- **Status**: v1.6 (página única + CDI/Selic + carteira MVP) pronto —
+  2026-08-04
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -27,10 +28,10 @@
   rodar os testes antes de considerar pronto. Commit e `git push` estão
   permanentemente autorizados após o gate passar, sem nova confirmação a
   cada tarefa (decisão explícita do Raul, 2026-08-04).
-- Streamlit multipage: `app_financas.py` é a home; `pages/1_Boletim_Focus.py`
-  é a primeira feature. Nasce como hub multipage (não app isolado) porque a
-  visão é crescer para carteira + calculadora de projeção mais adiante —
-  assim não precisa migrar path/estrutura quando essas páginas chegarem.
+- Streamlit em página única: `app_financas.py` chama `pagina_home.py`, que
+  compõe visão geral, Focus, Radar e carteira na mesma rolagem. O menu
+  lateral usa âncoras para navegar entre as seções; os antigos entrypoints em
+  `pages/` foram removidos para não manter navegação paralela.
 - Separação motor puro / adaptador / UI:
   - `financas_taxonomia.py` — enums compartilhados (ClasseAtivo, Direcao,
     unidades de exibição).
@@ -44,10 +45,9 @@
   - `focus_regras.py` — narrativa em linguagem simples + analogias.
   - `focus_apresentacao.py` — priorização, destaques e formatação da camada
     visual (sem Streamlit).
-  - `pagina_focus.py` — composição da experiência e dos estados da página;
-    `pages/1_Boletim_Focus.py` é apenas o entrypoint multipage.
-  - `pagina_home.py` — composição da home; `app_financas.py` é apenas o
-    entrypoint principal.
+  - `pagina_focus.py` — composição da seção e dos estados do Focus.
+  - `pagina_home.py` — composição da experiência única;
+    `app_financas.py` é apenas o entrypoint principal.
   - `ui_estilos.py` — tokens e CSS responsivo/acessível compartilhável.
   - `noticias_data.py` — normalização, relevância, deduplicação e seleção
     diversificada das manchetes (sem I/O).
@@ -56,11 +56,14 @@
   - `mercado_data.py` — dataclasses, consolidação, variação de 30 dias e
     normalização base 100 (sem I/O).
   - `mercado_fontes.py` — adaptadores independentes para PTAX/BACEN,
-    Brent/EIA via FRED e BTC/BRL/Binance.
+    Brent/EIA via FRED, BTC/BRL/Binance e CDI/Selic diários via SGS.
   - `macro_modelo.py` — sinais, eixos, cenário condicionado, perspectivas,
     confiança e temas editoriais (motor puro e explicável).
-  - `pagina_macro.py` — composição visual do Radar;
-    `pages/2_Radar_Macro.py` é o entrypoint multipage.
+  - `pagina_macro.py` — composição visual da seção Radar.
+  - `carteira_modelo.py` — normalização, alocação, resultado, benchmark e
+    cruzamento puro entre classes da carteira e perspectivas do Radar.
+  - `pagina_carteira.py` — editor de posições em memória e apresentação; os
+    valores pessoais não são persistidos nem versionados.
   - `METODOLOGIA_RADAR.md` — contrato, fontes, limites e próximos gates do
     motor macro.
   - `atualizar_focus_cache.py` — entrada sem Streamlit usada pela automação
@@ -172,6 +175,24 @@
     “Juros altos, mas inflação sem aceleração clara”, confiança moderada.
   - Gate ampliado para 76 testes, incluindo os três adaptadores, fallback
     independente, normalização, motor/guardrail e `AppTest` da nova página.
+- **v1.6 (2026-08-04)** — página única + referências + carteira:
+  - Home, Focus, Radar e carteira passaram a formar uma única página com
+    quatro âncoras no menu lateral, foco visível, alvos de 44 px e estado
+    ativo por seção. Os dois entrypoints multipágina foram removidos.
+  - PTAX, Brent e Bitcoin agora são coletados desde 1º de janeiro. CDI (SGS
+    12) e Selic realizada (SGS 11) são compostos a partir das taxas diárias e
+    entram no mesmo gráfico em base 100; não entram como sinal duplicado no
+    motor macro.
+  - Carteira MVP permite informar nome, classe, valor atual, valor investido
+    e benchmark. Mostra total, concentração, alocação, resultado, comparação
+    no ano e parcela exposta a cada perspectiva macro. Dados ficam apenas na
+    sessão do navegador.
+  - Validação ao vivo em 04/08/2026: 147 pontos PTAX (02/01–04/08), 143
+    Brent (02/01–27/07), 216 BTC/BRL (01/01–04/08), 146 CDI e 146 Selic
+    (02/01–03/08); nenhuma fonte indisponível.
+  - Gate ampliado para 84 testes, incluindo composição de taxas, cinco
+    adaptadores, carteira pura, privacidade/empty state e as três seções de
+    UI com `AppTest`; `py_compile` limpo.
 
 ## Fila priorizada
 
@@ -183,11 +204,13 @@ exigem dados pessoais ou uma escolha de canal externo.
 | P0 | Entregue v1.4 | Atualização automática, backfill e cache atômico | Alto | Médio |
 | P0 | Entregue v1.4 | Coletor semanal no GitHub Actions | Alto | Baixo |
 | P0 | Entregue v1.5 | Radar Macro + PTAX, Brent, BTC e linhas base 100 | Alto | Alto |
+| P0 | Entregue v1.6 | Página única + CDI/Selic desde o início do ano | Alto | Médio |
 | P1 | Próxima | Backtest temporal e placar de acerto por horizonte/regime | Muito alto | Alto |
 | P1 | Próxima | IPCA realizado, atividade, emprego e curva de juros | Alto | Alto |
 | P1 | Fila | “O que mudou desde minha última visita” | Alto | Médio |
 | P2 | Fila | Resumo semântico com fonte licenciada e provedor autorizado | Alto | Alto |
-| P2 | Fila | Carteira MVP local, separada do motor educacional | Alto | Alto |
+| P2 | Entregue v1.6 | Carteira MVP em sessão, separada do motor educacional | Alto | Alto |
+| P2 | Fila | Importação/exportação local opcional da carteira | Médio | Médio |
 | P2 | Fila | Simulador de aportes e juros compostos | Alto | Médio |
 | P2 | Fila | Alertas externos apenas para mudança relevante | Médio | Médio; depende do canal |
 | P3 | Adiado | Deploy público/mobile | Médio | Alto |

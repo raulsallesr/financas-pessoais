@@ -5,8 +5,10 @@ começando pelo **Boletim Focus** do Banco Central — a pesquisa semanal de
 expectativas de mercado (Selic, IPCA, câmbio, PIB...) publicada toda
 segunda-feira.
 
-## O que faz hoje (v1.5)
+## O que faz hoje (v1.6)
 
+- Reúne visão geral, Boletim Focus, Radar Macro e carteira em uma única
+  página. O menu lateral leva diretamente a cada seção sem trocar de rota.
 - Busca Selic, IPCA, câmbio, PIB Total, IGP-M e dívida líquida do setor
   público direto da API pública do BACEN (Sistema de Expectativas de Mercado
   / Olinda), sem precisar de PDF nem chave de acesso.
@@ -30,8 +32,13 @@ segunda-feira.
   temas das manchetes em um cenário direcional de 4–12 semanas. Mostra
   confiança, sinais, classes relativamente favorecidas/pressionadas e o que
   faria a leitura mudar — sem alvo de preço nem ordem de compra/venda.
-- Compara dólar, Brent e Bitcoin no mesmo gráfico de linhas em base 100 e
-  mantém preço real, data da observação e tabela acessível sob demanda.
+- Compara dólar, Brent, Bitcoin, CDI e Selic desde o início do ano no mesmo
+  gráfico de linhas em base 100, mantendo valor real, data da observação e
+  tabela acessível sob demanda.
+- Oferece um editor de carteira para informar ativo, classe, valor atual,
+  valor investido e referência. Calcula alocação, concentração, resultado,
+  comparação no ano e exposição ao cenário macro. Os valores ficam somente
+  na sessão: não são gravados em arquivo nem enviados ao GitHub.
 
 A metodologia e seus limites estão em `METODOLOGIA_RADAR.md`.
 
@@ -56,9 +63,10 @@ streamlit run app_financas.py
 `cd` continua sendo a pasta deste projeto — só o `.venv` em si vive fora do
 OneDrive.
 
-Depois use **Abrir panorama** na home. A atualização acontece
-automaticamente; o botão **Atualizar dados** continua disponível para uma
-verificação manual. A home também oferece acesso direto ao **Radar Macro**.
+O app abre em uma página única. Use o menu lateral para ir ao **Boletim
+Focus**, **Radar Macro** ou **Minha carteira**. A atualização do Focus
+acontece automaticamente; o botão **Atualizar dados** continua disponível
+para uma verificação manual.
 
 ## Trabalhando de mais de uma máquina (casa + trabalho)
 
@@ -85,7 +93,7 @@ mantém o contexto entre casa e trabalho.
 
 ## Roadmap
 
-- Depois: página de carteira (organizar seus investimentos) e calculadora de
+- Depois: importação/exportação local opcional da carteira e calculadora de
   projeção de rentabilidade (juros compostos, aportes).
 - Avaliado e descartado por ora: deploy público (Streamlit Community Cloud).
 
@@ -102,3 +110,7 @@ Demais séries do Radar:
   https://fred.stlouisfed.org/series/DCOILBRENTEU
 - BTC/BRL/Binance:
   https://data-api.binance.vision
+- Selic diária (SGS 11):
+  https://dadosabertos.bcb.gov.br/dataset/11-taxa-de-juros---selic
+- CDI diário (SGS 12):
+  https://www3.bcb.gov.br/sgspub/consultarvalores/consultarValoresSeries.do?method=consultarSeries&series=12

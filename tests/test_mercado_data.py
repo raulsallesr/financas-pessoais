@@ -7,6 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from mercado_data import (
     PontoMercado,
     SerieMercado,
+    acumular_taxas_diarias,
     calcular_movimento,
     consolidar_pontos,
     pontos_base_100,
@@ -63,3 +64,16 @@ def test_base_100_preserva_movimento_relativo():
         100.0,
         110.0,
     ]
+
+
+def test_taxas_diarias_viram_indice_acumulado_base_100():
+    pontos = acumular_taxas_diarias(
+        [
+            PontoMercado(date(2026, 1, 2), 0.05),
+            PontoMercado(date(2026, 1, 5), 0.10),
+            PontoMercado(date(2026, 1, 6), 0.20),
+        ]
+    )
+    assert pontos[0] == PontoMercado(date(2026, 1, 2), 100.0)
+    assert pontos[1].valor == 100.1
+    assert pontos[2].valor == 100.3002

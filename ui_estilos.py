@@ -9,6 +9,10 @@ def aplicar_estilos() -> None:
     st.markdown(
         """
         <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
         :root {
             --fp-bg: #f3f6fb;
             --fp-surface: #fbfcfe;
@@ -44,6 +48,74 @@ def aplicar_estilos() -> None:
             padding-bottom: 4rem;
         }
 
+        .fp-section-anchor {
+            display: block;
+            position: relative;
+            top: -1.5rem;
+            visibility: hidden;
+            scroll-margin-top: 1.5rem;
+        }
+
+        .fp-section-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+
+        .fp-section-nav a {
+            align-items: center;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            color: var(--fp-ink);
+            display: flex;
+            gap: 0.7rem;
+            min-height: 44px;
+            padding: 0.65rem 0.75rem;
+            text-decoration: none;
+            transition: border-color 180ms ease, background-color 180ms ease;
+        }
+
+        .fp-section-nav a:hover {
+            background: var(--fp-surface);
+            border-color: var(--fp-border);
+            color: var(--fp-primary);
+        }
+
+        .fp-section-nav a:active {
+            background: color-mix(
+                in srgb,
+                var(--fp-primary) 12%,
+                var(--fp-surface)
+            );
+        }
+
+        body:not(:has(.fp-section-anchor:target))
+        .fp-section-nav a[href="#visao-geral"],
+        body:has(#visao-geral:target)
+        .fp-section-nav a[href="#visao-geral"],
+        body:has(#boletim-focus:target)
+        .fp-section-nav a[href="#boletim-focus"],
+        body:has(#radar-macro:target)
+        .fp-section-nav a[href="#radar-macro"],
+        body:has(#minha-carteira:target)
+        .fp-section-nav a[href="#minha-carteira"] {
+            background: var(--fp-surface);
+            border-color: var(--fp-primary);
+            color: var(--fp-primary);
+            font-weight: 600;
+        }
+
+        .fp-section-nav a:focus-visible {
+            outline: 3px solid var(--fp-primary);
+            outline-offset: 2px;
+        }
+
+        .fp-section-nav .material-symbols-rounded {
+            color: var(--fp-primary);
+            font-size: 1.25rem;
+        }
+
         h1, h2, h3 {
             color: var(--fp-ink);
             letter-spacing: -0.025em;
@@ -73,6 +145,8 @@ def aplicar_estilos() -> None:
         div[data-testid="stVerticalBlockBorderWrapper"],
         .st-key-home_feature_macro
         div[data-testid="stVerticalBlockBorderWrapper"],
+        .st-key-home_overview
+        div[data-testid="stVerticalBlockBorderWrapper"],
         .st-key-macro_cenario
         div[data-testid="stVerticalBlockBorderWrapper"] {
             border-left: 5px solid var(--fp-primary);
@@ -89,7 +163,7 @@ def aplicar_estilos() -> None:
         .stButton button:focus-visible,
         .stLinkButton a:focus-visible,
         [data-testid="stPopover"] button:focus-visible {
-            outline: 3px solid rgba(30, 64, 175, 0.28);
+            outline: 3px solid var(--fp-primary);
             outline-offset: 2px;
         }
 

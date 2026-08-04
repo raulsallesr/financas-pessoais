@@ -22,14 +22,19 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
 
 - Motor puro (sem I/O) separado de adaptador (I/O) separado de UI:
   `focus_data.py` / `motor_indicadores.py` (puro) vs. `focus_leitura.py`
-  (adaptador da API do BACEN) vs. `app_financas.py` / `pages/` (UI).
+  (adaptador da API do BACEN) vs. `pagina_*.py` (UI).
+- A experiência é uma página única: `app_financas.py` chama
+  `pagina_home.py`, que compõe as seções Focus, Radar e Carteira e oferece
+  navegação por âncoras no menu lateral. Não recriar entrypoints em `pages/`
+  sem uma nova decisão explícita do Raul.
 - Guardrail de conteúdo, sem exceção: nenhuma regra em `motor_indicadores.py`
   ou texto em `focus_regras.py` pode usar linguagem imperativa de
   investimento ("invista", "compre", "venda", "recomendo") nem receber dado
   do usuário (patrimônio, carteira) — é conteúdo educacional, nunca
   recomendação personalizada. `tests/test_focus_regras.py` faz lint disso
   automaticamente; se adicionar indicador/regra nova, roda esse teste antes
-  de considerar terminado.
+  de considerar terminado. O cruzamento com valores pessoais pertence
+  exclusivamente a `carteira_modelo.py`, fora do motor educacional.
 - Todo código roda dentro de um `.venv` (precisa ser recriado em cada
   máquina, não é versionado) — nunca contra o Python global. **Desde
   2026-08-04 crie o `.venv` fora da pasta do projeto**, porque ela vive

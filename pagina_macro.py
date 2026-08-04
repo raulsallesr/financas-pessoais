@@ -19,7 +19,6 @@ from mercado_data import (
 from mercado_fontes import ResultadoMercados, buscar_mercados
 from noticias_data import Noticia, selecionar_destaques
 from noticias_feed import ResultadoNoticias, buscar_noticias
-from ui_estilos import aplicar_estilos
 
 _CORES_ESTADO = {
     "vento favorável": "green",
@@ -27,6 +26,7 @@ _CORES_ESTADO = {
     "cenário misto": "gray",
     "proteção com ressalvas": "blue",
 }
+_CODIGOS_PRECO = frozenset({"USDBRL", "BRENT", "BTCBRL"})
 
 
 @st.cache_data(ttl=15 * 60, show_spinner=False)
@@ -66,7 +66,7 @@ def _renderizar_cabecalho() -> None:
     titulo, acao = st.columns([4, 1], vertical_alignment="bottom")
     with titulo:
         st.caption("RADAR MACROECONÔMICO")
-        st.title("Sinais, cenário e preços")
+        st.header("Sinais, cenário e preços")
         st.write(
             "Uma leitura explicável do momento: dados públicos, temas das "
             "manchetes e condições que confirmam ou invalidam o cenário."
@@ -94,6 +94,9 @@ def _renderizar_cabecalho() -> None:
 
 
 def _renderizar_precos(series: list[SerieMercado]) -> list[MovimentoMercado]:
+    series = [
+        serie for serie in series if serie.codigo in _CODIGOS_PRECO
+    ]
     st.subheader("Três preços que mudam o cenário")
     st.caption(
         "A seta mostra apenas movimento de preço — alta não significa "
@@ -191,10 +194,11 @@ def _renderizar_perspectivas(cenario: CenarioMacro) -> None:
 
 
 def _renderizar_linhas(series: list[SerieMercado]) -> None:
-    st.subheader("As linhas do mercado")
+    st.subheader("Mercados e juros desde o início do ano")
     st.caption(
-        "Todas começam em 100 para comparar direção e intensidade, não o "
-        "preço absoluto de ativos com unidades diferentes."
+        f"Dólar, Brent, Bitcoin, CDI e Selic desde o primeiro ponto útil de "
+        f"{date.today().year}. Todas as linhas começam em 100 para comparar "
+        "desempenho acumulado, não valores absolutos com unidades diferentes."
     )
     linhas = [
         {
@@ -218,7 +222,7 @@ def _renderizar_linhas(series: list[SerieMercado]) -> None:
     )
 
     with st.expander(
-        "Ver preços reais e dados do gráfico",
+        "Ver valores reais e dados do gráfico",
         icon=":material/show_chart:",
     ):
         nomes = [serie.nome for serie in series]
@@ -232,13 +236,13 @@ def _renderizar_linhas(series: list[SerieMercado]) -> None:
         reais = pd.DataFrame(
             {
                 "Data": [ponto.data for ponto in serie.pontos],
-                "Preço": [ponto.valor for ponto in serie.pontos],
+                "Valor": [ponto.valor for ponto in serie.pontos],
             }
         )
         st.line_chart(
             reais,
             x="Data",
-            y="Preço",
+            y="Valor",
             y_label=serie.unidade,
             height=280,
             color="#1e40af",
@@ -306,13 +310,7 @@ def _renderizar_invalidadores(cenario: CenarioMacro) -> None:
         )
 
 
-def render() -> None:
-    st.set_page_config(
-        page_title="Radar Macro",
-        page_icon=":material/public:",
-        layout="wide",
-    )
-    aplicar_estilos()
+def render_secao() -> tuple[CenarioMacro | None, list[SerieMercado]]:
     _renderizar_cabecalho()
 
     with st.spinner("Conectando sinais públicos...", show_time=True):
@@ -344,11 +342,14 @@ def render() -> None:
             "O radar está sem dados quantitativos agora. Tente atualizar "
             "novamente quando as fontes estiverem disponíveis."
         )
-        st.stop()
+        return None, series
 
-    if series:
-        _renderizar_precos(series)
-    cenario = construir_cenario(comparativos, series, noticias)
+    series_precos = [
+        serie for serie in series if serie.codigo in _CODIGOS_PRECO
+    ]
+    if series_precos:
+        _renderizar_precos(series_precos)
+    cenario = construir_cenario(comparativos, series_precos, noticias)
     _renderizar_cenario(cenario)
     st.divider()
     _renderizar_eixos(cenario)
@@ -372,7 +373,9 @@ def render() -> None:
         )
     st.caption(
         "Fontes: PTAX/Banco Central, Brent/EIA via FRED, BTC/BRL/Binance, "
+        "CDI e Selic/Banco Central (SGS), "
         "Boletim Focus/BACEN e metadados RSS de InfoMoney/Brazil Journal. "
         "Conteúdo educacional; cenário condicionado, não previsão garantida "
         "nem orientação personalizada."
     )
+    return cenario, series
