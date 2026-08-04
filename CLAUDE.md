@@ -23,6 +23,10 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
 - Motor puro (sem I/O) separado de adaptador (I/O) separado de UI:
   `focus_data.py` / `motor_indicadores.py` (puro) vs. `focus_leitura.py`
   (adaptador da API do BACEN) vs. `pagina_*.py` (UI).
+- Importações Excel usam `openpyxl`; `b3_importacao.py` é o adaptador da
+  posição B3. Nunca versione planilha real nem seus valores/identificadores.
+  Testes de importação devem gerar o XLSX sintético em memória durante o
+  próprio teste.
 - A experiência é uma página única: `app_financas.py` chama
   `pagina_home.py`, que compõe as seções Focus, Radar e Carteira e oferece
   navegação por âncoras no menu lateral. Não recriar entrypoints em `pages/`

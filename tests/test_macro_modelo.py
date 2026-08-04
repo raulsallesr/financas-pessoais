@@ -100,6 +100,11 @@ def test_cenario_combina_focus_mercados_e_condiciona_projecao():
         and item.estado == "mais pressionado"
         for item in cenario.perspectivas
     )
+    assert any(
+        item.classe == "Fundos imobiliários / FIAGRO"
+        and item.estado == "mais pressionado"
+        for item in cenario.perspectivas
+    )
     assert cenario.invalidadores
     assert {"Inflação", "Juros"}.issubset(
         {tema.tema for tema in cenario.temas_editoriais}

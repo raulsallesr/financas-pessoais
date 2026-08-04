@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+from hashlib import sha256
+
 import pandas as pd
 import streamlit as st
 
+from b3_importacao import ErroImportacaoB3, importar_posicao_b3
 from carteira_modelo import (
     BENCHMARKS,
     CLASSES_CARTEIRA,
@@ -34,7 +37,11 @@ _CORES_ESTADO = {
 }
 
 
-def _tabela_inicial() -> pd.DataFrame:
+def _tabela_inicial(
+    registros: list[dict[str, object]] | None = None,
+) -> pd.DataFrame:
+    if registros:
+        return pd.DataFrame(registros, columns=_COLUNAS)
     return pd.DataFrame(
         [
             {
@@ -60,6 +67,36 @@ def _moeda(valor: float) -> str:
 
 def _percentual(valor: float | None) -> str:
     return "—" if valor is None else f"{valor:+.2f}%".replace(".", ",")
+
+
+def _preparar_editor_b3(arquivo) -> tuple[pd.DataFrame, str]:
+    if arquivo is None:
+        return _tabela_inicial(), "carteira_editor_manual"
+    conteudo = arquivo.getvalue()
+    try:
+        resultado = importar_posicao_b3(conteudo)
+    except ErroImportacaoB3 as erro:
+        st.error(
+            str(erro) + " Você ainda pode preencher a tabela manualmente.",
+            icon=":material/error:",
+        )
+        return _tabela_inicial(), "carteira_editor_manual"
+
+    st.success(
+        f"{len(resultado.posicoes)} ativos consolidados · "
+        f"{_moeda(resultado.valor_total)} nesta posição parcial.",
+        icon=":material/check_circle:",
+    )
+    st.caption(
+        f"{resultado.linhas_validas} linhas de posição lidas em "
+        f"{len(resultado.abas_lidas)} abas; "
+        f"{resultado.linhas_ignoradas} linhas de subtotal, vazias ou sem "
+        "valor foram descartadas. Conta, instituição, CNPJ, ISIN e contratos "
+        "não entram no editor."
+    )
+    registros = [posicao.para_editor() for posicao in resultado.posicoes]
+    chave = sha256(conteudo).hexdigest()[:12]
+    return _tabela_inicial(registros), f"carteira_editor_b3_{chave}"
 
 
 def _renderizar_resumo(posicoes) -> None:
@@ -215,16 +252,36 @@ def render(
     )
     st.info(
         "Os valores ficam somente nesta sessão do navegador: não são "
-        "gravados em arquivo nem enviados ao GitHub.",
+        "gravados em arquivo nem enviados ao GitHub. A planilha importada "
+        "também é processada apenas em memória.",
         icon=":material/lock:",
     )
 
+    with st.container(border=True):
+        st.markdown("**Importar posição da B3**")
+        st.write(
+            "Envie o arquivo XLSX da Área do Investidor para preencher a "
+            "tabela automaticamente. A posição pode ser parcial: depois da "
+            "importação, acrescente ou ajuste qualquer linha."
+        )
+        arquivo_b3 = st.file_uploader(
+            "Planilha de posição da B3",
+            type=("xlsx",),
+            accept_multiple_files=False,
+            help=(
+                "São usados somente ativo, tipo, indexador e valor "
+                "atualizado. Identificadores e dados da instituição são "
+                "ignorados."
+            ),
+        )
+
+    tabela_base, chave_editor = _preparar_editor_b3(arquivo_b3)
     tabela = st.data_editor(
-        _tabela_inicial(),
+        tabela_base,
         hide_index=True,
         num_rows="dynamic",
         width="stretch",
-        key="carteira_editor",
+        key=chave_editor,
         column_config={
             "Ativo": st.column_config.TextColumn(
                 "Ativo",

@@ -5,7 +5,7 @@ começando pelo **Boletim Focus** do Banco Central — a pesquisa semanal de
 expectativas de mercado (Selic, IPCA, câmbio, PIB...) publicada toda
 segunda-feira.
 
-## O que faz hoje (v1.6)
+## O que faz hoje (v1.7)
 
 - Reúne visão geral, Boletim Focus, Radar Macro e carteira em uma única
   página. O menu lateral leva diretamente a cada seção sem trocar de rota.
@@ -39,6 +39,10 @@ segunda-feira.
   valor investido e referência. Calcula alocação, concentração, resultado,
   comparação no ano e exposição ao cenário macro. Os valores ficam somente
   na sessão: não são gravados em arquivo nem enviados ao GitHub.
+- Importa diretamente o XLSX de posição da Área do Investidor B3. O app
+  descarta subtotais, consolida o mesmo ativo entre abas, classifica ações,
+  ETFs, FIIs/FIAGRO, renda fixa e Tesouro e ignora conta, instituição, CNPJ,
+  ISIN e contratos. A planilha é processada apenas em memória.
 
 A metodologia e seus limites estão em `METODOLOGIA_RADAR.md`.
 
@@ -66,7 +70,9 @@ OneDrive.
 O app abre em uma página única. Use o menu lateral para ir ao **Boletim
 Focus**, **Radar Macro** ou **Minha carteira**. A atualização do Focus
 acontece automaticamente; o botão **Atualizar dados** continua disponível
-para uma verificação manual.
+para uma verificação manual. Em **Minha carteira**, envie a planilha XLSX da
+B3 ou preencha as posições manualmente; os dois caminhos permitem adicionar
+linhas para investimentos que não estejam nessa fotografia.
 
 ## Trabalhando de mais de uma máquina (casa + trabalho)
 
@@ -93,7 +99,7 @@ mantém o contexto entre casa e trabalho.
 
 ## Roadmap
 
-- Depois: importação/exportação local opcional da carteira e calculadora de
+- Depois: exportação/backup local opcional da carteira e calculadora de
   projeção de rentabilidade (juros compostos, aportes).
 - Avaliado e descartado por ora: deploy público (Streamlit Community Cloud).
 

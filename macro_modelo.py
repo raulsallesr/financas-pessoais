@@ -341,6 +341,7 @@ def _perspectivas(
     pontuacoes = {
         "Pós-fixados": monetario,
         "Prefixados longos": -monetario - inflacao - fiscal,
+        "Fundos imobiliários / FIAGRO": -monetario,
         "Bolsa brasileira": atividade - monetario - risco,
         "Dólar": risco + fiscal,
         "Commodities / energia": atividade + (
@@ -362,6 +363,12 @@ def _perspectivas(
         "Prefixados longos": (
             "Inflação, juros e risco fiscal maiores elevam a taxa exigida e "
             "podem pressionar preços no curto prazo."
+        ),
+        "Fundos imobiliários / FIAGRO": (
+            "Juros altos elevam a taxa de desconto e competem com os "
+            "rendimentos distribuídos. Imóveis, recebíveis e FIAGROs reagem "
+            "de formas diferentes a inflação, crédito e commodities, então "
+            "esta é apenas uma leitura agregada."
         ),
         "Bolsa brasileira": (
             "Atividade ajuda, enquanto juros altos e aversão a risco pesam "

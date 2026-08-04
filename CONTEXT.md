@@ -1,6 +1,6 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.6 (página única + CDI/Selic + carteira MVP) pronto —
+- **Status**: v1.7 (importação B3 privada + carteira ampliada) pronto —
   2026-08-04
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
@@ -62,8 +62,12 @@
   - `pagina_macro.py` — composição visual da seção Radar.
   - `carteira_modelo.py` — normalização, alocação, resultado, benchmark e
     cruzamento puro entre classes da carteira e perspectivas do Radar.
+  - `b3_importacao.py` — adaptador `openpyxl` em memória para o XLSX da Área
+    do Investidor B3; mantém apenas ativo, classe e valor, ignora
+    identificadores/subtotais e consolida ativos repetidos entre abas.
   - `pagina_carteira.py` — editor de posições em memória e apresentação; os
-    valores pessoais não são persistidos nem versionados.
+    valores pessoais e a planilha importada não são persistidos nem
+    versionados.
   - `METODOLOGIA_RADAR.md` — contrato, fontes, limites e próximos gates do
     motor macro.
   - `atualizar_focus_cache.py` — entrada sem Streamlit usada pela automação
@@ -193,6 +197,22 @@
   - Gate ampliado para 84 testes, incluindo composição de taxas, cinco
     adaptadores, carteira pura, privacidade/empty state e as três seções de
     UI com `AppTest`; `py_compile` limpo.
+- **v1.7 (2026-08-04)** — importação da posição B3:
+  - A carteira recebe o XLSX da Área do Investidor diretamente no navegador,
+    processa em memória e preenche o editor sem copiar a planilha para o
+    projeto. Conta, instituição, CNPJ, ISIN, contratos e demais colunas sem
+    uso não são mantidos pelo adaptador.
+  - As seis abas conhecidas são aceitas; subtotais e linhas sem valor são
+    descartados, o mesmo ativo em custódia e empréstimo é consolidado e
+    renda fixa usa MTM, curva ou fechamento nessa ordem. A dimensão A1
+    incorreta do exportador B3 é corrigida antes da leitura.
+  - Classes passam a incluir FIIs/FIAGRO, com perspectiva macro agregada e
+    ressalva explícita sobre diferenças entre imóveis, recebíveis e agro.
+  - Validado de ponta a ponta contra uma exportação real fornecida pelo Raul,
+    sem versionar arquivo, identificadores, ativos ou valores pessoais.
+  - Gate ampliado para 91 testes, incluindo XLSX sintético criado em runtime,
+    dimensão A1 incorreta, arquivo inválido, consolidação, privacidade e
+    upload via `AppTest`; `py_compile` limpo.
 
 ## Fila priorizada
 
@@ -210,7 +230,8 @@ exigem dados pessoais ou uma escolha de canal externo.
 | P1 | Fila | “O que mudou desde minha última visita” | Alto | Médio |
 | P2 | Fila | Resumo semântico com fonte licenciada e provedor autorizado | Alto | Alto |
 | P2 | Entregue v1.6 | Carteira MVP em sessão, separada do motor educacional | Alto | Alto |
-| P2 | Fila | Importação/exportação local opcional da carteira | Médio | Médio |
+| P2 | Entregue v1.7 | Importação XLSX da posição B3 em memória | Alto | Médio |
+| P2 | Fila | Exportação/backup local opcional da carteira | Médio | Médio |
 | P2 | Fila | Simulador de aportes e juros compostos | Alto | Médio |
 | P2 | Fila | Alertas externos apenas para mudança relevante | Médio | Médio; depende do canal |
 | P3 | Adiado | Deploy público/mobile | Médio | Alto |
