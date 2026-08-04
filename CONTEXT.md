@@ -1,6 +1,7 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.1 pronto e validado ponta a ponta — 2026-08-04
+- **Status**: v1.2 (multi-máquina) pronto — 2026-08-04
+- **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
   (`https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata`),
@@ -23,14 +24,22 @@
     classe de ativo (reaproveitável por features futuras).
   - `focus_data.py` — dataclasses e cálculo de delta/tendência (sem I/O).
   - `focus_leitura.py` — adaptador da API Olinda + cache local em
-    `dados/focus_cache.json` (gitignored; `dados/focus_cache.example.json`
-    versionado como exemplo).
+    `dados/focus_cache.json`.
   - `focus_regras.py` — narrativa em linguagem simples + analogias.
 - Guardrail de conteúdo: o motor de regras nunca recebe dados do usuário e
   nunca usa linguagem imperativa ("invista", "compre") — só descritiva/
   histórica. `tests/test_focus_regras.py` faz lint de vocabulário proibido.
 - Fluxo de código: Claude Code escreve direto (sem protocolo de brief/Codex
   do hub da Fits — aqui é só o Raul).
+- **Multi-máquina (trabalho + casa)**: mesma conta Claude, mas sem memória de
+  conversa compartilhada entre sessões/máquinas — o git é a única fonte de
+  verdade. Por isso: `CLAUDE.md` (instruções fixas, lido automaticamente por
+  qualquer sessão Claude Code) + este `CONTEXT.md` (estado vivo) substituem a
+  memória de chat. E `dados/focus_cache.json` **passou a ser versionado**
+  (deixou de ser gitignored) — é só dado público do BACEN, sem nada
+  sensível, e assim as duas máquinas acumulam o mesmo histórico em vez de
+  cada uma ter o seu. `dados/focus_cache.example.json` foi removido (ficou
+  redundante — o cache real agora é o próprio exemplo).
 
 ## Estado atual
 

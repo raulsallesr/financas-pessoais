@@ -1,0 +1,71 @@
+{
+  "atualizado_em": "2026-08-04",
+  "registros": [
+    {
+      "indicador": "Câmbio",
+      "referencia": "2026",
+      "data_coleta": "2026-07-31",
+      "mediana": 5.2,
+      "media": 5.2045,
+      "minimo": 4.85,
+      "maximo": 5.6,
+      "desvio_padrao": 0.1272,
+      "num_respondentes": 122
+    },
+    {
+      "indicador": "Dívida líquida do setor público",
+      "referencia": "2026",
+      "data_coleta": "2026-07-31",
+      "mediana": 69.9,
+      "media": 69.968,
+      "minimo": 66.0,
+      "maximo": 73.9,
+      "desvio_padrao": 1.1321,
+      "num_respondentes": 58
+    },
+    {
+      "indicador": "IGP-M",
+      "referencia": "2026",
+      "data_coleta": "2026-07-31",
+      "mediana": 4.5355,
+      "media": 4.6128,
+      "minimo": 1.9722,
+      "maximo": 6.0127,
+      "desvio_padrao": 0.8533,
+      "num_respondentes": 66
+    },
+    {
+      "indicador": "IPCA",
+      "referencia": "2026",
+      "data_coleta": "2026-07-31",
+      "mediana": 5.0273,
+      "media": 5.021,
+      "minimo": 4.3,
+      "maximo": 5.6201,
+      "desvio_padrao": 0.218,
+      "num_respondentes": 152
+    },
+    {
+      "indicador": "PIB Total",
+      "referencia": "2026",
+      "data_coleta": "2026-07-31",
+      "mediana": 1.985,
+      "media": 1.9724,
+      "minimo": 1.333,
+      "maximo": 2.5127,
+      "desvio_padrao": 0.16,
+      "num_respondentes": 119
+    },
+    {
+      "indicador": "Selic",
+      "referencia": "R5/2026",
+      "data_coleta": "2026-07-31",
+      "mediana": 14.0,
+      "media": 14.0166,
+      "minimo": 13.75,
+      "maximo": 14.25,
+      "desvio_padrao": 0.0685,
+      "num_respondentes": 151
+    }
+  ]
+}

@@ -32,6 +32,27 @@ streamlit run app_financas.py
 Depois abra a página "Boletim Focus" na barra lateral e clique em
 "Atualizar com dados mais recentes".
 
+## Trabalhando de mais de uma máquina (casa + trabalho)
+
+O `.venv` é local a cada máquina (não é versionado — recrie com os passos
+acima em cada lugar). Já o histórico de dados do Focus
+(`dados/focus_cache.json`) **é versionado de propósito** — é só dado público
+do BACEN, sem nada sensível — para as duas máquinas acumularem o mesmo
+histórico em vez de cada uma ter o seu.
+
+Rotina simples para não perder nada:
+
+```
+git pull                              # antes de abrir o app
+streamlit run app_financas.py         # usa/atualiza o app normalmente
+git add -A && git commit -m "..."     # depois de qualquer mudança (inclusive só o cache)
+git push
+```
+
+O Claude Code lê `CLAUDE.md` e `CONTEXT.md` automaticamente em qualquer
+máquina com o repositório clonado — é isso (não a conversa do chat) que
+mantém o contexto entre casa e trabalho.
+
 ## Roadmap
 
 - Depois: página de carteira (organizar seus investimentos) e calculadora de
