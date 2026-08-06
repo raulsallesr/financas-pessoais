@@ -1,7 +1,7 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.7 (importação B3 privada + carteira ampliada) pronto —
-  2026-08-04
+- **Status**: v1.8 (tema claro + identidade visual responsiva) pronto —
+  2026-08-06
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -213,6 +213,25 @@
   - Gate ampliado para 91 testes, incluindo XLSX sintético criado em runtime,
     dimensão A1 incorreta, arquivo inválido, consolidação, privacidade e
     upload via `AppTest`; `py_compile` limpo.
+- **v1.8 (2026-08-06)** — tema claro + identidade visual:
+  - Tema Streamlit fixado explicitamente em modo claro, sem alternância pelo
+    tema do sistema. A nova paleta combina fundo verde-neutro muito claro,
+    superfícies brancas, verde-petróleo de alto contraste e dourado discreto.
+  - Home ganhou hero editorial, hierarquia tipográfica mais clara, cartões
+    consistentes e etapas numeradas. O menu lateral passou a usar SVGs
+    vetoriais próprios; os nomes de Material Symbols que apareciam como
+    texto em alguns navegadores foram eliminados.
+  - Sidebar inicia em modo automático: aberta em desktop e recolhida em
+    telas pequenas. Abaixo de 768 px, colunas são empilhadas e os blocos
+    ficam limitados ao viewport; a medição do DOM no Chrome confirmou largura
+    rolável igual à largura visível no menor viewport aceito pelo headless.
+  - Acessibilidade preservada/reforçada: skip link, foco visível, alvos de
+    44 px, contraste WCAG AA testado, navegação com rótulo textual, ícones
+    decorativos ocultos de leitores de tela e `prefers-reduced-motion`.
+  - A cor principal dos gráficos foi centralizada em `ui_estilos.py`.
+    Cálculos, fontes, textos metodológicos e dados não foram alterados.
+  - Validação visual desktop em navegador real; gate ampliado para 93 testes,
+    zero falhas/erros, mais `py_compile` limpo.
 
 ## Fila priorizada
 

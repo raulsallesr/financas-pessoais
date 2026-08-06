@@ -38,6 +38,7 @@ from focus_leitura import (
 from focus_regras import explicar_leigo, resumo_efeitos
 from noticias_data import Noticia, selecionar_destaques
 from noticias_feed import ResultadoNoticias, buscar_noticias
+from ui_estilos import COR_GRAFICO_PRIMARIA
 
 _ROTULOS_EFEITO = {
     "positivo": ("Tende a favorecer", "trending_up", "blue"),
@@ -364,7 +365,7 @@ def _renderizar_historico(
         y="Mediana",
         x_label="Data da coleta",
         y_label=UNIDADE_INDICADOR.get(indicador, "Mediana"),
-        color="#1e40af",
+        color=COR_GRAFICO_PRIMARIA,
         height=300,
     )
     if indicador == "Selic":

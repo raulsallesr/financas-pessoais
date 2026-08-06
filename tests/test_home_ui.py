@@ -45,7 +45,12 @@ def test_home_mostra_status_e_entrada_clara_para_o_focus():
 
     assert not app.exception
     assert app.title[0].value == "Finanças Pessoais, sem ruído"
-    assert app.subheader[0].value == "Do cenário à sua carteira"
+    assert app.header[0].value == "Do cenário à sua carteira"
+    assert [item.value for item in app.subheader[:3]] == [
+        "Expectativas",
+        "Mercados",
+        "Carteira",
+    ]
     assert not app.get("page_link")
     assert "2 indicadores" in " ".join(
         elemento.value for elemento in app.caption
@@ -56,6 +61,11 @@ def test_home_mostra_status_e_entrada_clara_para_o_focus():
     assert "#boletim-focus" in menu
     assert "#radar-macro" in menu
     assert "#minha-carteira" in menu
+    assert "<svg" in menu
+    assert "material-symbols-rounded" not in menu
+    markdown = " ".join(elemento.value for elemento in app.markdown)
+    assert 'class="fp-eyebrow"' in markdown
+    assert 'class="fp-skip-link"' in markdown
     focus.assert_called_once_with()
     macro.assert_called_once_with()
     carteira.assert_called_once_with(None, [])

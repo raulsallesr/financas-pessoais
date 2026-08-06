@@ -1,0 +1,27 @@
+[theme]
+base = "light"
+primaryColor = "#0F766E"
+backgroundColor = "#F3F7F5"
+secondaryBackgroundColor = "#F8FAF9"
+textColor = "#17332F"
+font = "sans-serif"
+headingFont = "sans-serif"
+baseFontSize = 16
+baseRadius = "0.9rem"
+buttonRadius = "0.75rem"
+borderColor = "#D8E5E1"
+showWidgetBorder = true
+showSidebarBorder = true
+chartCategoricalColors = [
+    "#0F766E",
+    "#A16207",
+    "#2563EB",
+    "#7C3AED",
+    "#BE4667",
+    "#64748B",
+]
+
+[theme.sidebar]
+backgroundColor = "#FBFCFB"
+secondaryBackgroundColor = "#EFF5F2"
+textColor = "#17332F"

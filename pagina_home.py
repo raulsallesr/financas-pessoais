@@ -37,25 +37,66 @@ def _renderizar_menu(
     ultima_coleta: date | None,
 ) -> None:
     with st.sidebar:
-        st.caption("FINANÇAS PESSOAIS")
-        st.header("Navegação")
+        st.markdown(
+            """
+            <div class="fp-sidebar-brand">
+              <span class="fp-sidebar-brand__mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-linecap="round"
+                     stroke-linejoin="round">
+                  <path d="M4 17.5 9 12l3.2 3.2L20 7.5"/>
+                  <path d="M15.5 7.5H20V12"/>
+                </svg>
+              </span>
+              <span class="fp-sidebar-brand__text">
+                <span>PAINEL PESSOAL</span>
+                <strong>Finanças</strong>
+              </span>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.caption("NAVEGAÇÃO")
         st.markdown(
             """
             <nav class="fp-section-nav" aria-label="Seções desta página">
               <a href="#visao-geral">
-                <span class="material-symbols-rounded">home</span>
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="m3 10.5 9-7.5 9 7.5"/>
+                  <path d="M5.5 9.5v10.25h13V9.5"/>
+                  <path d="M9.5 19.75v-6h5v6"/>
+                </svg>
                 Visão geral
               </a>
               <a href="#boletim-focus">
-                <span class="material-symbols-rounded">query_stats</span>
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5V4.5"/>
+                  <path d="M4 19.5h16"/>
+                  <path d="m7 15 4-4 3 3 5-7"/>
+                </svg>
                 Boletim Focus
               </a>
               <a href="#radar-macro">
-                <span class="material-symbols-rounded">monitoring</span>
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="8.5"/>
+                  <circle cx="12" cy="12" r="3.5"/>
+                  <path d="M12 3.5V1.8M20.5 12h1.7M12 20.5v1.7M3.5 12H1.8"/>
+                </svg>
                 Radar Macro
               </a>
               <a href="#minha-carteira">
-                <span class="material-symbols-rounded">account_balance_wallet</span>
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 6.5h14.5a1.5 1.5 0 0 1 1.5 1.5v10.5H5.5A2.5 2.5 0 0 1 3 16V7.5A2.5 2.5 0 0 1 5.5 5H17"/>
+                  <path d="M15 11h5v4h-5a2 2 0 0 1 0-4Z"/>
+                </svg>
                 Minha carteira
               </a>
             </nav>
@@ -82,12 +123,28 @@ def _renderizar_visao_geral(
     ultima_coleta: date | None,
 ) -> None:
     atualidade = avaliar_atualidade(ultima_coleta, date.today())
-    st.caption("VISÃO GERAL")
-    st.title("Finanças Pessoais, sem ruído")
-    st.write(
-        "Expectativas, mercados e carteira reunidos em uma única leitura. "
-        "Role a página ou use o menu à esquerda para ir direto ao tópico."
-    )
+    with st.container(key="home_hero"):
+        st.markdown(
+            """
+            <span class="fp-eyebrow">
+              <svg viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2"
+                   stroke-linecap="round" stroke-linejoin="round"
+                   aria-hidden="true">
+                <path d="M4 17.5 9 12l3.2 3.2L20 7.5"/>
+                <path d="M15.5 7.5H20V12"/>
+              </svg>
+              Visão financeira integrada
+            </span>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.title("Finanças Pessoais, sem ruído")
+        st.write(
+            "Expectativas, mercados e carteira reunidos em uma única "
+            "leitura. Role a página ou use o menu à esquerda para ir "
+            "direto ao tópico."
+        )
 
     with st.container(border=True, key="home_overview"):
         st.badge(
@@ -95,7 +152,7 @@ def _renderizar_visao_geral(
             icon=f":material/{atualidade.icone}:",
             color=atualidade.cor,
         )
-        st.subheader("Do cenário à sua carteira")
+        st.header("Do cenário à sua carteira")
         st.write(
             "Primeiro, veja o que o mercado espera no Boletim Focus. Depois, "
             "compare dólar, petróleo, Bitcoin, CDI e Selic no ano. Por fim, "
@@ -111,25 +168,32 @@ def _renderizar_visao_geral(
     etapas = st.columns(3, gap="medium")
     conteudos = (
         (
-            "1 · Expectativas",
+            "Expectativas",
             "O Focus mostra como Selic, inflação, câmbio e atividade estão "
             "mudando na visão do mercado.",
         ),
         (
-            "2 · Mercados",
+            "Mercados",
             "O Radar organiza os sinais e compara cinco referências desde o "
             "início do ano em uma base comum.",
         ),
         (
-            "3 · Carteira",
+            "Carteira",
             "Seus valores ficam apenas na sessão e são cruzados com o "
             "cenário de forma descritiva.",
         ),
     )
-    for coluna, (titulo, texto) in zip(etapas, conteudos):
+    for indice, (coluna, (titulo, texto)) in enumerate(
+        zip(etapas, conteudos),
+        start=1,
+    ):
         with coluna:
-            with st.container(border=True):
-                st.markdown(f"**{titulo}**")
+            with st.container(border=True, key=f"home_step_{indice}"):
+                st.markdown(
+                    f'<span class="fp-step-index">0{indice}</span>',
+                    unsafe_allow_html=True,
+                )
+                st.subheader(titulo)
                 st.write(texto)
 
 
@@ -138,9 +202,14 @@ def render() -> None:
         page_title="Finanças Pessoais",
         page_icon=":material/account_balance_wallet:",
         layout="wide",
-        initial_sidebar_state="expanded",
+        initial_sidebar_state="auto",
     )
     aplicar_estilos()
+    st.markdown(
+        '<a class="fp-skip-link" href="#visao-geral">'
+        "Pular para o conteúdo</a>",
+        unsafe_allow_html=True,
+    )
     total_indicadores, ultima_coleta = _carregar_status()
     _renderizar_menu(total_indicadores, ultima_coleta)
 

@@ -19,6 +19,7 @@ from mercado_data import (
 from mercado_fontes import ResultadoMercados, buscar_mercados
 from noticias_data import Noticia, selecionar_destaques
 from noticias_feed import ResultadoNoticias, buscar_noticias
+from ui_estilos import COR_GRAFICO_PRIMARIA
 
 _CORES_ESTADO = {
     "vento favorável": "green",
@@ -245,7 +246,7 @@ def _renderizar_linhas(series: list[SerieMercado]) -> None:
             y="Valor",
             y_label=serie.unidade,
             height=280,
-            color="#1e40af",
+            color=COR_GRAFICO_PRIMARIA,
         )
         st.dataframe(reais, hide_index=True, width="stretch")
 

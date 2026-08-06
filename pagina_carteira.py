@@ -18,6 +18,7 @@ from carteira_modelo import (
 )
 from macro_modelo import CenarioMacro
 from mercado_data import SerieMercado
+from ui_estilos import COR_GRAFICO_PRIMARIA
 
 
 _COLUNAS = (
@@ -153,7 +154,7 @@ def _renderizar_resumo(posicoes) -> None:
             x="Classe",
             y="Valor atual (R$)",
             height=300,
-            color="#1e40af",
+            color=COR_GRAFICO_PRIMARIA,
         )
     with direita:
         st.subheader("Detalhe da alocação")
