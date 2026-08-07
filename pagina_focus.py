@@ -34,6 +34,9 @@ from focus_leitura import (
     data_ultima_atualizacao_cache,
 )
 from focus_regras import explicar_leigo, resumo_efeitos
+from noticias_analise import AnaliseArtigo, analisar_artigo
+from noticias_artigo import ErroLeituraArtigo, buscar_artigo
+from noticias_data import Noticia
 from noticias_feed import ResultadoNoticias, buscar_noticias
 from noticias_focus import cruzar_noticias_com_focus
 
@@ -54,6 +57,15 @@ _CORES_RELACAO = {
 @st.cache_data(ttl=15 * 60, show_spinner=False)
 def _carregar_noticias() -> ResultadoNoticias:
     return buscar_noticias()
+
+
+@st.cache_data(ttl=30 * 60, show_spinner=False)
+def _carregar_analise_artigo(
+    noticia: Noticia,
+    comparativos: tuple[ComparativoIndicador, ...],
+) -> AnaliseArtigo:
+    artigo = buscar_artigo(noticia)
+    return analisar_artigo(artigo, list(comparativos))
 
 
 def _montar_comparativos(
@@ -353,6 +365,15 @@ def _renderizar_noticias_focus(
                             )
                             st.caption(noticia.fonte)
 
+        candidatas = _noticias_unicas(
+            [
+                noticia
+                for leitura in leituras
+                for noticia in leitura.destaques
+            ]
+        )
+        _renderizar_leitura_aprofundada(candidatas, comparativos)
+
     if resultado.fontes_indisponiveis:
         st.caption(
             "Indisponíveis agora: "
@@ -360,9 +381,162 @@ def _renderizar_noticias_focus(
             + "."
         )
     st.caption(
-        "A conexão usa somente títulos e categorias dos feeds; não lê o "
-        "corpo das matérias e não transforma frequência em verdade."
+        "Os cartões usam títulos e categorias. O corpo só é lido ao pedir "
+        "uma análise e não é salvo; frequência editorial não vira verdade."
     )
+
+
+def _noticias_unicas(noticias: list[Noticia]) -> list[Noticia]:
+    unicas: list[Noticia] = []
+    links: set[str] = set()
+    for noticia in noticias:
+        if noticia.link in links:
+            continue
+        links.add(noticia.link)
+        unicas.append(noticia)
+    return unicas
+
+
+def _renderizar_leitura_aprofundada(
+    noticias: list[Noticia],
+    comparativos: list[ComparativoIndicador],
+) -> None:
+    if not noticias:
+        return
+    with st.expander(
+        "Destrinchar uma matéria",
+        icon=":material/manage_search:",
+    ):
+        st.caption(
+            "Escolha uma matéria para verificar o conteúdo, os números "
+            "citados e a conexão com o Focus."
+        )
+        noticia = st.selectbox(
+            "Matéria",
+            noticias,
+            format_func=lambda item: f"{item.fonte} · {item.titulo}",
+            key="materia_para_analise",
+        )
+        chave = _chave_analise(noticia, comparativos)
+        analisar = st.button(
+            "Analisar matéria",
+            icon=":material/article:",
+            width="stretch",
+            key="analisar_materia_focus",
+        )
+        if analisar:
+            try:
+                with st.spinner(
+                    f"Lendo e conferindo {noticia.fonte}...",
+                    show_time=True,
+                ):
+                    analise = _carregar_analise_artigo(
+                        noticia,
+                        tuple(comparativos),
+                    )
+                st.session_state["analise_materia_focus"] = (
+                    chave,
+                    analise,
+                )
+            except ErroLeituraArtigo as erro:
+                st.session_state.pop("analise_materia_focus", None)
+                st.warning(str(erro))
+                st.markdown(
+                    f"[Abrir a matéria na fonte]"
+                    f"({noticia.link})"
+                )
+            except Exception:
+                st.session_state.pop("analise_materia_focus", None)
+                st.warning(
+                    "A matéria não pôde ser analisada agora. "
+                    "O link original continua disponível."
+                )
+                st.markdown(
+                    f"[Abrir a matéria na fonte]"
+                    f"({noticia.link})"
+                )
+
+        resultado_salvo = st.session_state.get("analise_materia_focus")
+        if (
+            resultado_salvo
+            and resultado_salvo[0] == chave
+        ):
+            _renderizar_analise_artigo(resultado_salvo[1])
+
+
+def _chave_analise(
+    noticia: Noticia,
+    comparativos: list[ComparativoIndicador],
+) -> tuple[object, ...]:
+    fotografia_focus = tuple(
+        (
+            item.atual.indicador,
+            item.atual.data_coleta.isoformat(),
+            item.atual.mediana,
+            item.direcao.value,
+        )
+        for item in comparativos
+    )
+    return noticia.link, fotografia_focus
+
+
+def _renderizar_analise_artigo(analise: AnaliseArtigo) -> None:
+    st.divider()
+    st.markdown(
+        f"#### [{_escapar_markdown(analise.noticia.titulo)}]"
+        f"({analise.noticia.link})"
+    )
+    st.caption(
+        f"{analise.noticia.fonte} · {analise.origem} · "
+        f"{analise.palavras_lidas} palavras examinadas"
+    )
+    st.markdown("**O que encontramos**")
+    st.write(analise.sintese)
+
+    if analise.conexoes:
+        st.markdown("**Como isso conversa com o Focus**")
+        for conexao in analise.conexoes:
+            with st.container(border=True):
+                st.badge(
+                    conexao.relacao,
+                    color=_CORES_RELACAO[conexao.relacao],
+                )
+                st.markdown(
+                    f"**{conexao.tema} · Focus: "
+                    f"{conexao.indicador_focus}**"
+                )
+                st.write(conexao.explicacao)
+
+    numeros, instituicoes = st.columns(2, gap="medium")
+    with numeros:
+        st.markdown("**Números citados**")
+        if analise.numeros:
+            for evidencia in analise.numeros:
+                st.markdown(
+                    f"- **{_escapar_markdown(evidencia.valor)}** "
+                    f"· {evidencia.contexto}"
+                )
+        else:
+            st.caption("Nenhum número econômico detectado com segurança.")
+    with instituicoes:
+        st.markdown("**Quem aparece no texto**")
+        if analise.instituicoes:
+            for instituicao in analise.instituicoes:
+                st.markdown(f"- {instituicao}")
+        else:
+            st.caption("Nenhuma instituição-chave detectada com segurança.")
+
+    if analise.onde_olhar:
+        st.markdown("**Onde olhar a partir daqui**")
+        for item in analise.onde_olhar:
+            st.markdown(f"- {item}")
+
+    if analise.trecho_verificacao:
+        st.caption(
+            "Trecho curto para conferência: "
+            f"“{_escapar_markdown(analise.trecho_verificacao)}”"
+        )
+    st.caption(analise.limitacao)
 
 
 def _renderizar_detalhes(

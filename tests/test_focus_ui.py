@@ -9,6 +9,11 @@ from streamlit.testing.v1 import AppTest
 
 import pagina_focus
 from focus_data import LeituraIndicador
+from noticias_analise import (
+    AnaliseArtigo,
+    ConexaoFocus,
+    EvidenciaNumerica,
+)
 from noticias_data import Noticia
 from noticias_feed import ResultadoNoticias
 
@@ -80,6 +85,34 @@ def _noticias():
     )
 
 
+def _analise(noticia):
+    return AnaliseArtigo(
+        noticia=noticia,
+        origem="Texto da matéria",
+        palavras_lidas=420,
+        temas=("Inflação",),
+        sintese="A matéria concentra-se em inflação.",
+        conexoes=(
+            ConexaoFocus(
+                tema="Inflação",
+                indicador_focus="IPCA",
+                relacao="Em tensão",
+                explicacao=(
+                    "A matéria sinaliza pressão de alta nos preços, "
+                    "mas IPCA caiu no Focus."
+                ),
+            ),
+        ),
+        numeros=(
+            EvidenciaNumerica(valor="5,2%", contexto="Inflação"),
+        ),
+        instituicoes=("Banco Central do Brasil",),
+        onde_olhar=("Próxima leitura do IPCA",),
+        trecho_verificacao="A inflação voltou ao radar nesta semana.",
+        limitacao="Leitura automatizada; confira a matéria.",
+    )
+
+
 def test_pagina_focus_substitui_historico_por_leitura_multifuente():
     pagina = (
         Path(__file__).resolve().parent / "apps" / "focus_section.py"
@@ -116,6 +149,56 @@ def test_pagina_focus_substitui_historico_por_leitura_multifuente():
     assert "5 fontes" in " ".join(
         elemento.value for elemento in app.caption
     )
+    assert any(
+        elemento.label == "Analisar matéria"
+        for elemento in app.button
+    )
+
+
+def test_pagina_focus_aprofunda_materia_so_depois_do_clique():
+    pagina = (
+        Path(__file__).resolve().parent / "apps" / "focus_section.py"
+    )
+    with (
+        patch.object(
+            pagina_focus, "carregar_cache", return_value=_historico()
+        ),
+        patch.object(
+            pagina_focus,
+            "data_ultima_atualizacao_cache",
+            return_value=date(2026, 8, 4),
+        ),
+        patch.object(
+            pagina_focus,
+            "_carregar_noticias",
+            return_value=_noticias(),
+        ),
+        patch.object(
+            pagina_focus,
+            "_carregar_analise_artigo",
+        ) as carregar_analise,
+    ):
+        carregar_analise.side_effect = (
+            lambda noticia, comparativos: _analise(noticia)
+        )
+        app = AppTest.from_file(pagina, default_timeout=15).run()
+        carregar_analise.assert_not_called()
+
+        botao = next(
+            elemento
+            for elemento in app.button
+            if elemento.label == "Analisar matéria"
+        )
+        app = botao.click().run()
+
+    assert not app.exception
+    carregar_analise.assert_called_once()
+    textos = " ".join(elemento.value for elemento in app.markdown)
+    assert "O que encontramos" in textos
+    assert "Como isso conversa com o Focus" in textos
+    assert "5,2%" in textos
+    assert "Banco Central do Brasil" in textos
+    assert "Próxima leitura do IPCA" in textos
 
 
 def test_pagina_focus_busca_primeiro_historico_automaticamente():

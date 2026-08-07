@@ -1,6 +1,6 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.10 (noticiário multifuente cruzado com o Focus) pronto —
+- **Status**: v1.11 (leitura aprofundada e rastreável das matérias) pronto —
   2026-08-07
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
@@ -56,6 +56,12 @@
     limite de resposta, allowlist e fallback por fonte.
   - `noticias_focus.py` — motor puro e conservador que identifica temas no
     próprio título e cruza a direção editorial com a última mudança do Focus.
+  - `noticias_artigo.py` — extrator sob demanda e efêmero do conteúdo de uma
+    matéria, com robots.txt, allowlist HTTPS, redirecionamentos validados,
+    limites de tamanho e descarte de navegação/publicidade.
+  - `noticias_analise.py` — motor puro que identifica temas, direção, números
+    e instituições no texto, compara os sinais com o Focus e devolve apenas
+    análise estruturada; o corpo editorial não integra o resultado.
   - `mercado_data.py` — dataclasses, consolidação, variação de 30 dias e
     normalização base 100 (sem I/O).
   - `mercado_fontes.py` — adaptadores independentes para PTAX/BACEN,
@@ -274,6 +280,25 @@
   - Gate ampliado para 98 testes, com regressão contra temas inventados por
     categoria; `py_compile`, integração real das seis fontes e
     `git diff --check` aprovados.
+- **v1.11 (2026-08-07)** — leitura aprofundada das matérias:
+  - Cada manchete destacada pode ser analisada sob demanda na própria seção
+    Focus. O app abre a fonte somente depois do clique e mostra síntese
+    conservadora, relações por tema com a última mudança do Focus, números,
+    instituições e cinco pontos objetivos para acompanhar.
+  - A análise diferencia `Em linha`, `Em tensão`, `Monitorar` e `Sem direção
+    clara`; ausência de sinal suficiente aparece como limite, sem completar
+    lacunas nem atribuir intenção ao autor.
+  - A leitura respeita robots.txt, aceita somente HTTPS e hosts das seis
+    fontes, valida redirecionamentos, limita o HTML a 2 MB e o texto a 6 mil
+    palavras. O corpo integral existe apenas durante o processamento em
+    memória: cache e sessão recebem somente a análise estruturada. Na tela,
+    a rastreabilidade usa título/link da fonte e um trecho de até 18 palavras.
+  - Validação real em 07/08/2026 analisou, sem persistir o texto, matérias de
+    InvestNews (878 palavras), Money Times (604) e Agência Brasil (275);
+    falhas de extração/robots degradam para aviso e link original.
+  - Gate ampliado para 105 testes, incluindo segurança do extrator, bloqueio
+    por robots.txt, redirecionamento externo, classificação, evidências e
+    carregamento somente após clique; `py_compile` e integração real limpos.
 
 ## Fila priorizada
 
