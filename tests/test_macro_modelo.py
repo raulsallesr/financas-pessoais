@@ -137,6 +137,18 @@ def test_temas_editoriais_nao_inventam_tema_sem_palavra_chave():
     assert temas == ()
 
 
+def test_temas_editoriais_nao_usam_categoria_ampla_como_evidencia():
+    noticia = Noticia(
+        titulo="Ouro registra maior ganho semanal desde janeiro",
+        link="https://example.com/ouro",
+        fonte="Teste",
+        publicada_em=datetime(2026, 8, 4, tzinfo=UTC),
+        categorias=("Juros", "Câmbio"),
+    )
+
+    assert extrair_temas_editoriais([noticia]) == ()
+
+
 def test_fonte_muito_defasada_nao_sustenta_confianca_moderada():
     cenario = construir_cenario(
         [

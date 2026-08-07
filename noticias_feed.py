@@ -49,6 +49,32 @@ FONTES_RSS = (
             {"braziljournal.com", "www.braziljournal.com"}
         ),
     ),
+    FonteRSS(
+        nome="Money Times",
+        url="https://www.moneytimes.com.br/feed/",
+        hosts_permitidos=frozenset(
+            {"moneytimes.com.br", "www.moneytimes.com.br"}
+        ),
+    ),
+    FonteRSS(
+        nome="Agência Brasil",
+        url="https://agenciabrasil.ebc.com.br/rss/economia/feed.xml",
+        hosts_permitidos=frozenset({"agenciabrasil.ebc.com.br"}),
+    ),
+    FonteRSS(
+        nome="InvestNews",
+        url="https://investnews.com.br/feed/",
+        hosts_permitidos=frozenset(
+            {"investnews.com.br", "www.investnews.com.br"}
+        ),
+    ),
+    FonteRSS(
+        nome="NeoFeed",
+        url="https://neofeed.com.br/feed/",
+        hosts_permitidos=frozenset(
+            {"neofeed.com.br", "www.neofeed.com.br"}
+        ),
+    ),
 )
 
 

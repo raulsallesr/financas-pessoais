@@ -8,6 +8,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from noticias_feed import (
     ErroFonteNoticias,
+    FONTES_RSS,
     FonteRSS,
     buscar_fonte,
     buscar_noticias,
@@ -50,6 +51,17 @@ FONTE = FonteRSS(
         {"infomoney.com.br", "www.infomoney.com.br"}
     ),
 )
+
+
+def test_fontes_padrao_cobrem_seis_veiculos_validados():
+    assert {fonte.nome for fonte in FONTES_RSS} == {
+        "InfoMoney",
+        "Brazil Journal",
+        "Money Times",
+        "Agência Brasil",
+        "InvestNews",
+        "NeoFeed",
+    }
 
 
 @patch("noticias_feed.requests.get")

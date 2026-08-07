@@ -59,16 +59,6 @@ def _renderizar_menu(
         st.markdown(
             """
             <nav class="fp-section-nav" aria-label="Seções desta página">
-              <a href="#visao-geral">
-                <svg viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-linecap="round"
-                     stroke-linejoin="round" aria-hidden="true">
-                  <path d="m3 10.5 9-7.5 9 7.5"/>
-                  <path d="M5.5 9.5v10.25h13V9.5"/>
-                  <path d="M9.5 19.75v-6h5v6"/>
-                </svg>
-                Visão geral
-              </a>
               <a href="#boletim-focus">
                 <svg viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-linecap="round"
@@ -141,14 +131,13 @@ def render() -> None:
     )
     aplicar_estilos()
     st.markdown(
-        '<a class="fp-skip-link" href="#visao-geral">'
+        '<a class="fp-skip-link" href="#boletim-focus">'
         "Pular para o conteúdo</a>",
         unsafe_allow_html=True,
     )
     total_indicadores, ultima_coleta = _carregar_status()
     _renderizar_menu(total_indicadores, ultima_coleta)
 
-    _ancora("visao-geral")
     _renderizar_visao_geral(ultima_coleta)
 
     st.divider()

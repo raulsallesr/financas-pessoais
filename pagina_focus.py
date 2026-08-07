@@ -8,7 +8,6 @@ from datetime import date
 import pandas as pd
 import streamlit as st
 
-from financas_taxonomia import UNIDADE_INDICADOR
 from focus_atualizacao import (
     avaliar_atualidade,
     deve_verificar_automaticamente,
@@ -35,7 +34,8 @@ from focus_leitura import (
     data_ultima_atualizacao_cache,
 )
 from focus_regras import explicar_leigo, resumo_efeitos
-from ui_estilos import COR_GRAFICO_PRIMARIA
+from noticias_feed import ResultadoNoticias, buscar_noticias
+from noticias_focus import cruzar_noticias_com_focus
 
 _ROTULOS_EFEITO = {
     "positivo": ("Tende a favorecer", "trending_up", "blue"),
@@ -43,6 +43,17 @@ _ROTULOS_EFEITO = {
     "neutro": ("Efeito misto", "swap_vert", "gray"),
 }
 _CARACTERES_MARKDOWN = re.compile(r"([\\`*_{}\[\]<>()#+\-.!|])")
+_CORES_RELACAO = {
+    "Em linha": "green",
+    "Em tensão": "orange",
+    "Monitorar": "blue",
+    "Sem direção clara": "gray",
+}
+
+
+@st.cache_data(ttl=15 * 60, show_spinner=False)
+def _carregar_noticias() -> ResultadoNoticias:
+    return buscar_noticias()
 
 
 def _montar_comparativos(
@@ -288,54 +299,70 @@ def _renderizar_impactos(
                         st.write(efeito.explicacao)
 
 
-def _renderizar_historico(
+def _renderizar_noticias_focus(
     comparativos: list[ComparativoIndicador],
-    historico: list[LeituraIndicador],
 ) -> None:
-    st.subheader("Histórico")
-    opcoes = [comparativo.atual.indicador for comparativo in comparativos]
-    indicador = st.pills(
-        "Indicador do gráfico",
-        opcoes,
-        default=opcoes[0],
-        required=True,
-        label_visibility="collapsed",
-        key="indicador_historico",
-    )
-    serie = serie_historica(historico, indicador)
-    if len(serie) < 2:
-        st.info(
-            "Ainda é preciso salvar pelo menos duas coletas para desenhar "
-            "a evolução deste indicador."
+    st.subheader("Noticiário x Focus")
+    try:
+        with st.spinner("Lendo fontes públicas..."):
+            resultado = _carregar_noticias()
+    except Exception:
+        resultado = ResultadoNoticias(
+            noticias=(),
+            fontes_indisponiveis=("Fontes de notícias",),
         )
-        return
 
-    dados = pd.DataFrame(
-        {
-            "Coleta": [leitura.data_coleta for leitura in serie],
-            "Mediana": [leitura.mediana for leitura in serie],
-        }
-    )
-    st.line_chart(
-        dados,
-        x="Coleta",
-        y="Mediana",
-        x_label="Data da coleta",
-        y_label=UNIDADE_INDICADOR.get(indicador, "Mediana"),
-        color=COR_GRAFICO_PRIMARIA,
-        height=300,
-    )
-    if indicador == "Selic":
+    noticias = list(resultado.noticias)
+    fontes_ativas = sorted({noticia.fonte for noticia in noticias})
+    if noticias:
         st.caption(
-            "A reunião observada muda após cada Copom; uma troca de "
-            "referência pode gerar salto sem mudança equivalente na "
-            "expectativa para a mesma reunião."
+            f"{len(noticias)} manchetes recentes · "
+            f"{len(fontes_ativas)} fontes: {', '.join(fontes_ativas)}."
         )
-    with st.expander(
-        "Ver valores usados no gráfico",
-        icon=":material/table_rows:",
-    ):
-        st.dataframe(dados, hide_index=True, width="stretch")
+    leituras = cruzar_noticias_com_focus(comparativos, noticias)
+    if not leituras:
+        st.info(
+            "Ainda não há manchetes suficientes para cruzar com a última "
+            "mudança do Focus."
+        )
+    else:
+        colunas = st.columns(len(leituras), gap="medium")
+        for coluna, leitura in zip(colunas, leituras):
+            with coluna:
+                with st.container(border=True):
+                    st.badge(
+                        leitura.relacao,
+                        color=_CORES_RELACAO[leitura.relacao],
+                    )
+                    st.markdown(f"**{leitura.tema}**")
+                    st.caption(
+                        f"{leitura.mencoes} manchetes · "
+                        f"{len(leitura.fontes)} fontes · "
+                        f"Focus: {leitura.indicador_focus}"
+                    )
+                    st.write(leitura.resumo)
+                    with st.popover(
+                        "Ver manchetes",
+                        icon=":material/newspaper:",
+                        width="stretch",
+                    ):
+                        for noticia in leitura.destaques:
+                            st.markdown(
+                                f"[{_escapar_markdown(noticia.titulo)}]"
+                                f"({noticia.link})"
+                            )
+                            st.caption(noticia.fonte)
+
+    if resultado.fontes_indisponiveis:
+        st.caption(
+            "Indisponíveis agora: "
+            + ", ".join(resultado.fontes_indisponiveis)
+            + "."
+        )
+    st.caption(
+        "A conexão usa somente títulos e categorias dos feeds; não lê o "
+        "corpo das matérias e não transforma frequência em verdade."
+    )
 
 
 def _renderizar_detalhes(
@@ -398,7 +425,7 @@ def render_secao() -> None:
 
     destaque = _renderizar_resumo(comparativos)
     _renderizar_metricas(comparativos, historico)
-    _renderizar_historico(comparativos, historico)
+    _renderizar_noticias_focus(comparativos)
     _renderizar_impactos(comparativos, destaque)
     _renderizar_detalhes(comparativos)
     st.caption(

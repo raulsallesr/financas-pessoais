@@ -1,6 +1,6 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.9 (interface enxuta e conteúdo priorizado) pronto —
+- **Status**: v1.10 (noticiário multifuente cruzado com o Focus) pronto —
   2026-08-07
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
@@ -52,7 +52,10 @@
   - `noticias_data.py` — normalização, relevância, deduplicação e seleção
     diversificada das manchetes (sem I/O).
   - `noticias_feed.py` — adaptador RSS isolado para InfoMoney e Brazil
-    Journal, com timeout, limite de resposta, allowlist e fallback por fonte.
+    Journal, Money Times, Agência Brasil, InvestNews e NeoFeed, com timeout,
+    limite de resposta, allowlist e fallback por fonte.
+  - `noticias_focus.py` — motor puro e conservador que identifica temas no
+    próprio título e cruza a direção editorial com a última mudança do Focus.
   - `mercado_data.py` — dataclasses, consolidação, variação de 30 dias e
     normalização base 100 (sem I/O).
   - `mercado_fontes.py` — adaptadores independentes para PTAX/BACEN,
@@ -250,6 +253,27 @@
     e alternativas tabulares dos gráficos foram preservados.
   - Cálculos, fontes, persistência e dados não foram alterados. Gate: 93
     testes aprovados, `py_compile` e `git diff --check` limpos.
+- **v1.10 (2026-08-07)** — noticiário multifuente cruzado com o Focus:
+  - O gráfico histórico do Focus foi removido: a série quase reta da Selic
+    não entregava sinal acionável e repetia informação já resumida nas
+    métricas.
+  - A seção substituta consulta em paralelo seis feeds validados — InfoMoney,
+    Brazil Journal, Money Times, Agência Brasil, InvestNews e NeoFeed — e
+    mostra os três temas mais conectados a juros, inflação, câmbio, atividade
+    ou fiscal. O teste ao vivo leu 60 manchetes, dez por fonte, sem fonte
+    indisponível.
+  - Cada tema informa quantidade de manchetes e fontes e classifica a relação
+    com a última mudança do Focus como `Em linha`, `Em tensão`, `Monitorar` ou
+    `Sem direção clara`. As manchetes usadas ficam acessíveis no próprio card.
+  - Para evitar relações artificiais, apenas palavras presentes no título
+    podem sustentar o cruzamento; categorias amplas dos feeds não viram
+    evidência. O app explicita que não lê o corpo das matérias e que frequência
+    não equivale a verdade.
+  - A navegação caiu de quatro para três destinos reais: Focus, Radar e
+    Carteira. A capa continua como cabeçalho, mas deixou de parecer uma aba.
+  - Gate ampliado para 98 testes, com regressão contra temas inventados por
+    categoria; `py_compile`, integração real das seis fontes e
+    `git diff --check` aprovados.
 
 ## Fila priorizada
 

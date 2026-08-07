@@ -202,9 +202,7 @@ div[data-testid="stVerticalBlockBorderWrapper"]
 }
 
 body:not(:has(.fp-section-anchor:target))
-.fp-section-nav a[href="#visao-geral"],
-body:has(#visao-geral:target)
-.fp-section-nav a[href="#visao-geral"],
+.fp-section-nav a[href="#boletim-focus"],
 body:has(#boletim-focus:target)
 .fp-section-nav a[href="#boletim-focus"],
 body:has(#radar-macro:target)

@@ -82,9 +82,7 @@ def extrair_temas_editoriais(
 ) -> tuple[TemaEditorial, ...]:
     contagens: dict[str, int] = {}
     for noticia in noticias:
-        texto = normalizar_texto(
-            " ".join((noticia.titulo, *noticia.categorias))
-        )
+        texto = normalizar_texto(noticia.titulo)
         for tema, termos in _TERMOS_TEMAS.items():
             if any(termo in texto for termo in termos):
                 contagens[tema] = contagens.get(tema, 0) + 1

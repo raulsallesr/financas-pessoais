@@ -60,10 +60,13 @@ def test_home_mostra_status_e_entrada_compacta():
     assert "#boletim-focus" in menu
     assert "#radar-macro" in menu
     assert "#minha-carteira" in menu
+    assert "#visao-geral" not in menu
+    assert menu.count("<a href=") == 3
     assert "<svg" in menu
     assert "material-symbols-rounded" not in menu
     markdown = " ".join(elemento.value for elemento in app.markdown)
     assert 'class="fp-skip-link"' in markdown
+    assert 'href="#boletim-focus"' in markdown
     assert "fp-step-index" not in markdown
     focus.assert_called_once_with()
     macro.assert_called_once_with()
