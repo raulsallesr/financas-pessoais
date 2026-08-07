@@ -3,8 +3,7 @@
 from __future__ import annotations
 
 import re
-from datetime import UTC, date
-from zoneinfo import ZoneInfo
+from datetime import date
 
 import pandas as pd
 import streamlit as st
@@ -36,8 +35,6 @@ from focus_leitura import (
     data_ultima_atualizacao_cache,
 )
 from focus_regras import explicar_leigo, resumo_efeitos
-from noticias_data import Noticia, selecionar_destaques
-from noticias_feed import ResultadoNoticias, buscar_noticias
 from ui_estilos import COR_GRAFICO_PRIMARIA
 
 _ROTULOS_EFEITO = {
@@ -46,11 +43,6 @@ _ROTULOS_EFEITO = {
     "neutro": ("Efeito misto", "swap_vert", "gray"),
 }
 _CARACTERES_MARKDOWN = re.compile(r"([\\`*_{}\[\]<>()#+\-.!|])")
-
-
-@st.cache_data(ttl=15 * 60, show_spinner=False)
-def _carregar_noticias() -> ResultadoNoticias:
-    return buscar_noticias()
 
 
 def _montar_comparativos(
@@ -92,25 +84,12 @@ def _escapar_markdown(texto: str) -> str:
     return _CARACTERES_MARKDOWN.sub(r"\\\1", texto)
 
 
-def _formatar_publicacao(noticia: Noticia) -> str:
-    if noticia.publicada_em is None:
-        return "Horário não informado"
-    momento = noticia.publicada_em
-    if momento.tzinfo is None:
-        momento = momento.replace(tzinfo=UTC)
-    local = momento.astimezone(ZoneInfo("America/Sao_Paulo"))
-    return local.strftime("%d/%m às %H:%M")
-
-
 def _renderizar_cabecalho() -> bool:
     cabecalho, acoes = st.columns([4, 1], vertical_alignment="bottom")
     with cabecalho:
-        st.caption("PANORAMA ECONÔMICO")
-        st.header("Seu dinheiro em contexto")
-        st.write(
-            "Entenda o que mudou nas expectativas e explore os possíveis "
-            "efeitos sem transformar cenário em certeza."
-        )
+        st.caption("BOLETIM FOCUS")
+        st.header("Expectativas do mercado")
+        st.write("Selic, inflação e câmbio esperados para os próximos meses.")
     with acoes:
         atualizar = st.button(
             "Atualizar dados",
@@ -207,27 +186,13 @@ def _renderizar_resumo(
         color=atualidade.cor,
     )
     st.caption(
-        f"Última coleta disponível: "
         f"{data_mais_recente.strftime('%d/%m/%Y')} · "
-        f"{atualidade.descricao} · "
-        "Fonte oficial dos indicadores: Banco Central."
+        f"{atualidade.descricao} · Banco Central"
     )
     destaque = escolher_destaque(comparativos)
     with st.container(border=True, key="resumo_semana"):
-        st.badge(
-            "Expectativas de mercado",
-            icon=":material/query_stats:",
-            color="blue",
-        )
         st.subheader(titulo_resumo(comparativos))
         st.write(explicar_leigo(destaque))
-        if destaque.anterior is not None:
-            st.caption(
-                "Comparação real: "
-                f"{destaque.anterior.data_coleta.strftime('%d/%m/%Y')} → "
-                f"{destaque.atual.data_coleta.strftime('%d/%m/%Y')}. "
-                "O destaque considera o limiar específico de cada indicador."
-            )
     return destaque
 
 
@@ -235,11 +200,6 @@ def _renderizar_metricas(
     comparativos: list[ComparativoIndicador],
     historico: list[LeituraIndicador],
 ) -> None:
-    st.subheader("Três números para começar")
-    st.caption(
-        "Selic, inflação e dólar ficam na primeira camada; os demais "
-        "indicadores continuam disponíveis sem disputar atenção."
-    )
     mapa = {
         comparativo.atual.indicador: comparativo
         for comparativo in comparativos
@@ -279,63 +239,60 @@ def _renderizar_impactos(
     comparativos: list[ComparativoIndicador],
     destaque: ComparativoIndicador,
 ) -> None:
-    st.divider()
-    st.subheader("O que isso pode afetar")
-    st.caption(
-        "Escolha um indicador. Os rótulos são condicionais e acompanhados "
-        "da explicação — a cor nunca carrega o significado sozinha."
-    )
     com_efeitos = [
         comparativo
         for comparativo in comparativos
         if resumo_efeitos(comparativo)
     ]
     if not com_efeitos:
-        st.info("A leitura atual ainda não tem efeitos educacionais mapeados.")
         return
 
-    opcoes = [comparativo.atual.indicador for comparativo in com_efeitos]
-    padrao = (
-        destaque.atual.indicador
-        if destaque.atual.indicador in opcoes
-        else opcoes[0]
-    )
-    indicador = st.pills(
-        "Indicador para explorar",
-        opcoes,
-        default=padrao,
-        required=True,
-        label_visibility="collapsed",
-        key="indicador_impacto",
-    )
-    comparativo_selecionado = next(
-        comparativo
-        for comparativo in com_efeitos
-        if comparativo.atual.indicador == indicador
-    )
-    st.write(explicar_leigo(comparativo_selecionado))
-    efeitos = resumo_efeitos(comparativo_selecionado)
-    for inicio in range(0, len(efeitos), 3):
-        grupo = efeitos[inicio : inicio + 3]
-        colunas = st.columns(len(grupo), gap="medium")
-        for coluna, efeito in zip(colunas, grupo):
-            rotulo, icone, cor = _ROTULOS_EFEITO[efeito.sentido]
-            with coluna:
-                with st.container(border=True):
-                    st.badge(
-                        rotulo,
-                        icon=f":material/{icone}:",
-                        color=cor,
-                    )
-                    st.markdown(f"**{efeito.classe.value}**")
-                    st.write(efeito.explicacao)
+    with st.expander(
+        "Possíveis impactos por classe de ativo",
+        icon=":material/insights:",
+    ):
+        opcoes = [comparativo.atual.indicador for comparativo in com_efeitos]
+        padrao = (
+            destaque.atual.indicador
+            if destaque.atual.indicador in opcoes
+            else opcoes[0]
+        )
+        indicador = st.pills(
+            "Indicador para explorar",
+            opcoes,
+            default=padrao,
+            required=True,
+            label_visibility="collapsed",
+            key="indicador_impacto",
+        )
+        comparativo_selecionado = next(
+            comparativo
+            for comparativo in com_efeitos
+            if comparativo.atual.indicador == indicador
+        )
+        st.write(explicar_leigo(comparativo_selecionado))
+        efeitos = resumo_efeitos(comparativo_selecionado)
+        for inicio in range(0, len(efeitos), 3):
+            grupo = efeitos[inicio : inicio + 3]
+            colunas = st.columns(len(grupo), gap="medium")
+            for coluna, efeito in zip(colunas, grupo):
+                rotulo, icone, cor = _ROTULOS_EFEITO[efeito.sentido]
+                with coluna:
+                    with st.container(border=True):
+                        st.badge(
+                            rotulo,
+                            icon=f":material/{icone}:",
+                            color=cor,
+                        )
+                        st.markdown(f"**{efeito.classe.value}**")
+                        st.write(efeito.explicacao)
 
 
 def _renderizar_historico(
     comparativos: list[ComparativoIndicador],
     historico: list[LeituraIndicador],
 ) -> None:
-    st.subheader("Histórico sem poluição visual")
+    st.subheader("Histórico")
     opcoes = [comparativo.atual.indicador for comparativo in comparativos]
     indicador = st.pills(
         "Indicador do gráfico",
@@ -381,56 +338,11 @@ def _renderizar_historico(
         st.dataframe(dados, hide_index=True, width="stretch")
 
 
-def _renderizar_noticias() -> None:
-    st.subheader("Contexto em 3 manchetes")
-    st.caption(
-        "Leitura externa para contexto. Título e link permanecem na fonte; "
-        "os indicadores oficiais continuam sendo os do BACEN."
-    )
-    try:
-        with st.spinner("Atualizando manchetes..."):
-            resultado = _carregar_noticias()
-    except Exception:
-        resultado = ResultadoNoticias(
-            noticias=(),
-            fontes_indisponiveis=("Feeds de notícias",),
-        )
-    destaques = selecionar_destaques(list(resultado.noticias), limite=3)
-    if not destaques:
-        st.info(
-            "As manchetes estão temporariamente indisponíveis. O panorama "
-            "do Focus continua funcionando normalmente."
-        )
-    for indice, noticia in enumerate(destaques):
-        with st.container(border=True):
-            st.badge(
-                noticia.fonte,
-                icon=":material/newspaper:",
-                color="gray",
-            )
-            st.markdown(f"**{_escapar_markdown(noticia.titulo)}**")
-            st.caption(_formatar_publicacao(noticia))
-            st.link_button(
-                "Ler na fonte",
-                noticia.link,
-                icon=":material/open_in_new:",
-                type="tertiary",
-                key=f"noticia_{indice}",
-            )
-    if resultado.fontes_indisponiveis:
-        st.caption(
-            "Fonte temporariamente indisponível: "
-            + ", ".join(resultado.fontes_indisponiveis)
-            + "."
-        )
-
-
 def _renderizar_detalhes(
     comparativos: list[ComparativoIndicador],
 ) -> None:
-    st.divider()
     with st.expander(
-        "Ver todos os indicadores, explicações e dispersão",
+        "Todos os indicadores e metodologia",
         icon=":material/data_exploration:",
     ):
         st.caption(
@@ -486,17 +398,8 @@ def render_secao() -> None:
 
     destaque = _renderizar_resumo(comparativos)
     _renderizar_metricas(comparativos, historico)
+    _renderizar_historico(comparativos, historico)
     _renderizar_impactos(comparativos, destaque)
-
-    st.divider()
-    coluna_historico, coluna_noticias = st.columns(
-        [3, 2], gap="large", vertical_alignment="top"
-    )
-    with coluna_historico:
-        _renderizar_historico(comparativos, historico)
-    with coluna_noticias:
-        _renderizar_noticias()
-
     _renderizar_detalhes(comparativos)
     st.caption(
         "Fonte dos indicadores: BACEN — Sistema de Expectativas de Mercado "

@@ -1,7 +1,7 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.8 (tema claro + identidade visual responsiva) pronto —
-  2026-08-06
+- **Status**: v1.9 (interface enxuta e conteúdo priorizado) pronto —
+  2026-08-07
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -232,6 +232,24 @@
     Cálculos, fontes, textos metodológicos e dados não foram alterados.
   - Validação visual desktop em navegador real; gate ampliado para 93 testes,
     zero falhas/erros, mais `py_compile` limpo.
+- **v1.9 (2026-08-07)** — interface enxuta e conteúdo priorizado:
+  - A home deixou de funcionar como landing page: hero, cartão explicativo e
+    três etapas redundantes foram substituídos por um cabeçalho compacto com
+    status da coleta e acesso direto às seções.
+  - O Focus prioriza síntese, Selic/IPCA/câmbio e histórico. Manchetes
+    duplicadas foram removidas dessa seção; impactos, indicadores secundários
+    e metodologia continuam disponíveis por abertura progressiva.
+  - O Radar mostra primeiro cenário, preços e desempenho no ano; sinais,
+    classes de ativo, temas editoriais e invalidadores foram agrupados em
+    detalhes recolhidos. A carteira recolhe a importação B3 e a exposição
+    macro, elimina métricas e tabelas duplicadas e mantém os valores exatos
+    acessíveis sob demanda.
+  - A densidade visual aumentou com conteúdo limitado a 1100 px, cartões e
+    métricas menores, sombras mais discretas e ritmo vertical compacto. Foco
+    visível, alvos de 44 px, contraste, redução de movimento, rótulos textuais
+    e alternativas tabulares dos gráficos foram preservados.
+  - Cálculos, fontes, persistência e dados não foram alterados. Gate: 93
+    testes aprovados, `py_compile` e `git diff --check` limpos.
 
 ## Fila priorizada
 

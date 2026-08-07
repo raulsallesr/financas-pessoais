@@ -56,6 +56,9 @@ def test_css_claro_preserva_acessibilidade_e_responsividade() -> None:
     assert "min-height: 44px" in CSS_APP
     assert "flex-wrap: wrap !important" in CSS_APP
     assert "max-width: 100vw" in CSS_APP
-    assert "width: calc(100vw - 2rem) !important" in CSS_APP
+    assert "max-width: 1100px" in CSS_APP
+    assert "gap: 1rem" in CSS_APP
+    assert "min-height: 108px" in CSS_APP
+    assert ".st-key-home_hero" not in CSS_APP
     assert _contraste("#0F766E", "#FFFFFF") >= 4.5
     assert _contraste("#17332F", "#F3F7F5") >= 4.5

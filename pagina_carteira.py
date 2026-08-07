@@ -102,23 +102,18 @@ def _preparar_editor_b3(arquivo) -> tuple[pd.DataFrame, str]:
 
 def _renderizar_resumo(posicoes) -> None:
     resumo = resumir_carteira(posicoes)
-    metricas = st.columns(4, gap="medium")
+    metricas = st.columns(3, gap="medium")
     metricas[0].metric(
         "Valor atual",
         _moeda(resumo.total_atual),
         border=True,
     )
     metricas[1].metric(
-        "Posições",
-        str(resumo.quantidade_posicoes),
-        border=True,
-    )
-    metricas[2].metric(
         "Maior posição",
         f"{resumo.maior_concentracao_percentual:.1f}%".replace(".", ","),
         border=True,
     )
-    metricas[3].metric(
+    metricas[2].metric(
         "Retorno informado",
         _percentual(resumo.retorno_conhecido_percentual),
         delta=(
@@ -144,20 +139,15 @@ def _renderizar_resumo(posicoes) -> None:
             for classe, valor in resumo.alocacao_por_classe
         ]
     )
-    esquerda, direita = st.columns(
-        [3, 2], gap="large", vertical_alignment="top"
+    st.subheader("Alocação")
+    st.bar_chart(
+        alocacao,
+        x="Classe",
+        y="Valor atual (R$)",
+        height=260,
+        color=COR_GRAFICO_PRIMARIA,
     )
-    with esquerda:
-        st.subheader("Alocação por classe")
-        st.bar_chart(
-            alocacao,
-            x="Classe",
-            y="Valor atual (R$)",
-            height=300,
-            color=COR_GRAFICO_PRIMARIA,
-        )
-    with direita:
-        st.subheader("Detalhe da alocação")
+    with st.expander("Ver valores por classe"):
         st.dataframe(
             alocacao,
             hide_index=True,
@@ -178,13 +168,7 @@ def _renderizar_comparacoes(
     comparacoes = comparar_com_benchmarks(posicoes, series)
     if not comparacoes:
         return
-    st.subheader("Como as posições estão se saindo")
-    st.caption(
-        "O retorno da posição usa os valores atual e investido que você "
-        "informou. A referência mostra a variação desde o primeiro ponto "
-        "útil disponível do ano. Como os períodos podem ser diferentes, o "
-        "app não calcula uma diferença direta entre eles."
-    )
+    st.subheader("Posições x referências")
     dados = pd.DataFrame(
         [
             {
@@ -216,55 +200,45 @@ def _renderizar_comparacoes(
 
 
 def _renderizar_impactos(posicoes, cenario: CenarioMacro | None) -> None:
-    st.subheader("Como o cenário encosta na carteira")
-    st.caption(
-        "A leitura cruza apenas a classe de cada posição com o Radar Macro. "
-        "Ela não avalia qualidade, preço de entrada, prazo ou adequação."
-    )
     impactos = cruzar_cenario(posicoes, cenario)
-    for inicio in range(0, len(impactos), 2):
-        grupo = impactos[inicio : inicio + 2]
-        colunas = st.columns(len(grupo), gap="medium")
-        for coluna, impacto in zip(colunas, grupo):
-            with coluna:
-                with st.container(border=True):
-                    st.badge(
-                        impacto.estado,
-                        color=_CORES_ESTADO[impacto.estado],
-                    )
-                    st.markdown(f"**{impacto.classe}**")
-                    st.caption(
-                        f"{_moeda(impacto.valor_atual)} · "
-                        f"{impacto.peso_percentual:.1f}% da carteira"
-                    )
-                    st.write(impacto.explicacao)
+    with st.expander(
+        "Exposição ao cenário macro",
+        icon=":material/radar:",
+    ):
+        for inicio in range(0, len(impactos), 2):
+            grupo = impactos[inicio : inicio + 2]
+            colunas = st.columns(len(grupo), gap="medium")
+            for coluna, impacto in zip(colunas, grupo):
+                with coluna:
+                    with st.container(border=True):
+                        st.badge(
+                            impacto.estado,
+                            color=_CORES_ESTADO[impacto.estado],
+                        )
+                        st.markdown(f"**{impacto.classe}**")
+                        st.caption(
+                            f"{_moeda(impacto.valor_atual)} · "
+                            f"{impacto.peso_percentual:.1f}% da carteira"
+                        )
+                        st.write(impacto.explicacao)
 
 
 def render(
     cenario: CenarioMacro | None,
     series: list[SerieMercado],
 ) -> None:
-    st.caption("CARTEIRA PESSOAL")
-    st.header("Minha carteira em contexto")
-    st.write(
-        "Adicione cada ativo, sua classe e quanto ele vale hoje. Se também "
-        "informar quanto foi investido, o app calcula o resultado e permite "
-        "comparar com uma referência desde o início do ano."
-    )
-    st.info(
-        "Os valores ficam somente nesta sessão do navegador: não são "
-        "gravados em arquivo nem enviados ao GitHub. A planilha importada "
-        "também é processada apenas em memória.",
-        icon=":material/lock:",
+    st.caption("MINHA CARTEIRA")
+    st.header("Posições e alocação")
+    st.write("Preencha manualmente ou importe sua posição da B3.")
+    st.caption(
+        "Privacidade: os valores ficam somente nesta sessão e a planilha é "
+        "processada em memória."
     )
 
-    with st.container(border=True):
-        st.markdown("**Importar posição da B3**")
-        st.write(
-            "Envie o arquivo XLSX da Área do Investidor para preencher a "
-            "tabela automaticamente. A posição pode ser parcial: depois da "
-            "importação, acrescente ou ajuste qualquer linha."
-        )
+    with st.expander(
+        "Importar posição da B3",
+        icon=":material/upload_file:",
+    ):
         arquivo_b3 = st.file_uploader(
             "Planilha de posição da B3",
             type=("xlsx",),
@@ -317,22 +291,12 @@ def render(
     )
     posicoes = montar_posicoes(tabela.to_dict("records"))
     if not posicoes:
-        st.markdown(
-            """
-            **Quando você preencher a primeira posição, esta área mostrará:**
-
-            - valor total, concentração e alocação por classe;
-            - resultado da posição quando houver valor investido;
-            - comparação com CDI, Selic, dólar, Brent ou Bitcoin no ano;
-            - quais parcelas da carteira estão mais expostas ao cenário macro.
-            """
+        st.caption(
+            "Adicione uma posição para ver total, retorno, alocação e "
+            "exposição ao cenário."
         )
         return
 
     _renderizar_resumo(posicoes)
     _renderizar_comparacoes(posicoes, series)
     _renderizar_impactos(posicoes, cenario)
-    st.caption(
-        "Leitura descritiva e educacional. Não constitui recomendação de "
-        "investimento nem substitui a análise de cada ativo."
-    )

@@ -25,7 +25,7 @@ def _leitura(indicador: str) -> LeituraIndicador:
     )
 
 
-def test_home_mostra_status_e_entrada_clara_para_o_focus():
+def test_home_mostra_status_e_entrada_compacta():
     pagina = Path(__file__).resolve().parent.parent / "app_financas.py"
     with (
         patch.object(
@@ -44,13 +44,12 @@ def test_home_mostra_status_e_entrada_clara_para_o_focus():
         app = AppTest.from_file(pagina, default_timeout=15).run()
 
     assert not app.exception
-    assert app.title[0].value == "Finanças Pessoais, sem ruído"
-    assert app.header[0].value == "Do cenário à sua carteira"
-    assert [item.value for item in app.subheader[:3]] == [
-        "Expectativas",
-        "Mercados",
-        "Carteira",
+    assert app.title[0].value == "Finanças pessoais"
+    assert "Expectativas, mercados e carteira em uma leitura só." in [
+        item.value for item in app.markdown
     ]
+    assert not app.header
+    assert not app.subheader
     assert not app.get("page_link")
     assert "2 indicadores" in " ".join(
         elemento.value for elemento in app.caption
@@ -64,8 +63,8 @@ def test_home_mostra_status_e_entrada_clara_para_o_focus():
     assert "<svg" in menu
     assert "material-symbols-rounded" not in menu
     markdown = " ".join(elemento.value for elemento in app.markdown)
-    assert 'class="fp-eyebrow"' in markdown
     assert 'class="fp-skip-link"' in markdown
+    assert "fp-step-index" not in markdown
     focus.assert_called_once_with()
     macro.assert_called_once_with()
     carteira.assert_called_once_with(None, [])

@@ -111,13 +111,13 @@ def test_radar_macro_renderiza_precos_cenario_e_linhas():
         app = AppTest.from_file(pagina, default_timeout=15).run()
 
     assert not app.exception
-    assert app.header[0].value == "Sinais, cenário e preços"
+    assert app.header[0].value == "Cenário e mercados"
     assert [metrica.label for metrica in app.metric[:3]] == [
         "Dólar PTAX",
         "Petróleo Brent",
         "Bitcoin",
     ]
-    assert "Mercados e juros desde o início do ano" in [
+    assert "Desempenho no ano" in [
         elemento.value for elemento in app.subheader
     ]
     assert len(app.get("vega_lite_chart")) == 2

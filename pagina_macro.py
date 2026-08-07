@@ -66,12 +66,9 @@ def _formatar_variacao(movimento: MovimentoMercado) -> str:
 def _renderizar_cabecalho() -> None:
     titulo, acao = st.columns([4, 1], vertical_alignment="bottom")
     with titulo:
-        st.caption("RADAR MACROECONÔMICO")
-        st.header("Sinais, cenário e preços")
-        st.write(
-            "Uma leitura explicável do momento: dados públicos, temas das "
-            "manchetes e condições que confirmam ou invalidam o cenário."
-        )
+        st.caption("RADAR MACRO")
+        st.header("Cenário e mercados")
+        st.write("O que os principais sinais públicos sugerem agora.")
     with acao:
         if st.button(
             "Atualizar radar",
@@ -92,17 +89,17 @@ def _renderizar_cabecalho() -> None:
                 "financeira individual. Ele organiza relações condicionais "
                 "com horizonte de semanas e confiança limitada."
             )
+            st.caption(
+                "Fontes: Banco Central, EIA/FRED, Binance e metadados RSS "
+                "de InfoMoney/Brazil Journal."
+            )
 
 
 def _renderizar_precos(series: list[SerieMercado]) -> list[MovimentoMercado]:
     series = [
         serie for serie in series if serie.codigo in _CODIGOS_PRECO
     ]
-    st.subheader("Três preços que mudam o cenário")
-    st.caption(
-        "A seta mostra apenas movimento de preço — alta não significa "
-        "automaticamente melhora, e queda não significa piora."
-    )
+    st.subheader("Mercados agora")
     movimentos = [calcular_movimento(serie) for serie in series]
     colunas = st.columns(max(1, len(movimentos)), gap="medium")
     for coluna, serie, movimento in zip(colunas, series, movimentos):
@@ -147,11 +144,7 @@ def _renderizar_cenario(cenario: CenarioMacro) -> None:
 
 
 def _renderizar_eixos(cenario: CenarioMacro) -> None:
-    st.subheader("Como o motor chegou nessa leitura")
-    st.caption(
-        "Cada eixo mostra direção e evidências. Ausência de sinal é tratada "
-        "como incerteza, não como confirmação."
-    )
+    st.subheader("Sinais considerados")
     for inicio in range(0, len(cenario.eixos), 3):
         grupo = cenario.eixos[inicio : inicio + 3]
         colunas = st.columns(len(grupo), gap="medium")
@@ -178,10 +171,6 @@ def _renderizar_eixos(cenario: CenarioMacro) -> None:
 
 def _renderizar_perspectivas(cenario: CenarioMacro) -> None:
     st.subheader("Ambiente por classe de ativo")
-    st.caption(
-        "Isto descreve ventos macro relativos; não considera prazo, preço de "
-        "entrada, objetivo, liquidez ou tolerância a risco."
-    )
     colunas = st.columns(2, gap="medium")
     for indice, perspectiva in enumerate(cenario.perspectivas):
         with colunas[indice % 2]:
@@ -195,11 +184,9 @@ def _renderizar_perspectivas(cenario: CenarioMacro) -> None:
 
 
 def _renderizar_linhas(series: list[SerieMercado]) -> None:
-    st.subheader("Mercados e juros desde o início do ano")
+    st.subheader("Desempenho no ano")
     st.caption(
-        f"Dólar, Brent, Bitcoin, CDI e Selic desde o primeiro ponto útil de "
-        f"{date.today().year}. Todas as linhas começam em 100 para comparar "
-        "desempenho acumulado, não valores absolutos com unidades diferentes."
+        f"Base 100 desde o primeiro ponto útil de {date.today().year}."
     )
     linhas = [
         {
@@ -255,11 +242,7 @@ def _renderizar_noticias(
     cenario: CenarioMacro,
     noticias: list[Noticia],
 ) -> None:
-    st.subheader("O que domina as manchetes")
-    st.caption(
-        "O motor conta temas no título e nas categorias do RSS. Ele não "
-        "raspa nem presume ter lido o conteúdo integral das matérias."
-    )
+    st.subheader("Temas nas manchetes")
     if cenario.temas_editoriais:
         colunas = st.columns(len(cenario.temas_editoriais), gap="small")
         for coluna, tema in zip(colunas, cenario.temas_editoriais):
@@ -273,42 +256,31 @@ def _renderizar_noticias(
         st.info("Nenhum tema macro apareceu com força nas manchetes atuais.")
 
     destaques = selecionar_destaques(noticias, limite=3)
-    with st.expander(
-        "Ver manchetes usadas como contexto",
-        icon=":material/newspaper:",
-    ):
-        if not destaques:
-            st.caption("Manchetes temporariamente indisponíveis.")
-        for indice, noticia in enumerate(destaques):
-            publicada = noticia.publicada_em
-            if publicada is not None:
-                if publicada.tzinfo is None:
-                    publicada = publicada.replace(tzinfo=UTC)
-                momento = publicada.astimezone().strftime("%d/%m às %H:%M")
-            else:
-                momento = "horário não informado"
-            st.markdown(f"**{noticia.titulo}**")
-            st.caption(f"{noticia.fonte} · {momento}")
-            st.link_button(
-                "Ler na fonte",
-                noticia.link,
-                icon=":material/open_in_new:",
-                type="tertiary",
-                key=f"macro_noticia_{indice}",
-            )
+    if not destaques:
+        st.caption("Manchetes temporariamente indisponíveis.")
+    for indice, noticia in enumerate(destaques):
+        publicada = noticia.publicada_em
+        if publicada is not None:
+            if publicada.tzinfo is None:
+                publicada = publicada.replace(tzinfo=UTC)
+            momento = publicada.astimezone().strftime("%d/%m às %H:%M")
+        else:
+            momento = "horário não informado"
+        st.markdown(f"**{noticia.titulo}**")
+        st.caption(f"{noticia.fonte} · {momento}")
+        st.link_button(
+            "Ler na fonte",
+            noticia.link,
+            icon=":material/open_in_new:",
+            type="tertiary",
+            key=f"macro_noticia_{indice}",
+        )
 
 
 def _renderizar_invalidadores(cenario: CenarioMacro) -> None:
-    with st.expander(
-        "O que faria o cenário mudar",
-        icon=":material/change_circle:",
-    ):
-        for item in cenario.invalidadores:
-            st.markdown(f"- {item}")
-        st.caption(
-            "A leitura é recalculada com os dados disponíveis a cada "
-            "atualização; não existe cenário permanente."
-        )
+    st.subheader("O que mudaria o cenário")
+    for item in cenario.invalidadores:
+        st.markdown(f"- {item}")
 
 
 def render_secao() -> tuple[CenarioMacro | None, list[SerieMercado]]:
@@ -348,19 +320,20 @@ def render_secao() -> tuple[CenarioMacro | None, list[SerieMercado]]:
     series_precos = [
         serie for serie in series if serie.codigo in _CODIGOS_PRECO
     ]
-    if series_precos:
-        _renderizar_precos(series_precos)
     cenario = construir_cenario(comparativos, series_precos, noticias)
     _renderizar_cenario(cenario)
-    st.divider()
-    _renderizar_eixos(cenario)
-    _renderizar_perspectivas(cenario)
+    if series_precos:
+        _renderizar_precos(series_precos)
     if series:
-        st.divider()
         _renderizar_linhas(series)
-    st.divider()
-    _renderizar_noticias(cenario, noticias)
-    _renderizar_invalidadores(cenario)
+    with st.expander(
+        "Entender como o cenário foi montado",
+        icon=":material/account_tree:",
+    ):
+        _renderizar_eixos(cenario)
+        _renderizar_perspectivas(cenario)
+        _renderizar_noticias(cenario, noticias)
+        _renderizar_invalidadores(cenario)
 
     indisponiveis = (
         *resultado_mercados.fontes_indisponiveis,
@@ -373,10 +346,6 @@ def render_secao() -> tuple[CenarioMacro | None, list[SerieMercado]]:
             + ". A confiança da leitura foi reduzida."
         )
     st.caption(
-        "Fontes: PTAX/Banco Central, Brent/EIA via FRED, BTC/BRL/Binance, "
-        "CDI e Selic/Banco Central (SGS), "
-        "Boletim Focus/BACEN e metadados RSS de InfoMoney/Brazil Journal. "
-        "Conteúdo educacional; cenário condicionado, não previsão garantida "
-        "nem orientação personalizada."
+        "Fontes públicas · cenário condicionado · conteúdo educacional."
     )
     return cenario, series

@@ -31,14 +31,14 @@ def test_carteira_abre_editor_e_explica_privacidade_da_sessao():
     app = AppTest.from_file(pagina, default_timeout=15).run()
 
     assert not app.exception
-    assert app.header[0].value == "Minha carteira em contexto"
+    assert app.header[0].value == "Posições e alocação"
     assert len(app.get("file_uploader")) == 1
     assert len(app.get("dataframe")) == 1
     assert "somente nesta sessão" in " ".join(
-        elemento.value for elemento in app.info
+        elemento.value for elemento in app.caption
     )
-    assert "Quando você preencher" in " ".join(
-        elemento.value for elemento in app.markdown
+    assert "Adicione uma posição" in " ".join(
+        elemento.value for elemento in app.caption
     )
 
 
@@ -58,4 +58,8 @@ def test_upload_b3_preenche_editor_e_mostra_resumo():
         elemento.value for elemento in app.success
     )
     assert app.metric[0].value == "R$ 1.500,00"
-    assert app.metric[1].value == "1"
+    assert [metrica.label for metrica in app.metric] == [
+        "Valor atual",
+        "Maior posição",
+        "Retorno informado",
+    ]

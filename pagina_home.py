@@ -56,7 +56,6 @@ def _renderizar_menu(
             """,
             unsafe_allow_html=True,
         )
-        st.caption("NAVEGAÇÃO")
         st.markdown(
             """
             <nav class="fp-section-nav" aria-label="Seções desta página">
@@ -103,98 +102,34 @@ def _renderizar_menu(
             """,
             unsafe_allow_html=True,
         )
-        st.divider()
         if ultima_coleta is not None:
             st.caption(
-                f"{total_indicadores} indicadores do Focus · última coleta "
-                f"em {ultima_coleta.strftime('%d/%m/%Y')}."
+                f"Focus · {total_indicadores} indicadores · "
+                f"{ultima_coleta.strftime('%d/%m/%Y')}"
             )
         else:
-            st.caption(
-                "O Focus será consultado quando houver conexão disponível."
-            )
-        st.caption(
-            "Use os links acima para ir direto ao tópico sem trocar de página."
-        )
+            st.caption("Focus aguardando a primeira coleta.")
 
 
-def _renderizar_visao_geral(
-    total_indicadores: int,
-    ultima_coleta: date | None,
-) -> None:
+def _renderizar_visao_geral(ultima_coleta: date | None) -> None:
     atualidade = avaliar_atualidade(ultima_coleta, date.today())
-    with st.container(key="home_hero"):
-        st.markdown(
-            """
-            <span class="fp-eyebrow">
-              <svg viewBox="0 0 24 24" fill="none"
-                   stroke="currentColor" stroke-width="2"
-                   stroke-linecap="round" stroke-linejoin="round"
-                   aria-hidden="true">
-                <path d="M4 17.5 9 12l3.2 3.2L20 7.5"/>
-                <path d="M15.5 7.5H20V12"/>
-              </svg>
-              Visão financeira integrada
-            </span>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.title("Finanças Pessoais, sem ruído")
-        st.write(
-            "Expectativas, mercados e carteira reunidos em uma única "
-            "leitura. Role a página ou use o menu à esquerda para ir "
-            "direto ao tópico."
-        )
-
-    with st.container(border=True, key="home_overview"):
+    introducao, status = st.columns(
+        [4, 1], gap="large", vertical_alignment="bottom"
+    )
+    with introducao:
+        st.caption("PAINEL FINANCEIRO PESSOAL")
+        st.title("Finanças pessoais")
+        st.write("Expectativas, mercados e carteira em uma leitura só.")
+    with status:
         st.badge(
             atualidade.rotulo,
             icon=f":material/{atualidade.icone}:",
             color=atualidade.cor,
         )
-        st.header("Do cenário à sua carteira")
-        st.write(
-            "Primeiro, veja o que o mercado espera no Boletim Focus. Depois, "
-            "compare dólar, petróleo, Bitcoin, CDI e Selic no ano. Por fim, "
-            "adicione suas posições para enxergar alocação, resultado e "
-            "exposição ao cenário."
-        )
         if ultima_coleta is not None:
             st.caption(
-                f"{total_indicadores} indicadores acompanhados · dados do "
-                f"Focus até {ultima_coleta.strftime('%d/%m/%Y')}."
+                f"Focus em {ultima_coleta.strftime('%d/%m/%Y')}"
             )
-
-    etapas = st.columns(3, gap="medium")
-    conteudos = (
-        (
-            "Expectativas",
-            "O Focus mostra como Selic, inflação, câmbio e atividade estão "
-            "mudando na visão do mercado.",
-        ),
-        (
-            "Mercados",
-            "O Radar organiza os sinais e compara cinco referências desde o "
-            "início do ano em uma base comum.",
-        ),
-        (
-            "Carteira",
-            "Seus valores ficam apenas na sessão e são cruzados com o "
-            "cenário de forma descritiva.",
-        ),
-    )
-    for indice, (coluna, (titulo, texto)) in enumerate(
-        zip(etapas, conteudos),
-        start=1,
-    ):
-        with coluna:
-            with st.container(border=True, key=f"home_step_{indice}"):
-                st.markdown(
-                    f'<span class="fp-step-index">0{indice}</span>',
-                    unsafe_allow_html=True,
-                )
-                st.subheader(titulo)
-                st.write(texto)
 
 
 def render() -> None:
@@ -214,7 +149,7 @@ def render() -> None:
     _renderizar_menu(total_indicadores, ultima_coleta)
 
     _ancora("visao-geral")
-    _renderizar_visao_geral(total_indicadores, ultima_coleta)
+    _renderizar_visao_geral(ultima_coleta)
 
     st.divider()
     _ancora("boletim-focus")

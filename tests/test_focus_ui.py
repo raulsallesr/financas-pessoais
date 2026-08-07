@@ -1,5 +1,5 @@
 import sys
-from datetime import UTC, date, datetime
+from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
@@ -9,8 +9,6 @@ from streamlit.testing.v1 import AppTest
 
 import pagina_focus
 from focus_data import LeituraIndicador
-from noticias_data import Noticia
-from noticias_feed import ResultadoNoticias
 
 
 def _leitura(indicador, mediana, data_coleta, referencia="2026"):
@@ -57,22 +55,6 @@ def _historico():
     return leituras
 
 
-def _noticias():
-    return ResultadoNoticias(
-        noticias=tuple(
-            Noticia(
-                titulo=f"Selic e inflação em destaque {indice}",
-                link=f"https://www.infomoney.com.br/economia/item-{indice}/",
-                fonte="InfoMoney" if indice < 2 else "Brazil Journal",
-                publicada_em=datetime(
-                    2026, 8, 4, 14 - indice, tzinfo=UTC
-                ),
-            )
-            for indice in range(3)
-        )
-    )
-
-
 def test_pagina_focus_renderiza_hierarquia_e_um_unico_grafico():
     pagina = (
         Path(__file__).resolve().parent / "apps" / "focus_section.py"
@@ -80,9 +62,6 @@ def test_pagina_focus_renderiza_hierarquia_e_um_unico_grafico():
     with (
         patch.object(
             pagina_focus, "carregar_cache", return_value=_historico()
-        ),
-        patch.object(
-            pagina_focus, "_carregar_noticias", return_value=_noticias()
         ),
         patch.object(
             pagina_focus,
@@ -93,19 +72,17 @@ def test_pagina_focus_renderiza_hierarquia_e_um_unico_grafico():
         app = AppTest.from_file(pagina, default_timeout=15).run()
 
     assert not app.exception
-    assert app.header[0].value == "Seu dinheiro em contexto"
+    assert app.header[0].value == "Expectativas do mercado"
     subtitulos = [elemento.value for elemento in app.subheader]
-    assert "Três números para começar" in subtitulos
-    assert "O que isso pode afetar" in subtitulos
-    assert "Histórico sem poluição visual" in subtitulos
-    assert "Contexto em 3 manchetes" in subtitulos
+    assert "Histórico" in subtitulos
+    assert "Contexto em 3 manchetes" not in subtitulos
     assert [metrica.label for metrica in app.metric[:3]] == [
         "Selic",
         "IPCA",
         "Câmbio",
     ]
     assert len(app.get("vega_lite_chart")) == 1
-    assert len(app.get("link_button")) == 3
+    assert not app.get("link_button")
 
 
 def test_pagina_focus_busca_primeiro_historico_automaticamente():
@@ -124,9 +101,6 @@ def test_pagina_focus_busca_primeiro_historico_automaticamente():
             "atualizar_e_obter_historico",
             return_value=_historico(),
         ) as atualizar,
-        patch.object(
-            pagina_focus, "_carregar_noticias", return_value=_noticias()
-        ),
     ):
         app = AppTest.from_file(pagina, default_timeout=15).run()
 
