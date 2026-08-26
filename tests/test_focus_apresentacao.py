@@ -5,13 +5,16 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from focus_apresentacao import (
+    descricao_resumo_semanal,
     escolher_destaque,
     formatar_delta,
     formatar_valor,
     ordenar_comparativos,
+    titulo_resumo_semanal,
     titulo_resumo,
 )
 from focus_data import LeituraIndicador, comparar
+from focus_semanal import montar_resumo_semanal
 
 
 def _leitura(
@@ -78,3 +81,41 @@ def test_formatacao_financeira_em_portugues():
     assert formatar_delta(cambio) == "+R$ 0,15 desde 28/07"
     assert formatar_valor(selic) == "14,00%"
     assert formatar_delta(selic) == "+0,50 p.p. desde 28/07"
+
+
+def test_texto_semanal_resume_estado_e_quantifica_evidencia():
+    comparativos = [
+        _comparativo("Selic", 14.2, 14.0),
+        _comparativo("IPCA", 5.15, 5.0),
+        _comparativo("Câmbio", 5.04, 5.0),
+        _comparativo("PIB Total", 1.04, 1.0),
+    ]
+    resumo = montar_resumo_semanal(
+        comparativos,
+        date(2026, 8, 4),
+    )
+
+    assert titulo_resumo_semanal(resumo) == (
+        "IPCA liderou as revisões de alta"
+    )
+    descricao = descricao_resumo_semanal(resumo)
+    assert "2 de 4 indicadores comparáveis" in descricao
+    assert "limiar" in descricao
+
+
+def test_texto_semanal_nao_inventa_movimento_na_primeira_fotografia():
+    comparativos = [
+        comparar(
+            _leitura("Selic", 14.0, date(2026, 8, 4)),
+            None,
+        )
+    ]
+    resumo = montar_resumo_semanal(
+        comparativos,
+        date(2026, 8, 4),
+    )
+
+    assert titulo_resumo_semanal(resumo) == (
+        "Primeira fotografia das expectativas disponível"
+    )
+    assert "não calculamos variação" in descricao_resumo_semanal(resumo)

@@ -1,7 +1,7 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.11 pronto; evolução para FocusLens BR estruturada em
-  2026-08-26. Próxima entrega: Focus Semanal (`v1.12`).
+- **Status**: Focus Semanal (`v1.12`) implementado em 2026-08-26. Próxima
+  entrega: Curva Tesouro (`v1.13`).
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -26,8 +26,8 @@
 - A curva começará por títulos prefixados sem cupom e pontos observados. Taxa
   de título não será apresentada como previsão pura da Selic; prêmio de prazo,
   risco e liquidez permanecem limitações explícitas.
-- A Etapa 0 (estruturação) foi concluída em 2026-08-26. Nenhuma decisão de
-  produto, arquitetura ou visual está pendente para iniciar a Etapa 1.
+- As Etapas 0 e 1 foram concluídas em 2026-08-26. A próxima execução é a
+  validação da fonte e do contrato de dados da Curva Tesouro.
 
 ## Arquitetura
 
@@ -64,6 +64,8 @@
   - `focus_regras.py` — narrativa em linguagem simples + analogias.
   - `focus_apresentacao.py` — priorização, destaques e formatação da camada
     visual (sem Streamlit).
+  - `focus_semanal.py` — motor puro de relevância normalizada, ranking e
+    estados da fotografia semanal.
   - `pagina_focus.py` — composição da seção e dos estados do Focus.
   - `pagina_home.py` — composição da experiência única;
     `app_financas.py` é apenas o entrypoint principal.
@@ -98,6 +100,8 @@
     versionados.
   - `METODOLOGIA_RADAR.md` — contrato, fontes, limites e próximos gates do
     motor macro.
+  - `METODOLOGIA_FOCUS.md` — cálculo, limiares, estados e limites do Focus
+    Semanal.
   - `atualizar_focus_cache.py` — entrada sem Streamlit usada pela automação
     agendada em `.github/workflows/atualizar-focus.yml`.
 - Guardrail de conteúdo: o motor de regras nunca recebe dados do usuário e
@@ -318,6 +322,20 @@
   - Gate ampliado para 105 testes, incluindo segurança do extrator, bloqueio
     por robots.txt, redirecionamento externo, classificação, evidências e
     carregamento somente após clique; `py_compile` e integração real limpos.
+- **v1.12 (2026-08-26)** — Focus Semanal:
+  - O topo da seção Focus responde “o que mudou” antes dos detalhes e mostra
+    até três revisões entre Selic, IPCA, câmbio e PIB Total.
+  - A relevância é comparável entre unidades: delta absoluto dividido pelo
+    limiar específico de estabilidade. Empates seguem ordem fixa e o método
+    está documentado em `METODOLOGIA_FOCUS.md`.
+  - A tela distingue `Atualizado`, `Defasado`, `Indisponível` e `Sem mudança
+    relevante`, sempre com datas e evidência perto da conclusão.
+  - Motor, apresentação e UI permanecem separados; a identidade clara em
+    verde-petróleo foi preservada e a captura principal está versionada.
+  - Gate: 115 testes aprovados; `py_compile` dos três módulos alterados e
+    `git diff --check` limpos. Desktop foi inspecionado em navegador real;
+    responsividade, foco, contraste e redução de movimento permanecem cobertos
+    pelo CSS compartilhado e pelos testes de UI.
 
 ## Fila priorizada
 
@@ -326,8 +344,8 @@ integração seguinte.
 
 | Prioridade | Estado | Melhoria | Impacto | Esforço |
 |---|---|---|---|---|
-| P0 | Próxima | Focus Semanal (`v1.12`) | Alto | Médio |
-| P1 | Planejada | Curva Tesouro (`v1.13`) | Muito alto | Alto |
+| P0 | Entregue | Focus Semanal (`v1.12`) | Alto | Médio |
+| P1 | Próxima | Curva Tesouro (`v1.13`) | Muito alto | Alto |
 | P2 | Planejada | Focus × Curva (`v1.14`) | Muito alto | Alto |
 | P3 | Planejada | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |

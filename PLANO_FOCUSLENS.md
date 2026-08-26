@@ -118,6 +118,11 @@ entregas.
 **Publicação:** “Criei um monitor automático para mostrar o que mudou no
 Boletim Focus — sem depender do PDF.”
 
+**Estado:** concluída em 2026-08-26. O motor puro normaliza cada delta pelo
+limiar do indicador, a interface prioriza até três revisões e os quatro estados
+de disponibilidade foram cobertos por testes. Método e captura estão em
+`METODOLOGIA_FOCUS.md` e `docs/assets/focus-semanal-v1.12.png`.
+
 ---
 
 ### Etapa 2 — Curva Tesouro
@@ -346,18 +351,16 @@ descartáveis:
 Antes de tornar o repositório público, executar auditoria específica de
 segredos, dados pessoais, direitos de conteúdo, dependências e histórico Git.
 
-## 11. Próxima execução — Etapa 1
+## 11. Próxima execução — Etapa 2
 
 Ordem de trabalho:
 
-1. definir matematicamente “mudança relevante” por indicador;
-2. criar motor puro que ordena as revisões;
-3. modelar os quatro estados de atualização;
-4. compor o bloco “O que mudou” na seção Focus;
-5. adicionar testes de regra, datas, ausência de dado e UI;
-6. revisar a tela em desktop e mobile;
-7. preparar README, imagens e release `v1.12`;
-8. auditar o repositório antes de qualquer mudança de visibilidade.
+1. confirmar o contrato real da fonte Tesouro Transparente;
+2. escolher os campos canônicos de taxa e vencimento;
+3. criar o adaptador isolado e fixtures sintéticas;
+4. modelar pontos observados e variações em D-5/D-21 úteis;
+5. compor a primeira Curva Tesouro sem interpolação artificial;
+6. documentar limitações e validar os estados da fonte.
 
-Nenhuma decisão de fonte, arquitetura ou identidade visual está pendente para
-começar essa etapa.
+A Etapa 1 está fechada na `v1.12`. A próxima implementação começa pela
+qualidade e rastreabilidade da fonte da curva, antes da camada visual.

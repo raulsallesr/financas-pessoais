@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from focus_data import ComparativoIndicador
 from financas_taxonomia import Direcao
+from focus_semanal import EstadoFocusSemanal, ResumoFocusSemanal
 from motor_indicadores import limiar_estavel
 
 ORDEM_INDICADORES = (
@@ -81,6 +82,52 @@ def titulo_resumo(comparativos: list[ComparativoIndicador]) -> str:
     return (
         f"{destaque.atual.indicador} concentrou o movimento de "
         f"{movimento} mais relevante"
+    )
+
+
+def titulo_resumo_semanal(resumo: ResumoFocusSemanal) -> str:
+    if resumo.estado == EstadoFocusSemanal.INDISPONIVEL:
+        return "Focus indisponível no momento"
+    if resumo.estado == EstadoFocusSemanal.DEFASADO:
+        return "A última fotografia do Focus está defasada"
+    if resumo.estado == EstadoFocusSemanal.SEM_MUDANCA_RELEVANTE:
+        return "Expectativas seguem praticamente estáveis"
+    if resumo.total_comparaveis == 0:
+        return "Primeira fotografia das expectativas disponível"
+
+    destaque = resumo.destaques[0]
+    movimento = "alta" if destaque.direcao == Direcao.SUBIU else "queda"
+    return f"{destaque.atual.indicador} liderou as revisões de {movimento}"
+
+
+def descricao_resumo_semanal(resumo: ResumoFocusSemanal) -> str:
+    if resumo.estado == EstadoFocusSemanal.INDISPONIVEL:
+        return (
+            "Ainda não existe uma fotografia íntegra salva. Atualize os "
+            "dados para consultar as expectativas do Banco Central."
+        )
+    if resumo.estado == EstadoFocusSemanal.DEFASADO:
+        data = resumo.data_mais_recente.strftime("%d/%m/%Y")
+        return (
+            f"A coleta disponível é de {data} e tem "
+            f"{resumo.dias_uteis} dias úteis. Os números permanecem "
+            "visíveis, mas não representam uma leitura atual."
+        )
+    if resumo.estado == EstadoFocusSemanal.SEM_MUDANCA_RELEVANTE:
+        return (
+            f"Os {resumo.total_comparaveis} indicadores comparáveis "
+            "ficaram dentro do limiar de estabilidade definido para cada "
+            "série."
+        )
+    if resumo.total_comparaveis == 0:
+        return (
+            "Ainda não há uma leitura anterior da mesma referência; por "
+            "isso não calculamos variação."
+        )
+    return (
+        f"{resumo.total_relevantes} de {resumo.total_comparaveis} "
+        "indicadores comparáveis ultrapassaram o próprio limiar de "
+        "estabilidade."
     )
 
 

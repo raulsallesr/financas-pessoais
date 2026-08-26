@@ -1,5 +1,5 @@
 import sys
-from datetime import UTC, date, datetime
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch
 
@@ -16,6 +16,10 @@ from noticias_analise import (
 )
 from noticias_data import Noticia
 from noticias_feed import ResultadoNoticias
+
+
+DATA_ATUAL = date.today()
+DATA_ANTERIOR = DATA_ATUAL - timedelta(days=7)
 
 
 def _leitura(indicador, mediana, data_coleta, referencia="2026"):
@@ -48,13 +52,13 @@ def _historico():
                 _leitura(
                     indicador,
                     anterior,
-                    date(2026, 7, 28),
+                    DATA_ANTERIOR,
                     referencia,
                 ),
                 _leitura(
                     indicador,
                     atual,
-                    date(2026, 8, 4),
+                    DATA_ATUAL,
                     referencia,
                 ),
             ]
@@ -124,7 +128,7 @@ def test_pagina_focus_substitui_historico_por_leitura_multifuente():
         patch.object(
             pagina_focus,
             "data_ultima_atualizacao_cache",
-            return_value=date(2026, 8, 4),
+            return_value=DATA_ATUAL,
         ),
         patch.object(
             pagina_focus,
@@ -135,15 +139,20 @@ def test_pagina_focus_substitui_historico_por_leitura_multifuente():
         app = AppTest.from_file(pagina, default_timeout=15).run()
 
     assert not app.exception
-    assert app.header[0].value == "Expectativas do mercado"
+    assert app.header[0].value == "O que mudou no Focus"
     subtitulos = [elemento.value for elemento in app.subheader]
     assert "Noticiário x Focus" in subtitulos
     assert "Histórico" not in subtitulos
     assert [metrica.label for metrica in app.metric[:3]] == [
         "Selic",
-        "IPCA",
         "Câmbio",
+        "PIB Total",
     ]
+    assert "Selic liderou as revisões de alta" in subtitulos
+    assert any(
+        "Atualizado" in elemento.value
+        for elemento in app.markdown
+    )
     assert not app.get("vega_lite_chart")
     assert not app.get("link_button")
     assert "5 fontes" in " ".join(
@@ -166,7 +175,7 @@ def test_pagina_focus_aprofunda_materia_so_depois_do_clique():
         patch.object(
             pagina_focus,
             "data_ultima_atualizacao_cache",
-            return_value=date(2026, 8, 4),
+            return_value=DATA_ATUAL,
         ),
         patch.object(
             pagina_focus,
@@ -229,6 +238,93 @@ def test_pagina_focus_busca_primeiro_historico_automaticamente():
     atualizar.assert_called_once_with()
     assert [metrica.label for metrica in app.metric[:3]] == [
         "Selic",
-        "IPCA",
         "Câmbio",
+        "PIB Total",
+    ]
+
+
+def test_pagina_focus_explica_quando_nao_ha_mudanca_relevante():
+    pagina = (
+        Path(__file__).resolve().parent / "apps" / "focus_section.py"
+    )
+    historico = []
+    valores = {
+        "Selic": (14.08, 14.0, "R6/2026"),
+        "IPCA": (5.04, 5.0, "2026"),
+        "Câmbio": (5.04, 5.0, "2026"),
+        "PIB Total": (1.04, 1.0, "2026"),
+    }
+    for indicador, (atual, anterior, referencia) in valores.items():
+        historico.extend(
+            [
+                _leitura(
+                    indicador,
+                    anterior,
+                    DATA_ANTERIOR,
+                    referencia,
+                ),
+                _leitura(
+                    indicador,
+                    atual,
+                    DATA_ATUAL,
+                    referencia,
+                ),
+            ]
+        )
+
+    with (
+        patch.object(
+            pagina_focus,
+            "carregar_cache",
+            return_value=historico,
+        ),
+        patch.object(
+            pagina_focus,
+            "data_ultima_atualizacao_cache",
+            return_value=DATA_ATUAL,
+        ),
+        patch.object(
+            pagina_focus,
+            "_carregar_noticias",
+            return_value=ResultadoNoticias(noticias=()),
+        ),
+    ):
+        app = AppTest.from_file(pagina, default_timeout=15).run()
+
+    assert not app.exception
+    assert any(
+        "Sem mudança relevante" in elemento.value
+        for elemento in app.markdown
+    )
+    assert "Expectativas seguem praticamente estáveis" in [
+        elemento.value for elemento in app.subheader
+    ]
+
+
+def test_pagina_focus_mostra_estado_indisponivel_sem_historico():
+    pagina = (
+        Path(__file__).resolve().parent / "apps" / "focus_section.py"
+    )
+    with (
+        patch.object(pagina_focus, "carregar_cache", return_value=[]),
+        patch.object(
+            pagina_focus,
+            "data_ultima_atualizacao_cache",
+            return_value=None,
+        ),
+        patch.object(
+            pagina_focus,
+            "atualizar_e_obter_historico",
+            return_value=[],
+        ),
+    ):
+        app = AppTest.from_file(pagina, default_timeout=15).run()
+
+    assert not app.exception
+    assert any(
+        "Indisponível" in elemento.value
+        for elemento in app.markdown
+    )
+    assert "Focus indisponível no momento" in [
+        elemento.value for elemento in app.subheader
     ]

@@ -8,23 +8,28 @@ from datetime import date
 import pandas as pd
 import streamlit as st
 
+from financas_taxonomia import Direcao
 from focus_atualizacao import (
-    avaliar_atualidade,
     deve_verificar_automaticamente,
 )
 from focus_apresentacao import (
-    INDICADORES_PRIORITARIOS,
+    descricao_resumo_semanal,
     escolher_destaque,
     formatar_delta,
     formatar_valor,
     ordenar_comparativos,
-    titulo_resumo,
+    titulo_resumo_semanal,
 )
 from focus_data import (
     ComparativoIndicador,
     LeituraIndicador,
     montar_comparativos,
     serie_historica,
+)
+from focus_semanal import (
+    EstadoFocusSemanal,
+    ResumoFocusSemanal,
+    montar_resumo_semanal,
 )
 from focus_leitura import (
     ErroBuscaFocus,
@@ -51,6 +56,15 @@ _CORES_RELACAO = {
     "Em tensão": "orange",
     "Monitorar": "blue",
     "Sem direção clara": "gray",
+}
+_ESTILO_ESTADO_SEMANAL = {
+    EstadoFocusSemanal.ATUALIZADO: ("check_circle", "green"),
+    EstadoFocusSemanal.DEFASADO: ("history", "orange"),
+    EstadoFocusSemanal.INDISPONIVEL: ("cloud_off", "gray"),
+    EstadoFocusSemanal.SEM_MUDANCA_RELEVANTE: (
+        "horizontal_rule",
+        "blue",
+    ),
 }
 
 
@@ -110,9 +124,12 @@ def _escapar_markdown(texto: str) -> str:
 def _renderizar_cabecalho() -> bool:
     cabecalho, acoes = st.columns([4, 1], vertical_alignment="bottom")
     with cabecalho:
-        st.caption("BOLETIM FOCUS")
-        st.header("Expectativas do mercado")
-        st.write("Selic, inflação e câmbio esperados para os próximos meses.")
+        st.caption("FOCUSLENS BR · FOCUS SEMANAL")
+        st.header("O que mudou no Focus")
+        st.write(
+            "As maiores revisões de Selic, IPCA, câmbio e PIB, com datas "
+            "e fonte."
+        )
     with acoes:
         atualizar = st.button(
             "Atualizar dados",
@@ -198,60 +215,75 @@ def _obter_historico(atualizar: bool) -> list[LeituraIndicador]:
 
 def _renderizar_resumo(
     comparativos: list[ComparativoIndicador],
-) -> ComparativoIndicador:
-    data_mais_recente = max(
-        comparativo.atual.data_coleta for comparativo in comparativos
-    )
-    atualidade = avaliar_atualidade(data_mais_recente, date.today())
-    st.badge(
-        atualidade.rotulo,
-        icon=f":material/{atualidade.icone}:",
-        color=atualidade.cor,
-    )
-    st.caption(
-        f"{data_mais_recente.strftime('%d/%m/%Y')} · "
-        f"{atualidade.descricao} · Banco Central"
-    )
-    destaque = escolher_destaque(comparativos)
+    historico: list[LeituraIndicador],
+) -> ResumoFocusSemanal:
+    resumo = montar_resumo_semanal(comparativos, date.today())
+    icone, cor = _ESTILO_ESTADO_SEMANAL[resumo.estado]
     with st.container(border=True, key="resumo_semana"):
-        st.subheader(titulo_resumo(comparativos))
-        st.write(explicar_leigo(destaque))
-    return destaque
+        estado, origem = st.columns(
+            [1, 3],
+            gap="medium",
+            vertical_alignment="center",
+        )
+        with estado:
+            st.badge(
+                resumo.estado.value,
+                icon=f":material/{icone}:",
+                color=cor,
+            )
+        with origem:
+            if resumo.data_mais_recente is None:
+                st.caption("Banco Central · API pública Olinda")
+            else:
+                st.caption(
+                    f"Coleta de "
+                    f"{resumo.data_mais_recente.strftime('%d/%m/%Y')} · "
+                    f"{resumo.total_acompanhados} indicadores acompanhados"
+                )
+
+        st.caption("O QUE MUDOU")
+        st.subheader(titulo_resumo_semanal(resumo))
+        st.write(descricao_resumo_semanal(resumo))
+
+        if resumo.destaques:
+            colunas = st.columns(len(resumo.destaques), gap="medium")
+            for posicao, (coluna, comparativo) in enumerate(
+                zip(colunas, resumo.destaques),
+                start=1,
+            ):
+                with coluna:
+                    if comparativo.anterior is None:
+                        st.caption("PRIMEIRA LEITURA")
+                    elif comparativo.direcao == Direcao.ESTAVEL:
+                        st.caption("DENTRO DO LIMIAR")
+                    else:
+                        st.caption(f"{posicao}ª MAIOR REVISÃO")
+                    _renderizar_metrica(
+                        comparativo,
+                        historico,
+                        com_grafico=True,
+                    )
+    return resumo
 
 
 def _renderizar_metricas(
     comparativos: list[ComparativoIndicador],
     historico: list[LeituraIndicador],
+    exibidos: set[str],
 ) -> None:
-    mapa = {
-        comparativo.atual.indicador: comparativo
-        for comparativo in comparativos
-    }
-    principais = [
-        mapa[indicador]
-        for indicador in INDICADORES_PRIORITARIOS
-        if indicador in mapa
-    ]
-    colunas = st.columns(max(1, len(principais)), gap="medium")
-    for coluna, comparativo in zip(colunas, principais):
-        with coluna:
-            _renderizar_metrica(
-                comparativo, historico, com_grafico=True
-            )
-
-    secundarios = [
+    restantes = [
         comparativo
         for comparativo in comparativos
-        if comparativo.atual.indicador not in INDICADORES_PRIORITARIOS
+        if comparativo.atual.indicador not in exibidos
     ]
-    if not secundarios:
+    if not restantes:
         return
     with st.expander(
-        "Ver PIB, IGP-M e dívida pública",
+        "Ver os demais indicadores",
         icon=":material/add_chart:",
     ):
-        colunas = st.columns(min(3, len(secundarios)), gap="medium")
-        for coluna, comparativo in zip(colunas, secundarios):
+        colunas = st.columns(min(3, len(restantes)), gap="medium")
+        for coluna, comparativo in zip(colunas, restantes):
             with coluna:
                 _renderizar_metrica(
                     comparativo, historico, com_grafico=False
@@ -586,20 +618,26 @@ def render_secao() -> None:
     atualizar = _renderizar_cabecalho()
     historico = _obter_historico(atualizar)
     if not historico:
-        st.warning(
-            "Ainda não há uma leitura salva. Use **Atualizar dados** para "
-            "criar a primeira fotografia das expectativas."
-        )
+        _renderizar_resumo([], [])
         return
 
     comparativos = _montar_comparativos(historico)
     if not comparativos:
-        st.warning("O histórico salvo não contém indicadores reconhecíveis.")
+        _renderizar_resumo([], historico)
         return
 
-    destaque = _renderizar_resumo(comparativos)
-    _renderizar_metricas(comparativos, historico)
+    resumo = _renderizar_resumo(comparativos, historico)
+    exibidos = {
+        comparativo.atual.indicador
+        for comparativo in resumo.destaques
+    }
+    _renderizar_metricas(comparativos, historico, exibidos)
     _renderizar_noticias_focus(comparativos)
+    destaque = (
+        resumo.destaques[0]
+        if resumo.destaques
+        else escolher_destaque(comparativos)
+    )
     _renderizar_impactos(comparativos, destaque)
     _renderizar_detalhes(comparativos)
     st.caption(

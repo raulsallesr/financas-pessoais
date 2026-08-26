@@ -8,7 +8,7 @@ cenários em entregas pequenas e publicáveis.
 O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
-## O que faz hoje (v1.11)
+## O que faz hoje (v1.12)
 
 - Reúne visão geral, Boletim Focus, Radar Macro e carteira em uma única
   página. O menu lateral leva diretamente a cada seção sem trocar de rota.
@@ -20,8 +20,11 @@ sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
   se o BACEN estiver indisponível, preserva e identifica a última coleta.
 - Mantém o histórico atualizado no GitHub toda segunda-feira por uma rotina
   agendada, mesmo quando o app não é aberto.
-- Resume primeiro o que mais importa: Selic, IPCA e câmbio, com comparação
-  entre as duas datas disponíveis e destaque para a principal mudança.
+- Abre com o **Focus Semanal**: ranqueia as três maiores revisões entre Selic,
+  IPCA, câmbio e PIB, normalizadas pelo limiar de cada indicador. Valor atual,
+  variação, datas e estado da coleta ficam junto da conclusão.
+- Diferencia explicitamente leitura atualizada, defasada, indisponível ou sem
+  mudança relevante; os demais indicadores e detalhes ficam sob demanda.
 - Permite explorar os impactos por classe de investimento e escolher qual
   série histórica visualizar; indicadores secundários, explicações e dados
   completos ficam disponíveis sob demanda.
@@ -47,7 +50,11 @@ sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
   ETFs, FIIs/FIAGRO, renda fixa e Tesouro e ignora conta, instituição, CNPJ,
   ISIN e contratos. A planilha é processada apenas em memória.
 
-A metodologia e seus limites estão em `METODOLOGIA_RADAR.md`.
+As metodologias e seus limites estão em
+[`METODOLOGIA_FOCUS.md`](METODOLOGIA_FOCUS.md) e
+[`METODOLOGIA_RADAR.md`](METODOLOGIA_RADAR.md).
+
+![Focus Semanal v1.12](docs/assets/focus-semanal-v1.12.png)
 
 ## Como rodar
 
@@ -104,7 +111,7 @@ mantém o contexto entre casa e trabalho.
 
 O produto será publicado em quatro marcos no mesmo repositório:
 
-1. **Focus Semanal (`v1.12`)** — o que mudou nas expectativas;
+1. **Focus Semanal (`v1.12`, entregue)** — o que mudou nas expectativas;
 2. **Curva Tesouro (`v1.13`)** — o que mudou nas taxas prefixadas;
 3. **Focus × Curva (`v1.14`)** — expectativa versus precificação;
 4. **FocusLens BR (`v2.0`)** — experiência integrada e demo pública.
