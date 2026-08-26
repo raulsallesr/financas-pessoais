@@ -1,7 +1,7 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: v1.11 (leitura aprofundada e rastreável das matérias) pronto —
-  2026-08-07
+- **Status**: v1.11 pronto; evolução para FocusLens BR estruturada em
+  2026-08-26. Próxima entrega: Focus Semanal (`v1.12`).
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -9,6 +9,25 @@
   sem autenticação.
 - **Periodicidade**: BACEN publica o Boletim Focus toda segunda-feira; a API
   tem granularidade diária, então o app permite atualizar a qualquer momento.
+
+## Direção aprovada — FocusLens BR
+
+- O projeto evoluirá no mesmo repositório, em quatro entregas independentes e
+  publicáveis: Focus Semanal (`v1.12`), Curva Tesouro (`v1.13`), Focus × Curva
+  (`v1.14`) e integração FocusLens BR (`v2.0`). Não serão criados repositórios
+  descartáveis para cada etapa.
+- `PLANO_FOCUSLENS.md` é o contrato canônico de produto: tese, escopo, limites,
+  arquitetura prevista, padrão visual, gates e estratégia de publicação.
+- A identidade atual permanece: tema claro, verde-petróleo, dourado discreto,
+  hierarquia editorial, conteúdo denso e detalhes progressivos. A evolução não
+  adicionará dependência visual nem trocará o design a cada marco.
+- Fontes padrão: BACEN/Focus e SGS, mais Tesouro Transparente na etapa da
+  curva. ANBIMA será opcional e nunca dependência do MVP.
+- A curva começará por títulos prefixados sem cupom e pontos observados. Taxa
+  de título não será apresentada como previsão pura da Selic; prêmio de prazo,
+  risco e liquidez permanecem limitações explícitas.
+- A Etapa 0 (estruturação) foi concluída em 2026-08-26. Nenhuma decisão de
+  produto, arquitetura ou visual está pendente para iniciar a Etapa 1.
 
 ## Arquitetura
 
@@ -302,25 +321,18 @@
 
 ## Fila priorizada
 
-Critério: primeiro confiabilidade e utilidade recorrente; depois módulos que
-exigem dados pessoais ou uma escolha de canal externo.
+Critério atual: publicar valor pequeno e completo, reaproveitando cada motor na
+integração seguinte.
 
 | Prioridade | Estado | Melhoria | Impacto | Esforço |
 |---|---|---|---|---|
-| P0 | Entregue v1.4 | Atualização automática, backfill e cache atômico | Alto | Médio |
-| P0 | Entregue v1.4 | Coletor semanal no GitHub Actions | Alto | Baixo |
-| P0 | Entregue v1.5 | Radar Macro + PTAX, Brent, BTC e linhas base 100 | Alto | Alto |
-| P0 | Entregue v1.6 | Página única + CDI/Selic desde o início do ano | Alto | Médio |
-| P1 | Próxima | Backtest temporal e placar de acerto por horizonte/regime | Muito alto | Alto |
-| P1 | Próxima | IPCA realizado, atividade, emprego e curva de juros | Alto | Alto |
-| P1 | Fila | “O que mudou desde minha última visita” | Alto | Médio |
-| P2 | Fila | Resumo semântico com fonte licenciada e provedor autorizado | Alto | Alto |
-| P2 | Entregue v1.6 | Carteira MVP em sessão, separada do motor educacional | Alto | Alto |
-| P2 | Entregue v1.7 | Importação XLSX da posição B3 em memória | Alto | Médio |
-| P2 | Fila | Exportação/backup local opcional da carteira | Médio | Médio |
-| P2 | Fila | Simulador de aportes e juros compostos | Alto | Médio |
-| P2 | Fila | Alertas externos apenas para mudança relevante | Médio | Médio; depende do canal |
-| P3 | Adiado | Deploy público/mobile | Médio | Alto |
+| P0 | Próxima | Focus Semanal (`v1.12`) | Alto | Médio |
+| P1 | Planejada | Curva Tesouro (`v1.13`) | Muito alto | Alto |
+| P2 | Planejada | Focus × Curva (`v1.14`) | Muito alto | Alto |
+| P3 | Planejada | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
+| Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
+| Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
+| Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |
 
 ## Bloqueios
 

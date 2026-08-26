@@ -1,11 +1,14 @@
-# Finanças Pessoais
+# Finanças Pessoais — base do FocusLens BR
 
-App pessoal (Streamlit) para aprender e acompanhar mercado financeiro,
-começando pelo **Boletim Focus** do Banco Central — a pesquisa semanal de
-expectativas de mercado (Selic, IPCA, câmbio, PIB...) publicada toda
-segunda-feira.
+App pessoal em Streamlit para aprender e acompanhar o mercado financeiro. A
+base atual reúne **Boletim Focus**, Radar Macro e carteira; sua evolução
+aprovada é o **FocusLens BR**, que cruzará expectativas, curva de juros e
+cenários em entregas pequenas e publicáveis.
 
-## O que faz hoje (v1.7)
+O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
+sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
+
+## O que faz hoje (v1.11)
 
 - Reúne visão geral, Boletim Focus, Radar Macro e carteira em uma única
   página. O menu lateral leva diretamente a cada seção sem trocar de rota.
@@ -99,9 +102,16 @@ mantém o contexto entre casa e trabalho.
 
 ## Roadmap
 
-- Depois: exportação/backup local opcional da carteira e calculadora de
-  projeção de rentabilidade (juros compostos, aportes).
-- Avaliado e descartado por ora: deploy público (Streamlit Community Cloud).
+O produto será publicado em quatro marcos no mesmo repositório:
+
+1. **Focus Semanal (`v1.12`)** — o que mudou nas expectativas;
+2. **Curva Tesouro (`v1.13`)** — o que mudou nas taxas prefixadas;
+3. **Focus × Curva (`v1.14`)** — expectativa versus precificação;
+4. **FocusLens BR (`v2.0`)** — experiência integrada e demo pública.
+
+Cada marco precisa funcionar sozinho, passar pelos gates técnico e visual e
+gerar uma publicação própria. O escopo completo está em
+[`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
 ## Fonte oficial dos dados
 
