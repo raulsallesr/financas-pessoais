@@ -4,6 +4,7 @@ from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -60,6 +61,18 @@ def test_interpretacao_falha_fechada_quando_schema_muda():
         assert "estrutura" in str(erro)
 
 
+def test_interpretacao_rejeita_pontos_conflitantes():
+    conteudo = _csv(
+        "Tesouro Prefixado;01/01/2029;26/08/2026;"
+        "14,06;14,18;736,83;734,64;734,64",
+        "Tesouro Prefixado;01/01/2029;26/08/2026;"
+        "14,20;14,32;730,00;728,00;728,00",
+    )
+
+    with pytest.raises(ErroFonteCurva, match="conflitantes"):
+        curva_fontes.interpretar_csv(conteudo)
+
+
 @patch("curva_fontes.requests.get")
 def test_busca_limita_download_e_interpreta_resposta(mock_get):
     resposta = mock_get.return_value
@@ -75,6 +88,7 @@ def test_busca_limita_download_e_interpreta_resposta(mock_get):
 
     assert pontos == (_ponto(),)
     assert mock_get.call_args.kwargs["stream"] is True
+    resposta.close.assert_called_once_with()
 
 
 @patch("curva_fontes.requests.get")
@@ -116,6 +130,18 @@ def test_cache_invalido_gera_erro_controlado(tmp_path, monkeypatch):
         assert False, "deveria rejeitar cache inválido"
     except ErroCacheCurva:
         pass
+
+
+def test_cache_rejeita_numero_nao_finito(tmp_path, monkeypatch):
+    caminho = tmp_path / "curva.json"
+    monkeypatch.setattr(curva_fontes, "CACHE_PATH", caminho)
+    curva_fontes.salvar_cache((_ponto(),))
+    conteudo = json.loads(caminho.read_text(encoding="utf-8"))
+    conteudo["registros"][0]["taxa_compra"] = float("nan")
+    caminho.write_text(json.dumps(conteudo), encoding="utf-8")
+
+    with pytest.raises(ErroCacheCurva, match="registro inválido"):
+        curva_fontes.carregar_cache()
 
 
 def test_atualizacao_busca_salva_e_retorna_pontos():

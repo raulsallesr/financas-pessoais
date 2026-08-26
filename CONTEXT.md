@@ -1,6 +1,6 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: Curva Tesouro (`v1.13`) implementada em 2026-08-26. Próxima
+- **Status**: Curva Tesouro (`v1.13.1`) revisada em 2026-08-26. Próxima
   entrega: Focus × Curva (`v1.14`).
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
@@ -74,6 +74,8 @@
     atômico das 45 datas mais recentes.
   - `curva_modelo.py` — fotografias D-5/D-21, deltas em bps, inclinação,
     estados e narrativa determinística.
+  - `curva_apresentacao.py` — formatação pt-BR, séries e especificação do
+    gráfico e linhas da tabela, sem dependência do Streamlit.
   - `pagina_curva.py` — resumo, métricas, curva com estilos de linha e tabela
     acessível.
   - `pagina_home.py` — composição da experiência única;
@@ -365,6 +367,19 @@
   - Gate final: 132 testes aprovados; `py_compile` dos seis módulos da entrega
     e `git diff --check` limpos. A interface foi inspecionada em navegador real
     a 1440 px e 390 px, sem rolagem horizontal no viewport móvel.
+- **v1.13.1 (2026-08-26)** — revisão de qualidade pré-integração:
+  - A preparação de formatação, gráfico e tabela saiu de `pagina_curva.py`
+    para `curva_apresentacao.py`, uma camada pura e testável. A página caiu de
+    372 para 262 linhas sem mudar o resultado visual.
+  - `PontoCurva` passou a rejeitar vencimento inválido, campo obrigatório vazio
+    e número não finito. Duplicatas idênticas são consolidadas; duplicatas
+    conflitantes interrompem fonte ou cache com erro controlado.
+  - Gate: 141 testes aprovados, todos os módulos compilados, `pip check` e
+    `git diff --check` limpos. O cache real carregou 225 pontos no estado
+    `Atualizada`; interface e diagrama foram inspecionados em navegador real a
+    1440 px, 375 px e 844 px em paisagem, com `scrollWidth == clientWidth`.
+    O intervalo de 769–960 px agora organiza as quatro métricas em grade 2×2,
+    evitando truncamento dos valores.
 
 ## Fila priorizada
 

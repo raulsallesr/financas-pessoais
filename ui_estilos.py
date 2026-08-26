@@ -315,6 +315,21 @@ hr {
     margin: 1.25rem 0 !important;
 }
 
+@media (min-width: 769px) and (max-width: 960px) {
+    .st-key-curva_resumo
+    [data-testid="stHorizontalBlock"]:has([data-testid="stMetric"]) {
+        flex-wrap: wrap !important;
+        gap: 0.75rem !important;
+    }
+
+    .st-key-curva_resumo
+    [data-testid="stHorizontalBlock"]:has([data-testid="stMetric"])
+    > [data-testid="stColumn"] {
+        flex: 1 1 calc(50% - 0.375rem) !important;
+        min-width: 0 !important;
+    }
+}
+
 @media (max-width: 768px) {
     [data-testid="stMain"],
     [data-testid="stMainBlockContainer"] {

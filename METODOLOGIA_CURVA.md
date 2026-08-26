@@ -103,5 +103,7 @@ gravação atômica impede que uma interrupção deixe o arquivo pela metade.
 - `curva_data.py`: contrato e consolidação pura;
 - `curva_fontes.py`: download, parsing, validação e cache;
 - `curva_modelo.py`: fotografias, variações, estados e narrativa;
+- `curva_apresentacao.py`: formatação, séries do gráfico e linhas da tabela,
+  sem dependência do Streamlit;
 - `pagina_curva.py`: apresentação Streamlit;
 - `atualizar_curva_cache.py`: automação sem Streamlit.

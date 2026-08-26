@@ -53,6 +53,8 @@ def test_css_claro_preserva_acessibilidade_e_responsividade() -> None:
     assert "prefers-reduced-motion: reduce" in CSS_APP
     assert ":focus-visible" in CSS_APP
     assert "@media (max-width: 768px)" in CSS_APP
+    assert "@media (min-width: 769px) and (max-width: 960px)" in CSS_APP
+    assert ':has([data-testid="stMetric"])' in CSS_APP
     assert "min-height: 44px" in CSS_APP
     assert "flex-wrap: wrap !important" in CSS_APP
     assert "max-width: 100vw" in CSS_APP

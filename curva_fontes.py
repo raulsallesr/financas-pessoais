@@ -123,7 +123,12 @@ def interpretar_csv(
         raise ErroFonteCurva(
             "A fonte não retornou títulos prefixados sem cupom."
         )
-    return manter_datas_recentes(pontos, max_datas=max_datas)
+    try:
+        return manter_datas_recentes(pontos, max_datas=max_datas)
+    except ValueError as erro:
+        raise ErroFonteCurva(
+            "O CSV do Tesouro contém pontos conflitantes."
+        ) from erro
 
 
 def _baixar_csv() -> bytes:
@@ -196,7 +201,7 @@ def data_ultima_atualizacao_cache() -> date | None:
 def carregar_cache() -> list[PontoCurva]:
     conteudo = _ler_cache()
     try:
-        return [
+        pontos = [
             PontoCurva(
                 data_referencia=date.fromisoformat(
                     registro["data_referencia"]
@@ -223,6 +228,9 @@ def carregar_cache() -> list[PontoCurva]:
             )
             for registro in conteudo.get("registros", [])
         ]
+        return list(
+            manter_datas_recentes(pontos, max_datas=MAX_DATAS_CACHE)
+        )
     except (KeyError, TypeError, ValueError) as erro:
         raise ErroCacheCurva(
             "O cache local da curva contém um registro inválido."

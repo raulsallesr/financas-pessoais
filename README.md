@@ -8,7 +8,7 @@ de juros e cenários em entregas pequenas e publicáveis.
 O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
-## O que faz hoje (v1.13)
+## O que faz hoje (v1.13.1)
 
 - Reúne visão geral, Boletim Focus, Curva Tesouro, Radar Macro e carteira em
   uma única página. O menu lateral leva diretamente a cada seção sem trocar
@@ -32,6 +32,8 @@ sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
   longa e inclinação; gráfico e tabela preservam cada vencimento real.
 - Mantém um cache público de 45 datas e o atualiza automaticamente em dias
   úteis pelo GitHub Actions. Falha da fonte não derruba as demais seções.
+- Separa contrato de dados, adaptador, motor, apresentação pura e interface;
+  cálculos e semântica visual podem ser testados sem rede nem navegador.
 - Permite explorar os impactos por classe de investimento e escolher qual
   série histórica visualizar; indicadores secundários, explicações e dados
   completos ficam disponíveis sob demanda.

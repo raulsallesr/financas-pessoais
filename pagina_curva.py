@@ -7,6 +7,13 @@ from datetime import date
 import pandas as pd
 import streamlit as st
 
+from curva_apresentacao import (
+    especificacao_grafico,
+    formatar_bps,
+    formatar_numero,
+    linhas_grafico,
+    linhas_tabela,
+)
 from curva_data import PontoCurva
 from curva_fontes import (
     CURVA_FONTE_URL,
@@ -18,7 +25,6 @@ from curva_fontes import (
 )
 from curva_modelo import (
     EstadoCurva,
-    FotografiaCurva,
     LeituraCurva,
     descricao_leitura_curva,
     montar_leitura_curva,
@@ -33,23 +39,6 @@ _ESTILO_ESTADO = {
     EstadoCurva.PARCIAL: ("pending", "blue"),
     EstadoCurva.INDISPONIVEL: ("cloud_off", "gray"),
 }
-
-
-def _formatar_numero(valor: float, casas: int = 2) -> str:
-    return (
-        f"{valor:,.{casas}f}"
-        .replace(",", "X")
-        .replace(".", ",")
-        .replace("X", ".")
-    )
-
-
-def _formatar_bps(valor: float | None) -> str:
-    if valor is None:
-        return "Sem comparação"
-    if float(valor).is_integer():
-        return f"{valor:+.0f} bps"
-    return f"{valor:+.1f} bps".replace(".", ",")
 
 
 def _renderizar_cabecalho() -> bool:
@@ -169,7 +158,7 @@ def _renderizar_resumo(leitura: LeituraCurva) -> None:
         with metricas[0]:
             st.metric(
                 "Mediana D-5",
-                _formatar_bps(leitura.movimento_mediano_d5_bps),
+                formatar_bps(leitura.movimento_mediano_d5_bps),
                 delta=(
                     f"{sum(item.delta_d5_bps is not None for item in leitura.comparacoes)} "
                     "em comum"
@@ -180,7 +169,7 @@ def _renderizar_resumo(leitura: LeituraCurva) -> None:
         with metricas[1]:
             st.metric(
                 "Ponta curta",
-                f"{_formatar_numero(curta.taxa_compra)}%",
+                f"{formatar_numero(curta.taxa_compra)}%",
                 delta=f"Vence em {curta.vencimento.year}",
                 delta_color="off",
                 border=True,
@@ -188,7 +177,7 @@ def _renderizar_resumo(leitura: LeituraCurva) -> None:
         with metricas[2]:
             st.metric(
                 "Ponta longa",
-                f"{_formatar_numero(longa.taxa_compra)}%",
+                f"{formatar_numero(longa.taxa_compra)}%",
                 delta=f"Vence em {longa.vencimento.year}",
                 delta_color="off",
                 border=True,
@@ -196,42 +185,11 @@ def _renderizar_resumo(leitura: LeituraCurva) -> None:
         with metricas[3]:
             st.metric(
                 "Inclinação atual",
-                _formatar_bps(leitura.inclinacao_atual_bps),
+                formatar_bps(leitura.inclinacao_atual_bps),
                 delta="longa menos curta",
                 delta_color="off",
                 border=True,
             )
-
-
-def _linhas_grafico(leitura: LeituraCurva) -> pd.DataFrame:
-    fotografias: list[tuple[str, FotografiaCurva]] = []
-    if leitura.atual is not None:
-        fotografias.append(
-            (
-                f"Atual · {leitura.atual.data_referencia:%d/%m}",
-                leitura.atual,
-            )
-        )
-    if leitura.d5 is not None:
-        fotografias.append(
-            (f"D-5 · {leitura.d5.data_referencia:%d/%m}", leitura.d5)
-        )
-    if leitura.d21 is not None:
-        fotografias.append(
-            (f"D-21 · {leitura.d21.data_referencia:%d/%m}", leitura.d21)
-        )
-    return pd.DataFrame(
-        [
-            {
-                "Vencimento": ponto.vencimento.strftime("%d/%m/%Y"),
-                "Taxa": ponto.taxa_compra,
-                "Período": rotulo,
-                "Data da curva": fotografia.data_referencia,
-            }
-            for rotulo, fotografia in fotografias
-            for ponto in fotografia.pontos
-        ]
-    )
 
 
 def _renderizar_grafico(leitura: LeituraCurva) -> None:
@@ -242,81 +200,13 @@ def _renderizar_grafico(leitura: LeituraCurva) -> None:
         "Taxa de compra da manhã. Marcadores são observações publicadas; "
         "os segmentos apenas conectam esses pontos."
     )
-    dados = _linhas_grafico(leitura)
-    periodos = list(dict.fromkeys(dados["Período"].tolist()))
-    cores = ["#0F766E", "#A16207", "#64748B"][: len(periodos)]
-    tracos = [[], [7, 4], [2, 4]][: len(periodos)]
-    especificacao = {
-        "mark": {
-            "type": "line",
-            "point": {"filled": True, "size": 65},
-            "strokeWidth": 2.5,
-        },
-        "encoding": {
-            "x": {
-                "field": "Vencimento",
-                "type": "ordinal",
-                "sort": None,
-                "axis": {"title": "Vencimento", "labelAngle": 0},
-            },
-            "y": {
-                "field": "Taxa",
-                "type": "quantitative",
-                "scale": {"zero": False},
-                "axis": {"title": "Taxa de compra (% a.a.)"},
-            },
-            "color": {
-                "field": "Período",
-                "type": "nominal",
-                "scale": {"domain": periodos, "range": cores},
-                "legend": {"title": None, "orient": "top"},
-            },
-            "strokeDash": {
-                "field": "Período",
-                "type": "nominal",
-                "scale": {"domain": periodos, "range": tracos},
-                "legend": None,
-            },
-            "tooltip": [
-                {"field": "Período", "type": "nominal"},
-                {
-                    "field": "Vencimento",
-                    "type": "ordinal",
-                },
-                {
-                    "field": "Taxa",
-                    "type": "quantitative",
-                    "format": ".2f",
-                    "title": "Taxa (% a.a.)",
-                },
-            ],
-        },
-        "height": 360,
-    }
+    linhas = linhas_grafico(leitura)
+    dados = pd.DataFrame(linhas)
+    especificacao = especificacao_grafico(linhas)
     st.vega_lite_chart(
         dados,
         especificacao,
         width="stretch",
-    )
-
-
-def _tabela_comparacoes(leitura: LeituraCurva) -> pd.DataFrame:
-    return pd.DataFrame(
-        [
-            {
-                "Vencimento": item.atual.vencimento,
-                "Atual (% a.a.)": item.atual.taxa_compra,
-                "D-5 (% a.a.)": (
-                    item.d5.taxa_compra if item.d5 else None
-                ),
-                "Δ D-5 (bps)": item.delta_d5_bps,
-                "D-21 (% a.a.)": (
-                    item.d21.taxa_compra if item.d21 else None
-                ),
-                "Δ D-21 (bps)": item.delta_d21_bps,
-            }
-            for item in leitura.comparacoes
-        ]
     )
 
 
@@ -328,7 +218,7 @@ def _renderizar_detalhes(leitura: LeituraCurva) -> None:
         icon=":material/table_chart:",
     ):
         st.dataframe(
-            _tabela_comparacoes(leitura),
+            pd.DataFrame(linhas_tabela(leitura)),
             hide_index=True,
             width="stretch",
             column_config={
