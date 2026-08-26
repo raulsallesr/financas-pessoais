@@ -7,6 +7,7 @@ from datetime import date
 import streamlit as st
 
 import pagina_carteira
+import pagina_convergencia
 import pagina_curva
 import pagina_focus
 import pagina_macro
@@ -82,6 +83,17 @@ def _renderizar_menu(
                   <circle cx="19" cy="11.5" r="1"/>
                 </svg>
                 Curva Tesouro
+              </a>
+              <a href="#focus-curva">
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 7h12"/>
+                  <path d="m14 4 3 3-3 3"/>
+                  <path d="M19 17H7"/>
+                  <path d="m10 14-3 3 3 3"/>
+                </svg>
+                Focus × Curva
               </a>
               <a href="#radar-macro">
                 <svg viewBox="0 0 24 24" fill="none"
@@ -161,6 +173,10 @@ def render() -> None:
     st.divider()
     _ancora("curva-tesouro")
     pagina_curva.render_secao()
+
+    st.divider()
+    _ancora("focus-curva")
+    pagina_convergencia.render_secao()
 
     st.divider()
     _ancora("radar-macro")

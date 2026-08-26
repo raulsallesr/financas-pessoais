@@ -192,6 +192,12 @@ liquidez; o produto nunca apresenta esse spread como causalidade comprovada.
 **Publicação:** “O mercado está precificando a mesma história que declara no
 Focus?”
 
+**Estado:** concluída em 2026-08-26. O motor compara a revisão da Selic para a
+mesma reunião com a mediana D-5 dos vencimentos em comum, preserva sinais
+mistos entre as pontas e degrada para dados insuficientes sem completar
+lacunas. Evidências, limiares e datas ficam junto do veredito; o método está em
+`METODOLOGIA_FOCUS_CURVA.md`.
+
 ---
 
 ### Etapa 4 — FocusLens BR
@@ -357,17 +363,9 @@ descartáveis:
 Antes de tornar o repositório público, executar auditoria específica de
 segredos, dados pessoais, direitos de conteúdo, dependências e histórico Git.
 
-## 11. Próxima execução — Etapa 3
+## 11. Próxima execução — Etapa 4
 
-Ordem de trabalho:
-
-1. definir o contrato de evidências comparáveis entre Focus e curva;
-2. separar ponta curta e longa sem atribuir causalidade;
-3. modelar os cinco estados de convergência;
-4. explicitar “O que prova” e “O que faria mudar”;
-5. testar sinais alinhados, divergentes, mistos e insuficientes;
-6. integrar a leitura sem duplicar Focus ou Curva.
-
-As Etapas 1 e 2 estão fechadas nas versões `v1.12` e `v1.13`. A próxima
-implementação reaproveita os dois motores puros; nenhuma notícia entra no
-cálculo numérico.
+As Etapas 1, 2 e 3 estão fechadas nas versões `v1.12`, `v1.13` e `v1.14`.
+A próxima execução consolidará o FocusLens BR `v2.0`: revisar a hierarquia
+geral, incorporar somente os sinais úteis do Radar ao Resumo, adicionar o
+cenário simples de choque paralelo e executar a auditoria final de publicação.

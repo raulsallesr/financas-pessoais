@@ -1,7 +1,7 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: Curva Tesouro (`v1.13.1`) revisada em 2026-08-26. Próxima
-  entrega: Focus × Curva (`v1.14`).
+- **Status**: Focus × Curva (`v1.14`) concluído em 2026-08-26. Próxima
+  entrega: FocusLens BR integrado (`v2.0`).
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -28,8 +28,8 @@
 - A curva começará por títulos prefixados sem cupom e pontos observados. Taxa
   de título não será apresentada como previsão pura da Selic; prêmio de prazo,
   risco e liquidez permanecem limitações explícitas.
-- As Etapas 0, 1 e 2 foram concluídas em 2026-08-26. A próxima execução é o
-  motor explicável de convergência Focus × Curva.
+- As Etapas 0, 1, 2 e 3 foram concluídas em 2026-08-26. A próxima execução é
+  a consolidação do FocusLens BR `v2.0`.
 
 ## Arquitetura
 
@@ -50,9 +50,9 @@
   permanentemente autorizados após o gate passar, sem nova confirmação a
   cada tarefa (decisão explícita do Raul, 2026-08-04).
 - Streamlit em página única: `app_financas.py` chama `pagina_home.py`, que
-  compõe visão geral, Focus, Curva, Radar e carteira na mesma rolagem. O menu
-  lateral usa âncoras para navegar entre as seções; os antigos entrypoints em
-  `pages/` foram removidos para não manter navegação paralela.
+  compõe visão geral, Focus, Curva, Focus × Curva, Radar e carteira na mesma
+  rolagem. O menu lateral usa âncoras para navegar entre as seções; os antigos
+  entrypoints em `pages/` foram removidos para não manter navegação paralela.
 - Separação motor puro / adaptador / UI:
   - `financas_taxonomia.py` — enums compartilhados (ClasseAtivo, Direcao,
     unidades de exibição).
@@ -78,6 +78,12 @@
     gráfico e linhas da tabela, sem dependência do Streamlit.
   - `pagina_curva.py` — resumo, métricas, curva com estilos de linha e tabela
     acessível.
+  - `convergencia_modelo.py` — matriz direcional Focus × Curva, recortes de
+    ponta, cinco estados, evidências e condições de mudança, sem I/O.
+  - `convergencia_apresentacao.py` — formatação pt-BR das quatro métricas da
+    convergência, sem Streamlit.
+  - `pagina_convergencia.py` — leitura dos dois caches públicos e composição
+    visual do veredito, provas, mudanças e limites.
   - `pagina_home.py` — composição da experiência única;
     `app_financas.py` é apenas o entrypoint principal.
   - `ui_estilos.py` — tokens e CSS responsivo/acessível compartilhável.
@@ -115,6 +121,8 @@
     Semanal.
   - `METODOLOGIA_CURVA.md` — fonte, licença, fórmulas, estados e limites da
     Curva Tesouro.
+  - `METODOLOGIA_FOCUS_CURVA.md` — contrato de comparabilidade, matriz dos
+    estados, pontas, evidências e limites da convergência.
   - `atualizar_focus_cache.py` — entrada sem Streamlit usada pela automação
     agendada em `.github/workflows/atualizar-focus.yml`.
   - `atualizar_curva_cache.py` — entrada sem Streamlit usada pela automação
@@ -380,6 +388,25 @@
     1440 px, 375 px e 844 px em paisagem, com `scrollWidth == clientWidth`.
     O intervalo de 769–960 px agora organiza as quatro métricas em grade 2×2,
     evitando truncamento dos valores.
+- **v1.14 (2026-08-26)** — Focus × Curva:
+  - O motor compara a revisão da Selic para a mesma reunião com a mediana
+    D-5 de ao menos dois vencimentos prefixados em comum. As direções formam os
+    estados `Alinhados`, `Curva mais pressionada`, `Curva mais benigna`,
+    `Sinais mistos` e `Dados insuficientes`.
+  - Com quatro ou mais pontos, os vencimentos mais próximos e mais distantes
+    viram ponta curta e longa. Direções opostas permanecem mistas; notícias,
+    Radar e carteira não entram no cálculo.
+  - Na fotografia de lançamento, a Selic `R6/2026` ficou em 13,75% entre
+    14/08 e 21/08, enquanto a curva caiu mediana de 24 bps entre 19/08 e
+    26/08. O estado é `Curva mais benigna`, com curta em -6,5 bps e longa em
+    -29 bps; esses valores são evidência da demo, não recomendação.
+  - O veredito, quatro métricas, “O que prova” e “O que faria mudar” foram
+    validados em 390, 844 e 1440 px, sem rolagem horizontal. Captura,
+    metodologia, diagrama técnico e texto de LinkedIn acompanham a entrega.
+  - Gate final: 160 testes aprovados fora do sandbox do Windows; `py_compile`,
+    `pip check` e `git diff --check` limpos. O primeiro run dentro do sandbox
+    encontrou apenas `WinError 5` nos diretórios temporários usados pelos
+    testes de cache atômico, sem regressão funcional.
 
 ## Fila priorizada
 
@@ -390,8 +417,8 @@ integração seguinte.
 |---|---|---|---|---|
 | P0 | Entregue | Focus Semanal (`v1.12`) | Alto | Médio |
 | P1 | Entregue | Curva Tesouro (`v1.13`) | Muito alto | Alto |
-| P2 | Próxima | Focus × Curva (`v1.14`) | Muito alto | Alto |
-| P3 | Planejada | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
+| P2 | Entregue | Focus × Curva (`v1.14`) | Muito alto | Alto |
+| P3 | Próxima | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
 | Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |

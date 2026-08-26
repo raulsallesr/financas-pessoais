@@ -207,6 +207,8 @@ body:has(#boletim-focus:target)
 .fp-section-nav a[href="#boletim-focus"],
 body:has(#curva-tesouro:target)
 .fp-section-nav a[href="#curva-tesouro"],
+body:has(#focus-curva:target)
+.fp-section-nav a[href="#focus-curva"],
 body:has(#radar-macro:target)
 .fp-section-nav a[href="#radar-macro"],
 body:has(#minha-carteira:target)
@@ -253,9 +255,15 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
     padding: 0.85rem 1rem;
 }
 
+.st-key-focus_curva_resumo [data-testid="stMetricDelta"] svg {
+    display: none;
+}
+
 .st-key-resumo_semana
 div[data-testid="stVerticalBlockBorderWrapper"],
 .st-key-curva_resumo
+div[data-testid="stVerticalBlockBorderWrapper"],
+.st-key-focus_curva_resumo
 div[data-testid="stVerticalBlockBorderWrapper"],
 .st-key-macro_cenario
 div[data-testid="stVerticalBlockBorderWrapper"] {
@@ -322,7 +330,20 @@ hr {
         gap: 0.75rem !important;
     }
 
+    .st-key-focus_curva_resumo
+    [data-testid="stHorizontalBlock"]:has([data-testid="stMetric"]) {
+        flex-wrap: wrap !important;
+        gap: 0.75rem !important;
+    }
+
     .st-key-curva_resumo
+    [data-testid="stHorizontalBlock"]:has([data-testid="stMetric"])
+    > [data-testid="stColumn"] {
+        flex: 1 1 calc(50% - 0.375rem) !important;
+        min-width: 0 !important;
+    }
+
+    .st-key-focus_curva_resumo
     [data-testid="stHorizontalBlock"]:has([data-testid="stMetric"])
     > [data-testid="stColumn"] {
         flex: 1 1 calc(50% - 0.375rem) !important;

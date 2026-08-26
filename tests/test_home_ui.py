@@ -36,6 +36,10 @@ def test_home_mostra_status_e_entrada_compacta():
         patch.object(pagina_home.pagina_focus, "render_secao") as focus,
         patch.object(pagina_home.pagina_curva, "render_secao") as curva,
         patch.object(
+            pagina_home.pagina_convergencia,
+            "render_secao",
+        ) as convergencia,
+        patch.object(
             pagina_home.pagina_macro,
             "render_secao",
             return_value=(None, []),
@@ -60,10 +64,11 @@ def test_home_mostra_status_e_entrada_compacta():
     )
     assert "#boletim-focus" in menu
     assert "#curva-tesouro" in menu
+    assert "#focus-curva" in menu
     assert "#radar-macro" in menu
     assert "#minha-carteira" in menu
     assert "#visao-geral" not in menu
-    assert menu.count("<a href=") == 4
+    assert menu.count("<a href=") == 5
     assert "<svg" in menu
     assert "material-symbols-rounded" not in menu
     markdown = " ".join(elemento.value for elemento in app.markdown)
@@ -72,5 +77,6 @@ def test_home_mostra_status_e_entrada_compacta():
     assert "fp-step-index" not in markdown
     focus.assert_called_once_with()
     curva.assert_called_once_with()
+    convergencia.assert_called_once_with()
     macro.assert_called_once_with()
     carteira.assert_called_once_with(None, [])

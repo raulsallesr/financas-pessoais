@@ -1,18 +1,18 @@
 # Finanças Pessoais — base do FocusLens BR
 
 App pessoal em Streamlit para aprender e acompanhar o mercado financeiro. A
-base atual reúne **Boletim Focus**, Curva Tesouro, Radar Macro e carteira;
-sua evolução aprovada é o **FocusLens BR**, que cruzará expectativas, curva
-de juros e cenários em entregas pequenas e publicáveis.
+base atual reúne **Boletim Focus**, Curva Tesouro, Focus × Curva, Radar Macro
+e carteira; sua evolução aprovada é o **FocusLens BR**, que cruza expectativas,
+curva de juros e cenários em entregas pequenas e publicáveis.
 
 O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
-## O que faz hoje (v1.13.1)
+## O que faz hoje (v1.14)
 
-- Reúne visão geral, Boletim Focus, Curva Tesouro, Radar Macro e carteira em
-  uma única página. O menu lateral leva diretamente a cada seção sem trocar
-  de rota.
+- Reúne visão geral, Boletim Focus, Curva Tesouro, Focus × Curva, Radar
+  Macro e carteira em uma única página. O menu lateral leva diretamente a
+  cada seção sem trocar de rota.
 - Busca Selic, IPCA, câmbio, PIB Total, IGP-M e dívida líquida do setor
   público direto da API pública do BACEN (Sistema de Expectativas de Mercado
   / Olinda), sem precisar de PDF nem chave de acesso.
@@ -32,6 +32,13 @@ sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
   longa e inclinação; gráfico e tabela preservam cada vencimento real.
 - Mantém um cache público de 45 datas e o atualiza automaticamente em dias
   úteis pelo GitHub Actions. Falha da fonte não derruba as demais seções.
+- O módulo **Focus × Curva** compara a revisão da Selic para a mesma reunião
+  com a mediana D-5 dos vencimentos prefixados em comum. O resultado é um dos
+  cinco estados explicáveis: alinhados, curva mais pressionada, curva mais
+  benigna, sinais mistos ou dados insuficientes.
+- Quando existem quatro ou mais vencimentos comparáveis, separa as pontas
+  curta e longa. O veredito sempre mostra os números e datas que o sustentam,
+  além das condições objetivas que fariam a leitura mudar.
 - Separa contrato de dados, adaptador, motor, apresentação pura e interface;
   cálculos e semântica visual podem ser testados sem rede nem navegador.
 - Permite explorar os impactos por classe de investimento e escolher qual
@@ -62,13 +69,20 @@ sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 As metodologias e seus limites estão em
 [`METODOLOGIA_FOCUS.md`](METODOLOGIA_FOCUS.md),
 [`METODOLOGIA_CURVA.md`](METODOLOGIA_CURVA.md) e
+[`METODOLOGIA_FOCUS_CURVA.md`](METODOLOGIA_FOCUS_CURVA.md), além de
 [`METODOLOGIA_RADAR.md`](METODOLOGIA_RADAR.md).
 
 ![Focus Semanal v1.12](docs/assets/focus-semanal-v1.12.png)
 
 ![Curva Tesouro v1.13](docs/assets/curva-tesouro-v1.13.png)
 
+![Focus × Curva v1.14](docs/assets/focus-curva-v1.14.png)
+
 ![Arquitetura da Curva Tesouro](docs/assets/arquitetura-curva-v1.13.svg)
+
+![Arquitetura Focus × Curva](docs/assets/arquitetura-focus-curva-v1.14.svg)
+
+Texto de publicação: [`docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md`](docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md).
 
 ## Como rodar
 
@@ -92,11 +106,11 @@ streamlit run app_financas.py
 OneDrive.
 
 O app abre em uma página única. Use o menu lateral para ir ao **Boletim
-Focus**, **Curva Tesouro**, **Radar Macro** ou **Minha carteira**. Focus e
-Curva verificam automaticamente se há dados novos; os dois também mantêm um
-botão de atualização manual. Em **Minha carteira**, envie a planilha XLSX da
-B3 ou preencha as posições manualmente; os dois caminhos permitem adicionar
-linhas para investimentos que não estejam nessa fotografia.
+Focus**, **Curva Tesouro**, **Focus × Curva**, **Radar Macro** ou **Minha
+carteira**. Focus e Curva verificam automaticamente se há dados novos; os dois
+também oferecem atualização manual. Em **Minha carteira**, envie a planilha
+XLSX da B3 ou preencha as posições manualmente; os dois caminhos permitem
+adicionar linhas para investimentos que não estejam nessa fotografia.
 
 ## Trabalhando de mais de uma máquina (casa + trabalho)
 
@@ -126,7 +140,7 @@ O produto será publicado em quatro marcos no mesmo repositório:
 
 1. **Focus Semanal (`v1.12`, entregue)** — o que mudou nas expectativas;
 2. **Curva Tesouro (`v1.13`, entregue)** — o que mudou nas taxas prefixadas;
-3. **Focus × Curva (`v1.14`)** — expectativa versus precificação;
+3. **Focus × Curva (`v1.14`, entregue)** — expectativa versus precificação;
 4. **FocusLens BR (`v2.0`)** — experiência integrada e demo pública.
 
 Cada marco precisa funcionar sozinho, passar pelos gates técnico e visual e

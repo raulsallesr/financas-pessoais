@@ -1,0 +1,147 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"
+     viewBox="0 0 1600 900" role="img"
+     aria-labelledby="titulo descricao">
+  <title id="titulo">Arquitetura do módulo Focus × Curva v1.14</title>
+  <desc id="descricao">
+    Fluxo dos caches públicos do Banco Central e Tesouro Transparente até
+    os motores puros, a matriz determinística de convergência e a interface.
+  </desc>
+  <defs>
+    <linearGradient id="fundo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7faf8"/>
+      <stop offset="1" stop-color="#e8f2ef"/>
+    </linearGradient>
+    <filter id="sombra" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="10" stdDeviation="15"
+                    flood-color="#184840" flood-opacity="0.10"/>
+    </filter>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0 10 5 0 10Z" fill="#0f766e"/>
+    </marker>
+    <style>
+      .sans { font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+              "Segoe UI", sans-serif; }
+      .eyebrow { fill: #0f766e; font-size: 18px; font-weight: 750;
+                 letter-spacing: 2.8px; }
+      .title { fill: #17332f; font-size: 48px; font-weight: 780;
+               letter-spacing: -1.8px; }
+      .subtitle { fill: #536965; font-size: 22px; }
+      .box-title { fill: #17332f; font-size: 24px; font-weight: 740; }
+      .box-copy { fill: #536965; font-size: 17px; }
+      .box-title-light { fill: #ffffff; font-size: 24px; font-weight: 740; }
+      .box-copy-light { fill: #dcebe7; font-size: 17px; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+              fill: #0a5b55; font-size: 16px; font-weight: 650; }
+      .pill { fill: #0a5b55; font-size: 15px; font-weight: 700; }
+      .footer { fill: #536965; font-size: 16px; }
+      .arrow { fill: none; stroke: #0f766e; stroke-width: 3;
+               marker-end: url(#seta); }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#fundo)"/>
+  <circle cx="1470" cy="-35" r="300" fill="#d8ebe6" opacity="0.75"/>
+  <circle cx="70" cy="870" r="230" fill="#fff3d6" opacity="0.65"/>
+
+  <g class="sans">
+    <text x="100" y="88" class="eyebrow">FOCUSLENS BR · V1.14</text>
+    <text x="100" y="145" class="title">Da expectativa ao veredito explicável</text>
+    <text x="100" y="184" class="subtitle">
+      Duas fontes públicas, regras testáveis e nenhuma causalidade inventada.
+    </text>
+
+    <g filter="url(#sombra)">
+      <rect x="100" y="260" width="310" height="180" rx="24"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <rect x="100" y="260" width="8" height="180" rx="4" fill="#0f766e"/>
+      <text x="138" y="306" class="box-title">BACEN · Focus</text>
+      <text x="138" y="343" class="box-copy">Selic para a mesma reunião</text>
+      <text x="138" y="373" class="box-copy">coleta atual × anterior</text>
+      <rect x="138" y="396" width="190" height="28" rx="14" fill="#ddf2ed"/>
+      <text x="153" y="416" class="mono">delta em p.p.</text>
+
+      <rect x="100" y="480" width="310" height="180" rx="24"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <rect x="100" y="480" width="8" height="180" rx="4" fill="#a16207"/>
+      <text x="138" y="526" class="box-title">Tesouro · Curva</text>
+      <text x="138" y="563" class="box-copy">Prefixados sem cupom</text>
+      <text x="138" y="593" class="box-copy">mesmo vencimento × D-5</text>
+      <rect x="138" y="616" width="190" height="28" rx="14" fill="#fff3d6"/>
+      <text x="153" y="636" class="mono">delta em bps</text>
+    </g>
+
+    <path d="M410 350H500" class="arrow"/>
+    <path d="M410 570H500" class="arrow"/>
+
+    <g filter="url(#sombra)">
+      <rect x="510" y="260" width="360" height="180" rx="24"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="548" y="306" class="box-title">Contratos puros</text>
+      <text x="548" y="344" class="mono">focus_data.py</text>
+      <text x="548" y="375" class="box-copy">referência, datas, mediana e direção</text>
+      <text x="548" y="407" class="box-copy">sem rede · sem Streamlit</text>
+
+      <rect x="510" y="480" width="360" height="180" rx="24"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="548" y="526" class="box-title">Fotografias observadas</text>
+      <text x="548" y="564" class="mono">curva_modelo.py</text>
+      <text x="548" y="595" class="box-copy">mediana geral · curta · longa</text>
+      <text x="548" y="627" class="box-copy">lacunas permanecem lacunas</text>
+    </g>
+
+    <path d="M870 350C930 350 925 415 980 430" class="arrow"/>
+    <path d="M870 570C930 570 925 505 980 490" class="arrow"/>
+
+    <g filter="url(#sombra)">
+      <rect x="990" y="300" width="510" height="330" rx="28"
+            fill="#17332f"/>
+      <text x="1034" y="350" fill="#b8e5dc" class="eyebrow">
+        MOTOR DETERMINÍSTICO
+      </text>
+      <text x="1034" y="398" class="box-title-light">
+        convergencia_modelo.py
+      </text>
+      <text x="1034" y="438" class="box-copy-light">
+        mais benigna &lt; estável &lt; mais pressionada
+      </text>
+
+      <g>
+        <rect x="1034" y="474" width="116" height="34" rx="17" fill="#ddf2ed"/>
+        <text x="1054" y="497" class="pill">Alinhados</text>
+        <rect x="1162" y="474" width="160" height="34" rx="17" fill="#fff3d6"/>
+        <text x="1182" y="497" class="pill">Mais pressionada</text>
+        <rect x="1334" y="474" width="130" height="34" rx="17" fill="#dbeafe"/>
+        <text x="1354" y="497" class="pill">Mais benigna</text>
+        <rect x="1034" y="520" width="128" height="34" rx="17" fill="#fff3d6"/>
+        <text x="1054" y="543" class="pill">Sinais mistos</text>
+        <rect x="1174" y="520" width="172" height="34" rx="17" fill="#edf1f0"/>
+        <text x="1194" y="543" class="pill">Dados insuficientes</text>
+      </g>
+
+      <text x="1034" y="593" class="box-copy-light">
+        Saída: veredito + evidências + condições de mudança
+      </text>
+    </g>
+
+    <path d="M1245 630V704" class="arrow"/>
+    <g filter="url(#sombra)">
+      <rect x="910" y="718" width="590" height="94" rx="22"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="950" y="758" class="box-title">Interface em uma resposta primeiro</text>
+      <text x="950" y="788" class="box-copy">
+        pagina_convergencia.py · 4 métricas · prova · mudança · limites
+      </text>
+    </g>
+
+    <text x="100" y="780" class="footer">
+      Guardrails
+    </text>
+    <text x="100" y="810" class="footer">
+      mesmas referências · datas visíveis · sinais mistos preservados
+    </text>
+    <text x="100" y="838" class="footer">
+      sem notícias no cálculo · sem probabilidade · sem recomendação
+    </text>
+  </g>
+</svg>
