@@ -60,5 +60,7 @@ def test_css_claro_preserva_acessibilidade_e_responsividade() -> None:
     assert "gap: 1rem" in CSS_APP
     assert "min-height: 108px" in CSS_APP
     assert ".st-key-home_hero" not in CSS_APP
+    assert 'href="#curva-tesouro"' in CSS_APP
+    assert ".st-key-curva_resumo" in CSS_APP
     assert _contraste("#0F766E", "#FFFFFF") >= 4.5
     assert _contraste("#17332F", "#F3F7F5") >= 4.5

@@ -34,6 +34,7 @@ def test_home_mostra_status_e_entrada_compacta():
             return_value=[_leitura("Selic"), _leitura("IPCA")],
         ),
         patch.object(pagina_home.pagina_focus, "render_secao") as focus,
+        patch.object(pagina_home.pagina_curva, "render_secao") as curva,
         patch.object(
             pagina_home.pagina_macro,
             "render_secao",
@@ -45,7 +46,7 @@ def test_home_mostra_status_e_entrada_compacta():
 
     assert not app.exception
     assert app.title[0].value == "Finanças pessoais"
-    assert "Expectativas, mercados e carteira em uma leitura só." in [
+    assert "Expectativas, curva, mercados e carteira em uma leitura só." in [
         item.value for item in app.markdown
     ]
     assert not app.header
@@ -58,10 +59,11 @@ def test_home_mostra_status_e_entrada_compacta():
         elemento.value for elemento in app.sidebar.markdown
     )
     assert "#boletim-focus" in menu
+    assert "#curva-tesouro" in menu
     assert "#radar-macro" in menu
     assert "#minha-carteira" in menu
     assert "#visao-geral" not in menu
-    assert menu.count("<a href=") == 3
+    assert menu.count("<a href=") == 4
     assert "<svg" in menu
     assert "material-symbols-rounded" not in menu
     markdown = " ".join(elemento.value for elemento in app.markdown)
@@ -69,5 +71,6 @@ def test_home_mostra_status_e_entrada_compacta():
     assert 'href="#boletim-focus"' in markdown
     assert "fp-step-index" not in markdown
     focus.assert_called_once_with()
+    curva.assert_called_once_with()
     macro.assert_called_once_with()
     carteira.assert_called_once_with(None, [])

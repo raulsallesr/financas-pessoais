@@ -7,6 +7,7 @@ from datetime import date
 import streamlit as st
 
 import pagina_carteira
+import pagina_curva
 import pagina_focus
 import pagina_macro
 from focus_atualizacao import avaliar_atualidade
@@ -69,6 +70,19 @@ def _renderizar_menu(
                 </svg>
                 Boletim Focus
               </a>
+              <a href="#curva-tesouro">
+                <svg viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-linecap="round"
+                     stroke-linejoin="round" aria-hidden="true">
+                  <path d="M4 19.5V4.5"/>
+                  <path d="M4 19.5h16"/>
+                  <path d="M7 15.5c3-1 4-6 7-6s3 2 5 2"/>
+                  <circle cx="7" cy="15.5" r="1"/>
+                  <circle cx="14" cy="9.5" r="1"/>
+                  <circle cx="19" cy="11.5" r="1"/>
+                </svg>
+                Curva Tesouro
+              </a>
               <a href="#radar-macro">
                 <svg viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-linecap="round"
@@ -109,7 +123,7 @@ def _renderizar_visao_geral(ultima_coleta: date | None) -> None:
     with introducao:
         st.caption("PAINEL FINANCEIRO PESSOAL")
         st.title("Finanças pessoais")
-        st.write("Expectativas, mercados e carteira em uma leitura só.")
+        st.write("Expectativas, curva, mercados e carteira em uma leitura só.")
     with status:
         st.badge(
             atualidade.rotulo,
@@ -143,6 +157,10 @@ def render() -> None:
     st.divider()
     _ancora("boletim-focus")
     pagina_focus.render_secao()
+
+    st.divider()
+    _ancora("curva-tesouro")
+    pagina_curva.render_secao()
 
     st.divider()
     _ancora("radar-macro")

@@ -1,7 +1,7 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: Focus Semanal (`v1.12`) implementado em 2026-08-26. Próxima
-  entrega: Curva Tesouro (`v1.13`).
+- **Status**: Curva Tesouro (`v1.13`) implementada em 2026-08-26. Próxima
+  entrega: Focus × Curva (`v1.14`).
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -9,6 +9,8 @@
   sem autenticação.
 - **Periodicidade**: BACEN publica o Boletim Focus toda segunda-feira; a API
   tem granularidade diária, então o app permite atualizar a qualquer momento.
+- **Curva oficial**: Tesouro Transparente, conjunto diário “Taxas dos Títulos
+  Ofertados pelo Tesouro Direto”, CSV aberto sob ODbL 1.0.
 
 ## Direção aprovada — FocusLens BR
 
@@ -26,8 +28,8 @@
 - A curva começará por títulos prefixados sem cupom e pontos observados. Taxa
   de título não será apresentada como previsão pura da Selic; prêmio de prazo,
   risco e liquidez permanecem limitações explícitas.
-- As Etapas 0 e 1 foram concluídas em 2026-08-26. A próxima execução é a
-  validação da fonte e do contrato de dados da Curva Tesouro.
+- As Etapas 0, 1 e 2 foram concluídas em 2026-08-26. A próxima execução é o
+  motor explicável de convergência Focus × Curva.
 
 ## Arquitetura
 
@@ -48,7 +50,7 @@
   permanentemente autorizados após o gate passar, sem nova confirmação a
   cada tarefa (decisão explícita do Raul, 2026-08-04).
 - Streamlit em página única: `app_financas.py` chama `pagina_home.py`, que
-  compõe visão geral, Focus, Radar e carteira na mesma rolagem. O menu
+  compõe visão geral, Focus, Curva, Radar e carteira na mesma rolagem. O menu
   lateral usa âncoras para navegar entre as seções; os antigos entrypoints em
   `pages/` foram removidos para não manter navegação paralela.
 - Separação motor puro / adaptador / UI:
@@ -67,6 +69,13 @@
   - `focus_semanal.py` — motor puro de relevância normalizada, ranking e
     estados da fotografia semanal.
   - `pagina_focus.py` — composição da seção e dos estados do Focus.
+  - `curva_data.py` — contrato e consolidação dos pontos observados.
+  - `curva_fontes.py` — download limitado, parser do CSV, validação e cache
+    atômico das 45 datas mais recentes.
+  - `curva_modelo.py` — fotografias D-5/D-21, deltas em bps, inclinação,
+    estados e narrativa determinística.
+  - `pagina_curva.py` — resumo, métricas, curva com estilos de linha e tabela
+    acessível.
   - `pagina_home.py` — composição da experiência única;
     `app_financas.py` é apenas o entrypoint principal.
   - `ui_estilos.py` — tokens e CSS responsivo/acessível compartilhável.
@@ -102,8 +111,12 @@
     motor macro.
   - `METODOLOGIA_FOCUS.md` — cálculo, limiares, estados e limites do Focus
     Semanal.
+  - `METODOLOGIA_CURVA.md` — fonte, licença, fórmulas, estados e limites da
+    Curva Tesouro.
   - `atualizar_focus_cache.py` — entrada sem Streamlit usada pela automação
     agendada em `.github/workflows/atualizar-focus.yml`.
+  - `atualizar_curva_cache.py` — entrada sem Streamlit usada pela automação
+    diária em `.github/workflows/atualizar-curva.yml`.
 - Guardrail de conteúdo: o motor de regras nunca recebe dados do usuário e
   nunca usa linguagem imperativa ("invista", "compre") — só descritiva/
   histórica. `tests/test_focus_regras.py` faz lint de vocabulário proibido.
@@ -111,11 +124,9 @@
   conversa compartilhada entre sessões/máquinas — o git é a única fonte de
   verdade. Por isso: `CLAUDE.md` (instruções fixas, lido automaticamente por
   qualquer sessão Claude Code) + este `CONTEXT.md` (estado vivo) substituem a
-  memória de chat. E `dados/focus_cache.json` **passou a ser versionado**
-  (deixou de ser gitignored) — é só dado público do BACEN, sem nada
-  sensível, e assim as duas máquinas acumulam o mesmo histórico em vez de
-  cada uma ter o seu. `dados/focus_cache.example.json` foi removido (ficou
-  redundante — o cache real agora é o próprio exemplo).
+  memória de chat. `dados/focus_cache.json` e
+  `dados/curva_prefixada_cache.json` são versionados — contêm apenas dados
+  públicos e mantêm a mesma fotografia nas duas máquinas.
 
 ## Estado atual
 
@@ -336,6 +347,24 @@
     `git diff --check` limpos. Desktop foi inspecionado em navegador real;
     responsividade, foco, contraste e redução de movimento permanecem cobertos
     pelo CSS compartilhado e pelos testes de UI.
+- **v1.13 (2026-08-26)** — Curva Tesouro:
+  - Fonte oficial validada ao vivo: 175.462 registros, oito famílias e
+    histórico efetivo desde 31/12/2004. O MVP usa somente `Tesouro Prefixado`
+    sem cupom e `Taxa Compra Manha`, conforme metadados oficiais.
+  - O cache inicial contém 225 pontos em 45 datas. A curva de 26/08/2026 tem
+    cinco vencimentos; D-5 é 19/08 e D-21 é 28/07, sempre por observações
+    efetivamente publicadas.
+  - Na fotografia de lançamento, a variação mediana D-5 foi -24 bps e a
+    inclinação entre as pontas observadas foi +93 bps. Isso é evidência da
+    demo, não recomendação nem previsão de Selic.
+  - Gráfico diferencia atual, D-5 e D-21 por cor, traço e marcador; a tabela
+    preserva valores exatos e lacunas. Fonte indisponível degrada para cache
+    ou estado explícito sem afetar as outras seções.
+  - Automação em dias úteis, metodologia ODbL, captura e diagrama técnico
+    acompanham a entrega.
+  - Gate final: 132 testes aprovados; `py_compile` dos seis módulos da entrega
+    e `git diff --check` limpos. A interface foi inspecionada em navegador real
+    a 1440 px e 390 px, sem rolagem horizontal no viewport móvel.
 
 ## Fila priorizada
 
@@ -345,8 +374,8 @@ integração seguinte.
 | Prioridade | Estado | Melhoria | Impacto | Esforço |
 |---|---|---|---|---|
 | P0 | Entregue | Focus Semanal (`v1.12`) | Alto | Médio |
-| P1 | Próxima | Curva Tesouro (`v1.13`) | Muito alto | Alto |
-| P2 | Planejada | Focus × Curva (`v1.14`) | Muito alto | Alto |
+| P1 | Entregue | Curva Tesouro (`v1.13`) | Muito alto | Alto |
+| P2 | Próxima | Focus × Curva (`v1.14`) | Muito alto | Alto |
 | P3 | Planejada | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |

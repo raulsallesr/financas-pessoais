@@ -155,6 +155,12 @@ recomendação de título.
 **Publicação:** “Transformei dados públicos do Tesouro em uma leitura direta da
 curva prefixada brasileira.”
 
+**Estado:** concluída em 2026-08-26. A implementação usa a taxa de compra da
+manhã, filtra somente prefixados sem cupom, seleciona D-5/D-21 entre datas
+publicadas e compara apenas vencimentos idênticos. O método está em
+`METODOLOGIA_CURVA.md`; cache, automação, gráfico, tabela e estados da fonte
+foram integrados sem nova dependência.
+
 ---
 
 ### Etapa 3 — Focus × Curva
@@ -351,16 +357,17 @@ descartáveis:
 Antes de tornar o repositório público, executar auditoria específica de
 segredos, dados pessoais, direitos de conteúdo, dependências e histórico Git.
 
-## 11. Próxima execução — Etapa 2
+## 11. Próxima execução — Etapa 3
 
 Ordem de trabalho:
 
-1. confirmar o contrato real da fonte Tesouro Transparente;
-2. escolher os campos canônicos de taxa e vencimento;
-3. criar o adaptador isolado e fixtures sintéticas;
-4. modelar pontos observados e variações em D-5/D-21 úteis;
-5. compor a primeira Curva Tesouro sem interpolação artificial;
-6. documentar limitações e validar os estados da fonte.
+1. definir o contrato de evidências comparáveis entre Focus e curva;
+2. separar ponta curta e longa sem atribuir causalidade;
+3. modelar os cinco estados de convergência;
+4. explicitar “O que prova” e “O que faria mudar”;
+5. testar sinais alinhados, divergentes, mistos e insuficientes;
+6. integrar a leitura sem duplicar Focus ou Curva.
 
-A Etapa 1 está fechada na `v1.12`. A próxima implementação começa pela
-qualidade e rastreabilidade da fonte da curva, antes da camada visual.
+As Etapas 1 e 2 estão fechadas nas versões `v1.12` e `v1.13`. A próxima
+implementação reaproveita os dois motores puros; nenhuma notícia entra no
+cálculo numérico.

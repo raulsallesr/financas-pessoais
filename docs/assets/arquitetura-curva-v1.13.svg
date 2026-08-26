@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="440" viewBox="0 0 1200 440" role="img" aria-labelledby="title desc">
+  <title id="title">Arquitetura da Curva Tesouro v1.13</title>
+  <desc id="desc">Fluxo do CSV público do Tesouro Transparente até o adaptador, cache, motor puro e interface FocusLens.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#0f766e"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="7" stdDeviation="8" flood-color="#184840" flood-opacity="0.10"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="440" rx="28" fill="#f3f7f5"/>
+  <text x="64" y="70" fill="#17332f" font-family="Arial, sans-serif" font-size="30" font-weight="700">Curva Tesouro v1.13</text>
+  <text x="64" y="102" fill="#536965" font-family="Arial, sans-serif" font-size="17">Fonte pública → contrato validado → cálculo explicável → evidência visual</text>
+  <g filter="url(#shadow)" font-family="Arial, sans-serif">
+    <g transform="translate(58 150)">
+      <rect width="230" height="190" rx="18" fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="24" y="43" fill="#0f766e" font-size="14" font-weight="700" letter-spacing="1.2">FONTE</text>
+      <text x="24" y="78" fill="#17332f" font-size="21" font-weight="700">Tesouro Transparente</text>
+      <text x="24" y="111" fill="#536965" font-size="16">CSV diário · ODbL 1.0</text>
+      <text x="24" y="140" fill="#536965" font-size="16">8 famílias na origem</text>
+      <text x="24" y="169" fill="#536965" font-size="16">sem autenticação</text>
+    </g>
+    <g transform="translate(340 150)">
+      <rect width="230" height="190" rx="18" fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="24" y="43" fill="#0f766e" font-size="14" font-weight="700" letter-spacing="1.2">ADAPTADOR</text>
+      <text x="24" y="78" fill="#17332f" font-size="21" font-weight="700">Validação e filtro</text>
+      <text x="24" y="111" fill="#536965" font-size="16">schema + locale pt-BR</text>
+      <text x="24" y="140" fill="#536965" font-size="16">Prefixado sem cupom</text>
+      <text x="24" y="169" fill="#536965" font-size="16">cache de 45 datas</text>
+    </g>
+    <g transform="translate(622 150)">
+      <rect width="230" height="190" rx="18" fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="24" y="43" fill="#0f766e" font-size="14" font-weight="700" letter-spacing="1.2">MOTOR PURO</text>
+      <text x="24" y="78" fill="#17332f" font-size="21" font-weight="700">D-5 e D-21</text>
+      <text x="24" y="111" fill="#536965" font-size="16">comparação por vencimento</text>
+      <text x="24" y="140" fill="#536965" font-size="16">delta em pontos-base</text>
+      <text x="24" y="169" fill="#536965" font-size="16">sem interpolação</text>
+    </g>
+    <g transform="translate(904 150)">
+      <rect width="238" height="190" rx="18" fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="24" y="43" fill="#0f766e" font-size="14" font-weight="700" letter-spacing="1.2">INTERFACE</text>
+      <text x="24" y="78" fill="#17332f" font-size="21" font-weight="700">FocusLens BR</text>
+      <text x="24" y="111" fill="#536965" font-size="16">resumo antes do gráfico</text>
+      <text x="24" y="140" fill="#536965" font-size="16">linhas + marcadores</text>
+      <text x="24" y="169" fill="#536965" font-size="16">tabela acessível</text>
+    </g>
+  </g>
+  <g stroke="#0f766e" stroke-width="3" fill="none" marker-end="url(#arrow)">
+    <path d="M288 245 H330"/>
+    <path d="M570 245 H612"/>
+    <path d="M852 245 H894"/>
+  </g>
+  <text x="64" y="394" fill="#a16207" font-family="Arial, sans-serif" font-size="16" font-weight="700">Guardrail:</text>
+  <text x="151" y="394" fill="#536965" font-family="Arial, sans-serif" font-size="16">campo ausente não recebe zero; título ausente não recebe taxa estimada.</text>
+</svg>

@@ -205,6 +205,8 @@ body:not(:has(.fp-section-anchor:target))
 .fp-section-nav a[href="#boletim-focus"],
 body:has(#boletim-focus:target)
 .fp-section-nav a[href="#boletim-focus"],
+body:has(#curva-tesouro:target)
+.fp-section-nav a[href="#curva-tesouro"],
 body:has(#radar-macro:target)
 .fp-section-nav a[href="#radar-macro"],
 body:has(#minha-carteira:target)
@@ -252,6 +254,8 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 }
 
 .st-key-resumo_semana
+div[data-testid="stVerticalBlockBorderWrapper"],
+.st-key-curva_resumo
 div[data-testid="stVerticalBlockBorderWrapper"],
 .st-key-macro_cenario
 div[data-testid="stVerticalBlockBorderWrapper"] {
