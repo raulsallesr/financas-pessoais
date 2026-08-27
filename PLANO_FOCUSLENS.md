@@ -380,11 +380,12 @@ UI, o que os motores já entregam.
    implementada prioriza convergência íntegra, revisão relevante do Focus,
    curva atual, Focus atual e, por último, qualidade dos dados; limites e
    condições de mudança também permanecem no contrato.
-2. **Consolidar a hierarquia da página única.** Organizar a jornada final em
-   Resumo → Expectativas → Curva → Carteira. Incorporar ao Resumo somente
-   sinais do Radar que acrescentem contexto, eliminando repetição sem apagar
-   o módulo antigo antes de a migração estar coberta por testes e validada
-   visualmente.
+2. **Consolidar a hierarquia da página única — concluído em 2026-08-27.** A
+   jornada final agora segue Resumo → Expectativas → Curva → Carteira. O
+   Resumo consome o contrato puro na primeira dobra e seleciona no máximo um
+   sinal externo do Radar, excluindo sinais que repetiriam o Focus. A carga
+   completa do Radar foi preservada para a Carteira e sua apresentação antiga
+   continua coberta por teste, sem permanecer como seção paralela da Home.
 3. **Adicionar o cenário de curva.** Implementar o choque paralelo simples em
    um módulo puro, com entradas explícitas e saída descritiva. Não estimar
    probabilidade, retorno de carteira, preço-alvo nem recomendação; não abrir

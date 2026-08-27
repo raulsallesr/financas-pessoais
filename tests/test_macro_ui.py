@@ -121,3 +121,29 @@ def test_radar_macro_renderiza_precos_cenario_e_linhas():
         elemento.value for elemento in app.subheader
     ]
     assert len(app.get("vega_lite_chart")) == 2
+
+
+def test_carga_do_radar_isola_falha_de_mercados():
+    with (
+        patch.object(
+            pagina_macro,
+            "_carregar_mercados",
+            side_effect=RuntimeError("fonte indisponível"),
+        ),
+        patch.object(
+            pagina_macro,
+            "_carregar_noticias_macro",
+            return_value=_noticias(),
+        ),
+        patch.object(
+            pagina_macro,
+            "carregar_cache",
+            return_value=_historico_focus(),
+        ),
+    ):
+        dados = pagina_macro.carregar_dados_radar()
+
+    assert dados.cenario is not None
+    assert dados.series == ()
+    assert dados.noticias == _noticias().noticias
+    assert dados.fontes_indisponiveis == ("Mercados",)

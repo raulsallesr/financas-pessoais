@@ -25,11 +25,13 @@ from focus_semanal import (
     ResumoFocusSemanal,
     montar_resumo_semanal,
 )
+from macro_modelo import CenarioMacro, SinalMacro
 from resumo_integrado import (
     FONTE_CURVA,
     FONTE_FOCUS,
     PrioridadeResumo,
     montar_resumo_integrado,
+    selecionar_contexto_radar,
 )
 
 
@@ -310,3 +312,68 @@ def test_motores_reais_compoem_o_resumo_com_dados_sinteticos():
         date(2026, 8, 19),
         date(2026, 8, 26),
     )
+
+
+def _cenario(*sinais: SinalMacro) -> CenarioMacro:
+    return CenarioMacro(
+        titulo="Cenário misto",
+        horizonte="próximas semanas",
+        confianca="moderada",
+        resumo="Sinais condicionais.",
+        projecoes=(),
+        eixos=(),
+        perspectivas=(),
+        invalidadores=(),
+        temas_editoriais=(),
+        sinais=sinais,
+    )
+
+
+def test_contexto_radar_remove_focus_e_escolhe_sinal_externo_mais_forte():
+    contexto = selecionar_contexto_radar(
+        _cenario(
+            SinalMacro(
+                eixo="juros",
+                impacto=3,
+                titulo="Selic revisada",
+                evidencia="Focus subiu.",
+                fonte="Boletim Focus / BACEN",
+            ),
+            SinalMacro(
+                eixo="externo",
+                impacto=-2,
+                titulo="Dólar ganhou força",
+                evidencia="PTAX avançou no período.",
+                fonte="PTAX / BACEN",
+            ),
+            SinalMacro(
+                eixo="commodities",
+                impacto=1,
+                titulo="Brent avançou",
+                evidencia="Petróleo subiu no período.",
+                fonte="EIA via FRED",
+            ),
+        )
+    )
+
+    assert contexto is not None
+    assert contexto.titulo == "Dólar ganhou força"
+    assert contexto.fonte == "PTAX / BACEN"
+    assert contexto.horizonte == "próximas semanas"
+    assert contexto.confianca == "moderada"
+
+
+def test_contexto_radar_nao_cria_card_quando_so_repetiria_o_focus():
+    contexto = selecionar_contexto_radar(
+        _cenario(
+            SinalMacro(
+                eixo="juros",
+                impacto=2,
+                titulo="Selic revisada",
+                evidencia="Focus subiu.",
+                fonte="Boletim Focus / BACEN",
+            )
+        )
+    )
+
+    assert contexto is None

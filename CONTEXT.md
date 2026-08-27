@@ -1,8 +1,8 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: Etapa 4 do FocusLens BR (`v2.0`) em andamento. O contrato puro
-  do Resumo integrado foi concluído em 2026-08-27; próxima entrega: consolidar
-  a hierarquia da página única sem alterar os motores das versões anteriores.
+- **Status**: Etapa 4 do FocusLens BR (`v2.0`) em andamento. Contrato e
+  hierarquia integrada do Resumo foram concluídos em 2026-08-27; próxima
+  entrega: cenário simples de choque paralelo na curva.
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -22,10 +22,10 @@
 - A branch de trabalho é `main`, sincronizada com `origin/main` em 2026-08-27.
 - O próximo marco é somente a **Etapa 4 — FocusLens BR integrado (`v2.0`)**.
   Não refazer as Etapas 1–3 nem abrir novos repositórios para elas.
-- O item 1 da Etapa 4 está concluído em `resumo_integrado.py`: o contrato
-  escolhe entre Focus × Curva, Expectativas, Curva e Qualidade dos dados,
-  preserva duas a quatro provas, datas por fonte, limites e condições de
-  mudança. O próximo incremento é somente o item 2, hierarquia da página.
+- Os itens 1 e 2 da Etapa 4 estão concluídos. `resumo_integrado.py` escolhe
+  entre Focus × Curva, Expectativas, Curva e Qualidade dos dados; a Home usa
+  esse contrato na primeira dobra e segue Resumo → Expectativas → Curva →
+  Carteira. O próximo incremento é somente o item 3, cenário de curva.
 - Existe um stash anterior chamado
   `codex-pre-focuslens-cache-2026-08-26`. Ele deve ser preservado e não pode
   ser aplicado ou removido sem antes inspecionar seu conteúdo e confirmar a
@@ -38,9 +38,9 @@
 3. Leia `CLAUDE.md`, este `CONTEXT.md` e `PLANO_FOCUSLENS.md`, nessa ordem.
 4. Use a seção **“Próxima execução — Etapa 4”** do plano como checklist
    canônico; este handoff apenas fixa o ponto de retomada.
-5. Antes de editar, inspecione `pagina_home.py`, `resumo_integrado.py` e os
-   testes do novo contrato. Reuse `montar_resumo_integrado`; não replique a
-   regra de prioridade dentro da UI.
+5. Antes de editar, inspecione `curva_modelo.py`, `curva_data.py`,
+   `pagina_curva.py` e os testes da curva. O novo choque deve nascer em módulo
+   puro e não pode alterar a leitura D-5/D-21 existente.
 
 ### Decisões que não devem ser reabertas
 
@@ -64,11 +64,12 @@
 
 > Abra o projeto `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only` e
 > leia `CLAUDE.md`, `CONTEXT.md` e `PLANO_FOCUSLENS.md`. Continue a Etapa 4 —
-> FocusLens BR `v2.0` pelo item 2, sem refazer as versões `v1.12`–`v1.14` nem
-> o contrato `resumo_integrado.py` já concluído. Consolide a jornada Resumo →
-> Expectativas → Curva → Carteira, reuse o contrato puro na primeira dobra e
-> preserve o Radar até a migração estar coberta por testes e validação visual.
-> Conclua o incremento com documentação, commit e push no git próprio.
+> FocusLens BR `v2.0` pelo item 3, sem refazer as versões `v1.12`–`v1.14` nem
+> os incrementos já concluídos do Resumo. Implemente o choque paralelo simples
+> em módulo puro, com entradas explícitas e saída descritiva; não estime
+> probabilidade, retorno de carteira, preço-alvo nem recomendação e não abra
+> escopo para bootstrap, forwards, cupom ou IPCA+. Conclua o incremento com
+> testes, validação visual, documentação, commit e push no git próprio.
 
 ## Direção aprovada — FocusLens BR
 
@@ -108,9 +109,9 @@
   permanentemente autorizados após o gate passar, sem nova confirmação a
   cada tarefa (decisão explícita do Raul, 2026-08-04).
 - Streamlit em página única: `app_financas.py` chama `pagina_home.py`, que
-  compõe visão geral, Focus, Curva, Focus × Curva, Radar e carteira na mesma
-  rolagem. O menu lateral usa âncoras para navegar entre as seções; os antigos
-  entrypoints em `pages/` foram removidos para não manter navegação paralela.
+  compõe Resumo, Expectativas, Curva e Carteira na mesma rolagem. O menu
+  lateral usa essas quatro âncoras; os antigos entrypoints em `pages/` foram
+  removidos para não manter navegação paralela.
 - Separação motor puro / adaptador / UI:
   - `financas_taxonomia.py` — enums compartilhados (ClasseAtivo, Direcao,
     unidades de exibição).
@@ -140,11 +141,14 @@
     ponta, cinco estados, evidências e condições de mudança, sem I/O.
   - `convergencia_apresentacao.py` — formatação pt-BR das quatro métricas da
     convergência, sem Streamlit.
-  - `pagina_convergencia.py` — leitura dos dois caches públicos e composição
-    visual do veredito, provas, mudanças e limites.
+  - `pagina_convergencia.py` — apresentação anterior preservada e coberta por
+    testes durante a migração; não é mais seção paralela da Home.
   - `resumo_integrado.py` — orquestração pura dos três contratos públicos;
     escolhe a leitura prioritária, limita a síntese a duas–quatro provas e
-    mantém datas, limites e condições sem refazer cálculos.
+    mantém datas, limites e condições sem refazer cálculos; também filtra um
+    único contexto externo do Radar sem repetir o Focus.
+  - `pagina_resumo.py` — adaptador independente dos dois caches e composição
+    visual do Resumo, com falha isolada por fonte.
   - `pagina_home.py` — composição da experiência única;
     `app_financas.py` é apenas o entrypoint principal.
   - `ui_estilos.py` — tokens e CSS responsivo/acessível compartilhável.
@@ -167,7 +171,9 @@
     Brent/EIA via FRED, BTC/BRL/Binance e CDI/Selic diários via SGS.
   - `macro_modelo.py` — sinais, eixos, cenário condicionado, perspectivas,
     confiança e temas editoriais (motor puro e explicável).
-  - `pagina_macro.py` — composição visual da seção Radar.
+  - `pagina_macro.py` — carga reutilizável do cenário e apresentação completa
+    anterior do Radar; a Home usa a carga na Carteira e só o contexto externo
+    selecionado no Resumo.
   - `carteira_modelo.py` — normalização, alocação, resultado, benchmark e
     cruzamento puro entre classes da carteira e perspectivas do Radar.
   - `b3_importacao.py` — adaptador `openpyxl` em memória para o XLSX da Área
@@ -487,6 +493,21 @@
     conhecido. A regressão visual real preservou título, Focus, Curva,
     Convergência, skip link e movimento reduzido em 375, 768, 1024, 1440 e
     844×390 px, sempre com `scrollWidth == innerWidth`.
+- **Etapa 4 · incremento 2 (2026-08-27)** — hierarquia integrada:
+  - `pagina_resumo.py` conecta os caches aos três motores e apresenta na
+    primeira dobra prioridade, veredito, duas–quatro provas, datas, fonte,
+    limite e condição de mudança. Nenhuma fórmula foi movida para a UI.
+  - A Home agora segue Resumo → Expectativas → Curva → Carteira. Focus × Curva
+    virou evidência do Resumo; as apresentações antigas de Convergência e
+    Radar permanecem no repositório e testadas, mas não duplicam seções.
+  - `DadosRadar` carrega o cenário uma vez: no Resumo entra no máximo o sinal
+    externo de maior impacto absoluto, sem repetir Focus; o contrato completo
+    continua alimentando a Carteira. Falhas de mercado ou notícias ficam
+    isoladas no Radar.
+  - Gate final: 172 testes aprovados fora do sandbox; módulos compilados;
+    `pip check` e `git diff --check` limpos. A página foi validada em 375, 768,
+    1024, 1440 e 844×390 px sem rolagem horizontal, com as quatro âncoras,
+    primeira dobra legível e significado independente de cor.
 
 ## Fila priorizada
 
@@ -498,7 +519,7 @@ integração seguinte.
 | P0 | Entregue | Focus Semanal (`v1.12`) | Alto | Médio |
 | P1 | Entregue | Curva Tesouro (`v1.13`) | Muito alto | Alto |
 | P2 | Entregue | Focus × Curva (`v1.14`) | Muito alto | Alto |
-| P3 | Em andamento (1/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
+| P3 | Em andamento (2/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
 | Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |

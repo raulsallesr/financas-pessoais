@@ -202,17 +202,15 @@ div[data-testid="stVerticalBlockBorderWrapper"]
 }
 
 body:not(:has(.fp-section-anchor:target))
-.fp-section-nav a[href="#boletim-focus"],
-body:has(#boletim-focus:target)
-.fp-section-nav a[href="#boletim-focus"],
-body:has(#curva-tesouro:target)
-.fp-section-nav a[href="#curva-tesouro"],
-body:has(#focus-curva:target)
-.fp-section-nav a[href="#focus-curva"],
-body:has(#radar-macro:target)
-.fp-section-nav a[href="#radar-macro"],
-body:has(#minha-carteira:target)
-.fp-section-nav a[href="#minha-carteira"] {
+.fp-section-nav a[href="#resumo"],
+body:has(#resumo:target)
+.fp-section-nav a[href="#resumo"],
+body:has(#expectativas:target)
+.fp-section-nav a[href="#expectativas"],
+body:has(#curva:target)
+.fp-section-nav a[href="#curva"],
+body:has(#carteira:target)
+.fp-section-nav a[href="#carteira"] {
     background: linear-gradient(135deg, #e7f5f1 0%, #f6fbf9 100%);
     border-color: #b8dcd4;
     color: var(--fp-primary-strong) !important;
@@ -260,6 +258,8 @@ div[data-testid="stVerticalBlockBorderWrapper"] {
 }
 
 .st-key-resumo_semana
+div[data-testid="stVerticalBlockBorderWrapper"],
+.st-key-resumo_integrado
 div[data-testid="stVerticalBlockBorderWrapper"],
 .st-key-curva_resumo
 div[data-testid="stVerticalBlockBorderWrapper"],
@@ -357,6 +357,7 @@ hr {
         max-width: 100vw !important;
         min-width: 0 !important;
         overflow-x: hidden;
+        padding-top: 2.5rem !important;
         width: 100% !important;
     }
 
@@ -365,7 +366,7 @@ hr {
         max-width: 100vw !important;
         padding-left: 1rem;
         padding-right: 1rem;
-        padding-top: 1rem;
+        padding-top: 2rem;
         width: 100vw !important;
     }
 

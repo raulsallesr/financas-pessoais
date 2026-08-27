@@ -27,10 +27,12 @@ from focus_apresentacao import (
     titulo_resumo_semanal,
 )
 from focus_semanal import EstadoFocusSemanal, ResumoFocusSemanal
+from macro_modelo import CenarioMacro
 
 
 FONTE_FOCUS = "BACEN · Focus"
 FONTE_CURVA = "Tesouro Transparente"
+FONTE_FOCUS_RADAR = "Boletim Focus / BACEN"
 
 
 class PrioridadeResumo(str, Enum):
@@ -68,6 +70,44 @@ class ResumoIntegrado:
             raise ValueError("O Resumo integrado exige de duas a quatro provas.")
         if not self.veredito.strip():
             raise ValueError("O veredito do Resumo integrado não pode ser vazio.")
+
+
+@dataclass(frozen=True)
+class ContextoRadarResumo:
+    """Único sinal externo que pode complementar o Resumo."""
+
+    titulo: str
+    evidencia: str
+    fonte: str
+    horizonte: str
+    confianca: str
+
+
+def selecionar_contexto_radar(
+    cenario: CenarioMacro | None,
+) -> ContextoRadarResumo | None:
+    """Seleciona contexto externo sem repetir sinais do Focus.
+
+    O maior impacto absoluto lidera. ``max`` preserva o primeiro sinal em
+    empates, mantendo a ordem explicável do motor macro.
+    """
+    if cenario is None:
+        return None
+    candidatos = [
+        sinal
+        for sinal in cenario.sinais
+        if sinal.fonte != FONTE_FOCUS_RADAR and sinal.impacto != 0
+    ]
+    if not candidatos:
+        return None
+    sinal = max(candidatos, key=lambda item: abs(item.impacto))
+    return ContextoRadarResumo(
+        titulo=sinal.titulo,
+        evidencia=sinal.evidencia,
+        fonte=sinal.fonte,
+        horizonte=cenario.horizonte,
+        confianca=cenario.confianca,
+    )
 
 
 def _datas_unicas(*datas: date | None) -> tuple[date, ...]:

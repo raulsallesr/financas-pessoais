@@ -58,12 +58,17 @@ def test_css_claro_preserva_acessibilidade_e_responsividade() -> None:
     assert "min-height: 44px" in CSS_APP
     assert "flex-wrap: wrap !important" in CSS_APP
     assert "max-width: 100vw" in CSS_APP
+    assert "padding-top: 2.5rem !important" in CSS_APP
     assert "max-width: 1100px" in CSS_APP
     assert "gap: 1rem" in CSS_APP
     assert "min-height: 108px" in CSS_APP
     assert ".st-key-home_hero" not in CSS_APP
-    assert 'href="#curva-tesouro"' in CSS_APP
-    assert 'href="#focus-curva"' in CSS_APP
+    assert 'href="#resumo"' in CSS_APP
+    assert 'href="#expectativas"' in CSS_APP
+    assert 'href="#curva"' in CSS_APP
+    assert 'href="#carteira"' in CSS_APP
+    assert 'href="#focus-curva"' not in CSS_APP
+    assert ".st-key-resumo_integrado" in CSS_APP
     assert ".st-key-curva_resumo" in CSS_APP
     assert ".st-key-focus_curva_resumo" in CSS_APP
     assert '[data-testid="stMetricDelta"] svg' in CSS_APP

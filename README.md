@@ -2,29 +2,31 @@
 
 App pessoal em Streamlit para aprender e acompanhar o mercado financeiro. A
 base atual reúne **Boletim Focus**, Curva Tesouro, Focus × Curva, Radar Macro
-e carteira; sua evolução aprovada é o **FocusLens BR**, que cruza expectativas,
-curva de juros e cenários em entregas pequenas e publicáveis.
+e carteira; a página integrada do **FocusLens BR** organiza esses contratos em
+Resumo, Expectativas, Curva e Carteira.
 
 O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
 ## Etapa 4 em andamento
 
-O primeiro incremento do FocusLens BR `v2.0` fechou o contrato puro do Resumo
-integrado. `resumo_integrado.py` recebe as saídas já calculadas do Focus
-Semanal, da Curva Tesouro e de Focus × Curva; escolhe qual leitura deve liderar
-e devolve duas a quatro provas, datas por fonte, limites e condições de
-mudança. Nenhuma fórmula dos motores `v1.12`–`v1.14` foi duplicada.
+Os dois primeiros incrementos do FocusLens BR `v2.0` fecharam o contrato puro
+e o conectaram à primeira dobra. O Resumo escolhe a leitura prioritária já
+calculada pelos motores, mostra duas a quatro provas, datas por fonte, limite e
+condição de mudança e, quando existe, incorpora somente um sinal externo do
+Radar que acrescente contexto. Nenhuma fórmula dos motores `v1.12`–`v1.14` foi
+duplicada.
 
-A página ainda preserva integralmente a composição visual da `v1.14`. O
-próximo incremento conectará esse contrato à primeira dobra e consolidará a
-jornada Resumo → Expectativas → Curva → Carteira.
+A página agora segue Resumo → Expectativas → Curva → Carteira. O módulo visual
+completo do Radar e a antiga apresentação de Focus × Curva continuam no código
+e cobertos por testes durante a migração; o cenário completo do Radar segue
+alimentando a Carteira. O próximo incremento é o cenário simples de curva.
 
-## O que faz hoje (v1.14)
+## O que faz hoje (v2.0 em construção)
 
-- Reúne visão geral, Boletim Focus, Curva Tesouro, Focus × Curva, Radar
-  Macro e carteira em uma única página. O menu lateral leva diretamente a
-  cada seção sem trocar de rota.
+- Abre com “o que merece atenção agora?” e mantém prova, datas, fonte, limite
+  e condição de mudança junto do veredito. O menu lateral leva a Resumo,
+  Expectativas, Curva e Carteira sem trocar de rota.
 - Busca Selic, IPCA, câmbio, PIB Total, IGP-M e dívida líquida do setor
   público direto da API pública do BACEN (Sistema de Expectativas de Mercado
   / Olinda), sem precisar de PDF nem chave de acesso.
@@ -62,10 +64,11 @@ jornada Resumo → Expectativas → Curva → Carteira.
 - Reúne três manchetes relevantes de InfoMoney e Brazil Journal via RSS, com
   cache, deduplicação e fallback independente por fonte. O app exibe apenas
   título, fonte, horário e link para a publicação original.
-- O **Radar Macro** combina Focus, dólar PTAX, petróleo Brent, Bitcoin e
-  temas das manchetes em um cenário direcional de 4–12 semanas. Mostra
-  confiança, sinais, classes relativamente favorecidas/pressionadas e o que
-  faria a leitura mudar — sem alvo de preço nem ordem de compra/venda.
+- O **Radar Macro** combina Focus, dólar PTAX, petróleo Brent, Bitcoin e temas
+  das manchetes em um cenário direcional de 4–12 semanas. No Resumo aparece
+  no máximo um sinal externo não redundante, com fonte, horizonte e confiança;
+  o cenário completo permanece disponível ao motor da Carteira — sem alvo de
+  preço nem ordem de compra/venda.
 - Compara dólar, Brent, Bitcoin, CDI e Selic desde o início do ano no mesmo
   gráfico de linhas em base 100, mantendo valor real, data da observação e
   tabela acessível sob demanda.

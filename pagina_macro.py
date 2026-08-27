@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from datetime import UTC, date
 
 import pandas as pd
@@ -28,6 +29,14 @@ _CORES_ESTADO = {
     "proteção com ressalvas": "blue",
 }
 _CODIGOS_PRECO = frozenset({"USDBRL", "BRENT", "BTCBRL"})
+
+
+@dataclass(frozen=True)
+class DadosRadar:
+    cenario: CenarioMacro | None
+    series: tuple[SerieMercado, ...]
+    noticias: tuple[Noticia, ...]
+    fontes_indisponiveis: tuple[str, ...]
 
 
 @st.cache_data(ttl=15 * 60, show_spinner=False)
@@ -283,34 +292,62 @@ def _renderizar_invalidadores(cenario: CenarioMacro) -> None:
         st.markdown(f"- {item}")
 
 
-def render_secao() -> tuple[CenarioMacro | None, list[SerieMercado]]:
-    _renderizar_cabecalho()
-
-    with st.spinner("Conectando sinais públicos...", show_time=True):
-        try:
-            resultado_mercados = _carregar_mercados()
-        except Exception:
-            resultado_mercados = ResultadoMercados(
-                series=(),
-                fontes_indisponiveis=("Mercados",),
-            )
-        try:
-            resultado_noticias = _carregar_noticias_macro()
-        except Exception:
-            resultado_noticias = ResultadoNoticias(
-                noticias=(),
-                fontes_indisponiveis=("Feeds de notícias",),
-            )
-
+def carregar_dados_radar() -> DadosRadar:
+    """Carrega uma vez o cenário completo, sem produzir elementos de UI."""
+    try:
+        resultado_mercados = _carregar_mercados()
+    except Exception:
+        resultado_mercados = ResultadoMercados(
+            series=(),
+            fontes_indisponiveis=("Mercados",),
+        )
+    try:
+        resultado_noticias = _carregar_noticias_macro()
+    except Exception:
+        resultado_noticias = ResultadoNoticias(
+            noticias=(),
+            fontes_indisponiveis=("Feeds de notícias",),
+        )
     try:
         historico_focus = carregar_cache()
     except ErroCacheFocus:
         historico_focus = []
-    series = list(resultado_mercados.series)
-    noticias = list(resultado_noticias.noticias)
+    series = resultado_mercados.series
+    noticias = resultado_noticias.noticias
     comparativos = montar_comparativos(historico_focus)
+    series_precos = tuple(
+        serie for serie in series if serie.codigo in _CODIGOS_PRECO
+    )
+    cenario = (
+        construir_cenario(comparativos, list(series_precos), list(noticias))
+        if series or comparativos
+        else None
+    )
+    return DadosRadar(
+        cenario=cenario,
+        series=series,
+        noticias=noticias,
+        fontes_indisponiveis=(
+            *resultado_mercados.fontes_indisponiveis,
+            *resultado_noticias.fontes_indisponiveis,
+        ),
+    )
 
-    if not series and not comparativos:
+
+def render_secao(
+    dados: DadosRadar | None = None,
+) -> tuple[CenarioMacro | None, list[SerieMercado]]:
+    """Mantém a seção legada disponível durante a migração da Etapa 4."""
+    _renderizar_cabecalho()
+
+    if dados is None:
+        with st.spinner("Conectando sinais públicos...", show_time=True):
+            dados = carregar_dados_radar()
+
+    series = list(dados.series)
+    noticias = list(dados.noticias)
+
+    if dados.cenario is None:
         st.error(
             "O radar está sem dados quantitativos agora. Tente atualizar "
             "novamente quando as fontes estiverem disponíveis."
@@ -320,7 +357,7 @@ def render_secao() -> tuple[CenarioMacro | None, list[SerieMercado]]:
     series_precos = [
         serie for serie in series if serie.codigo in _CODIGOS_PRECO
     ]
-    cenario = construir_cenario(comparativos, series_precos, noticias)
+    cenario = dados.cenario
     _renderizar_cenario(cenario)
     if series_precos:
         _renderizar_precos(series_precos)
@@ -335,14 +372,10 @@ def render_secao() -> tuple[CenarioMacro | None, list[SerieMercado]]:
         _renderizar_noticias(cenario, noticias)
         _renderizar_invalidadores(cenario)
 
-    indisponiveis = (
-        *resultado_mercados.fontes_indisponiveis,
-        *resultado_noticias.fontes_indisponiveis,
-    )
-    if indisponiveis:
+    if dados.fontes_indisponiveis:
         st.warning(
             "Fontes temporariamente indisponíveis: "
-            + ", ".join(indisponiveis)
+            + ", ".join(dados.fontes_indisponiveis)
             + ". A confiança da leitura foi reduzida."
         )
     st.caption(
