@@ -44,7 +44,7 @@ def _historico() -> list[PontoCurva]:
     return pontos
 
 
-def test_curva_renderiza_resumo_grafico_e_tabela_acessivel():
+def test_curva_renderiza_resumo_cenario_e_tabelas_acessiveis():
     pagina = Path(__file__).resolve().parent / "apps" / "curva_section.py"
     with patch.object(
         pagina_curva,
@@ -64,11 +64,41 @@ def test_curva_renderiza_resumo_grafico_e_tabela_acessivel():
         "Ponta longa",
         "Inclinação atual",
     ]
-    assert len(app.get("vega_lite_chart")) == 1
-    assert len(app.dataframe) == 1
+    assert len(app.get("vega_lite_chart")) == 2
+    assert len(app.dataframe) == 2
+    assert app.slider[0].label == "Choque paralelo sobre todas as taxas"
+    assert app.slider[0].value == 25
+    assert "Choque paralelo de +25 bps" in [
+        elemento.value for elemento in app.subheader
+    ]
+    assert [metrica.label for metrica in app.metric[4:]] == [
+        "Ponta curta no cenário",
+        "Ponta longa no cenário",
+        "Inclinação no cenário",
+    ]
     assert any(
         "Atualizada" in elemento.value for elemento in app.markdown
     )
+
+
+def test_curva_atualiza_cenario_sem_reler_ou_alterar_a_fotografia():
+    pagina = Path(__file__).resolve().parent / "apps" / "curva_section.py"
+    historico = _historico()
+    with patch.object(
+        pagina_curva,
+        "_obter_pontos",
+        return_value=historico,
+    ):
+        app = AppTest.from_file(pagina, default_timeout=15).run()
+        app.slider[0].set_value(-50).run()
+
+    assert not app.exception
+    assert app.slider[0].value == -50
+    assert "Choque paralelo de -50 bps" in [
+        elemento.value for elemento in app.subheader
+    ]
+    assert app.metric[4].delta == "-50 bps"
+    assert historico[-1].taxa_compra == 13.81
 
 
 def test_curva_indisponivel_nao_quebra_as_outras_secoes():
@@ -82,3 +112,4 @@ def test_curva_indisponivel_nao_quebra_as_outras_secoes():
     ]
     assert not app.metric
     assert not app.get("vega_lite_chart")
+    assert not app.slider

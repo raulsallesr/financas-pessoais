@@ -10,17 +10,20 @@ sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
 ## Etapa 4 em andamento
 
-Os dois primeiros incrementos do FocusLens BR `v2.0` fecharam o contrato puro
-e o conectaram à primeira dobra. O Resumo escolhe a leitura prioritária já
-calculada pelos motores, mostra duas a quatro provas, datas por fonte, limite e
-condição de mudança e, quando existe, incorpora somente um sinal externo do
-Radar que acrescente contexto. Nenhuma fórmula dos motores `v1.12`–`v1.14` foi
-duplicada.
+Os três primeiros incrementos do FocusLens BR `v2.0` fecharam o contrato puro,
+conectaram-no à primeira dobra e adicionaram um cenário mecânico à Curva. O
+Resumo escolhe a leitura prioritária já calculada pelos motores, mostra duas a
+quatro provas, datas por fonte, limite e condição de mudança e, quando existe,
+incorpora somente um sinal externo do Radar que acrescente contexto. Nenhuma
+fórmula dos motores `v1.12`–`v1.14` foi duplicada.
 
 A página agora segue Resumo → Expectativas → Curva → Carteira. O módulo visual
 completo do Radar e a antiga apresentação de Focus × Curva continuam no código
 e cobertos por testes durante a migração; o cenário completo do Radar segue
-alimentando a Carteira. O próximo incremento é o cenário simples de curva.
+alimentando a Carteira. Na seção Curva, um choque paralelo de −100 a +100 bps
+compara a fotografia observada com uma hipótese de deslocamento uniforme, sem
+calcular probabilidade, preço ou retorno. O próximo incremento é unificar a
+metodologia e a narrativa da `v2.0`.
 
 ## O que faz hoje (v2.0 em construção)
 
@@ -46,6 +49,10 @@ alimentando a Carteira. O próximo incremento é o cenário simples de curva.
   longa e inclinação; gráfico e tabela preservam cada vencimento real.
 - Mantém um cache público de 45 datas e o atualiza automaticamente em dias
   úteis pelo GitHub Actions. Falha da fonte não derruba as demais seções.
+- Permite aplicar um choque paralelo ilustrativo à fotografia atual. Todos os
+  vencimentos recebem o mesmo deslocamento em bps, então a inclinação fica
+  inalterada por construção; gráfico, tabela e limites deixam explícito que o
+  cenário não é previsão nem cálculo de retorno.
 - O módulo **Focus × Curva** compara a revisão da Selic para a mesma reunião
   com a mediana D-5 dos vencimentos prefixados em comum. O resultado é um dos
   cinco estados explicáveis: alinhados, curva mais pressionada, curva mais

@@ -70,6 +70,7 @@ def test_css_claro_preserva_acessibilidade_e_responsividade() -> None:
     assert 'href="#focus-curva"' not in CSS_APP
     assert ".st-key-resumo_integrado" in CSS_APP
     assert ".st-key-curva_resumo" in CSS_APP
+    assert ".st-key-curva_cenario" in CSS_APP
     assert ".st-key-focus_curva_resumo" in CSS_APP
     assert '[data-testid="stMetricDelta"] svg' in CSS_APP
     assert _contraste("#0F766E", "#FFFFFF") >= 4.5

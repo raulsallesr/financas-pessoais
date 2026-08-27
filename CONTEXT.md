@@ -1,8 +1,8 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: Etapa 4 do FocusLens BR (`v2.0`) em andamento. Contrato e
-  hierarquia integrada do Resumo foram concluídos em 2026-08-27; próxima
-  entrega: cenário simples de choque paralelo na curva.
+- **Status**: Etapa 4 do FocusLens BR (`v2.0`) em andamento. Contrato, página
+  integrada e cenário de curva foram concluídos em 2026-08-27; próxima
+  entrega: metodologia e narrativa unificadas.
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -22,10 +22,11 @@
 - A branch de trabalho é `main`, sincronizada com `origin/main` em 2026-08-27.
 - O próximo marco é somente a **Etapa 4 — FocusLens BR integrado (`v2.0`)**.
   Não refazer as Etapas 1–3 nem abrir novos repositórios para elas.
-- Os itens 1 e 2 da Etapa 4 estão concluídos. `resumo_integrado.py` escolhe
+- Os itens 1, 2 e 3 da Etapa 4 estão concluídos. `resumo_integrado.py` escolhe
   entre Focus × Curva, Expectativas, Curva e Qualidade dos dados; a Home usa
   esse contrato na primeira dobra e segue Resumo → Expectativas → Curva →
-  Carteira. O próximo incremento é somente o item 3, cenário de curva.
+  Carteira. `curva_cenarios.py` adiciona o choque paralelo puro. O próximo
+  incremento é somente o item 4, metodologia e narrativa unificadas.
 - Existe um stash anterior chamado
   `codex-pre-focuslens-cache-2026-08-26`. Ele deve ser preservado e não pode
   ser aplicado ou removido sem antes inspecionar seu conteúdo e confirmar a
@@ -38,9 +39,9 @@
 3. Leia `CLAUDE.md`, este `CONTEXT.md` e `PLANO_FOCUSLENS.md`, nessa ordem.
 4. Use a seção **“Próxima execução — Etapa 4”** do plano como checklist
    canônico; este handoff apenas fixa o ponto de retomada.
-5. Antes de editar, inspecione `curva_modelo.py`, `curva_data.py`,
-   `pagina_curva.py` e os testes da curva. O novo choque deve nascer em módulo
-   puro e não pode alterar a leitura D-5/D-21 existente.
+5. Antes de editar, inspecione `resumo_integrado.py`, `curva_cenarios.py` e as
+   metodologias de Focus, Curva, Focus × Curva e Radar. O item 4 deve unificar
+   explicação e rastreabilidade sem mover fórmulas para a documentação ou UI.
 
 ### Decisões que não devem ser reabertas
 
@@ -64,12 +65,12 @@
 
 > Abra o projeto `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only` e
 > leia `CLAUDE.md`, `CONTEXT.md` e `PLANO_FOCUSLENS.md`. Continue a Etapa 4 —
-> FocusLens BR `v2.0` pelo item 3, sem refazer as versões `v1.12`–`v1.14` nem
-> os incrementos já concluídos do Resumo. Implemente o choque paralelo simples
-> em módulo puro, com entradas explícitas e saída descritiva; não estime
-> probabilidade, retorno de carteira, preço-alvo nem recomendação e não abra
-> escopo para bootstrap, forwards, cupom ou IPCA+. Conclua o incremento com
-> testes, validação visual, documentação, commit e push no git próprio.
+> FocusLens BR `v2.0` pelo item 4, sem refazer as versões `v1.12`–`v1.14` nem
+> os três incrementos já concluídos. Unifique a metodologia e a narrativa:
+> documente como o Resumo escolhe a leitura principal, como o choque paralelo
+> é calculado, quais fontes e datas sustentam cada conclusão e quais limites
+> impedem interpretação causal. Preserve motores, UI aprovada e contratos;
+> conclua com testes, validação, documentação, commit e push no git próprio.
 
 ## Direção aprovada — FocusLens BR
 
@@ -133,6 +134,8 @@
     atômico das 45 datas mais recentes.
   - `curva_modelo.py` — fotografias D-5/D-21, deltas em bps, inclinação,
     estados e narrativa determinística.
+  - `curva_cenarios.py` — choque paralelo puro sobre a fotografia atual, com
+    taxas simuladas, inclinação preservada, narrativa e limites explícitos.
   - `curva_apresentacao.py` — formatação pt-BR, séries e especificação do
     gráfico e linhas da tabela, sem dependência do Streamlit.
   - `pagina_curva.py` — resumo, métricas, curva com estilos de linha e tabela
@@ -508,6 +511,21 @@
     `pip check` e `git diff --check` limpos. A página foi validada em 375, 768,
     1024, 1440 e 844×390 px sem rolagem horizontal, com as quatro âncoras,
     primeira dobra legível e significado independente de cor.
+- **Etapa 4 · incremento 3 (2026-08-27)** — cenário de curva:
+  - `curva_cenarios.py` recebe fotografia e choque explícitos, aplica o mesmo
+    deslocamento a cada taxa sem mutar os pontos e devolve comparação,
+    inclinação, narrativa e limites. Entradas não finitas, vazias, incoerentes
+    ou além de ±200 bps falham fechado.
+  - A seção Curva ganhou o controle de −100 a +100 bps, métricas das pontas,
+    inclinação inalterada por construção, gráfico Observada × Cenário e tabela
+    exata sob divulgação progressiva. Hipótese e limites aparecem antes de
+    qualquer interpretação.
+  - Treze testes novos cobrem motor, guardrails, apresentação tracejada,
+    interação do slider e degradação sem curva. Gate final: 185 testes,
+    `py_compile`, `pip check` e `git diff --check` aprovados.
+  - Validação visual real em 375, 768, 1024, 1440 e 844×390 px confirmou duas
+    curvas, slider, limites, cartões responsivos e ausência de rolagem
+    horizontal; o significado não depende somente de cor.
 
 ## Fila priorizada
 
@@ -519,7 +537,7 @@ integração seguinte.
 | P0 | Entregue | Focus Semanal (`v1.12`) | Alto | Médio |
 | P1 | Entregue | Curva Tesouro (`v1.13`) | Muito alto | Alto |
 | P2 | Entregue | Focus × Curva (`v1.14`) | Muito alto | Alto |
-| P3 | Em andamento (2/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
+| P3 | Em andamento (3/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
 | Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |

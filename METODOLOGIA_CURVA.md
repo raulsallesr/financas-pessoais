@@ -68,6 +68,29 @@ Somente os marcadores são pontos observados: não há bootstrap, spline,
 interpolação de taxa ou construção de vértices sintéticos. Os valores exatos
 ficam disponíveis em tabela.
 
+## Cenário mecânico de choque paralelo
+
+O cenário da `v2.0` parte exclusivamente da fotografia atual e aplica uma
+hipótese explícita, igual para todos os vencimentos:
+
+```text
+taxa no cenário = taxa observada + choque em bps ÷ 100
+```
+
+Assim, um choque de `+25 bps` soma `0,25 p.p.` a cada taxa; `-50 bps` subtrai
+`0,50 p.p.`. A função pura aceita de `-200` a `+200 bps`; a interface oferece
+o recorte mais contido de `-100` a `+100 bps`, em passos de 25 bps.
+
+Como o mesmo valor é somado a todos os pontos, a inclinação permanece
+inalterada por construção. O gráfico compara a curva observada, em linha
+sólida, com a hipótese, em linha tracejada; a tabela mantém os valores exatos.
+O cenário não modifica a fotografia, o cache nem a leitura D-5/D-21.
+
+Este recurso é uma análise de sensibilidade mecânica. Ele não estima chance de
+ocorrência, causalidade, preço de título, retorno, duration, impostos, custos
+ou adequação à carteira. Choques não paralelos e mudanças de inclinação ficam
+fora deste contrato.
+
 ## Estados
 
 - **Atualizada:** há curva recente, ao menos dois vencimentos e histórico
@@ -103,7 +126,8 @@ gravação atômica impede que uma interrupção deixe o arquivo pela metade.
 - `curva_data.py`: contrato e consolidação pura;
 - `curva_fontes.py`: download, parsing, validação e cache;
 - `curva_modelo.py`: fotografias, variações, estados e narrativa;
+- `curva_cenarios.py`: choque paralelo puro, narrativa e guardrails;
 - `curva_apresentacao.py`: formatação, séries do gráfico e linhas da tabela,
-  sem dependência do Streamlit;
+  incluindo a comparação Observada × Cenário, sem dependência do Streamlit;
 - `pagina_curva.py`: apresentação Streamlit;
 - `atualizar_curva_cache.py`: automação sem Streamlit.

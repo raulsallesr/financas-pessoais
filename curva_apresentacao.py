@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from curva_cenarios import CenarioCurva
 from curva_modelo import FotografiaCurva, LeituraCurva
 
 
@@ -126,4 +127,90 @@ def linhas_tabela(leitura: LeituraCurva) -> list[dict[str, object]]:
             "Δ D-21 (bps)": item.delta_d21_bps,
         }
         for item in leitura.comparacoes
+    ]
+
+
+def linhas_grafico_cenario(
+    cenario: CenarioCurva,
+) -> list[dict[str, object]]:
+    rotulo_observado = f"Observada · {cenario.data_base:%d/%m}"
+    rotulo_cenario = f"Cenário · {formatar_bps(cenario.choque_bps)}"
+    return [
+        {
+            "Vencimento": ponto.vencimento.strftime("%d/%m/%Y"),
+            "Taxa": taxa,
+            "Curva": rotulo,
+        }
+        for ponto in cenario.pontos
+        for rotulo, taxa in (
+            (rotulo_observado, ponto.taxa_observada),
+            (rotulo_cenario, ponto.taxa_cenario),
+        )
+    ]
+
+
+def especificacao_grafico_cenario(
+    linhas: list[dict[str, object]],
+) -> dict[str, object]:
+    curvas = list(dict.fromkeys(str(linha["Curva"]) for linha in linhas))
+    return {
+        "mark": {
+            "type": "line",
+            "point": {"filled": True, "size": 70},
+            "strokeWidth": 2.7,
+        },
+        "encoding": {
+            "x": {
+                "field": "Vencimento",
+                "type": "ordinal",
+                "sort": None,
+                "axis": {"title": "Vencimento", "labelAngle": 0},
+            },
+            "y": {
+                "field": "Taxa",
+                "type": "quantitative",
+                "scale": {"zero": False},
+                "axis": {"title": "Taxa (% a.a.)"},
+            },
+            "color": {
+                "field": "Curva",
+                "type": "nominal",
+                "scale": {
+                    "domain": curvas,
+                    "range": [CORES_PERIODOS[0], CORES_PERIODOS[1]],
+                },
+                "legend": {"title": None, "orient": "top"},
+            },
+            "strokeDash": {
+                "field": "Curva",
+                "type": "nominal",
+                "scale": {"domain": curvas, "range": [[], [7, 4]]},
+                "legend": None,
+            },
+            "tooltip": [
+                {"field": "Curva", "type": "nominal"},
+                {"field": "Vencimento", "type": "ordinal"},
+                {
+                    "field": "Taxa",
+                    "type": "quantitative",
+                    "format": ".2f",
+                    "title": "Taxa (% a.a.)",
+                },
+            ],
+        },
+        "height": 320,
+    }
+
+
+def linhas_tabela_cenario(
+    cenario: CenarioCurva,
+) -> list[dict[str, object]]:
+    return [
+        {
+            "Vencimento": ponto.vencimento,
+            "Observada (% a.a.)": ponto.taxa_observada,
+            "Cenário (% a.a.)": ponto.taxa_cenario,
+            "Choque (bps)": cenario.choque_bps,
+        }
+        for ponto in cenario.pontos
     ]

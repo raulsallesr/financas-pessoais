@@ -8,12 +8,16 @@ import pandas as pd
 import streamlit as st
 
 from curva_apresentacao import (
+    especificacao_grafico_cenario,
     especificacao_grafico,
     formatar_bps,
     formatar_numero,
+    linhas_grafico_cenario,
     linhas_grafico,
+    linhas_tabela_cenario,
     linhas_tabela,
 )
+from curva_cenarios import simular_choque_paralelo
 from curva_data import PontoCurva
 from curva_fontes import (
     CURVA_FONTE_URL,
@@ -249,12 +253,123 @@ def _renderizar_detalhes(leitura: LeituraCurva) -> None:
         st.markdown(f"[Abrir fonte oficial no Tesouro Transparente]({CURVA_FONTE_URL})")
 
 
+def _renderizar_cenario(leitura: LeituraCurva) -> None:
+    if leitura.atual is None:
+        return
+
+    st.caption("FOCUSLENS BR · CENÁRIO MECÂNICO")
+    st.subheader("E se toda a curva se mover?")
+    st.write(
+        "Aplique o mesmo choque a todos os pontos observados e compare a "
+        "hipótese com a fotografia atual."
+    )
+    with st.container(border=True, key="curva_cenario"):
+        st.badge(
+            "Hipótese, não previsão",
+            icon=":material/science:",
+            color="gray",
+        )
+        choque_bps = st.slider(
+            "Choque paralelo sobre todas as taxas",
+            min_value=-100,
+            max_value=100,
+            value=25,
+            step=25,
+            format="%d bps",
+            help=(
+                "Pontos-base medem a variação da taxa: 100 bps equivalem "
+                "a 1 ponto percentual."
+            ),
+            key="choque_paralelo_bps",
+        )
+        st.caption(
+            "Use − para taxas mais baixas e + para taxas mais altas. "
+            "O controle não estima chance de ocorrência."
+        )
+
+        cenario = simular_choque_paralelo(leitura.atual, choque_bps)
+        st.subheader(cenario.titulo)
+        st.write(cenario.resumo)
+
+        curto = cenario.pontos[0]
+        longo = cenario.pontos[-1]
+        if curto == longo:
+            st.metric(
+                "Taxa no cenário",
+                f"{formatar_numero(curto.taxa_cenario)}%",
+                delta=formatar_bps(cenario.choque_bps),
+                delta_color="off",
+                border=True,
+            )
+        else:
+            metricas = st.columns(3, gap="medium")
+            with metricas[0]:
+                st.metric(
+                    "Ponta curta no cenário",
+                    f"{formatar_numero(curto.taxa_cenario)}%",
+                    delta=formatar_bps(cenario.choque_bps),
+                    delta_color="off",
+                    border=True,
+                )
+            with metricas[1]:
+                st.metric(
+                    "Ponta longa no cenário",
+                    f"{formatar_numero(longo.taxa_cenario)}%",
+                    delta=formatar_bps(cenario.choque_bps),
+                    delta_color="off",
+                    border=True,
+                )
+            with metricas[2]:
+                st.metric(
+                    "Inclinação no cenário",
+                    formatar_bps(cenario.inclinacao_cenario_bps),
+                    delta="inalterada por construção",
+                    delta_color="off",
+                    border=True,
+                )
+
+        linhas = linhas_grafico_cenario(cenario)
+        st.vega_lite_chart(
+            pd.DataFrame(linhas),
+            especificacao_grafico_cenario(linhas),
+            width="stretch",
+        )
+
+        with st.expander(
+            "Ver taxas simuladas e limites",
+            icon=":material/rule:",
+        ):
+            st.dataframe(
+                pd.DataFrame(linhas_tabela_cenario(cenario)),
+                hide_index=True,
+                width="stretch",
+                column_config={
+                    "Vencimento": st.column_config.DateColumn(
+                        "Vencimento", format="DD/MM/YYYY"
+                    ),
+                    "Observada (% a.a.)": st.column_config.NumberColumn(
+                        "Observada (% a.a.)", format="%.2f"
+                    ),
+                    "Cenário (% a.a.)": st.column_config.NumberColumn(
+                        "Cenário (% a.a.)", format="%.2f"
+                    ),
+                    "Choque (bps)": st.column_config.NumberColumn(
+                        "Choque (bps)", format="%+.0f"
+                    ),
+                },
+            )
+            st.markdown("**Limites deste cenário**")
+            for limite in cenario.limites:
+                st.markdown(f"- {limite}")
+
+
 def render_secao() -> None:
     atualizar = _renderizar_cabecalho()
     pontos = _obter_pontos(atualizar)
     leitura = montar_leitura_curva(pontos, date.today())
     _renderizar_resumo(leitura)
     _renderizar_grafico(leitura)
+    _renderizar_cenario(leitura)
     _renderizar_detalhes(leitura)
     st.caption(
         "Leitura educacional de dados públicos. Taxas de títulos também "

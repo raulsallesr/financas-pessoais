@@ -6,12 +6,16 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from curva_apresentacao import (
     CORES_PERIODOS,
+    especificacao_grafico_cenario,
     especificacao_grafico,
     formatar_bps,
     formatar_numero,
+    linhas_grafico_cenario,
     linhas_grafico,
+    linhas_tabela_cenario,
     linhas_tabela,
 )
+from curva_cenarios import simular_choque_paralelo
 from curva_data import PontoCurva
 from curva_modelo import (
     ComparacaoPontoCurva,
@@ -106,3 +110,25 @@ def test_tabela_preserva_lacuna_sem_inventar_taxa():
     assert linhas[0]["Δ D-5 (bps)"] == -20.0
     assert linhas[1]["D-5 (% a.a.)"] is None
     assert linhas[1]["Δ D-5 (bps)"] is None
+
+
+def test_apresentacao_do_cenario_diferencia_hipotese_sem_usar_so_cor():
+    cenario = simular_choque_paralelo(_leitura().atual, 25)
+    linhas = linhas_grafico_cenario(cenario)
+    especificacao = especificacao_grafico_cenario(linhas)
+    curvas = list(dict.fromkeys(linha["Curva"] for linha in linhas))
+    tabela = linhas_tabela_cenario(cenario)
+
+    assert len(linhas) == 4
+    assert curvas == ["Observada · 26/08", "Cenário · +25 bps"]
+    assert especificacao["encoding"]["color"]["scale"]["range"] == [
+        CORES_PERIODOS[0],
+        CORES_PERIODOS[1],
+    ]
+    assert especificacao["encoding"]["strokeDash"]["scale"]["range"] == [
+        [],
+        [7, 4],
+    ]
+    assert tabela[0]["Observada (% a.a.)"] == 14.0
+    assert tabela[0]["Cenário (% a.a.)"] == 14.25
+    assert tabela[0]["Choque (bps)"] == 25

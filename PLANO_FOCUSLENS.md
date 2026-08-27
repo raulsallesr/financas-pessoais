@@ -386,10 +386,12 @@ UI, o que os motores já entregam.
    sinal externo do Radar, excluindo sinais que repetiriam o Focus. A carga
    completa do Radar foi preservada para a Carteira e sua apresentação antiga
    continua coberta por teste, sem permanecer como seção paralela da Home.
-3. **Adicionar o cenário de curva.** Implementar o choque paralelo simples em
-   um módulo puro, com entradas explícitas e saída descritiva. Não estimar
-   probabilidade, retorno de carteira, preço-alvo nem recomendação; não abrir
-   escopo para bootstrap, forwards, cupom ou IPCA+.
+3. **Adicionar o cenário de curva — concluído em 2026-08-27.**
+   `curva_cenarios.py` recebe a fotografia atual e um choque explícito em bps,
+   desloca todos os pontos sem mutar a base e devolve taxas, inclinações,
+   narrativa e limites. A UI compara Observada × Cenário entre −100 e +100
+   bps; não estima probabilidade, retorno de carteira, preço-alvo nem
+   recomendação e não abre escopo para bootstrap, forwards, cupom ou IPCA+.
 4. **Unificar metodologia e narrativa.** Documentar como o Resumo escolhe a
    leitura principal, como os cenários são calculados, quais fontes e datas
    sustentam cada conclusão e quais limitações impedem interpretação causal.
