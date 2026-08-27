@@ -1,0 +1,187 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900"
+     viewBox="0 0 1600 900" role="img"
+     aria-labelledby="titulo descricao">
+  <title id="titulo">Arquitetura integrada do FocusLens BR v2.0</title>
+  <desc id="descricao">
+    Fluxo das fontes públicas e da carteira local por adaptadores isolados,
+    motores puros, resumo integrado e experiência única em quatro camadas.
+  </desc>
+  <defs>
+    <linearGradient id="fundo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7faf8"/>
+      <stop offset="1" stop-color="#e8f2ef"/>
+    </linearGradient>
+    <filter id="sombra" x="-20%" y="-20%" width="140%" height="155%">
+      <feDropShadow dx="0" dy="9" stdDeviation="13"
+                    flood-color="#184840" flood-opacity="0.10"/>
+    </filter>
+    <marker id="seta" markerWidth="10" markerHeight="10" refX="8" refY="5"
+            orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0 10 5 0 10Z" fill="#0f766e"/>
+    </marker>
+    <style>
+      .sans { font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+              "Segoe UI", sans-serif; }
+      .eyebrow { fill: #0f766e; font-size: 18px; font-weight: 750;
+                 letter-spacing: 2.8px; }
+      .title { fill: #17332f; font-size: 48px; font-weight: 780;
+               letter-spacing: -1.8px; }
+      .subtitle { fill: #536965; font-size: 21px; }
+      .stage { fill: #0f766e; font-size: 15px; font-weight: 760;
+               letter-spacing: 1.8px; }
+      .box-title { fill: #17332f; font-size: 21px; font-weight: 740; }
+      .box-copy { fill: #536965; font-size: 16px; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+              fill: #0a5b55; font-size: 15px; font-weight: 650; }
+      .light-title { fill: #ffffff; font-size: 24px; font-weight: 760; }
+      .light-copy { fill: #dcebe7; font-size: 16px; }
+      .pill { fill: #17332f; font-size: 15px; font-weight: 700; }
+      .guard { fill: #536965; font-size: 15px; font-weight: 650; }
+      .arrow { fill: none; stroke: #0f766e; stroke-width: 3;
+               marker-end: url(#seta); }
+      .arrow-local { fill: none; stroke: #a16207; stroke-width: 3;
+                     stroke-dasharray: 8 7; marker-end: url(#seta); }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#fundo)"/>
+  <circle cx="1490" cy="-45" r="310" fill="#d8ebe6" opacity="0.75"/>
+  <circle cx="20" cy="880" r="220" fill="#fff3d6" opacity="0.68"/>
+
+  <g class="sans">
+    <text x="86" y="78" class="eyebrow">FOCUSLENS BR · V2.0</text>
+    <text x="86" y="136" class="title">Uma resposta, contratos preservados</text>
+    <text x="86" y="176" class="subtitle">
+      Dados públicos entram por adaptadores isolados; motores testáveis sustentam a narrativa.
+    </text>
+
+    <text x="86" y="224" class="stage">1 · FONTES</text>
+    <text x="420" y="224" class="stage">2 · ADAPTADORES</text>
+    <text x="784" y="224" class="stage">3 · MOTORES PUROS</text>
+    <text x="1200" y="224" class="stage">4 · EXPERIÊNCIA</text>
+
+    <g filter="url(#sombra)">
+      <rect x="86" y="250" width="270" height="110" rx="20"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <rect x="86" y="250" width="7" height="110" rx="4" fill="#0f766e"/>
+      <text x="116" y="289" class="box-title">BACEN · Focus</text>
+      <text x="116" y="320" class="box-copy">Expectativas e reuniões</text>
+      <text x="116" y="346" class="mono">Olinda · ODbL</text>
+
+      <rect x="86" y="382" width="270" height="110" rx="20"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <rect x="86" y="382" width="7" height="110" rx="4" fill="#a16207"/>
+      <text x="116" y="421" class="box-title">Tesouro · Curva</text>
+      <text x="116" y="452" class="box-copy">Prefixados observados</text>
+      <text x="116" y="478" class="mono">CSV · ODbL</text>
+
+      <rect x="86" y="514" width="270" height="110" rx="20"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <rect x="86" y="514" width="7" height="110" rx="4" fill="#3b82f6"/>
+      <text x="116" y="553" class="box-title">Contexto público</text>
+      <text x="116" y="584" class="box-copy">PTAX · SGS · EIA · RSS</text>
+      <text x="116" y="610" class="mono">fonte + data</text>
+
+      <rect x="86" y="646" width="270" height="110" rx="20"
+            fill="#fffaf0" stroke="#ead8ad"/>
+      <rect x="86" y="646" width="7" height="110" rx="4" fill="#a16207"/>
+      <text x="116" y="685" class="box-title">Carteira local</text>
+      <text x="116" y="716" class="box-copy">Entrada manual ou XLSX</text>
+      <text x="116" y="742" class="mono">somente na sessão</text>
+    </g>
+
+    <path d="M356 305H400" class="arrow"/>
+    <path d="M356 437H400" class="arrow"/>
+    <path d="M356 569H400" class="arrow"/>
+
+    <g filter="url(#sombra)">
+      <rect x="410" y="250" width="300" height="506" rx="25"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="444" y="296" class="box-title">I/O com falha isolada</text>
+      <text x="444" y="328" class="box-copy">Cada fonte degrada sozinha.</text>
+
+      <rect x="444" y="360" width="232" height="62" rx="15" fill="#edf7f4"/>
+      <text x="462" y="386" class="mono">focus_leitura.py</text>
+      <text x="462" y="409" class="box-copy">cache público atômico</text>
+
+      <rect x="444" y="438" width="232" height="62" rx="15" fill="#fff7e6"/>
+      <text x="462" y="464" class="mono">curva_fontes.py</text>
+      <text x="462" y="487" class="box-copy">schema + 45 datas</text>
+
+      <rect x="444" y="516" width="232" height="82" rx="15" fill="#eef5ff"/>
+      <text x="462" y="542" class="mono">mercado_fontes.py</text>
+      <text x="462" y="565" class="mono">noticias_feed.py</text>
+      <text x="462" y="588" class="box-copy">timeout + allowlist</text>
+
+      <rect x="444" y="614" width="232" height="82" rx="15" fill="#fff7e6"/>
+      <text x="462" y="640" class="mono">b3_importacao.py</text>
+      <text x="462" y="663" class="box-copy">descarta identificadores</text>
+      <text x="462" y="686" class="box-copy">não persiste a planilha</text>
+    </g>
+
+    <path d="M356 701H400" class="arrow-local"/>
+    <path d="M710 503H760" class="arrow"/>
+
+    <g filter="url(#sombra)">
+      <rect x="770" y="250" width="350" height="126" rx="21"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="802" y="288" class="box-title">Expectativas + Curva</text>
+      <text x="802" y="318" class="mono">focus_semanal.py</text>
+      <text x="802" y="343" class="mono">curva_modelo.py</text>
+      <text x="802" y="365" class="box-copy">ranking · D-5/D-21 · estados</text>
+
+      <rect x="770" y="396" width="350" height="126" rx="21"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="802" y="434" class="box-title">Convergência + hipótese</text>
+      <text x="802" y="464" class="mono">convergencia_modelo.py</text>
+      <text x="802" y="489" class="mono">curva_cenarios.py</text>
+      <text x="802" y="511" class="box-copy">veredito · choque paralelo</text>
+
+      <rect x="770" y="542" width="350" height="126" rx="21"
+            fill="#ffffff" stroke="#d8e5e1"/>
+      <text x="802" y="580" class="box-title">Contexto + carteira</text>
+      <text x="802" y="610" class="mono">macro_modelo.py</text>
+      <text x="802" y="635" class="mono">carteira_modelo.py</text>
+      <text x="802" y="657" class="box-copy">não altera Focus × Curva</text>
+    </g>
+
+    <path d="M1120 459H1170" class="arrow"/>
+    <path d="M1120 605C1150 605 1148 680 1180 690" class="arrow-local"/>
+
+    <g filter="url(#sombra)">
+      <rect x="1180" y="250" width="334" height="506" rx="27"
+            fill="#17332f"/>
+      <text x="1214" y="296" fill="#b8e5dc" class="stage">ORQUESTRAÇÃO</text>
+      <text x="1214" y="337" class="light-title">resumo_integrado.py</text>
+      <text x="1214" y="369" class="light-copy">Escolhe a leitura íntegra.</text>
+      <text x="1214" y="394" class="light-copy">Não recalcula os motores.</text>
+
+      <rect x="1214" y="428" width="266" height="52" rx="16" fill="#ddf2ed"/>
+      <text x="1236" y="461" class="pill">1 · Resumo — resposta primeiro</text>
+      <rect x="1214" y="494" width="266" height="52" rx="16" fill="#ffffff"/>
+      <text x="1236" y="527" class="pill">2 · Expectativas — evidência</text>
+      <rect x="1214" y="560" width="266" height="52" rx="16" fill="#fff3d6"/>
+      <text x="1236" y="593" class="pill">3 · Curva — pontos + cenário</text>
+      <rect x="1214" y="626" width="266" height="52" rx="16" fill="#eef5ff"/>
+      <text x="1236" y="659" class="pill">4 · Carteira — uso local</text>
+
+      <text x="1214" y="716" class="light-copy">
+        2–4 provas · datas · limite · mudança
+      </text>
+    </g>
+
+    <rect x="86" y="806" width="1428" height="58" rx="20"
+          fill="#ffffff" stroke="#d8e5e1"/>
+    <text x="116" y="842" class="guard">
+      SEM SEGREDOS OU DADOS PESSOAIS
+    </text>
+    <circle cx="450" cy="835" r="4" fill="#a16207"/>
+    <text x="474" y="842" class="guard">
+      SEM CAUSALIDADE OU PROBABILIDADE INVENTADA
+    </text>
+    <circle cx="910" cy="835" r="4" fill="#a16207"/>
+    <text x="934" y="842" class="guard">
+      SEM RECOMENDAÇÃO PERSONALIZADA
+    </text>
+  </g>
+</svg>

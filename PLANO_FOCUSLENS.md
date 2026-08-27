@@ -218,6 +218,9 @@ de cupom, forwards, backtest por regime e probabilidades calibradas.
 
 **Versão-alvo:** `v2.0`.
 
+**Estado:** release candidate concluído em 2026-08-27. A abertura pública e a
+tag/release aguardam a decisão sobre licença do código e e-mail histórico.
+
 ## 6. Arquitetura
 
 A separação atual continua valendo: motor puro, adaptador de I/O e UI nunca
@@ -363,11 +366,11 @@ descartáveis:
 Antes de tornar o repositório público, executar auditoria específica de
 segredos, dados pessoais, direitos de conteúdo, dependências e histórico Git.
 
-## 11. Próxima execução — Etapa 4
+## 11. Execução da Etapa 4 — concluída tecnicamente
 
 As Etapas 1, 2 e 3 estão fechadas nas versões `v1.12`, `v1.13` e `v1.14`.
-A próxima execução consolidará o FocusLens BR `v2.0` sem recalcular, dentro da
-UI, o que os motores já entregam.
+A execução consolidou o FocusLens BR `v2.0` sem recalcular, dentro da UI, o que
+os motores já entregam.
 
 ### Ordem de implementação
 
@@ -397,10 +400,12 @@ UI, o que os motores já entregam.
    prioridade, evidências, janelas, fontes, cenário e limites causais. O
    Resumo expõe a lógica sob demanda, sem repetir métricas nem recalcular os
    motores na UI.
-5. **Fechar a publicação.** Atualizar README e histórico, gerar uma captura
-   principal e uma imagem técnica, preparar o texto de LinkedIn e executar a
-   auditoria de privacidade, segredos, licenças, dependências e histórico Git
-   antes de tornar o repositório público.
+5. **Fechar a publicação — concluído como release candidate em 2026-08-27.**
+   README, histórico, release notes e texto de LinkedIn foram alinhados; a
+   captura principal e o diagrama técnico foram gerados; privacidade, segredos,
+   fontes, licenças, dependências e histórico Git foram auditados. A visibilidade
+   não foi alterada: licença do código e e-mail histórico exigem decisão do
+   titular antes da tag/release pública.
 
 ### Critérios de aceite específicos da integração
 

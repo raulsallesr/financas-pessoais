@@ -1,8 +1,8 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: Etapa 4 do FocusLens BR (`v2.0`) em andamento. Contrato, página
-  integrada, cenário de curva e metodologia unificada foram concluídos em
-  2026-08-27; próxima entrega: fechamento da publicação.
+- **Status**: Etapa 4 do FocusLens BR (`v2.0`) concluída tecnicamente em
+  2026-08-27. O release candidate está em 5/5; tag, release e abertura pública
+  aguardam decisões de governança sobre licença e e-mail histórico.
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -17,17 +17,20 @@
 
 ### Ponto de partida verificado
 
-- O produto está fechado até a `v1.14`; o commit funcional dessa entrega é
-  `0f1458c` e recebeu a tag `v1.14`.
+- O produto está estável e versionado até a `v1.14`; o commit funcional dessa
+  entrega é `0f1458c` e recebeu a tag `v1.14`.
 - A branch de trabalho é `main`, sincronizada com `origin/main` em 2026-08-27.
-- O próximo marco é somente a **Etapa 4 — FocusLens BR integrado (`v2.0`)**.
-  Não refazer as Etapas 1–3 nem abrir novos repositórios para elas.
-- Os itens 1, 2, 3 e 4 da Etapa 4 estão concluídos. `resumo_integrado.py` escolhe
-  entre Focus × Curva, Expectativas, Curva e Qualidade dos dados; a Home usa
-  esse contrato na primeira dobra e segue Resumo → Expectativas → Curva →
-  Carteira. `curva_cenarios.py` adiciona o choque paralelo puro e
-  `METODOLOGIA_FOCUSLENS.md` conecta os contratos. O próximo incremento é
-  somente o item 5, fechamento da publicação.
+- A **Etapa 4 — FocusLens BR integrado (`v2.0`)** está concluída tecnicamente
+  como release candidate. Não refazer as Etapas 1–3 nem os cinco incrementos
+  da Etapa 4.
+- `resumo_integrado.py` escolhe entre Focus × Curva, Expectativas, Curva e
+  Qualidade dos dados; a Home usa esse contrato na primeira dobra e segue
+  Resumo → Expectativas → Curva → Carteira. `curva_cenarios.py` adiciona o
+  choque paralelo puro e `METODOLOGIA_FOCUSLENS.md` conecta os contratos. O
+  pacote da `v2.0` inclui captura, arquitetura, release notes, LinkedIn e
+  auditoria de publicação.
+- O repositório continua privado. A consulta anônima ao GitHub retornou 404;
+  nenhuma mudança de visibilidade, tag ou release foi executada.
 - Existe um stash anterior chamado
   `codex-pre-focuslens-cache-2026-08-26`. Ele deve ser preservado e não pode
   ser aplicado ou removido sem antes inspecionar seu conteúdo e confirmar a
@@ -38,11 +41,10 @@
 1. Trabalhe dentro deste repositório, nunca no git do hub que o contém.
 2. Rode `git pull --ff-only` e confirme `git status --short --branch` limpo.
 3. Leia `CLAUDE.md`, este `CONTEXT.md` e `PLANO_FOCUSLENS.md`, nessa ordem.
-4. Use a seção **“Próxima execução — Etapa 4”** do plano como checklist
-   canônico; este handoff apenas fixa o ponto de retomada.
-5. Antes de editar, inspecione `METODOLOGIA_FOCUSLENS.md`, os ativos em
-   `docs/assets/`, os textos de publicação, dependências, licenças, workflows
-   e histórico Git. O item 5 deve fechar os artefatos sem alterar os motores.
+4. Leia `docs/AUDITORIA_PUBLICACAO_V2.0.md` e
+   `docs/RELEASE_V2.0.md`; eles registram o gate e o pacote final.
+5. Antes de abrir o repositório, obtenha do Raul a decisão sobre licença do
+   código e sobre aceitar ou sanear o e-mail não mascarado dos commits.
 
 ### Decisões que não devem ser reabertas
 
@@ -65,13 +67,13 @@
 ### Prompt pronto para abrir o próximo chat
 
 > Abra o projeto `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only` e
-> leia `CLAUDE.md`, `CONTEXT.md` e `PLANO_FOCUSLENS.md`. Continue a Etapa 4 —
-> FocusLens BR `v2.0` pelo item 5, sem refazer as versões `v1.12`–`v1.14` nem
-> os quatro incrementos já concluídos. Feche a publicação: atualize README e
-> histórico, gere uma captura principal e uma imagem técnica, prepare o texto
-> de LinkedIn e audite privacidade, segredos, licenças, dependências e histórico
-> Git antes de tornar o repositório público. Preserve motores, UI aprovada e
-> contratos; conclua com testes, validação, commit e push no git próprio.
+> leia `CLAUDE.md`, `CONTEXT.md`, `PLANO_FOCUSLENS.md`,
+> `docs/AUDITORIA_PUBLICACAO_V2.0.md` e `docs/RELEASE_V2.0.md`. A `v2.0` está
+> pronta como release candidate; não altere motores ou refaça os cinco
+> incrementos. Confirme com o Raul a licença do código e se o e-mail não
+> mascarado do histórico pode permanecer público. Somente após autorização
+> explícita, crie tag/release `v2.0`, altere a visibilidade e valide os links
+> em sessão anônima.
 
 ## Direção aprovada — FocusLens BR
 
@@ -89,8 +91,9 @@
 - A curva começará por títulos prefixados sem cupom e pontos observados. Taxa
   de título não será apresentada como previsão pura da Selic; prêmio de prazo,
   risco e liquidez permanecem limitações explícitas.
-- As Etapas 0, 1, 2 e 3 foram concluídas em 2026-08-26. A próxima execução é
-  a consolidação do FocusLens BR `v2.0`.
+- As Etapas 0, 1, 2 e 3 foram concluídas em 2026-08-26. A Etapa 4 foi
+  concluída tecnicamente em 2026-08-27; falta somente a decisão de governança
+  para tag, release e abertura pública da `v2.0`.
 
 ## Arquitetura
 
@@ -196,6 +199,10 @@
     estados, pontas, evidências e limites da convergência.
   - `METODOLOGIA_FOCUSLENS.md` — ponto de entrada integrado para prioridade,
     evidências, datas, fontes, cenário e limites entre as quatro camadas.
+  - `docs/RELEASE_V2.0.md` — notas do release candidate e artefatos finais.
+  - `docs/AUDITORIA_PUBLICACAO_V2.0.md` — gate técnico de privacidade,
+    segredos, licenças, dependências e histórico Git.
+  - `docs/POST_LINKEDIN_FOCUSLENS_V2.0.md` — texto e checklist de publicação.
   - `atualizar_focus_cache.py` — entrada sem Streamlit usada pela automação
     agendada em `.github/workflows/atualizar-focus.yml`.
   - `atualizar_curva_cache.py` — entrada sem Streamlit usada pela automação
@@ -541,6 +548,20 @@
   - Validação visual real em 375, 768, 1024, 1440 e 844×390 px confirmou o
     método recolhido por padrão, conteúdo aberto legível e ausência de rolagem
     horizontal.
+- **Etapa 4 · incremento 5 (2026-08-27)** — fechamento da publicação:
+  - A captura `focuslens-br-v2.0.png` foi gerada da aplicação real; o SVG
+    `arquitetura-focuslens-v2.0.svg` documenta fontes, adaptadores, motores,
+    orquestração e guardrails com descrição acessível.
+  - Release notes, README e texto de LinkedIn foram alinhados à jornada final.
+    A auditoria não encontrou segredo, PII, extensão sensível ou vulnerabilidade
+    conhecida; os dois caches contêm somente campos públicos documentados.
+  - As dependências diretas e 39 distribuições transitivas têm licenças
+    permissivas/compatíveis. BACEN/Focus e Tesouro confirmaram ODbL; demais
+    fontes ficam atribuídas e não são redistribuídas como bases brutas.
+  - Gate final: 185 testes, `py_compile`, `pip check` e `git diff --check`
+    aprovados. A primeira dobra passou em 375/768/1024/1440/844×390 px.
+  - O repositório segue privado. A licença do código e um e-mail não mascarado
+    nos commits são decisões pendentes antes da tag/release e abertura pública.
 
 ## Fila priorizada
 
@@ -552,14 +573,18 @@ integração seguinte.
 | P0 | Entregue | Focus Semanal (`v1.12`) | Alto | Médio |
 | P1 | Entregue | Curva Tesouro (`v1.13`) | Muito alto | Alto |
 | P2 | Entregue | Focus × Curva (`v1.14`) | Muito alto | Alto |
-| P3 | Em andamento (4/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
+| P3 | Release candidate (5/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
 | Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |
 
 ## Bloqueios
 
-- Nenhum no momento.
+- Escolher a licença do código antes da abertura pública.
+- Aceitar a exposição do e-mail não mascarado dos commits ou autorizar uma
+  reescrita controlada do histórico.
+- Tag, release e visibilidade pública dependem dessas decisões e de autorização
+  explícita do Raul.
 
 ## Conceitos relacionados
 

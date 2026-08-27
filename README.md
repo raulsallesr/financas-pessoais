@@ -1,4 +1,4 @@
-# Finanças Pessoais — base do FocusLens BR
+# FocusLens BR — dados públicos, método visível
 
 App pessoal em Streamlit para aprender e acompanhar o mercado financeiro. A
 base atual reúne **Boletim Focus**, Curva Tesouro, Focus × Curva, Radar Macro
@@ -8,14 +8,13 @@ Resumo, Expectativas, Curva e Carteira.
 O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
-## Etapa 4 em andamento
+## v2.0 — release candidate
 
-Os quatro primeiros incrementos do FocusLens BR `v2.0` fecharam o contrato
-puro, conectaram-no à primeira dobra, adicionaram um cenário mecânico à Curva
-e unificaram o método de leitura. O Resumo escolhe a prioridade já calculada
-pelos motores, mostra duas a quatro provas, datas por fonte, limite e condição
-de mudança e, quando existe, incorpora somente um sinal externo do Radar que
-acrescente contexto. Nenhuma fórmula dos motores `v1.12`–`v1.14` foi duplicada.
+Os cinco incrementos do FocusLens BR `v2.0` estão concluídos tecnicamente. O
+Resumo escolhe a prioridade já calculada pelos motores, mostra duas a quatro
+provas, datas por fonte, limite e condição de mudança e, quando existe,
+incorpora somente um sinal externo do Radar que acrescente contexto. Nenhuma
+fórmula dos motores `v1.12`–`v1.14` foi duplicada.
 
 A página agora segue Resumo → Expectativas → Curva → Carteira. O módulo visual
 completo do Radar e a antiga apresentação de Focus × Curva continuam no código
@@ -23,10 +22,18 @@ e cobertos por testes durante a migração; o cenário completo do Radar segue
 alimentando a Carteira. Na seção Curva, um choque paralelo de −100 a +100 bps
 compara a fotografia observada com uma hipótese de deslocamento uniforme, sem
 calcular probabilidade, preço ou retorno. A primeira dobra também explica, sob
-demanda, por que a leitura atual lidera e o que fica fora do veredito. O próximo
-incremento é fechar os materiais e a auditoria de publicação da `v2.0`.
+demanda, por que a leitura atual lidera e o que fica fora do veredito.
 
-## O que faz hoje (v2.0 em construção)
+O pacote final inclui captura, arquitetura, release notes, texto de LinkedIn e
+auditoria de publicação. O repositório permanece privado: a tag/release `v2.0`
+e a abertura pública aguardam a escolha da licença do código e a decisão sobre
+o e-mail não mascarado presente no histórico Git.
+
+![FocusLens BR v2.0](docs/assets/focuslens-br-v2.0.png)
+
+![Arquitetura FocusLens BR v2.0](docs/assets/arquitetura-focuslens-v2.0.svg)
+
+## O que faz hoje
 
 - Abre com “o que merece atenção agora?” e mantém prova, datas, fonte, limite
   e condição de mudança junto do veredito. O menu lateral leva a Resumo,
@@ -96,6 +103,8 @@ especializados permanecem em [`METODOLOGIA_FOCUS.md`](METODOLOGIA_FOCUS.md),
 [`METODOLOGIA_FOCUS_CURVA.md`](METODOLOGIA_FOCUS_CURVA.md), além de
 [`METODOLOGIA_RADAR.md`](METODOLOGIA_RADAR.md).
 
+### Marcos anteriores
+
 ![Focus Semanal v1.12](docs/assets/focus-semanal-v1.12.png)
 
 ![Curva Tesouro v1.13](docs/assets/curva-tesouro-v1.13.png)
@@ -106,7 +115,14 @@ especializados permanecem em [`METODOLOGIA_FOCUS.md`](METODOLOGIA_FOCUS.md),
 
 ![Arquitetura Focus × Curva](docs/assets/arquitetura-focus-curva-v1.14.svg)
 
-Texto de publicação: [`docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md`](docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md).
+Pacote da `v2.0`:
+
+- [`docs/RELEASE_V2.0.md`](docs/RELEASE_V2.0.md);
+- [`docs/AUDITORIA_PUBLICACAO_V2.0.md`](docs/AUDITORIA_PUBLICACAO_V2.0.md);
+- [`docs/POST_LINKEDIN_FOCUSLENS_V2.0.md`](docs/POST_LINKEDIN_FOCUSLENS_V2.0.md).
+
+Publicação anterior:
+[`docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md`](docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md).
 
 ## Como rodar
 
@@ -129,12 +145,12 @@ streamlit run app_financas.py
 `cd` continua sendo a pasta deste projeto — só o `.venv` em si vive fora do
 OneDrive.
 
-O app abre em uma página única. Use o menu lateral para ir ao **Boletim
-Focus**, **Curva Tesouro**, **Focus × Curva**, **Radar Macro** ou **Minha
-carteira**. Focus e Curva verificam automaticamente se há dados novos; os dois
-também oferecem atualização manual. Em **Minha carteira**, envie a planilha
-XLSX da B3 ou preencha as posições manualmente; os dois caminhos permitem
-adicionar linhas para investimentos que não estejam nessa fotografia.
+O app abre em uma página única. Use o menu lateral para ir a **Resumo**,
+**Expectativas**, **Curva** ou **Carteira**. Focus e Curva verificam
+automaticamente se há dados novos; os dois também oferecem atualização manual.
+Em **Carteira**, envie a planilha XLSX da B3 ou preencha as posições
+manualmente; os dois caminhos permitem adicionar linhas para investimentos que
+não estejam nessa fotografia.
 
 ## Trabalhando de mais de uma máquina (casa + trabalho)
 
@@ -170,15 +186,25 @@ O produto será publicado em quatro marcos no mesmo repositório:
 1. **Focus Semanal (`v1.12`, entregue)** — o que mudou nas expectativas;
 2. **Curva Tesouro (`v1.13`, entregue)** — o que mudou nas taxas prefixadas;
 3. **Focus × Curva (`v1.14`, entregue)** — expectativa versus precificação;
-4. **FocusLens BR (`v2.0`)** — experiência integrada e demo pública.
+4. **FocusLens BR (`v2.0`, release candidate)** — experiência integrada,
+   método e pacote de publicação.
 
 Cada marco precisa funcionar sozinho, passar pelos gates técnico e visual e
 gerar uma publicação própria. O escopo completo está em
 [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
+## Publicação e licença
+
+A auditoria técnica da `v2.0` está em
+[`docs/AUDITORIA_PUBLICACAO_V2.0.md`](docs/AUDITORIA_PUBLICACAO_V2.0.md). O
+código ainda não possui uma licença explícita de reutilização; até o titular
+escolher uma, todos os direitos permanecem reservados por padrão. A ausência de
+um arquivo `LICENSE` é deliberadamente tratada como decisão pendente, não como
+uma licença aberta implícita.
+
 ## Fonte oficial dos dados
 
-BACEN — Sistema de Expectativas de Mercado (Boletim Focus):
+BACEN — Sistema de Expectativas de Mercado (Boletim Focus), licença ODbL:
 https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata
 
 Tesouro Transparente — taxas e preços do Tesouro Direto, licença ODbL 1.0:
