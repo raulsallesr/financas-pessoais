@@ -366,6 +366,62 @@ segredos, dados pessoais, direitos de conteúdo, dependências e histórico Git.
 ## 11. Próxima execução — Etapa 4
 
 As Etapas 1, 2 e 3 estão fechadas nas versões `v1.12`, `v1.13` e `v1.14`.
-A próxima execução consolidará o FocusLens BR `v2.0`: revisar a hierarquia
-geral, incorporar somente os sinais úteis do Radar ao Resumo, adicionar o
-cenário simples de choque paralelo e executar a auditoria final de publicação.
+A próxima execução consolidará o FocusLens BR `v2.0` sem recalcular, dentro da
+UI, o que os motores já entregam.
+
+### Ordem de implementação
+
+1. **Fechar o contrato do Resumo integrado.** Criar uma camada pura que
+   consuma `ResumoFocusSemanal`, `LeituraCurva` e `LeituraConvergencia` e
+   devolva uma prioridade, um veredito, duas a quatro provas e as datas das
+   fontes. Ela deve apenas orquestrar os resultados existentes; fórmulas de
+   Focus, curva e convergência continuam em seus motores de origem.
+2. **Consolidar a hierarquia da página única.** Organizar a jornada final em
+   Resumo → Expectativas → Curva → Carteira. Incorporar ao Resumo somente
+   sinais do Radar que acrescentem contexto, eliminando repetição sem apagar
+   o módulo antigo antes de a migração estar coberta por testes e validada
+   visualmente.
+3. **Adicionar o cenário de curva.** Implementar o choque paralelo simples em
+   um módulo puro, com entradas explícitas e saída descritiva. Não estimar
+   probabilidade, retorno de carteira, preço-alvo nem recomendação; não abrir
+   escopo para bootstrap, forwards, cupom ou IPCA+.
+4. **Unificar metodologia e narrativa.** Documentar como o Resumo escolhe a
+   leitura principal, como os cenários são calculados, quais fontes e datas
+   sustentam cada conclusão e quais limitações impedem interpretação causal.
+5. **Fechar a publicação.** Atualizar README e histórico, gerar uma captura
+   principal e uma imagem técnica, preparar o texto de LinkedIn e executar a
+   auditoria de privacidade, segredos, licenças, dependências e histórico Git
+   antes de tornar o repositório público.
+
+### Critérios de aceite específicos da integração
+
+- A primeira dobra responde “o que merece atenção agora?” sem exigir que a
+  pessoa percorra as seções anteriores.
+- Cada fato possui um lugar canônico; nenhuma métrica aparece repetida apenas
+  para preencher cards.
+- O veredito sempre mantém prova numérica, datas, fonte, limite e condição de
+  mudança próximos da ação de leitura.
+- Falha de uma fonte degrada somente a parte dependente dela e não inventa uma
+  síntese com dados ausentes.
+- A composição continua utilizável em 375, 768, 1024 e 1440 px, sem rolagem
+  horizontal e sem significado transmitido apenas por cor.
+- A suíte inteira, `py_compile`, `pip check` e `git diff --check` passam.
+
+### Gate local de engenharia
+
+No PowerShell, dentro do projeto e com o ambiente externo já criado:
+
+```powershell
+$pythonProjeto = "$env:USERPROFILE\.venvs\financas-pessoais\Scripts\python.exe"
+$baseTemporaria = Join-Path $env:TEMP ("fp_pytest_" + [guid]::NewGuid().ToString("N"))
+$arquivosPython = @(git ls-files "*.py")
+& $pythonProjeto -m pytest tests -q --basetemp $baseTemporaria -p no:cacheprovider
+& $pythonProjeto -m py_compile $arquivosPython
+& $pythonProjeto -m pip check
+git diff --check
+```
+
+No Windows/OneDrive, `WinError 5` em diretórios temporários pode ser ruído do
+sandbox nos testes de cache atômico. Se ocorrer, não afrouxar a implementação:
+repetir a suíte fora do sandbox, com um `--basetemp` único, e registrar os dois
+resultados.

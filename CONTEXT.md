@@ -12,6 +12,58 @@
 - **Curva oficial**: Tesouro Transparente, conjunto diário “Taxas dos Títulos
   Ofertados pelo Tesouro Direto”, CSV aberto sob ODbL 1.0.
 
+## Handoff para um novo chat — 2026-08-27
+
+### Ponto de partida verificado
+
+- O produto está fechado até a `v1.14`; o commit funcional dessa entrega é
+  `0f1458c` e recebeu a tag `v1.14`.
+- A branch de trabalho é `main`, sincronizada com `origin/main` em 2026-08-27.
+- O próximo marco é somente a **Etapa 4 — FocusLens BR integrado (`v2.0`)**.
+  Não refazer as Etapas 1–3 nem abrir novos repositórios para elas.
+- Existe um stash anterior chamado
+  `codex-pre-focuslens-cache-2026-08-26`. Ele deve ser preservado e não pode
+  ser aplicado ou removido sem antes inspecionar seu conteúdo e confirmar a
+  intenção com o Raul.
+
+### Ordem de leitura e preparação
+
+1. Trabalhe dentro deste repositório, nunca no git do hub que o contém.
+2. Rode `git pull --ff-only` e confirme `git status --short --branch` limpo.
+3. Leia `CLAUDE.md`, este `CONTEXT.md` e `PLANO_FOCUSLENS.md`, nessa ordem.
+4. Use a seção **“Próxima execução — Etapa 4”** do plano como checklist
+   canônico; este handoff apenas fixa o ponto de retomada.
+5. Antes de editar, inspecione `pagina_home.py` e os contratos existentes
+   `ResumoFocusSemanal`, `LeituraCurva` e `LeituraConvergencia`.
+
+### Decisões que não devem ser reabertas
+
+- A experiência continua em uma página Streamlit, com Resumo, Expectativas,
+  Curva e Carteira numa hierarquia única.
+- Os motores existentes são a fonte dos cálculos. A integração não deve
+  duplicar regras numéricas dentro da UI.
+- BACEN/Focus, SGS e Tesouro Transparente são as fontes públicas do produto;
+  ANBIMA continua opcional e fora do caminho crítico do MVP.
+- Notícias, Radar e dados da carteira não entram no cálculo de convergência
+  Focus × Curva. A carteira permanece local à sessão.
+- Taxa de título não é previsão pura da Selic. O app continua educacional,
+  sem recomendação, promessa, causalidade inventada ou probabilidade falsa.
+- O visual preserva tema claro, verde-petróleo, dourado discreto, números e
+  fontes perto da conclusão e detalhes por divulgação progressiva. Não criar
+  dependência de fonte, ícone ou biblioteca apenas por estética.
+- IPCA+, títulos com cupom, bootstrap, forwards e backtest continuam fora da
+  `v2.0`, salvo nova decisão explícita do Raul.
+
+### Prompt pronto para abrir o próximo chat
+
+> Abra o projeto `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only` e
+> leia `CLAUDE.md`, `CONTEXT.md` e `PLANO_FOCUSLENS.md`. Continue a Etapa 4 —
+> FocusLens BR `v2.0` sem refazer as versões `v1.12`–`v1.14`. Siga, na ordem,
+> o checklist da seção “Próxima execução — Etapa 4”, preserve os motores e
+> contratos existentes, mantenha o visual aprovado e conclua o próximo
+> incremento com testes, validação visual, documentação, commit e push no git
+> próprio deste projeto.
+
 ## Direção aprovada — FocusLens BR
 
 - O projeto evoluirá no mesmo repositório, em quatro entregas independentes e

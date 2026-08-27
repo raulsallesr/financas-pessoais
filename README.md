@@ -134,6 +134,11 @@ O Claude Code lê `CLAUDE.md` e `CONTEXT.md` automaticamente em qualquer
 máquina com o repositório clonado — é isso (não a conversa do chat) que
 mantém o contexto entre casa e trabalho.
 
+Para retomar o projeto em um chat novo, use o bloco **“Handoff para um novo
+chat”** no início de [`CONTEXT.md`](CONTEXT.md). Ele registra o ponto exato da
+entrega, as decisões preservadas e um prompt pronto; a ordem técnica da próxima
+etapa permanece em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
+
 ## Roadmap
 
 O produto será publicado em quatro marcos no mesmo repositório:
