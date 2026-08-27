@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "FocusLens BR",
+    "slug": "focuslens-br",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/focuslens-icon.png",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#F3F7F5",
+    "primaryColor": "#0F766E",
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#E7F1EE",
+        "foregroundImage": "./assets/focuslens-foreground.png",
+        "monochromeImage": "./assets/focuslens-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": true
+    },
+    "web": {
+      "favicon": "./assets/focuslens-icon.png"
+    },
+    "splash": {
+      "image": "./assets/focuslens-foreground.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F3F7F5"
+    }
+  }
+}

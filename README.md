@@ -1,12 +1,34 @@
-# FocusLens BR — dados públicos, método visível
+# FocusLens BR — inteligência de mercado para sua carteira
 
-App pessoal em Streamlit para aprender e acompanhar o mercado financeiro. A
-base atual reúne **Boletim Focus**, Curva Tesouro, Focus × Curva, Radar Macro
-e carteira; a página integrada do **FocusLens BR** organiza esses contratos em
-Resumo, Expectativas, Curva e Carteira.
+Produto pessoal de inteligência financeira. Os motores Python reúnem
+**Boletim Focus**, Curva Tesouro, Focus × Curva, Radar Macro e carteira; o novo
+app móvel transforma esses contratos na pergunta central: **o que o mercado
+está dizendo e como isso afeta os investimentos que eu já tenho?**
 
 O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
+
+## FocusLens Mobile — primeiro corte
+
+Em 2026-08-27, o Raul redirecionou o destino do produto para um app Android/iOS.
+O diretório [`mobile/`](mobile/) contém o primeiro corte em React Native, Expo e
+TypeScript, com quatro áreas:
+
+- **Hoje:** sinais de Focus, curva, inflação e dólar, todos com data e fonte;
+- **Carteira:** exposição, pesos e privacidade de valores;
+- **Cenários:** sensibilidade de −100 a +100 bps;
+- **Entenda:** Sinal → Evidência → Exposição → Limite.
+
+Ao tocar em um sinal, o app filtra as posições relacionadas e explica o efeito
+esperado por classe. A navegação, os filtros e o simulador já funcionam; este
+corte ainda usa uma carteira sintética e está marcado como demonstração segura.
+O próximo incremento conectará um snapshot somente leitura produzido pelos
+motores Python existentes, sem duplicar fórmulas na interface móvel.
+
+![FocusLens Mobile v0.1](docs/assets/focuslens-mobile-v0.1.png)
+
+Detalhes de execução em [`mobile/README.md`](mobile/README.md) e da fronteira
+técnica em [`docs/ARQUITETURA_MOBILE.md`](docs/ARQUITETURA_MOBILE.md).
 
 ## v2.0 — release candidate
 
@@ -124,7 +146,25 @@ Pacote da `v2.0`:
 Publicação anterior:
 [`docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md`](docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md).
 
-## Como rodar
+## Como rodar o app móvel
+
+```powershell
+cd mobile
+npm install
+npm run web
+```
+
+A prévia imediata usa o renderer web da mesma base React Native. O SDK 57 será
+testado em aparelho por um development build próprio no próximo incremento; o
+bundle Android já faz parte do gate local:
+
+```powershell
+npm run typecheck
+npm run test:domain
+npm run export:android
+```
+
+## Como rodar a referência Streamlit
 
 Desde 2026-08-04 este projeto mora dentro do hub da Fits, que é uma pasta
 sincronizada pelo OneDrive. **Crie o `.venv` fora dessa árvore** — instalar
@@ -181,13 +221,16 @@ etapa permanece em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
 ## Roadmap
 
-O produto será publicado em quatro marcos no mesmo repositório:
+O produto mantém os quatro marcos dos motores e abre uma quinta etapa móvel no
+mesmo repositório:
 
 1. **Focus Semanal (`v1.12`, entregue)** — o que mudou nas expectativas;
 2. **Curva Tesouro (`v1.13`, entregue)** — o que mudou nas taxas prefixadas;
 3. **Focus × Curva (`v1.14`, entregue)** — expectativa versus precificação;
 4. **FocusLens BR (`v2.0`, release candidate)** — experiência integrada,
-   método e pacote de publicação.
+   método e pacote de publicação;
+5. **FocusLens Mobile (`v0.1` em construção)** — interface Android/iOS,
+   personalização por carteira e cenários interativos.
 
 Cada marco precisa funcionar sozinho, passar pelos gates técnico e visual e
 gerar uma publicação própria. O escopo completo está em

@@ -221,6 +221,61 @@ de cupom, forwards, backtest por regime e probabilidades calibradas.
 **Estado:** release candidate concluído em 2026-08-27. A abertura pública e a
 tag/release aguardam a decisão sobre licença do código e e-mail histórico.
 
+---
+
+### Etapa 5 — FocusLens Mobile
+
+**Pergunta:** o que o mercado está dizendo agora e onde isso encosta nos
+investimentos que a pessoa já possui?
+
+**Objetivo:** transformar os motores do FocusLens em um app Android/iOS útil,
+explorável e pessoal, com padrão de explicabilidade, privacidade e acabamento
+compatível com um produto que também poderia integrar o ecossistema digital de
+uma instituição financeira.
+
+**Experiência-alvo:**
+
+- Hoje: um veredito, sinais tocáveis, data, fonte e evidência;
+- Carteira: exposição local, privacidade e filtro por classe/posição;
+- Cenários: hipóteses mecânicas com resposta imediata e limites visíveis;
+- Entenda: método curto, comparações e educação contextual;
+- alertas futuros sempre explicam `o que mudou`, `o que prova`, `onde afeta` e
+  `o que não prova`.
+
+**Incrementos:**
+
+1. **Fundação móvel `v0.1` — concluída em 2026-08-27.** React Native + Expo +
+   TypeScript; quatro áreas, navegação persistente, carteira sintética,
+   filtros, cenários, marca própria, testes de domínio e bundle Android.
+2. **Contrato vivo.** Gerar snapshot JSON versionado a partir dos motores
+   Python, validar compatibilidade e substituir o provider demo por leitura com
+   cache/fallback, sem duplicar regras financeiras no app.
+3. **Carteira realmente pessoal.** Editor local, ocultação de valores,
+   armazenamento criptografado e importação B3 sanitizada; nenhuma nuvem por
+   padrão.
+4. **Acompanhamento divertido e útil.** Favoritos, comparação entre
+   fotografias, alertas explicáveis, simulador de aportes e trilhas educativas,
+   sem gamificação que incentive giro ou risco.
+5. **Prontidão institucional.** Autenticação, consentimento, threat model,
+   observabilidade sem dado financeiro, acessibilidade E2E, assinatura de
+   builds e, somente depois, avaliação de Open Finance e integração bancária.
+
+**Não entra nesta fundação:** ordem de compra/venda, recomendação personalizada,
+sincronização de conta, Open Finance, cloud de carteira ou publicação em loja.
+
+**Aceite da fundação móvel:**
+
+- Android e iOS compartilham a mesma base React Native;
+- toque em um sinal filtra somente posições relacionadas;
+- valores pessoais podem ser ocultados e a demo é explicitamente sintética;
+- cenário não calcula preço, retorno ou probabilidade;
+- alvos interativos têm no mínimo 44 px, navegação funciona com rótulos e o
+  layout passa em celular pequeno, celular grande, tablet e paisagem;
+- TypeScript, testes de domínio e export Android passam.
+
+**Estado:** primeiro corte `v0.1` concluído; próximo incremento é o contrato
+vivo entre os motores Python e o app móvel.
+
 ## 6. Arquitetura
 
 A separação atual continua valendo: motor puro, adaptador de I/O e UI nunca
@@ -238,6 +293,19 @@ pagina_curva.py           apresentação Streamlit
 atualizar_curva_cache.py  automação sem Streamlit
 METODOLOGIA_CURVA.md      fórmulas, fontes e limitações
 ```
+
+A partir da Etapa 5, `mobile/` adiciona uma camada consumidora sem substituir
+os motores:
+
+```text
+mobile/src/data/          provider demo; depois snapshot vivo versionado
+mobile/src/domain/        contrato, filtros e sensibilidade educacional
+mobile/src/components/    componentes React Native acessíveis
+mobile/src/screens/       Hoje, Carteira, Cenários e Entenda
+mobile/tests/             gate do domínio TypeScript
+```
+
+A fronteira detalhada está em `docs/ARQUITETURA_MOBILE.md`.
 
 Pastas vazias e abstrações antecipadas não serão criadas. Cada módulo nasce com
 uso real e teste correspondente.

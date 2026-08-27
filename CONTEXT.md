@@ -1,8 +1,10 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: Etapa 4 do FocusLens BR (`v2.0`) concluída tecnicamente em
-  2026-08-27. O release candidate está em 5/5; tag, release e abertura pública
-  aguardam decisões de governança sobre licença e e-mail histórico.
+- **Status**: motores FocusLens BR `v2.0` preservados como release candidate e
+  Etapa 5 móvel iniciada em 2026-08-27. O primeiro corte React Native `v0.1`
+  está funcional; o próximo incremento conecta um snapshot vivo produzido
+  pelos motores Python. Tag, release e abertura pública da `v2.0` continuam
+  aguardando licença e decisão sobre e-mail histórico.
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -23,6 +25,10 @@
 - A **Etapa 4 — FocusLens BR integrado (`v2.0`)** está concluída tecnicamente
   como release candidate. Não refazer as Etapas 1–3 nem os cinco incrementos
   da Etapa 4.
+- O Raul redirecionou explicitamente o produto para um app móvel em
+  2026-08-27. `mobile/` contém a fundação React Native/Expo/TypeScript com Hoje,
+  Carteira, Cenários e Entenda. Streamlit é referência funcional dos motores,
+  não a interface final.
 - `resumo_integrado.py` escolhe entre Focus × Curva, Expectativas, Curva e
   Qualidade dos dados; a Home usa esse contrato na primeira dobra e segue
   Resumo → Expectativas → Curva → Carteira. `curva_cenarios.py` adiciona o
@@ -35,6 +41,9 @@
   `codex-pre-focuslens-cache-2026-08-26`. Ele deve ser preservado e não pode
   ser aplicado ou removido sem antes inspecionar seu conteúdo e confirmar a
   intenção com o Raul.
+- Existe também `codex-web-cockpit-before-mobile-pivot-2026-08-27`, criado para
+  preservar o protótipo Streamlit não publicado quando o Raul pediu a virada
+  móvel. Ambos os stashes permanecem intocados.
 
 ### Ordem de leitura e preparação
 
@@ -48,19 +57,20 @@
 
 ### Decisões que não devem ser reabertas
 
-- A experiência continua em uma página Streamlit, com Resumo, Expectativas,
-  Curva e Carteira numa hierarquia única.
+- A experiência principal agora é móvel. A página Streamlit permanece íntegra
+  como bancada dos motores e não deve receber uma nova rodada de redesign antes
+  do contrato vivo do app.
 - Os motores existentes são a fonte dos cálculos. A integração não deve
-  duplicar regras numéricas dentro da UI.
+  duplicar regras numéricas dentro da UI móvel.
 - BACEN/Focus, SGS e Tesouro Transparente são as fontes públicas do produto;
   ANBIMA continua opcional e fora do caminho crítico do MVP.
 - Notícias, Radar e dados da carteira não entram no cálculo de convergência
   Focus × Curva. A carteira permanece local à sessão.
 - Taxa de título não é previsão pura da Selic. O app continua educacional,
   sem recomendação, promessa, causalidade inventada ou probabilidade falsa.
-- O visual preserva tema claro, verde-petróleo, dourado discreto, números e
-  fontes perto da conclusão e detalhes por divulgação progressiva. Não criar
-  dependência de fonte, ícone ou biblioteca apenas por estética.
+- O visual móvel preserva tema claro, verde-petróleo, dourado discreto, números
+  e fontes perto da conclusão e detalhes progressivos. A marca em lente + curva
+  é determinística e versionada em SVG/PNG.
 - IPCA+, títulos com cupom, bootstrap, forwards e backtest continuam fora da
   `v2.0`, salvo nova decisão explícita do Raul.
 
@@ -68,12 +78,13 @@
 
 > Abra o projeto `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only` e
 > leia `CLAUDE.md`, `CONTEXT.md`, `PLANO_FOCUSLENS.md`,
-> `docs/AUDITORIA_PUBLICACAO_V2.0.md` e `docs/RELEASE_V2.0.md`. A `v2.0` está
-> pronta como release candidate; não altere motores ou refaça os cinco
-> incrementos. Confirme com o Raul a licença do código e se o e-mail não
-> mascarado do histórico pode permanecer público. Somente após autorização
-> explícita, crie tag/release `v2.0`, altere a visibilidade e valide os links
-> em sessão anônima.
+> `mobile/README.md` e `docs/ARQUITETURA_MOBILE.md`. A `v2.0` dos motores está
+> preservada e o corte móvel `v0.1` já existe; não redesenhe o Streamlit nem
+> replique fórmulas em TypeScript. Continue pelo contrato vivo: gere um
+> snapshot versionado dos motores Python e conecte um provider read-only no
+> app, mantendo a fotografia demo como fallback. Rode os gates Python e móvel,
+> valide em aparelho/viewport, atualize este contexto e publique somente no git
+> próprio do projeto. Tag/release pública ainda depende da governança pendente.
 
 ## Direção aprovada — FocusLens BR
 
@@ -94,6 +105,9 @@
 - As Etapas 0, 1, 2 e 3 foram concluídas em 2026-08-26. A Etapa 4 foi
   concluída tecnicamente em 2026-08-27; falta somente a decisão de governança
   para tag, release e abertura pública da `v2.0`.
+- A Etapa 5 começou em 2026-08-27 por decisão explícita do Raul. O app móvel é
+  o destino do produto; a fundação `v0.1` foi concluída com dados sintéticos e
+  o próximo passo é o snapshot vivo Python → mobile.
 
 ## Arquitetura
 
@@ -113,7 +127,12 @@
   rodar os testes antes de considerar pronto. Commit e `git push` estão
   permanentemente autorizados após o gate passar, sem nova confirmação a
   cada tarefa (decisão explícita do Raul, 2026-08-04).
-- Streamlit em página única: `app_financas.py` chama `pagina_home.py`, que
+- `mobile/` é a interface principal em React Native/Expo/TypeScript. `App.tsx`
+  mantém a navegação Hoje, Carteira, Cenários e Entenda; `src/domain/` separa o
+  contrato e os filtros da camada visual; `src/data/demoSnapshot.ts` é
+  explicitamente sintético; `docs/ARQUITETURA_MOBILE.md` registra a fronteira
+  para o provider vivo.
+- A referência Streamlit continua em página única: `app_financas.py` chama `pagina_home.py`, que
   compõe Resumo, Expectativas, Curva e Carteira na mesma rolagem. O menu
   lateral usa essas quatro âncoras; os antigos entrypoints em `pages/` foram
   removidos para não manter navegação paralela.
@@ -562,6 +581,31 @@
     aprovados. A primeira dobra passou em 375/768/1024/1440/844×390 px.
   - O repositório segue privado. A licença do código e um e-mail não mascarado
     nos commits são decisões pendentes antes da tag/release e abertura pública.
+- **Etapa 5 · FocusLens Mobile `v0.1` (2026-08-27)** — fundação móvel:
+  - O Raul redirecionou o produto de um novo polimento Streamlit para um app
+    Android/iOS. O protótipo web não publicado foi preservado no stash
+    `codex-web-cockpit-before-mobile-pivot-2026-08-27`.
+  - `mobile/` nasceu em React Native 0.86, Expo 57, React 19 e TypeScript 6. A
+    navegação reúne Hoje, Carteira, Cenários e Entenda sem depender do HTML ou
+    do Streamlit em produção.
+  - Hoje oferece quatro sinais tocáveis e cruza cada um com a carteira demo;
+    Carteira calcula peso e oculta valores; Cenários responde a choques de
+    −100 a +100 bps; Entenda explica Sinal → Evidência → Exposição → Limite.
+  - Toda posição e valor são sintéticos. O app não conecta conta, não persiste
+    carteira real, não recomenda ação e mostra data/fonte junto das leituras.
+  - A marca lente + curva foi criada deterministicamente em SVG e rasterizada
+    em PNG para ícone, adaptive icon e modo monocromático.
+  - Gate móvel: TypeScript limpo, 6 testes de domínio e bundle Android gerado
+    pelo Metro. O runtime foi validado em 375×812, 430×932, 768×1024 e 844×390,
+    com quatro abas e interações reais, sem overflow horizontal.
+  - A suíte Python permaneceu íntegra: 185 testes, `py_compile`, `pip check` e
+    `git diff --check` aprovados; nenhum motor `v1.12`–`v2.0` foi alterado.
+  - `npm audit --omit=dev` registrou zero vulnerabilidade alta/crítica e dez
+    moderadas transitivas do toolchain Expo. O downgrade incompatível sugerido
+    por `audit fix --force` não foi aplicado; isso bloqueia produção em loja,
+    não o protótipo local.
+  - Próximo incremento: snapshot JSON versionado produzido pelos motores Python
+    e provider read-only com fallback demo; não duplicar regras no TypeScript.
 
 ## Fila priorizada
 
@@ -574,6 +618,9 @@ integração seguinte.
 | P1 | Entregue | Curva Tesouro (`v1.13`) | Muito alto | Alto |
 | P2 | Entregue | Focus × Curva (`v1.14`) | Muito alto | Alto |
 | P3 | Release candidate (5/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
+| P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
+| P5 | Próximo | Snapshot vivo Python → app móvel | Muito alto | Alto |
+| P6 | Fila | Carteira local criptografada + importação B3 | Muito alto | Alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
 | Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |
@@ -585,6 +632,9 @@ integração seguinte.
   reescrita controlada do histórico.
 - Tag, release e visibilidade pública dependem dessas decisões e de autorização
   explícita do Raul.
+- A fundação móvel pode ser testada localmente, mas publicação em loja exige
+  resolver ou aceitar formalmente as vulnerabilidades moderadas transitivas do
+  toolchain Expo, além dos gates de segurança descritos na arquitetura móvel.
 
 ## Conceitos relacionados
 

@@ -1,9 +1,10 @@
 # financas-pessoais — instruções para o Claude
 
-Projeto pessoal do Raul, **sem nenhuma relação com FitBank/Fits**. App
-educacional de finanças pessoais (Streamlit), começando pelo interpretador
-do Boletim Focus do BACEN, evoluindo para uma plataforma financeira pessoal
-completa (carteira, calculadora de rentabilidade).
+Projeto pessoal do Raul, **sem nenhuma relação com FitBank/Fits**. Produto
+educacional de inteligência financeira, começado em Streamlit e redirecionado
+explicitamente pelo Raul em 2026-08-27 para um app móvel Android/iOS. Os motores
+Python continuam sendo a fonte das leituras; `mobile/` é a interface principal
+em React Native/Expo/TypeScript.
 
 Este repositório é editado de mais de uma máquina (trabalho e casa), com a
 mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
@@ -27,10 +28,10 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
   posição B3. Nunca versione planilha real nem seus valores/identificadores.
   Testes de importação devem gerar o XLSX sintético em memória durante o
   próprio teste.
-- A experiência é uma página única: `app_financas.py` chama
-  `pagina_home.py`, que compõe as seções Focus, Radar e Carteira e oferece
-  navegação por âncoras no menu lateral. Não recriar entrypoints em `pages/`
-  sem uma nova decisão explícita do Raul.
+- A experiência de produto agora está em `mobile/`, com Hoje, Carteira,
+  Cenários e Entenda. A referência Streamlit permanece em página única:
+  `app_financas.py` chama `pagina_home.py`, sem novos entrypoints em `pages/`.
+  Não remover nem reescrever os motores `v1.12`–`v2.0` durante a migração.
 - Guardrail de conteúdo, sem exceção: nenhuma regra em `motor_indicadores.py`
   ou texto em `focus_regras.py` pode usar linguagem imperativa de
   investimento ("invista", "compre", "venda", "recomendo") nem receber dado
@@ -47,6 +48,11 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
   OneDrive intercepta e a instalação quebra com `AssertionError`). Ver
   "Como rodar" no `README.md` para o comando validado em
   `%USERPROFILE%\.venvs\financas-pessoais`.
+- O app móvel usa Node.js LTS. Em checkouts dentro de OneDrive, mantenha
+  `node_modules` fora da árvore sincronizada ou trabalhe em um clone de caminho
+  curto; os milhares de arquivos do Expo e caminhos nativos longos tornam uma
+  instalação direta instável. Nunca versione `node_modules`, `.expo/`, bundles
+  ou dados pessoais.
 - Fluxo de código: **Claude e Codex escrevem direto**, com a mesma
   autorização — sem brief, sem tier de risco, sem porta de revisão prévia.
   O protocolo de brief → Codex é específico do hub interno da Fits e não se
@@ -61,7 +67,9 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
 
 ## Ao terminar qualquer tarefa
 
-1. Roda a suíte inteira (`pytest tests/`) antes de considerar pronto.
+1. Roda a suíte inteira (`pytest tests/`) quando tocar Python. Ao tocar
+   `mobile/`, roda `npm run typecheck`, `npm run test:domain` e
+   `npm run export:android`. Mudança transversal passa pelos dois gates.
 2. Atualiza `CONTEXT.md` (o que mudou, por quê, o que ficou pra próxima) —
    é o que permite a outra máquina continuar sem essa conversa.
 3. Commit + `git push` no remote próprio do projeto; a autorização é
