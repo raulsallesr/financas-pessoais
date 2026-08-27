@@ -27,6 +27,19 @@ export type MarketSignal = {
   effects: Partial<Record<AssetClass, ClassEffect>>;
 };
 
+export type MarketSource = {
+  id: string;
+  label: string;
+  available: boolean;
+  asOf: string | null;
+  status: string;
+};
+
+export type SnapshotProof = {
+  source: string;
+  text: string;
+};
+
 export type Position = {
   id: string;
   name: string;
@@ -36,14 +49,28 @@ export type Position = {
 };
 
 export type MarketSnapshot = {
-  mode: "demo";
+  schemaVersion: 1;
+  mode: "demo" | "live";
+  generatedAt: string;
   asOf: string;
   verdict: string;
   verdictSupport: string;
+  proofs: readonly SnapshotProof[];
+  sources: readonly MarketSource[];
   sourcesAvailable: number;
   sourcesTotal: number;
+  limits: readonly string[];
+  changeConditions: readonly string[];
   signals: readonly MarketSignal[];
   positions: readonly Position[];
+  fallbackReason?: string;
+};
+
+export type PublicMarketSnapshotV1 = Omit<
+  MarketSnapshot,
+  "mode" | "positions" | "sourcesAvailable" | "sourcesTotal" | "fallbackReason"
+> & {
+  mode: "live";
 };
 
 export type PortfolioImpact = {

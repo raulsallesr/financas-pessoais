@@ -20,7 +20,7 @@ BACEN · Tesouro · SGS
 MOTORES PYTHON EXISTENTES
 Focus · Curva · Convergência · Radar · Carteira
         │
-        ▼  próximo incremento: snapshot versionado / API somente leitura
+        ▼  adaptador local sem rede
 CONTRATO MÓVEL
 veredito · sinais · efeitos por classe · data · fonte · limites
         │
@@ -29,15 +29,16 @@ APP REACT NATIVE
 Hoje · Carteira · Cenários · Entenda
 ```
 
-Os motores Python continuam como fonte das leituras públicas. O app não deve
+Os motores Python continuam como fonte das leituras públicas. O app não
 reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
-convergência. A futura ponte entregará somente contratos já calculados.
+convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
+`mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.1`
+## Estado do corte `mobile v0.2`
 
-O diretório `mobile/` já contém a experiência completa de navegação e usa uma
-fotografia sintética em `src/data/demoSnapshot.ts`. Essa fotografia existe para
-validar a jornada e nunca deve ser confundida com dado vivo.
+O diretório `mobile/` contém a experiência completa de navegação e consome o
+snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
+permanece como fallback explícito e nunca é confundida com dado vivo.
 
 O domínio TypeScript faz apenas operações locais necessárias à experiência:
 
@@ -50,19 +51,26 @@ A sensibilidade móvel é uma demonstração própria e está rotulada como tal.
 não substitui `curva_cenarios.py`, não calcula preço ou retorno e não entra nos
 motores aprovados da `v2.0`.
 
-### Fronteira do contrato vivo `v1`
+### Fronteira implementada do contrato vivo `v1`
 
-O próximo snapshot transporta somente a leitura pública já calculada: versão do
+O snapshot transporta somente a leitura pública já calculada: versão do
 schema, modo, datas, veredito, provas, disponibilidade das fontes e sinais com
 efeitos por classe. Ele não transporta posições, valores ou identificadores da
 carteira. Essa separação evita transformar um artefato público e versionável em
 um canal acidental de dados pessoais.
 
-No app, um provider read-only valida o JSON e escolhe fotografia viva ou demo.
+`gerar_mobile_snapshot.py` lê somente os dois caches públicos versionados, sem
+rede. O adaptador compõe `ResumoIntegrado`, `ResumoFocusSemanal`,
+`LeituraCurva` e `LeituraConvergencia`, reutiliza os formatadores e efeitos
+existentes e grava JSON ordenado por chave, com UTF-8, newline final e troca
+atômica. O efeito de Curva por classe não existe nos motores aprovados; por
+isso, o adaptador mantém esse mapa vazio em vez de inventar o elo.
+
+No app, `snapshotProvider.ts` valida o JSON e escolhe fotografia viva ou demo.
 Somente depois dessa escolha a camada local combina os efeitos públicos com a
 carteira sintética. Schema ausente, desconhecido ou inválido degrada para a demo
-explicitamente rotulada, sem derrubar a navegação. O checklist completo está na
-seção “12. Próxima execução — Etapa 5” de `PLANO_FOCUSLENS.md`.
+explicitamente rotulada, sem derrubar a navegação. O documento público é
+rejeitado se transportar `positions`, `amount` ou outra chave pessoal proibida.
 
 ## Privacidade e guardrails
 
@@ -77,14 +85,15 @@ seção “12. Próxima execução — Etapa 5” de `PLANO_FOCUSLENS.md`.
 
 ## Roadmap técnico imediato
 
-1. gerar um snapshot JSON público e versionado a partir dos motores Python,
-   sem incluir carteira, com schema e teste de compatibilidade;
-2. trocar o provider demo por um provider somente leitura com fallback local
-   explícito;
-3. criar carteira local editável e criptografada, sem nuvem por padrão;
-4. portar a importação B3 de forma sanitizada para um fluxo móvel seguro;
-5. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
-6. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+1. **concluído:** snapshot JSON público e versionado a partir dos motores
+   Python, sem carteira, com schema e teste de compatibilidade;
+2. **concluído:** provider somente leitura com fallback local explícito;
+3. gerar e instalar um development build próprio para Android e preparar a
+   mesma rota no iOS;
+4. criar carteira local editável e criptografada, sem nuvem por padrão;
+5. portar a importação B3 de forma sanitizada para um fluxo móvel seguro;
+6. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
+7. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 

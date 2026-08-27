@@ -1,13 +1,39 @@
 import { MarketSnapshot } from "../domain/types";
 
 export const demoSnapshot: MarketSnapshot = {
+  schemaVersion: 1,
   mode: "demo",
-  asOf: "26 ago 2026",
+  generatedAt: "2026-08-26T00:00:00Z",
+  asOf: "2026-08-26",
   verdict: "A curva ficou mais benigna que o Focus",
   verdictSupport:
     "As expectativas seguem firmes, mas os prefixados recuaram em cinco vencimentos.",
+  proofs: [
+    {
+      source: "Demonstração",
+      text: "Fotografia sintética criada para validar a jornada móvel.",
+    },
+  ],
+  sources: [
+    {
+      id: "focus",
+      label: "BACEN · Focus",
+      available: true,
+      asOf: "2026-08-21",
+      status: "Dado sintético",
+    },
+    {
+      id: "curva",
+      label: "Tesouro Transparente",
+      available: true,
+      asOf: "2026-08-26",
+      status: "Dado sintético",
+    },
+  ],
   sourcesAvailable: 2,
   sourcesTotal: 2,
+  limits: ["A fotografia é sintética e não representa o mercado atual."],
+  changeConditions: ["Carregar um snapshot público válido e compatível."],
   signals: [
     {
       id: "curva",
@@ -18,7 +44,7 @@ export const demoSnapshot: MarketSnapshot = {
       explanation:
         "As taxas prefixadas recuaram na fotografia recente, com movimento mais forte na ponta longa.",
       source: "Tesouro Transparente",
-      updatedAt: "26 ago 2026",
+      updatedAt: "2026-08-26",
       tone: "positive",
       effects: {
         "Renda fixa prefixada": {
@@ -50,7 +76,7 @@ export const demoSnapshot: MarketSnapshot = {
       explanation:
         "A mediana do Focus não mudou entre as duas últimas fotografias comparáveis.",
       source: "BACEN · Focus",
-      updatedAt: "21 ago 2026",
+      updatedAt: "2026-08-21",
       tone: "neutral",
       effects: {
         "Renda fixa pós-fixada": {
@@ -82,7 +108,7 @@ export const demoSnapshot: MarketSnapshot = {
       explanation:
         "A direção é benigna, mas a mediana ainda precisa ser lida com horizonte e dispersão.",
       source: "BACEN · Focus",
-      updatedAt: "21 ago 2026",
+      updatedAt: "2026-08-21",
       tone: "positive",
       effects: {
         "Títulos IPCA+": {
@@ -108,7 +134,7 @@ export const demoSnapshot: MarketSnapshot = {
       explanation:
         "A variação amplia a diferença entre exposições locais e ativos ligados ao exterior.",
       source: "PTAX · BACEN",
-      updatedAt: "26 ago 2026",
+      updatedAt: "2026-08-26",
       tone: "attention",
       effects: {
         "Exterior / dólar": {

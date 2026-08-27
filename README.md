@@ -8,24 +8,28 @@ está dizendo e como isso afeta os investimentos que eu já tenho?**
 O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
-## FocusLens Mobile — primeiro corte
+## FocusLens Mobile — contrato vivo
 
 Em 2026-08-27, o Raul redirecionou o destino do produto para um app Android/iOS.
-O diretório [`mobile/`](mobile/) contém o primeiro corte em React Native, Expo e
-TypeScript, com quatro áreas:
+O diretório [`mobile/`](mobile/) contém o app React Native, Expo e TypeScript,
+com quatro áreas:
 
 - **Hoje:** sinais de Focus, curva, inflação e dólar, todos com data e fonte;
 - **Carteira:** exposição, pesos e privacidade de valores;
 - **Cenários:** sensibilidade de −100 a +100 bps;
 - **Entenda:** Sinal → Evidência → Exposição → Limite.
 
-Ao tocar em um sinal, o app filtra as posições relacionadas e explica o efeito
-esperado por classe. A navegação, os filtros e o simulador já funcionam; este
-corte ainda usa uma carteira sintética e está marcado como demonstração segura.
-O próximo incremento conectará um snapshot somente leitura produzido pelos
-motores Python existentes, sem duplicar fórmulas na interface móvel.
+Ao tocar em um sinal, o app filtra as posições relacionadas e explica somente
+os efeitos que o motor Python já calculou. O contrato `v1` agora gera um JSON
+público e versionado a partir dos caches locais de Focus e Curva, sem rede e
+sem carteira. Um provider TypeScript valida esse documento antes do uso;
+schema ausente, incompatível ou inválido ativa a fotografia sintética local e
+identifica o fallback na tela.
 
-![FocusLens Mobile v0.1](docs/assets/focuslens-mobile-v0.1.png)
+A carteira continua deliberadamente sintética e separada do artefato público.
+O provider combina mercado e posições apenas em memória, na borda da interface.
+
+![FocusLens Mobile com dados públicos](docs/assets/focuslens-mobile-v0.2-live.png)
 
 Detalhes de execução em [`mobile/README.md`](mobile/README.md) e da fronteira
 técnica em [`docs/ARQUITETURA_MOBILE.md`](docs/ARQUITETURA_MOBILE.md).
@@ -232,8 +236,9 @@ mesmo repositório:
 3. **Focus × Curva (`v1.14`, entregue)** — expectativa versus precificação;
 4. **FocusLens BR (`v2.0`, release candidate)** — experiência integrada,
    método e pacote de publicação;
-5. **FocusLens Mobile (`v0.1` em construção)** — interface Android/iOS,
-   personalização por carteira e cenários interativos.
+5. **FocusLens Mobile (`v0.1` + contrato vivo `v1`, entregues)** — interface
+   Android/iOS, fotografia pública, personalização por carteira sintética e
+   cenários interativos.
 
 Cada marco precisa funcionar sozinho, passar pelos gates técnico e visual e
 gerar uma publicação própria. O escopo completo está em

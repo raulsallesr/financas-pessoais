@@ -22,6 +22,18 @@ export function formatCurrency(value: number, hidden = false): string {
   }).format(value);
 }
 
+export function formatSnapshotDate(value: string): string {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return value;
+  }
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(`${value}T12:00:00Z`)).replace(" de ", " ").replace(" de ", " ");
+}
+
 export function Surface({
   children,
   style,
@@ -97,10 +109,20 @@ export function ToneBadge({
 }
 
 export function DemoPill() {
+  return <DataModePill mode="demo" />;
+}
+
+export function DataModePill({ mode }: { mode: "demo" | "live" }) {
+  const live = mode === "live";
   return (
-    <View style={styles.demoPill}>
-      <View style={styles.demoDot} />
-      <Text style={styles.demoText}>DEMO SEGURA</Text>
+    <View
+      accessibilityLabel={live ? "Dados públicos" : "Demonstração segura"}
+      style={[styles.demoPill, live && styles.livePill]}
+    >
+      <View style={[styles.demoDot, live && styles.liveDot]} />
+      <Text style={[styles.demoText, live && styles.liveText]}>
+        {live ? "DADOS PÚBLICOS" : "DEMONSTRAÇÃO"}
+      </Text>
     </View>
   );
 }
@@ -189,6 +211,15 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     height: 6,
     width: 6,
+  },
+  livePill: {
+    backgroundColor: colors.primarySoft,
+  },
+  liveDot: {
+    backgroundColor: colors.primary,
+  },
+  liveText: {
+    color: colors.primaryDark,
   },
   demoText: {
     color: "#714305",

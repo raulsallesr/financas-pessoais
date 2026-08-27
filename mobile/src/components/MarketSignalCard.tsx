@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import { MarketSignal } from "../domain/types";
 import { colors, radius, spacing } from "../theme";
-import { ToneBadge } from "./Primitives";
+import { formatSnapshotDate, ToneBadge } from "./Primitives";
 
 export function MarketSignalCard({
   signal,
@@ -39,7 +39,7 @@ export function MarketSignalCard({
         {signal.headline}
       </Text>
       <Text style={styles.source}>
-        {signal.source} · {signal.updatedAt}
+        {signal.source} · {formatSnapshotDate(signal.updatedAt)}
       </Text>
     </Pressable>
   );

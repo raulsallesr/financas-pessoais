@@ -10,8 +10,9 @@ import {
 import { ImpactCard } from "../components/ImpactCard";
 import { MarketSignalCard } from "../components/MarketSignalCard";
 import {
-  DemoPill,
+  DataModePill,
   Eyebrow,
+  formatSnapshotDate,
   SectionHeading,
   Surface,
 } from "../components/Primitives";
@@ -48,6 +49,10 @@ export function TodayScreen({
   const impacts = impactsForSignal(snapshot, selectedSignalId, classFilter);
   const allocation = impactedAllocation(impacts);
   const filters = [ALL_CLASSES, ...availableClasses(snapshot)] as const;
+  const availableSources = snapshot.sources
+    .filter((source) => source.available)
+    .map((source) => source.label)
+    .join(" · ");
 
   return (
     <ScrollView
@@ -62,11 +67,20 @@ export function TodayScreen({
           <Text style={styles.brand}>FocusLens</Text>
           <Text style={styles.brandSupport}>INTELIGÊNCIA PARA SUA CARTEIRA</Text>
         </View>
-        <DemoPill />
+        <DataModePill mode={snapshot.mode} />
       </View>
 
+      {snapshot.fallbackReason ? (
+        <Surface style={styles.fallbackNotice}>
+          <Eyebrow>Demonstração local</Eyebrow>
+          <Text style={styles.fallbackText}>{snapshot.fallbackReason}</Text>
+        </Surface>
+      ) : null}
+
       <View style={styles.hero}>
-        <Eyebrow inverse>Leitura de hoje</Eyebrow>
+        <Eyebrow inverse>
+          {snapshot.mode === "live" ? "Leitura com dados públicos" : "Fotografia de demonstração"}
+        </Eyebrow>
         <Text accessibilityRole="header" style={styles.heroTitle}>
           {snapshot.verdict}
         </Text>
@@ -81,9 +95,12 @@ export function TodayScreen({
           </View>
           <View style={styles.healthSecondary}>
             <Text style={styles.healthMeta}>Fotografia</Text>
-            <Text style={styles.healthDate}>{snapshot.asOf}</Text>
+            <Text style={styles.healthDate}>{formatSnapshotDate(snapshot.asOf)}</Text>
           </View>
         </View>
+        <Text style={styles.sourceList}>
+          Fontes disponíveis: {availableSources || "nenhuma"}
+        </Text>
       </View>
 
       <SectionHeading
@@ -113,7 +130,7 @@ export function TodayScreen({
           {selectedSignal.explanation}
         </Text>
         <Text style={styles.signalSource}>
-          Evidência: {selectedSignal.source} · {selectedSignal.updatedAt}
+          Evidência: {selectedSignal.source} · {formatSnapshotDate(selectedSignal.updatedAt)}
         </Text>
       </Surface>
 
@@ -206,8 +223,9 @@ export function TodayScreen({
       </Pressable>
 
       <Text style={styles.guardrail}>
-        Demonstração educacional com carteira sintética. As relações mostram
-        sensibilidade, não recomendação, promessa ou retorno futuro.
+        {snapshot.mode === "live" ? "Mercado vindo de dados públicos; " : "Mercado em demonstração; "}
+        carteira sintética local. As relações mostram sensibilidade, não
+        recomendação, promessa ou retorno futuro.
       </Text>
     </ScrollView>
   );
@@ -251,6 +269,17 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     overflow: "hidden",
     padding: spacing.lg,
+  },
+  fallbackNotice: {
+    backgroundColor: colors.goldSoft,
+    borderColor: "#EBCB91",
+    gap: spacing.xs,
+    shadowOpacity: 0,
+  },
+  fallbackText: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 20,
   },
   heroTitle: {
     color: colors.white,
@@ -304,6 +333,11 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontVariant: ["tabular-nums"],
     fontWeight: "700",
+  },
+  sourceList: {
+    color: "#B8DAD4",
+    fontSize: 11,
+    lineHeight: 17,
   },
   signalRail: {
     gap: spacing.sm,

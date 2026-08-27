@@ -1,14 +1,16 @@
 # FocusLens Mobile
 
-Primeiro corte móvel do FocusLens BR em React Native, Expo e TypeScript. A
+App móvel do FocusLens BR em React Native, Expo e TypeScript. A
 experiência responde a uma pergunta simples: **o que o mercado está dizendo e
 onde isso encosta na minha carteira?**
 
-![FocusLens Mobile v0.1](../docs/assets/focuslens-mobile-v0.1.png)
+![FocusLens Mobile com dados públicos](../docs/assets/focuslens-mobile-v0.2-live.png)
 
 ## O que já funciona
 
-- **Hoje:** quatro sinais tocáveis com valor, movimento, data e fonte;
+- **Hoje:** sinais públicos tocáveis com valor, movimento, data e fonte;
+- **origem explícita:** “Dados públicos” quando o contrato vivo é válido e
+  “Demonstração” quando o provider precisa usar o fallback local;
 - **impacto personalizado:** cada sinal revela somente as posições e classes
   relacionadas na carteira de demonstração;
 - **Carteira:** exposição, peso por posição e controle para ocultar valores;
@@ -18,8 +20,27 @@ onde isso encosta na minha carteira?**
 - navegação inferior persistente, alvos de toque de pelo menos 44 px, tema
   claro e nenhuma informação transmitida somente por cor.
 
-Este corte usa dados e valores **sintéticos**. Ele não conecta conta, corretora
-ou Open Finance, não persiste carteira real e não produz recomendação.
+O mercado vem de `src/data/liveSnapshot.json`, gerado pelos motores Python a
+partir dos caches públicos versionados. A carteira e seus valores continuam
+**sintéticos e locais**: o JSON público não contém posição, quantia ou
+identificador pessoal. O app não conecta conta, corretora ou Open Finance, não
+persiste carteira real e não produz recomendação.
+
+## Como atualizar a fotografia pública
+
+Na raiz do projeto, usando o `.venv` externo já documentado:
+
+```powershell
+$pythonProjeto = "$env:USERPROFILE\.venvs\financas-pessoais\Scripts\python.exe"
+& $pythonProjeto gerar_mobile_snapshot.py
+```
+
+O comando lê somente `dados/focus_cache.json` e
+`dados/curva_prefixada_cache.json`; não consulta rede. A gravação usa UTF-8,
+ordenação estável, newline final e substituição atômica. Se o conteúdo público
+não mudou, o gerador preserva `generatedAt` e não cria diff de relógio. Para
+reproduzir um diagnóstico de defasagem em uma data específica, use
+`--reference-date AAAA-MM-DD`.
 
 ## Como visualizar agora
 
@@ -70,8 +91,8 @@ npm start
 
 O empacotamento instalável e a assinatura do development build são o próximo
 incremento de distribuição. O gate atual já gera o bundle Android, mas ainda
-não publica APK, AAB ou build iOS. O incremento de produto imediatamente
-priorizado antes dele é o snapshot vivo Python → mobile.
+não publica APK, AAB ou build iOS. O contrato vivo Python → mobile já está
+concluído e não depende desse empacotamento.
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
@@ -86,21 +107,27 @@ npm run test:domain
 npm run export:android
 ```
 
-O gate atual cobre contrato demo, cálculo de peso, filtro por classe, impacto
-por sinal, limites do cenário e linguagem não imperativa. O bundle Android é
-gerado pelo Metro sem depender do Streamlit.
+O gate atual cobre contrato demo e live, schema incompatível, documento
+inválido, proibição de carteira no artefato público, fallback, cálculo de peso,
+filtro por classe, impacto por sinal, limites do cenário e linguagem não
+imperativa. O bundle Android é gerado pelo Metro sem depender do Streamlit.
 
 ## Estrutura
 
 ```text
 App.tsx                 estado e navegação principal
 src/components/         componentes móveis reutilizáveis
-src/data/               fotografia sintética versionada
+src/data/               snapshot vivo, validação/provider e fallback demo
 src/domain/             contrato, filtros e sensibilidade educacional
 src/screens/            Hoje, Carteira, Cenários e Entenda
 assets/                 marca determinística em SVG e PNG
 tests/                  testes do domínio TypeScript
 ```
+
+Na raiz, `mobile_snapshot.py` adapta os quatro contratos Python sem alterar os
+motores; `gerar_mobile_snapshot.py` é a entrada local de geração. O app importa
+o JSON como recurso read-only, valida o schema `1` e só então combina os sinais
+com `demoSnapshot.ts` em memória.
 
 A arquitetura e a fronteira entre os motores Python e o app estão em
 [`docs/ARQUITETURA_MOBILE.md`](../docs/ARQUITETURA_MOBILE.md).

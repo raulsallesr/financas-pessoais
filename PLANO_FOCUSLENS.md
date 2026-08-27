@@ -273,8 +273,9 @@ sincronização de conta, Open Finance, cloud de carteira ou publicação em loj
   layout passa em celular pequeno, celular grande, tablet e paisagem;
 - TypeScript, testes de domínio e export Android passam.
 
-**Estado:** primeiro corte `v0.1` concluído; próximo incremento é o contrato
-vivo entre os motores Python e o app móvel.
+**Estado:** fundação `v0.1` e contrato vivo `v1` concluídos em 2026-08-27. O
+próximo incremento é um development build instalável; carteira pessoal e
+armazenamento criptografado permanecem depois dele.
 
 ## 6. Arquitetura
 
@@ -508,7 +509,7 @@ sandbox nos testes de cache atômico. Se ocorrer, não afrouxar a implementaçã
 repetir a suíte fora do sandbox, com um `--basetemp` único, e registrar os dois
 resultados.
 
-## 12. Próxima execução — Etapa 5, incremento 2
+## 12. Execução da Etapa 5, incremento 2 — concluída
 
 ### Resultado esperado
 
@@ -519,6 +520,11 @@ continua navegável com a demo e identifica claramente o fallback.
 
 Esta entrega não inclui APK/AAB, conta real, nuvem, Open Finance, importação B3
 ou armazenamento de carteira. Esses itens continuam em incrementos separados.
+
+**Estado:** concluída em 2026-08-27. `mobile_snapshot.py` consome os quatro
+contratos aprovados, `gerar_mobile_snapshot.py` grava o JSON público de forma
+atômica e `snapshotProvider.ts` seleciona live ou demo sem espalhar condicionais
+pelas telas. Nenhum motor `v1.12`–`v2.0` foi alterado.
 
 ### Checklist de implementação
 
@@ -581,3 +587,38 @@ Depois deste contrato: development build instalável; carteira local editável e
 criptografada; importação B3 sanitizada; alertas/favoritos; E2E em Android/iOS;
 e somente então autenticação e avaliação de Open Finance. Não antecipar essas
 frentes dentro do incremento 2.
+
+### Evidência de fechamento
+
+- O artefato versionado `mobile/src/data/liveSnapshot.json` contém schema `1`,
+  datas ISO, veredito, provas, fontes, limites e quatro sinais; não contém
+  posição, quantia ou identificador pessoal.
+- Geração repetida com os mesmos contratos preserva `generatedAt` e produz os
+  mesmos bytes; a escrita usa arquivo temporário, `fsync` e `os.replace`.
+- Schema incompatível, JSON inválido, campo obrigatório ausente ou chave de
+  carteira ativam a demo sintética com motivo visível; a navegação não cai.
+- Gate: 191 testes Python e 10 testes móveis; `py_compile`, `pip check`,
+  TypeScript, export Android e `git diff --check` aprovados.
+- Validação visual real em 375×812, 430×932, 768×1024 e 844×390 confirmou
+  `scrollWidth == clientWidth`, origem textual, data/fonte e navegação sem
+  depender apenas de cor.
+
+## 13. Próxima execução — Etapa 5, build de desenvolvimento
+
+### Resultado esperado
+
+Instalar o app em um aparelho Android por um development build próprio, sem
+alterar o contrato público nem antecipar carteira real. Registrar a rota
+equivalente para iOS, que depende de ambiente e assinatura Apple compatíveis.
+
+### Escopo fechado
+
+1. configurar o projeto EAS/development client sem versionar credencial ou
+   segredo;
+2. gerar um build Android instalável de desenvolvimento e validar as quatro
+   abas em aparelho real;
+3. confirmar carregamento do snapshot empacotado e fallback demo offline;
+4. testar safe areas, gesto voltar, rotação, leitor de tela e tamanho de fonte;
+5. documentar comandos, requisitos, artefatos ignorados e limites do build;
+6. manter carteira editável, importação B3, alertas, autenticação e Open
+   Finance fora deste incremento.

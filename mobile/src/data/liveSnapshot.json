@@ -1,0 +1,100 @@
+{
+  "asOf": "2026-08-26",
+  "changeConditions": [
+    "A direção do Focus muda quando a revisão da Selic ultrapassa ±0,10 p.p. para a mesma reunião.",
+    "A direção da curva muda quando a mediana D‑5 cruza ±2 bps."
+  ],
+  "generatedAt": "2026-08-27T19:30:08.625567Z",
+  "limits": [
+    "Os intervalos do Focus e da curva podem ter datas diferentes; ambos ficam visíveis na evidência.",
+    "Taxa de título não é previsão pura da Selic: prêmio de prazo, risco e liquidez também podem mover a curva."
+  ],
+  "mode": "live",
+  "proofs": [
+    {
+      "source": "Focus × Curva",
+      "text": "Focus · Selic R6/2026: 13,75% → 13,75% entre 14/08/2026 e 21/08/2026."
+    },
+    {
+      "source": "Focus × Curva",
+      "text": "Curva · mediana: -24,0 bps em 5 vencimentos entre 19/08/2026 e 26/08/2026."
+    },
+    {
+      "source": "Focus × Curva",
+      "text": "Ponta curta: -6,5 bps nos vencimentos 2027, 2028 (mais benigna)."
+    },
+    {
+      "source": "Focus × Curva",
+      "text": "Ponta longa: -29,0 bps nos vencimentos 2031, 2032 (mais benigna)."
+    }
+  ],
+  "schemaVersion": 1,
+  "signals": [
+    {
+      "change": "-0,03 p.p. desde 14/08",
+      "effects": {},
+      "explanation": "A expectativa de PIB Total ficou praticamente estável entre 14/08/2026 e 21/08/2026 (1.95% no ano, quase igual à leitura anterior). O PIB mede o tamanho da economia: pense nele como o 'bolo' que o país inteiro produz em um ano -- quando a expectativa de crescimento sobe, o bolo esperado para este ano fica maior.",
+      "headline": "Expectativa de PIB Total segue estável",
+      "id": "focus-pib-total",
+      "label": "Focus · PIB Total",
+      "source": "BACEN · Focus",
+      "tone": "neutral",
+      "updatedAt": "2026-08-21",
+      "value": "1,95%"
+    },
+    {
+      "change": "-0,01 p.p. desde 14/08",
+      "effects": {},
+      "explanation": "A expectativa de IPCA ficou praticamente estável entre 14/08/2026 e 21/08/2026 (5.02% no ano, quase igual à leitura anterior). O IPCA é o termômetro da inflação: mede quanto mais caro ficou, em média, o que uma família brasileira compra todo mês.",
+      "headline": "Expectativa de IPCA segue estável",
+      "id": "focus-ipca",
+      "label": "Focus · IPCA",
+      "source": "BACEN · Focus",
+      "tone": "neutral",
+      "updatedAt": "2026-08-21",
+      "value": "5,02%"
+    },
+    {
+      "change": "0,00 p.p. desde 14/08",
+      "effects": {},
+      "explanation": "A expectativa de Selic ficou praticamente estável entre 14/08/2026 e 21/08/2026 (13.75% a.a., quase igual à leitura anterior). Pense na Selic como o \"preço do dinheiro no atacado\": quando ela sobe, todo o crédito da economia fica mais caro, do cartão ao financiamento.",
+      "headline": "Expectativa de Selic segue estável",
+      "id": "focus-selic",
+      "label": "Focus · Selic",
+      "source": "BACEN · Focus",
+      "tone": "neutral",
+      "updatedAt": "2026-08-21",
+      "value": "13,75%"
+    },
+    {
+      "change": "mediana frente a D-5",
+      "effects": {},
+      "explanation": "A variação mediana foi de -24,0 bps em 5 vencimentos comparáveis: 0 subiram, 4 caíram e 1 ficou estável.",
+      "headline": "Taxas prefixadas caíram frente a D-5",
+      "id": "curva-prefixada",
+      "label": "Curva prefixada",
+      "source": "Tesouro Transparente",
+      "tone": "neutral",
+      "updatedAt": "2026-08-26",
+      "value": "-24 bps"
+    }
+  ],
+  "sources": [
+    {
+      "asOf": "2026-08-21",
+      "available": true,
+      "id": "focus",
+      "label": "BACEN · Focus",
+      "status": "Sem mudança relevante"
+    },
+    {
+      "asOf": "2026-08-26",
+      "available": true,
+      "id": "curva",
+      "label": "Tesouro Transparente",
+      "status": "Atualizada"
+    }
+  ],
+  "verdict": "A curva ficou mais benigna que o Focus",
+  "verdictSupport": "Focus · Selic R6/2026: 13,75% → 13,75% entre 14/08/2026 e 21/08/2026."
+}

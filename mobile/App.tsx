@@ -10,7 +10,7 @@ import {
 import { StatusBar } from "expo-status-bar";
 
 import { BottomNav, TabKey } from "./src/components/BottomNav";
-import { demoSnapshot } from "./src/data/demoSnapshot";
+import { currentSnapshot } from "./src/data/currentSnapshot";
 import { ALL_CLASSES, ClassFilter } from "./src/domain/insights";
 import { LearnScreen } from "./src/screens/LearnScreen";
 import { PortfolioScreen } from "./src/screens/PortfolioScreen";
@@ -21,7 +21,7 @@ import { colors } from "./src/theme";
 export default function App() {
   const [activeTab, setActiveTab] = useState<TabKey>("today");
   const [selectedSignalId, setSelectedSignalId] = useState(
-    demoSnapshot.signals[0].id,
+    currentSnapshot.signals[0].id,
   );
   const [classFilter, setClassFilter] = useState<ClassFilter>(ALL_CLASSES);
   const [shockBps, setShockBps] = useState(0);
@@ -45,14 +45,14 @@ export default function App() {
 
   const renderScreen = () => {
     if (activeTab === "portfolio") {
-      return <PortfolioScreen snapshot={demoSnapshot} />;
+      return <PortfolioScreen snapshot={currentSnapshot} />;
     }
     if (activeTab === "scenarios") {
       return (
         <ScenariosScreen
           onShockChange={setShockBps}
           shockBps={shockBps}
-          snapshot={demoSnapshot}
+          snapshot={currentSnapshot}
         />
       );
     }
@@ -66,7 +66,7 @@ export default function App() {
         onNavigate={setActiveTab}
         onSelectSignal={setSelectedSignalId}
         selectedSignalId={selectedSignalId}
-        snapshot={demoSnapshot}
+        snapshot={currentSnapshot}
       />
     );
   };

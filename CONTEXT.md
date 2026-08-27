@@ -1,10 +1,10 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: motores FocusLens BR `v2.0` preservados como release candidate e
-  Etapa 5 móvel iniciada em 2026-08-27. O primeiro corte React Native `v0.1`
-  está funcional; o próximo incremento conecta um snapshot vivo produzido
-  pelos motores Python. Tag, release e abertura pública da `v2.0` continuam
-  aguardando licença e decisão sobre e-mail histórico.
+- **Status**: motores FocusLens BR `v2.0` preservados como release candidate.
+  A Etapa 5 móvel possui fundação React Native `v0.1` e contrato vivo `v1`
+  concluídos em 2026-08-27; o próximo incremento é um development build
+  instalável. Tag, release e abertura pública da `v2.0` continuam aguardando
+  licença e decisão sobre e-mail histórico.
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -35,6 +35,19 @@
   domínio móvel, export do bundle Android e validação visual em 375×812,
   430×932, 768×1024 e 844×390, sem overflow horizontal. A captura aprovada está
   em `docs/assets/focuslens-mobile-v0.1.png`.
+- O incremento 2 da Etapa 5 está concluído. `mobile_snapshot.py` adapta
+  `ResumoIntegrado`, `ResumoFocusSemanal`, `LeituraCurva` e
+  `LeituraConvergencia`; `gerar_mobile_snapshot.py` lê somente os caches
+  públicos e grava `mobile/src/data/liveSnapshot.json` de forma atômica.
+- `snapshotProvider.ts` valida schema, campos, datas, fontes, sinais e ausência
+  de carteira. Documento ausente, incompatível, inválido ou com chave pessoal
+  ativa a demo sintética e mostra o motivo; um contrato válido recebe as
+  posições demo somente em memória.
+- O fechamento do contrato vivo passou por 191 testes Python, 10 testes móveis,
+  `py_compile`, `pip check`, TypeScript, bundle Android e `git diff --check`.
+  A Home foi validada em 375×812, 430×932, 768×1024 e 844×390, sempre com
+  `scrollWidth == clientWidth`. A captura viva está em
+  `docs/assets/focuslens-mobile-v0.2-live.png`.
 - Este fechamento revalidou a suíte Python completa, `py_compile`, `pip check`,
   TypeScript, os 6 testes móveis, o bundle Android, os links locais dos cinco
   documentos centrais e `git diff --check`. O primeiro pytest encontrou
@@ -111,36 +124,32 @@
 
 ### Próximo incremento, sem ambiguidade
 
-- Entrega: **Etapa 5, incremento 2 — contrato vivo Python → mobile**.
-- O snapshot público contém mercado, fontes, datas, veredito, provas, limites e
-  efeitos já calculados. Ele não contém carteira, posição, valor ou identificador
-  pessoal.
-- A carteira sintética continua local e separada. O provider móvel combina a
-  fotografia pública com essa carteira somente na borda da interface.
-- O JSON tem versão explícita e geração determinística. Schema ausente,
-  incompatível ou inválido aciona a fotografia demo e mostra esse modo ao
-  usuário, sem derrubar a navegação.
-- O gerador consome os contratos Python existentes; não copia fórmulas para
-  TypeScript, não acessa rede durante a serialização e não altera os motores
-  `v1.12`–`v2.0`.
-- A definição completa de arquivos, testes, gate visual e aceite está na seção
-  “12. Próxima execução — Etapa 5” de `PLANO_FOCUSLENS.md`.
+- Entrega: **Etapa 5 — development build instalável**.
+- Configurar a rota de development client/EAS sem versionar credencial e gerar
+  um build Android instalável; documentar a rota iOS sem fingir que ela foi
+  executada fora de ambiente Apple compatível.
+- Validar em aparelho real as quatro abas, o snapshot empacotado, o fallback
+  demo offline, safe areas, gesto voltar, rotação, leitor de tela e tamanho de
+  fonte.
+- Não alterar os motores, o schema público `1` ou os três stashes. Carteira
+  editável, importação B3, alertas, autenticação, nuvem e Open Finance continuam
+  em incrementos posteriores.
+- A definição completa está na seção “13. Próxima execução — Etapa 5” de
+  `PLANO_FOCUSLENS.md`.
 
 ### Prompt pronto para abrir o próximo chat
 
 > Abra o projeto `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only` e
 > leia integralmente `CLAUDE.md`, `CONTEXT.md`, `PLANO_FOCUSLENS.md`,
-> `mobile/README.md` e `docs/ARQUITETURA_MOBILE.md`. Confira também
-> `git stash list`, mas não aplique nem remova os três stashes documentados. A
-> `v2.0` dos motores e a fundação móvel `v0.1` já estão concluídas; não refaça
-> `v1.12`–`v1.14`, não redesenhe o Streamlit e não replique fórmulas em
-> TypeScript. Execute a seção “12. Próxima execução — Etapa 5” do plano: gere
-> o snapshot público versionado a partir dos contratos Python, conecte um
-> provider read-only no app e mantenha a demo local como fallback explícito.
-> Não coloque carteira ou valores pessoais no snapshot. Rode os gates Python e
-> móvel, valide os viewports definidos, atualize a documentação e faça commit e
-> push somente no git próprio deste projeto. APK/development build e a abertura
-> pública da `v2.0` permanecem entregas separadas.
+> `mobile/README.md` e `docs/ARQUITETURA_MOBILE.md`. Confira `git stash list`,
+> mas não aplique nem remova os três stashes documentados. A `v2.0` dos motores,
+> a fundação móvel `v0.1` e o contrato vivo `v1` já estão concluídos; não refaça
+> `v1.12`–`v2.0`, não redesenhe o Streamlit, não replique fórmulas em TypeScript
+> e não coloque carteira no snapshot. Continue pela seção “13. Próxima execução
+> — Etapa 5” do plano: gere e instale um development build Android próprio,
+> valide snapshot/fallback e acessibilidade em aparelho real e documente a rota
+> iOS sem antecipar carteira pessoal, importação B3, autenticação ou Open
+> Finance. Rode os gates e faça commit/push somente no git próprio do projeto.
 
 ## Direção aprovada — FocusLens BR
 
@@ -162,8 +171,8 @@
   concluída tecnicamente em 2026-08-27; falta somente a decisão de governança
   para tag, release e abertura pública da `v2.0`.
 - A Etapa 5 começou em 2026-08-27 por decisão explícita do Raul. O app móvel é
-  o destino do produto; a fundação `v0.1` foi concluída com dados sintéticos e
-  o próximo passo é o snapshot vivo Python → mobile.
+  o destino do produto; a fundação `v0.1` e o contrato vivo `v1` foram
+  concluídos. O próximo passo é um development build instalável.
 
 ## Arquitetura
 
@@ -660,8 +669,24 @@
     moderadas transitivas do toolchain Expo. O downgrade incompatível sugerido
     por `audit fix --force` não foi aplicado; isso bloqueia produção em loja,
     não o protótipo local.
-  - Próximo incremento: snapshot JSON versionado produzido pelos motores Python
-    e provider read-only com fallback demo; não duplicar regras no TypeScript.
+  - Próximo incremento concluído abaixo: snapshot JSON versionado produzido
+    pelos motores Python e provider read-only com fallback demo.
+- **Etapa 5 · incremento 2 (2026-08-27)** — contrato vivo Python → mobile:
+  - `mobile_snapshot.py` consome os quatro contratos aprovados e gera schema
+    `1`, com datas ISO, veredito, provas, fontes, limites e sinais. O artefato
+    não aceita `positions`, `amount` nem chaves pessoais.
+  - `gerar_mobile_snapshot.py` usa somente os caches públicos locais e grava
+    `mobile/src/data/liveSnapshot.json` com ordenação estável, newline final,
+    `fsync` e troca atômica.
+  - O provider TypeScript valida a borda e combina a carteira demo somente em
+    memória. Versão desconhecida, documento inválido ou dado pessoal ativam
+    fallback explicitamente rotulado, sem derrubar a navegação.
+  - A tela Hoje identifica “Dados públicos”/“Demonstração”, data e fontes. O
+    adaptador não inventa efeito da Curva por classe quando o motor não o
+    fornece.
+  - Gate: 191 testes Python, 10 testes móveis, `py_compile`, `pip check`,
+    TypeScript, export Android e `git diff --check` aprovados. Quatro viewports
+    passaram sem overflow horizontal.
 
 ## Fila priorizada
 
@@ -675,8 +700,9 @@ integração seguinte.
 | P2 | Entregue | Focus × Curva (`v1.14`) | Muito alto | Alto |
 | P3 | Release candidate (5/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
-| P5 | Próximo | Snapshot vivo Python → app móvel | Muito alto | Alto |
-| P6 | Fila | Carteira local criptografada + importação B3 | Muito alto | Alto |
+| P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
+| P6 | Próximo | Development build instalável | Alto | Alto |
+| P7 | Fila | Carteira local criptografada + importação B3 | Muito alto | Alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
 | Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |
@@ -688,7 +714,7 @@ integração seguinte.
   reescrita controlada do histórico.
 - Tag, release e visibilidade pública dependem dessas decisões e de autorização
   explícita do Raul.
-- A fundação móvel pode ser testada localmente, mas publicação em loja exige
+- O app móvel pode ser testado localmente, mas publicação em loja exige
   resolver ou aceitar formalmente as vulnerabilidades moderadas transitivas do
   toolchain Expo, além dos gates de segurança descritos na arquitetura móvel.
 
