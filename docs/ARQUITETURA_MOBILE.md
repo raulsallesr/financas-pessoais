@@ -50,6 +50,20 @@ A sensibilidade móvel é uma demonstração própria e está rotulada como tal.
 não substitui `curva_cenarios.py`, não calcula preço ou retorno e não entra nos
 motores aprovados da `v2.0`.
 
+### Fronteira do contrato vivo `v1`
+
+O próximo snapshot transporta somente a leitura pública já calculada: versão do
+schema, modo, datas, veredito, provas, disponibilidade das fontes e sinais com
+efeitos por classe. Ele não transporta posições, valores ou identificadores da
+carteira. Essa separação evita transformar um artefato público e versionável em
+um canal acidental de dados pessoais.
+
+No app, um provider read-only valida o JSON e escolhe fotografia viva ou demo.
+Somente depois dessa escolha a camada local combina os efeitos públicos com a
+carteira sintética. Schema ausente, desconhecido ou inválido degrada para a demo
+explicitamente rotulada, sem derrubar a navegação. O checklist completo está na
+seção “12. Próxima execução — Etapa 5” de `PLANO_FOCUSLENS.md`.
+
 ## Privacidade e guardrails
 
 - nenhuma conta, CPF, instituição, posição real ou planilha foi usada;
@@ -63,9 +77,10 @@ motores aprovados da `v2.0`.
 
 ## Roadmap técnico imediato
 
-1. gerar um snapshot JSON versionado a partir dos motores Python, com schema e
-   teste de compatibilidade;
-2. trocar o provider demo por um provider somente leitura com fallback local;
+1. gerar um snapshot JSON público e versionado a partir dos motores Python,
+   sem incluir carteira, com schema e teste de compatibilidade;
+2. trocar o provider demo por um provider somente leitura com fallback local
+   explícito;
 3. criar carteira local editável e criptografada, sem nuvem por padrão;
 4. portar a importação B3 de forma sanitizada para um fluxo móvel seguro;
 5. adicionar alertas explicáveis, favoritos e comparação entre fotografias;

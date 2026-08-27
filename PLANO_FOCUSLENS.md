@@ -507,3 +507,77 @@ No Windows/OneDrive, `WinError 5` em diretórios temporários pode ser ruído do
 sandbox nos testes de cache atômico. Se ocorrer, não afrouxar a implementação:
 repetir a suíte fora do sandbox, com um `--basetemp` único, e registrar os dois
 resultados.
+
+## 12. Próxima execução — Etapa 5, incremento 2
+
+### Resultado esperado
+
+Conectar o primeiro dado vivo ao app sem transformar a interface em um segundo
+motor financeiro. Ao final, o app lê uma fotografia pública, versionada e
+gerada pelos contratos Python já aprovados; se ela estiver ausente ou inválida,
+continua navegável com a demo e identifica claramente o fallback.
+
+Esta entrega não inclui APK/AAB, conta real, nuvem, Open Finance, importação B3
+ou armazenamento de carteira. Esses itens continuam em incrementos separados.
+
+### Checklist de implementação
+
+1. **Fechar o contrato antes da UI.** Definir a versão `1` do snapshot com, no
+   mínimo: `schemaVersion`, `mode`, `generatedAt`, `asOf`, veredito e suporte,
+   disponibilidade das fontes e sinais com identificador, valor apresentado,
+   movimento, explicação, fonte, data, tom e efeitos por classe. Datas devem ser
+   serializadas em ISO; a formatação humana continua na apresentação.
+2. **Separar mercado de carteira.** O artefato gerado pelo Python não pode
+   conter `positions`, `amount`, patrimônio ou identificador pessoal. A carteira
+   demo permanece uma fixture local do app; uma carteira real só entra no
+   incremento de armazenamento local criptografado.
+3. **Serializar contratos, não recalcular.** Criar um adaptador Python que
+   consuma `ResumoIntegrado`, `ResumoFocusSemanal`, `LeituraCurva` e
+   `LeituraConvergencia`. Reutilizar os formatadores/apresentadores existentes
+   quando necessário; não duplicar mediana, D-5/D-21, relevância ou regras de
+   convergência.
+4. **Gerar um JSON determinístico.** Escrever em arquivo temporário e substituir
+   o destino de forma atômica, com UTF-8, ordenação estável e newline final. A
+   geração usa somente os caches públicos versionados e não consulta rede. O
+   artefato deve ser pequeno, revisável no diff e seguro para versionamento.
+5. **Validar na borda móvel.** Ampliar o contrato TypeScript para `demo | live`
+   e validar a estrutura antes de usá-la. Um schema desconhecido, campo
+   obrigatório ausente ou JSON inválido deve selecionar a demo, sem exceção não
+   tratada.
+6. **Criar o provider read-only.** Centralizar a escolha live → fallback demo em
+   `mobile/src/data/`, sem espalhar condicionais pelas telas. O provider combina
+   o mercado público com a carteira demo local apenas em memória.
+7. **Tornar a origem visível.** Hoje deve indicar “Dados públicos” ou
+   “Demonstração”, data da fotografia e fontes disponíveis. O fallback não pode
+   parecer dado atual. Carteira, Cenários e Entenda continuam funcionando com
+   quantidade variável de sinais.
+8. **Cobrir falhas e compatibilidade.** Adicionar testes Python para schema,
+   determinismo, ausência de dados pessoais e degradação por fonte; adicionar
+   testes móveis para snapshot válido, versão incompatível, documento inválido,
+   fallback demo e preservação dos filtros por classe.
+9. **Validar o produto completo.** Rodar os gates Python e móvel, abrir a prévia
+   e conferir 375×812, 430×932, 768×1024 e 844×390. Verificar overflow,
+   truncamento, alvos de toque, contraste, foco e entendimento sem depender de
+   cor. Registrar nova captura somente se houver mudança visual material.
+10. **Fechar o incremento.** Atualizar `README.md`, `mobile/README.md`,
+    `docs/ARQUITETURA_MOBILE.md`, este plano e `CONTEXT.md`; conferir
+    `git diff --check`; commitar e publicar apenas no remote próprio do projeto.
+
+### Critérios de aceite
+
+- O snapshot vivo nasce dos motores Python e possui versão explícita.
+- Nenhum cálculo financeiro aprovado foi reimplementado em TypeScript.
+- Nenhuma posição ou quantia pessoal sai no artefato público.
+- Falha ou incompatibilidade ativa uma demo claramente rotulada.
+- A navegação e os impactos continuam íntegros com dados live e demo.
+- Suíte Python, `py_compile`, `pip check`, TypeScript, testes de domínio, export
+  Android e `git diff --check` passam.
+- O layout permanece utilizável nos quatro viewports definidos, sem overflow
+  horizontal e sem informação transmitida apenas por cor.
+
+### Fora de escopo e ordem posterior
+
+Depois deste contrato: development build instalável; carteira local editável e
+criptografada; importação B3 sanitizada; alertas/favoritos; E2E em Android/iOS;
+e somente então autenticação e avaliação de Open Finance. Não antecipar essas
+frentes dentro do incremento 2.

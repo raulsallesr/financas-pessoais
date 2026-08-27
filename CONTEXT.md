@@ -21,7 +21,8 @@
 
 - O produto está estável e versionado até a `v1.14`; o commit funcional dessa
   entrega é `0f1458c` e recebeu a tag `v1.14`.
-- A branch de trabalho é `main`, sincronizada com `origin/main` em 2026-08-27.
+- A branch de trabalho é `main`. `git pull --ff-only` confirmou em 2026-08-27
+  que ela estava sincronizada com `origin/main` antes deste fechamento.
 - A **Etapa 4 — FocusLens BR integrado (`v2.0`)** está concluída tecnicamente
   como release candidate. Não refazer as Etapas 1–3 nem os cinco incrementos
   da Etapa 4.
@@ -29,6 +30,20 @@
   2026-08-27. `mobile/` contém a fundação React Native/Expo/TypeScript com Hoje,
   Carteira, Cenários e Entenda. Streamlit é referência funcional dos motores,
   não a interface final.
+- A implementação da fundação móvel `v0.1` está no commit `2c242b8`. Ela passou
+  por 185 testes Python, `py_compile`, `pip check`, TypeScript, 6 testes de
+  domínio móvel, export do bundle Android e validação visual em 375×812,
+  430×932, 768×1024 e 844×390, sem overflow horizontal. A captura aprovada está
+  em `docs/assets/focuslens-mobile-v0.1.png`.
+- Este fechamento revalidou a suíte Python completa, `py_compile`, `pip check`,
+  TypeScript, os 6 testes móveis, o bundle Android, os links locais dos cinco
+  documentos centrais e `git diff --check`. O primeiro pytest encontrou
+  `WinError 5` apenas na limpeza temporária e o primeiro export encontrou
+  `spawn EPERM` no Hermes dentro do sandbox; ambos passaram na repetição fora
+  do sandbox, sem mudança de código.
+- `npm run web` já permite testar a mesma árvore de componentes React Native no
+  navegador. Ainda não existe APK/AAB nem development build instalado; isso é
+  uma etapa distinta do contrato vivo e não deve ser apresentado como pronto.
 - `resumo_integrado.py` escolhe entre Focus × Curva, Expectativas, Curva e
   Qualidade dos dados; a Home usa esse contrato na primeira dobra e segue
   Resumo → Expectativas → Curva → Carteira. `curva_cenarios.py` adiciona o
@@ -43,17 +58,37 @@
   intenção com o Raul.
 - Existe também `codex-web-cockpit-before-mobile-pivot-2026-08-27`, criado para
   preservar o protótipo Streamlit não publicado quando o Raul pediu a virada
-  móvel. Ambos os stashes permanecem intocados.
+  móvel.
+- A verificação para este handoff encontrou uma alteração local isolada em
+  `dados/focus_cache.json`: somente `atualizado_em` mudava de `2026-08-26` para
+  `2026-08-27`. Como a origem não foi atribuída com segurança, ela foi guardada
+  no stash `codex-focus-cache-before-mobile-handoff-2026-08-27`. Os três
+  stashes devem ser preservados; não aplicar nem remover nenhum deles sem
+  inspecionar seu conteúdo e confirmar a intenção com o Raul.
+
+### Mapa de retomada
+
+| Arquivo | Para que serve |
+|---|---|
+| `CLAUDE.md` | Regras permanentes, guardrails e gates obrigatórios. |
+| `CONTEXT.md` | Estado vivo, decisões fechadas, bloqueios e próximo passo. |
+| `PLANO_FOCUSLENS.md` | Escopo do produto e checklist do próximo incremento. |
+| `mobile/README.md` | Comandos para executar e validar o app móvel. |
+| `docs/ARQUITETURA_MOBILE.md` | Fronteira Python → contrato → React Native. |
+| `docs/AUDITORIA_PUBLICACAO_V2.0.md` | Evidência e pendências da publicação web `v2.0`. |
 
 ### Ordem de leitura e preparação
 
 1. Trabalhe dentro deste repositório, nunca no git do hub que o contém.
-2. Rode `git pull --ff-only` e confirme `git status --short --branch` limpo.
+2. Rode `git pull --ff-only`, `git status --short --branch` e `git stash list`.
+   Não aplique os stashes apenas para “limpar” a lista.
 3. Leia `CLAUDE.md`, este `CONTEXT.md` e `PLANO_FOCUSLENS.md`, nessa ordem.
-4. Leia `docs/AUDITORIA_PUBLICACAO_V2.0.md` e
-   `docs/RELEASE_V2.0.md`; eles registram o gate e o pacote final.
-5. Antes de abrir o repositório, obtenha do Raul a decisão sobre licença do
-   código e sobre aceitar ou sanear o e-mail não mascarado dos commits.
+4. Para continuar o app, leia `mobile/README.md` e
+   `docs/ARQUITETURA_MOBILE.md`; siga a seção “Próxima execução — Etapa 5” do
+   plano. Para publicar a `v2.0` web, leia também
+   `docs/AUDITORIA_PUBLICACAO_V2.0.md` e `docs/RELEASE_V2.0.md`.
+5. A licença e o e-mail histórico só bloqueiam a abertura pública/tag/release;
+   não bloqueiam o desenvolvimento privado do app móvel.
 
 ### Decisões que não devem ser reabertas
 
@@ -74,17 +109,38 @@
 - IPCA+, títulos com cupom, bootstrap, forwards e backtest continuam fora da
   `v2.0`, salvo nova decisão explícita do Raul.
 
+### Próximo incremento, sem ambiguidade
+
+- Entrega: **Etapa 5, incremento 2 — contrato vivo Python → mobile**.
+- O snapshot público contém mercado, fontes, datas, veredito, provas, limites e
+  efeitos já calculados. Ele não contém carteira, posição, valor ou identificador
+  pessoal.
+- A carteira sintética continua local e separada. O provider móvel combina a
+  fotografia pública com essa carteira somente na borda da interface.
+- O JSON tem versão explícita e geração determinística. Schema ausente,
+  incompatível ou inválido aciona a fotografia demo e mostra esse modo ao
+  usuário, sem derrubar a navegação.
+- O gerador consome os contratos Python existentes; não copia fórmulas para
+  TypeScript, não acessa rede durante a serialização e não altera os motores
+  `v1.12`–`v2.0`.
+- A definição completa de arquivos, testes, gate visual e aceite está na seção
+  “12. Próxima execução — Etapa 5” de `PLANO_FOCUSLENS.md`.
+
 ### Prompt pronto para abrir o próximo chat
 
 > Abra o projeto `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only` e
-> leia `CLAUDE.md`, `CONTEXT.md`, `PLANO_FOCUSLENS.md`,
-> `mobile/README.md` e `docs/ARQUITETURA_MOBILE.md`. A `v2.0` dos motores está
-> preservada e o corte móvel `v0.1` já existe; não redesenhe o Streamlit nem
-> replique fórmulas em TypeScript. Continue pelo contrato vivo: gere um
-> snapshot versionado dos motores Python e conecte um provider read-only no
-> app, mantendo a fotografia demo como fallback. Rode os gates Python e móvel,
-> valide em aparelho/viewport, atualize este contexto e publique somente no git
-> próprio do projeto. Tag/release pública ainda depende da governança pendente.
+> leia integralmente `CLAUDE.md`, `CONTEXT.md`, `PLANO_FOCUSLENS.md`,
+> `mobile/README.md` e `docs/ARQUITETURA_MOBILE.md`. Confira também
+> `git stash list`, mas não aplique nem remova os três stashes documentados. A
+> `v2.0` dos motores e a fundação móvel `v0.1` já estão concluídas; não refaça
+> `v1.12`–`v1.14`, não redesenhe o Streamlit e não replique fórmulas em
+> TypeScript. Execute a seção “12. Próxima execução — Etapa 5” do plano: gere
+> o snapshot público versionado a partir dos contratos Python, conecte um
+> provider read-only no app e mantenha a demo local como fallback explícito.
+> Não coloque carteira ou valores pessoais no snapshot. Rode os gates Python e
+> móvel, valide os viewports definidos, atualize a documentação e faça commit e
+> push somente no git próprio deste projeto. APK/development build e a abertura
+> pública da `v2.0` permanecem entregas separadas.
 
 ## Direção aprovada — FocusLens BR
 

@@ -150,7 +150,7 @@ Publicação anterior:
 
 ```powershell
 cd mobile
-npm install
+npm ci
 npm run web
 ```
 
@@ -163,6 +163,9 @@ npm run typecheck
 npm run test:domain
 npm run export:android
 ```
+
+O comando exato já validado no computador de trabalho, com Node portátil e
+dependências fora do OneDrive, está em [`mobile/README.md`](mobile/README.md).
 
 ## Como rodar a referência Streamlit
 
