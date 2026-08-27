@@ -34,6 +34,31 @@ O provider combina mercado e posições apenas em memória, na borda da interfac
 Detalhes de execução em [`mobile/README.md`](mobile/README.md) e da fronteira
 técnica em [`docs/ARQUITETURA_MOBILE.md`](docs/ARQUITETURA_MOBILE.md).
 
+## Visão institucional — FocusLens Embedded
+
+O roadmap aprovado preserva o app pessoal como cliente de referência e, depois
+dos gates móveis, transforma os mesmos motores em uma camada incorporável a
+app, internet banking e plataforma de assessoria. A proposta não é vender um
+painel de indicadores, mas entregar inteligência financeira explicável com
+recibo auditável: sinal, evidência, fonte, exposição, limite, regra e versão.
+
+O produto institucional planejado combina:
+
+- Intelligence API e contratos versionados;
+- Exposure Adapter executado na fronteira privada da instituição;
+- alertas de carteira explicáveis;
+- Governance Studio com aprovação, replay e kill switch;
+- SDK white-label para os canais do banco;
+- piloto controlado com métricas de adoção, retenção, eficiência, qualidade e
+  risco.
+
+A estratégia completa está em
+[`docs/ESTRATEGIA_INSTITUCIONAL.md`](docs/ESTRATEGIA_INSTITUCIONAL.md). A
+arquitetura-alvo, os contratos e os gates estão em
+[`docs/ARQUITETURA_INSTITUCIONAL.md`](docs/ARQUITETURA_INSTITUCIONAL.md).
+Nenhum desses componentes institucionais está implementado neste corte; o
+próximo incremento continua sendo o development build da Etapa 5.
+
 ## v2.0 — release candidate
 
 Os cinco incrementos do FocusLens BR `v2.0` estão concluídos tecnicamente. O
@@ -238,11 +263,14 @@ mesmo repositório:
    método e pacote de publicação;
 5. **FocusLens Mobile (`v0.1` + contrato vivo `v1`, entregues)** — interface
    Android/iOS, fotografia pública, personalização por carteira sintética e
-   cenários interativos.
+   cenários interativos;
+6. **FocusLens Embedded (direção aprovada, não implementada)** — API, receipt,
+   SDK, governança e piloto institucional depois da maturidade móvel.
 
 Cada marco precisa funcionar sozinho, passar pelos gates técnico e visual e
 gerar uma publicação própria. O escopo completo está em
-[`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
+[`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md); a sequência institucional começa na
+seção 14 sem substituir a próxima execução da seção 13.
 
 ## Publicação e licença
 

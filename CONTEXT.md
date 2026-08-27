@@ -3,8 +3,10 @@
 - **Status**: motores FocusLens BR `v2.0` preservados como release candidate.
   A Etapa 5 móvel possui fundação React Native `v0.1` e contrato vivo `v1`
   concluídos em 2026-08-27; o próximo incremento é um development build
-  instalável. Tag, release e abertura pública da `v2.0` continuam aguardando
-  licença e decisão sobre e-mail histórico.
+  instalável. O roadmap institucional **FocusLens Embedded** foi aprovado e
+  documentado, mas permanece posterior aos gates móveis. Tag, release e
+  abertura pública da `v2.0` continuam aguardando licença e decisão sobre
+  e-mail histórico.
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -57,6 +59,12 @@
 - `npm run web` já permite testar a mesma árvore de componentes React Native no
   navegador. Ainda não existe APK/AAB nem development build instalado; isso é
   uma etapa distinta do contrato vivo e não deve ser apresentado como pronto.
+- Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
+  Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
+  piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
+  fronteiras, contratos, segurança, observabilidade e gates. Essa aprovação não
+  altera o próximo incremento nem significa que API, SDK, Governance Studio ou
+  integração bancária já existam.
 - `resumo_integrado.py` escolhe entre Focus × Curva, Expectativas, Curva e
   Qualidade dos dados; a Home usa esse contrato na primeira dobra e segue
   Resumo → Expectativas → Curva → Carteira. `curva_cenarios.py` adiciona o
@@ -88,6 +96,8 @@
 | `PLANO_FOCUSLENS.md` | Escopo do produto e checklist do próximo incremento. |
 | `mobile/README.md` | Comandos para executar e validar o app móvel. |
 | `docs/ARQUITETURA_MOBILE.md` | Fronteira Python → contrato → React Native. |
+| `docs/ESTRATEGIA_INSTITUCIONAL.md` | Tese, produto Embedded, piloto, métricas e pacote comercial. |
+| `docs/ARQUITETURA_INSTITUCIONAL.md` | Arquitetura-alvo, contratos, segurança e gates institucionais. |
 | `docs/AUDITORIA_PUBLICACAO_V2.0.md` | Evidência e pendências da publicação web `v2.0`. |
 
 ### Ordem de leitura e preparação
@@ -100,7 +110,10 @@
    `docs/ARQUITETURA_MOBILE.md`; siga a seção “Próxima execução — Etapa 5” do
    plano. Para publicar a `v2.0` web, leia também
    `docs/AUDITORIA_PUBLICACAO_V2.0.md` e `docs/RELEASE_V2.0.md`.
-5. A licença e o e-mail histórico só bloqueiam a abertura pública/tag/release;
+5. Para trabalhar na trilha B2B, leia `docs/ESTRATEGIA_INSTITUCIONAL.md` e
+   `docs/ARQUITETURA_INSTITUCIONAL.md`; a seção 14 do plano define quando essa
+   trilha pode começar.
+6. A licença e o e-mail histórico só bloqueiam a abertura pública/tag/release;
    não bloqueiam o desenvolvimento privado do app móvel.
 
 ### Decisões que não devem ser reabertas
@@ -121,6 +134,14 @@
   é determinística e versionada em SVG/PNG.
 - IPCA+, títulos com cupom, bootstrap, forwards e backtest continuam fora da
   `v2.0`, salvo nova decisão explícita do Raul.
+- A direção B2B aprovada chama-se **FocusLens Embedded**. O produto vendável é
+  a camada explicável e auditável — API, receipt, Exposure Adapter, SDK e
+  Governance Studio — e não apenas as telas do app.
+- O primeiro piloto institucional usará posições que o próprio banco já mantém.
+  Open Finance fica para uma expansão posterior aos gates e não será usado como
+  atalho para provar o caso de valor.
+- Motores não conhecerão identidade, consentimento ou catálogo. Explicação
+  educacional e recomendação comercial continuarão separadas.
 
 ### Próximo incremento, sem ambiguidade
 
@@ -134,6 +155,8 @@
 - Não alterar os motores, o schema público `1` ou os três stashes. Carteira
   editável, importação B3, alertas, autenticação, nuvem e Open Finance continuam
   em incrementos posteriores.
+- Não antecipar a Etapa 6/Embedded durante o development build. O roadmap
+  institucional aprovado começa somente depois dos gates definidos na seção 14.
 - A definição completa está na seção “13. Próxima execução — Etapa 5” de
   `PLANO_FOCUSLENS.md`.
 
@@ -150,6 +173,8 @@
 > valide snapshot/fallback e acessibilidade em aparelho real e documente a rota
 > iOS sem antecipar carteira pessoal, importação B3, autenticação ou Open
 > Finance. Rode os gates e faça commit/push somente no git próprio do projeto.
+> O roadmap FocusLens Embedded já está aprovado e documentado, mas não antecipe
+> API, SDK, autenticação ou integração bancária durante esse incremento.
 
 ## Direção aprovada — FocusLens BR
 
@@ -173,6 +198,10 @@
 - A Etapa 5 começou em 2026-08-27 por decisão explícita do Raul. O app móvel é
   o destino do produto; a fundação `v0.1` e o contrato vivo `v1` foram
   concluídos. O próximo passo é um development build instalável.
+- A direção institucional foi aprovada em 2026-08-27: o app pessoal será o
+  cliente de referência e a futura camada **FocusLens Embedded** oferecerá API,
+  receipt auditável, Exposure Adapter privado, SDK, Governance Studio e piloto
+  controlado. A sequência canônica está na seção 14 de `PLANO_FOCUSLENS.md`.
 
 ## Arquitetura
 
@@ -687,6 +716,23 @@
   - Gate: 191 testes Python, 10 testes móveis, `py_compile`, `pip check`,
     TypeScript, export Android e `git diff --check` aprovados. Quatro viewports
     passaram sem overflow horizontal.
+- **Direção institucional · FocusLens Embedded (2026-08-27)** — roadmap
+  aprovado e documentado:
+  - `docs/ESTRATEGIA_INSTITUCIONAL.md` define comprador, proposta de valor,
+    Intelligence API, Exposure Adapter, alertas explicáveis, Governance Studio,
+    SDK, piloto, métricas e modelo de implantação/comercial;
+  - `docs/ARQUITETURA_INSTITUCIONAL.md` define fronteiras pública/privada,
+    receipts, identidade e consentimento, segurança, observabilidade,
+    governança de regra e gates de sandbox, piloto e produção;
+  - a seção 14 de `PLANO_FOCUSLENS.md` fecha a ordem 5A → 5B → 5C → 6 → 7 →
+    8. A seção 13 continua sendo a próxima execução, sem antecipar API, Open
+    Finance ou integração bancária;
+  - validação documental: links locais e `git diff --check` aprovados. Como a
+    mudança toca documentação raiz e `mobile/`, também passaram a suíte Python
+    completa, TypeScript, 10 testes móveis e export Android. As primeiras
+    execuções encontraram somente os ruídos ambientais já conhecidos
+    (`WinError 5` na limpeza temporária e `spawn EPERM` no Hermes dentro do
+    sandbox); a repetição fora do sandbox passou sem mudança de código.
 
 ## Fila priorizada
 
@@ -703,6 +749,10 @@ integração seguinte.
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Próximo | Development build instalável | Alto | Alto |
 | P7 | Fila | Carteira local criptografada + importação B3 | Muito alto | Alto |
+| P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
+| P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
+| P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
+| Depois | Planejado | Open Finance + Advisor Copilot, após gates | Muito alto | Muito alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
 | Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |

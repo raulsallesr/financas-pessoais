@@ -622,3 +622,77 @@ equivalente para iOS, que depende de ambiente e assinatura Apple compatíveis.
 5. documentar comandos, requisitos, artefatos ignorados e limites do build;
 6. manter carteira editável, importação B3, alertas, autenticação e Open
    Finance fora deste incremento.
+
+## 14. Roadmap aprovado — FocusLens Embedded
+
+**Decisão de 2026-08-27:** o produto pessoal continuará evoluindo como app
+móvel e cliente de referência. Sobre os mesmos motores e contratos será criada,
+somente depois dos gates móveis, uma camada institucional incorporável chamada
+**FocusLens Embedded**.
+
+A tese, o pacote comercial e o desenho do piloto estão em
+`docs/ESTRATEGIA_INSTITUCIONAL.md`. Fronteiras, contratos, segurança,
+observabilidade e gates estão em `docs/ARQUITETURA_INSTITUCIONAL.md`.
+
+### Sequência canônica
+
+1. **Etapa 5A — distribuição móvel.** Concluir exatamente a seção 13:
+   development build Android instalado e validado; rota iOS documentada.
+2. **Etapa 5B — carteira pessoal segura.** Editor local, ocultação de valores,
+   armazenamento criptografado e importação B3 sanitizada, sem nuvem por
+   padrão.
+3. **Etapa 5C — acompanhamento explicável.** Histórico local de fotografias,
+   favoritos, alertas com evidência, simulador de aportes, testes de componentes
+   e E2E Android/iOS.
+4. **Etapa 6 — fundação Embedded.** Intelligence API, receipt versionado,
+   sandbox sintético, Exposure Adapter privado e primeiro SDK white-label.
+5. **Etapa 7 — governança e piloto.** Governance Studio, RBAC, auditoria,
+   replay, kill switch, observabilidade, continuidade e piloto controlado com
+   dados que a própria instituição já mantém.
+6. **Etapa 8 — expansão regulada.** Avaliar autenticação, Open Finance, contas
+   externas e Advisor Copilot depois que o piloto comprovar valor e os gates de
+   segurança, jurídico, compliance e risco forem aprovados.
+
+### Primeiro caso de uso institucional
+
+> Algo relevante mudou no mercado. Estas partes da carteira consentida são
+> sensíveis a isso. Veja o que prova a relação, quais são os limites e qual
+> versão da regra produziu a explicação.
+
+Cada decisão deverá produzir um receipt reproduzível com sinal, fonte, data,
+evidência, regra, versão, exposição relacionada, limite e política de entrega.
+O snapshot móvel público `v1` continuará sem posição, valor ou identificador.
+
+### Gates para iniciar a Etapa 6
+
+- development build e carteira local segura concluídos;
+- experiência de alertas explicáveis validada sem recomendação ou ordem;
+- testes de componentes e E2E móvel aprovados;
+- licença do código e cadeia de titularidade resolvidas;
+- contrato de receipt fechado com exemplos exclusivamente sintéticos;
+- threat model inicial e fronteiras de dados revisados;
+- nenhum dado de carteira no plano público ou em telemetria;
+- decisão explícita do Raul para iniciar o sandbox institucional.
+
+### Gates para iniciar um piloto
+
+- API e SDK com compatibilidade versionada;
+- ambiente privado da instituição e contexto de exposição minimizado;
+- identidade, consentimento, revogação e RBAC integrados;
+- Governance Studio com aprovação, replay e kill switch;
+- logs e métricas sem posição ou valor financeiro bruto;
+- segurança, privacidade, continuidade e incidentes documentados;
+- coorte, controle, métricas de compra e limiares comerciais acordados;
+- avaliações finais das áreas jurídica, compliance, segurança e risco da
+  instituição.
+
+### Guardrails da trilha institucional
+
+- Open Finance não é dependência do primeiro piloto;
+- os motores não recebem identidade, consentimento ou catálogo de produtos;
+- a carteira entra somente dentro da fronteira privada da instituição;
+- SDK e UI não reimplementam fórmula financeira;
+- explicação educacional e recomendação comercial permanecem camadas distintas;
+- IA generativa futura poderá resumir evidências aprovadas, nunca criar o
+  veredito ou contornar a política institucional;
+- esta arquitetura é proposta técnica, não parecer regulatório.

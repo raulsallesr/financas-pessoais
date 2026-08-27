@@ -83,6 +83,21 @@ rejeitado se transportar `positions`, `amount` ou outra chave pessoal proibida.
 - qualquer integração regulada será proposta técnica, com validação final das
   áreas jurídica e de compliance aplicáveis.
 
+## Relação com o FocusLens Embedded
+
+O app móvel é o cliente de referência da futura camada institucional, mas não
+é a própria integração bancária. O roadmap aprovado preserva esta fronteira e,
+depois da maturidade móvel, adiciona Intelligence API, receipt auditável,
+Exposure Adapter privado, SDK white-label e Governance Studio.
+
+O snapshot público `v1` não será ampliado para transportar carteira. Em uma
+instituição, sinais públicos e posições consentidas só se encontram depois da
+fronteira privada. A arquitetura-alvo está em
+[`ARQUITETURA_INSTITUCIONAL.md`](ARQUITETURA_INSTITUCIONAL.md); tese, piloto e
+métricas estão em [`ESTRATEGIA_INSTITUCIONAL.md`](ESTRATEGIA_INSTITUCIONAL.md).
+Esses componentes ainda não estão implementados e não entram no development
+build atual.
+
 ## Roadmap técnico imediato
 
 1. **concluído:** snapshot JSON público e versionado a partir dos motores

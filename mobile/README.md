@@ -131,3 +131,13 @@ com `demoSnapshot.ts` em memória.
 
 A arquitetura e a fronteira entre os motores Python e o app estão em
 [`docs/ARQUITETURA_MOBILE.md`](../docs/ARQUITETURA_MOBILE.md).
+
+## Relação com o produto institucional
+
+Este app é o cliente de referência da futura camada **FocusLens Embedded**. Ele
+não consome hoje API bancária, Open Finance, autenticação institucional ou
+carteira em nuvem. A estratégia aprovada está em
+[`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
+arquitetura-alvo em
+[`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
+O próximo incremento continua sendo o development build em aparelho real.
