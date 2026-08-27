@@ -392,9 +392,11 @@ UI, o que os motores já entregam.
    narrativa e limites. A UI compara Observada × Cenário entre −100 e +100
    bps; não estima probabilidade, retorno de carteira, preço-alvo nem
    recomendação e não abre escopo para bootstrap, forwards, cupom ou IPCA+.
-4. **Unificar metodologia e narrativa.** Documentar como o Resumo escolhe a
-   leitura principal, como os cenários são calculados, quais fontes e datas
-   sustentam cada conclusão e quais limitações impedem interpretação causal.
+4. **Unificar metodologia e narrativa — concluído em 2026-08-27.**
+   `METODOLOGIA_FOCUSLENS.md` conecta os contratos especializados e documenta
+   prioridade, evidências, janelas, fontes, cenário e limites causais. O
+   Resumo expõe a lógica sob demanda, sem repetir métricas nem recalcular os
+   motores na UI.
 5. **Fechar a publicação.** Atualizar README e histórico, gerar uma captura
    principal e uma imagem técnica, preparar o texto de LinkedIn e executar a
    auditoria de privacidade, segredos, licenças, dependências e histórico Git

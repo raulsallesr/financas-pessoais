@@ -10,20 +10,21 @@ sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
 ## Etapa 4 em andamento
 
-Os três primeiros incrementos do FocusLens BR `v2.0` fecharam o contrato puro,
-conectaram-no à primeira dobra e adicionaram um cenário mecânico à Curva. O
-Resumo escolhe a leitura prioritária já calculada pelos motores, mostra duas a
-quatro provas, datas por fonte, limite e condição de mudança e, quando existe,
-incorpora somente um sinal externo do Radar que acrescente contexto. Nenhuma
-fórmula dos motores `v1.12`–`v1.14` foi duplicada.
+Os quatro primeiros incrementos do FocusLens BR `v2.0` fecharam o contrato
+puro, conectaram-no à primeira dobra, adicionaram um cenário mecânico à Curva
+e unificaram o método de leitura. O Resumo escolhe a prioridade já calculada
+pelos motores, mostra duas a quatro provas, datas por fonte, limite e condição
+de mudança e, quando existe, incorpora somente um sinal externo do Radar que
+acrescente contexto. Nenhuma fórmula dos motores `v1.12`–`v1.14` foi duplicada.
 
 A página agora segue Resumo → Expectativas → Curva → Carteira. O módulo visual
 completo do Radar e a antiga apresentação de Focus × Curva continuam no código
 e cobertos por testes durante a migração; o cenário completo do Radar segue
 alimentando a Carteira. Na seção Curva, um choque paralelo de −100 a +100 bps
 compara a fotografia observada com uma hipótese de deslocamento uniforme, sem
-calcular probabilidade, preço ou retorno. O próximo incremento é unificar a
-metodologia e a narrativa da `v2.0`.
+calcular probabilidade, preço ou retorno. A primeira dobra também explica, sob
+demanda, por que a leitura atual lidera e o que fica fora do veredito. O próximo
+incremento é fechar os materiais e a auditoria de publicação da `v2.0`.
 
 ## O que faz hoje (v2.0 em construção)
 
@@ -88,8 +89,9 @@ metodologia e a narrativa da `v2.0`.
   ETFs, FIIs/FIAGRO, renda fixa e Tesouro e ignora conta, instituição, CNPJ,
   ISIN e contratos. A planilha é processada apenas em memória.
 
-As metodologias e seus limites estão em
-[`METODOLOGIA_FOCUS.md`](METODOLOGIA_FOCUS.md),
+O ponto de entrada do método está em
+[`METODOLOGIA_FOCUSLENS.md`](METODOLOGIA_FOCUSLENS.md). Os contratos
+especializados permanecem em [`METODOLOGIA_FOCUS.md`](METODOLOGIA_FOCUS.md),
 [`METODOLOGIA_CURVA.md`](METODOLOGIA_CURVA.md) e
 [`METODOLOGIA_FOCUS_CURVA.md`](METODOLOGIA_FOCUS_CURVA.md), além de
 [`METODOLOGIA_RADAR.md`](METODOLOGIA_RADAR.md).

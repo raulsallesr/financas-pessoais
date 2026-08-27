@@ -35,6 +35,25 @@ _ESTILO_PRIORIDADE = {
     PrioridadeResumo.QUALIDADE_DOS_DADOS: ("data_alert", "gray"),
 }
 
+_EXPLICACAO_PRIORIDADE = {
+    PrioridadeResumo.FOCUS_CURVA: (
+        "Focus × Curva lidera porque as duas fontes têm janelas "
+        "comparáveis e sustentam uma leitura conjunta."
+    ),
+    PrioridadeResumo.EXPECTATIVAS: (
+        "Expectativas lideram quando a convergência ainda não é comparável, "
+        "mas o Focus permanece atual e informativo."
+    ),
+    PrioridadeResumo.CURVA: (
+        "A Curva lidera quando ela permanece atual e o Focus não sustenta "
+        "uma convergência comparável."
+    ),
+    PrioridadeResumo.QUALIDADE_DOS_DADOS: (
+        "Qualidade dos dados lidera quando as fontes ainda não oferecem "
+        "evidência mínima para uma síntese íntegra."
+    ),
+}
+
 
 def carregar_resumo(hoje: date | None = None) -> ResumoIntegrado:
     """Lê cada cache de forma independente e compõe os motores existentes."""
@@ -78,6 +97,32 @@ def _formatar_datas(item: DatasFonteResumo) -> str:
 def _renderizar_lista(titulo: str, itens: tuple[str, ...]) -> None:
     st.markdown(f"**{titulo}**")
     st.write(itens[0] if itens else "Nenhum ponto adicional neste estado.")
+
+
+def _renderizar_metodologia(resumo: ResumoIntegrado) -> None:
+    with st.expander(
+        "Como o FocusLens BR chega a esta leitura",
+        icon=":material/account_tree:",
+    ):
+        st.markdown(f"**Por que {resumo.prioridade.value} lidera**")
+        st.write(_EXPLICACAO_PRIORIDADE[resumo.prioridade])
+        st.markdown("**O que cada camada pode afirmar**")
+        st.markdown(
+            "- O veredito e as provas vêm dos motores de Focus, Curva e "
+            "Focus × Curva; o Resumo apenas escolhe a melhor leitura "
+            "disponível.\n"
+            "- As datas acima são as janelas efetivamente usadas por cada "
+            "fonte, sem esconder intervalos diferentes sob o rótulo "
+            "‘semana’.\n"
+            "- O choque paralelo é uma hipótese mecânica separada: não "
+            "altera o veredito, o Radar nem a carteira.\n"
+            "- Radar e notícias oferecem contexto; dados pessoais da "
+            "carteira ficam na sessão e não entram no cálculo público."
+        )
+        st.caption(
+            "Método determinístico e educacional. Associação entre sinais "
+            "não prova causa, probabilidade ou retorno futuro."
+        )
 
 
 def render_secao(resumo: ResumoIntegrado) -> None:
@@ -128,6 +173,8 @@ def render_secao(resumo: ResumoIntegrado) -> None:
                     st.markdown("**Outras condições de mudança**")
                     for item in outras_condicoes:
                         st.markdown(f"- {item}")
+
+        _renderizar_metodologia(resumo)
 
 
 def renderizar_contexto_radar(cenario: CenarioMacro | None) -> None:

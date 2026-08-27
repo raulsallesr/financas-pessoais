@@ -1,8 +1,8 @@
 # CONTEXT — Finanças Pessoais
 
 - **Status**: Etapa 4 do FocusLens BR (`v2.0`) em andamento. Contrato, página
-  integrada e cenário de curva foram concluídos em 2026-08-27; próxima
-  entrega: metodologia e narrativa unificadas.
+  integrada, cenário de curva e metodologia unificada foram concluídos em
+  2026-08-27; próxima entrega: fechamento da publicação.
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -22,11 +22,12 @@
 - A branch de trabalho é `main`, sincronizada com `origin/main` em 2026-08-27.
 - O próximo marco é somente a **Etapa 4 — FocusLens BR integrado (`v2.0`)**.
   Não refazer as Etapas 1–3 nem abrir novos repositórios para elas.
-- Os itens 1, 2 e 3 da Etapa 4 estão concluídos. `resumo_integrado.py` escolhe
+- Os itens 1, 2, 3 e 4 da Etapa 4 estão concluídos. `resumo_integrado.py` escolhe
   entre Focus × Curva, Expectativas, Curva e Qualidade dos dados; a Home usa
   esse contrato na primeira dobra e segue Resumo → Expectativas → Curva →
-  Carteira. `curva_cenarios.py` adiciona o choque paralelo puro. O próximo
-  incremento é somente o item 4, metodologia e narrativa unificadas.
+  Carteira. `curva_cenarios.py` adiciona o choque paralelo puro e
+  `METODOLOGIA_FOCUSLENS.md` conecta os contratos. O próximo incremento é
+  somente o item 5, fechamento da publicação.
 - Existe um stash anterior chamado
   `codex-pre-focuslens-cache-2026-08-26`. Ele deve ser preservado e não pode
   ser aplicado ou removido sem antes inspecionar seu conteúdo e confirmar a
@@ -39,9 +40,9 @@
 3. Leia `CLAUDE.md`, este `CONTEXT.md` e `PLANO_FOCUSLENS.md`, nessa ordem.
 4. Use a seção **“Próxima execução — Etapa 4”** do plano como checklist
    canônico; este handoff apenas fixa o ponto de retomada.
-5. Antes de editar, inspecione `resumo_integrado.py`, `curva_cenarios.py` e as
-   metodologias de Focus, Curva, Focus × Curva e Radar. O item 4 deve unificar
-   explicação e rastreabilidade sem mover fórmulas para a documentação ou UI.
+5. Antes de editar, inspecione `METODOLOGIA_FOCUSLENS.md`, os ativos em
+   `docs/assets/`, os textos de publicação, dependências, licenças, workflows
+   e histórico Git. O item 5 deve fechar os artefatos sem alterar os motores.
 
 ### Decisões que não devem ser reabertas
 
@@ -65,12 +66,12 @@
 
 > Abra o projeto `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only` e
 > leia `CLAUDE.md`, `CONTEXT.md` e `PLANO_FOCUSLENS.md`. Continue a Etapa 4 —
-> FocusLens BR `v2.0` pelo item 4, sem refazer as versões `v1.12`–`v1.14` nem
-> os três incrementos já concluídos. Unifique a metodologia e a narrativa:
-> documente como o Resumo escolhe a leitura principal, como o choque paralelo
-> é calculado, quais fontes e datas sustentam cada conclusão e quais limites
-> impedem interpretação causal. Preserve motores, UI aprovada e contratos;
-> conclua com testes, validação, documentação, commit e push no git próprio.
+> FocusLens BR `v2.0` pelo item 5, sem refazer as versões `v1.12`–`v1.14` nem
+> os quatro incrementos já concluídos. Feche a publicação: atualize README e
+> histórico, gere uma captura principal e uma imagem técnica, prepare o texto
+> de LinkedIn e audite privacidade, segredos, licenças, dependências e histórico
+> Git antes de tornar o repositório público. Preserve motores, UI aprovada e
+> contratos; conclua com testes, validação, commit e push no git próprio.
 
 ## Direção aprovada — FocusLens BR
 
@@ -193,6 +194,8 @@
     Curva Tesouro.
   - `METODOLOGIA_FOCUS_CURVA.md` — contrato de comparabilidade, matriz dos
     estados, pontas, evidências e limites da convergência.
+  - `METODOLOGIA_FOCUSLENS.md` — ponto de entrada integrado para prioridade,
+    evidências, datas, fontes, cenário e limites entre as quatro camadas.
   - `atualizar_focus_cache.py` — entrada sem Streamlit usada pela automação
     agendada em `.github/workflows/atualizar-focus.yml`.
   - `atualizar_curva_cache.py` — entrada sem Streamlit usada pela automação
@@ -526,6 +529,18 @@
   - Validação visual real em 375, 768, 1024, 1440 e 844×390 px confirmou duas
     curvas, slider, limites, cartões responsivos e ausência de rolagem
     horizontal; o significado não depende somente de cor.
+- **Etapa 4 · incremento 4 (2026-08-27)** — metodologia e narrativa:
+  - `METODOLOGIA_FOCUSLENS.md` virou o ponto canônico da integração: registra
+    a ordem de prioridade, o lugar de cada fato, as janelas por fonte, o papel
+    do cenário mecânico e os limites que impedem leitura causal.
+  - O Resumo ganhou divulgação progressiva do método. A explicação identifica
+    por que a prioridade atual lidera e separa motores, hipótese, contexto do
+    Radar e dados locais da carteira, sem duplicar números ou fórmulas.
+  - O AppTest do Resumo passou a validar a narrativa integrada. Gate final:
+    185 testes, `py_compile`, `pip check` e `git diff --check` aprovados.
+  - Validação visual real em 375, 768, 1024, 1440 e 844×390 px confirmou o
+    método recolhido por padrão, conteúdo aberto legível e ausência de rolagem
+    horizontal.
 
 ## Fila priorizada
 
@@ -537,7 +552,7 @@ integração seguinte.
 | P0 | Entregue | Focus Semanal (`v1.12`) | Alto | Médio |
 | P1 | Entregue | Curva Tesouro (`v1.13`) | Muito alto | Alto |
 | P2 | Entregue | Focus × Curva (`v1.14`) | Muito alto | Alto |
-| P3 | Em andamento (3/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
+| P3 | Em andamento (4/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
 | Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |

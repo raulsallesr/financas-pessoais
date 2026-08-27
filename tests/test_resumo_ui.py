@@ -27,3 +27,7 @@ def test_resumo_mostra_veredito_provas_datas_limite_e_condicao():
     assert "CONTEXTO EXTERNO QUE COMPLEMENTA A LEITURA" in captions
     assert "PTAX / BACEN · Horizonte: próximas 4–12 semanas" in captions
     assert "Dólar ganhou força no período" in markdown
+    assert "Por que Focus × Curva lidera" in markdown
+    assert "o Resumo apenas escolhe a melhor leitura disponível" in markdown
+    assert "não altera o veredito, o Radar nem a carteira" in markdown
+    assert "não prova causa, probabilidade ou retorno futuro" in captions
