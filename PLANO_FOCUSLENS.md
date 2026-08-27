@@ -371,11 +371,15 @@ UI, o que os motores já entregam.
 
 ### Ordem de implementação
 
-1. **Fechar o contrato do Resumo integrado.** Criar uma camada pura que
-   consuma `ResumoFocusSemanal`, `LeituraCurva` e `LeituraConvergencia` e
-   devolva uma prioridade, um veredito, duas a quatro provas e as datas das
+1. **Fechar o contrato do Resumo integrado — concluído em 2026-08-27.** A
+   camada pura `resumo_integrado.py` consome `ResumoFocusSemanal`,
+   `LeituraCurva` e `LeituraConvergencia` e devolve uma prioridade, um
+   veredito, duas a quatro provas e as datas das
    fontes. Ela deve apenas orquestrar os resultados existentes; fórmulas de
-   Focus, curva e convergência continuam em seus motores de origem.
+   Focus, curva e convergência continuam em seus motores de origem. A regra
+   implementada prioriza convergência íntegra, revisão relevante do Focus,
+   curva atual, Focus atual e, por último, qualidade dos dados; limites e
+   condições de mudança também permanecem no contrato.
 2. **Consolidar a hierarquia da página única.** Organizar a jornada final em
    Resumo → Expectativas → Curva → Carteira. Incorporar ao Resumo somente
    sinais do Radar que acrescentem contexto, eliminando repetição sem apagar

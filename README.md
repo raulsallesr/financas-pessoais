@@ -8,6 +8,18 @@ curva de juros e cenários em entregas pequenas e publicáveis.
 O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
+## Etapa 4 em andamento
+
+O primeiro incremento do FocusLens BR `v2.0` fechou o contrato puro do Resumo
+integrado. `resumo_integrado.py` recebe as saídas já calculadas do Focus
+Semanal, da Curva Tesouro e de Focus × Curva; escolhe qual leitura deve liderar
+e devolve duas a quatro provas, datas por fonte, limites e condições de
+mudança. Nenhuma fórmula dos motores `v1.12`–`v1.14` foi duplicada.
+
+A página ainda preserva integralmente a composição visual da `v1.14`. O
+próximo incremento conectará esse contrato à primeira dobra e consolidará a
+jornada Resumo → Expectativas → Curva → Carteira.
+
 ## O que faz hoje (v1.14)
 
 - Reúne visão geral, Boletim Focus, Curva Tesouro, Focus × Curva, Radar

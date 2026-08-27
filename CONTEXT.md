@@ -1,7 +1,8 @@
 # CONTEXT — Finanças Pessoais
 
-- **Status**: Focus × Curva (`v1.14`) concluído em 2026-08-26. Próxima
-  entrega: FocusLens BR integrado (`v2.0`).
+- **Status**: Etapa 4 do FocusLens BR (`v2.0`) em andamento. O contrato puro
+  do Resumo integrado foi concluído em 2026-08-27; próxima entrega: consolidar
+  a hierarquia da página única sem alterar os motores das versões anteriores.
 - **Repositório**: https://github.com/raulsallesr/financas-pessoais (privado)
 - **Fonte oficial**: BACEN, Sistema de Expectativas de Mercado (Boletim
   Focus), API pública Olinda/OData
@@ -21,6 +22,10 @@
 - A branch de trabalho é `main`, sincronizada com `origin/main` em 2026-08-27.
 - O próximo marco é somente a **Etapa 4 — FocusLens BR integrado (`v2.0`)**.
   Não refazer as Etapas 1–3 nem abrir novos repositórios para elas.
+- O item 1 da Etapa 4 está concluído em `resumo_integrado.py`: o contrato
+  escolhe entre Focus × Curva, Expectativas, Curva e Qualidade dos dados,
+  preserva duas a quatro provas, datas por fonte, limites e condições de
+  mudança. O próximo incremento é somente o item 2, hierarquia da página.
 - Existe um stash anterior chamado
   `codex-pre-focuslens-cache-2026-08-26`. Ele deve ser preservado e não pode
   ser aplicado ou removido sem antes inspecionar seu conteúdo e confirmar a
@@ -33,8 +38,9 @@
 3. Leia `CLAUDE.md`, este `CONTEXT.md` e `PLANO_FOCUSLENS.md`, nessa ordem.
 4. Use a seção **“Próxima execução — Etapa 4”** do plano como checklist
    canônico; este handoff apenas fixa o ponto de retomada.
-5. Antes de editar, inspecione `pagina_home.py` e os contratos existentes
-   `ResumoFocusSemanal`, `LeituraCurva` e `LeituraConvergencia`.
+5. Antes de editar, inspecione `pagina_home.py`, `resumo_integrado.py` e os
+   testes do novo contrato. Reuse `montar_resumo_integrado`; não replique a
+   regra de prioridade dentro da UI.
 
 ### Decisões que não devem ser reabertas
 
@@ -58,11 +64,11 @@
 
 > Abra o projeto `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only` e
 > leia `CLAUDE.md`, `CONTEXT.md` e `PLANO_FOCUSLENS.md`. Continue a Etapa 4 —
-> FocusLens BR `v2.0` sem refazer as versões `v1.12`–`v1.14`. Siga, na ordem,
-> o checklist da seção “Próxima execução — Etapa 4”, preserve os motores e
-> contratos existentes, mantenha o visual aprovado e conclua o próximo
-> incremento com testes, validação visual, documentação, commit e push no git
-> próprio deste projeto.
+> FocusLens BR `v2.0` pelo item 2, sem refazer as versões `v1.12`–`v1.14` nem
+> o contrato `resumo_integrado.py` já concluído. Consolide a jornada Resumo →
+> Expectativas → Curva → Carteira, reuse o contrato puro na primeira dobra e
+> preserve o Radar até a migração estar coberta por testes e validação visual.
+> Conclua o incremento com documentação, commit e push no git próprio.
 
 ## Direção aprovada — FocusLens BR
 
@@ -136,6 +142,9 @@
     convergência, sem Streamlit.
   - `pagina_convergencia.py` — leitura dos dois caches públicos e composição
     visual do veredito, provas, mudanças e limites.
+  - `resumo_integrado.py` — orquestração pura dos três contratos públicos;
+    escolhe a leitura prioritária, limita a síntese a duas–quatro provas e
+    mantém datas, limites e condições sem refazer cálculos.
   - `pagina_home.py` — composição da experiência única;
     `app_financas.py` é apenas o entrypoint principal.
   - `ui_estilos.py` — tokens e CSS responsivo/acessível compartilhável.
@@ -459,6 +468,25 @@
     `pip check` e `git diff --check` limpos. O primeiro run dentro do sandbox
     encontrou apenas `WinError 5` nos diretórios temporários usados pelos
     testes de cache atômico, sem regressão funcional.
+- **Etapa 4 · incremento 1 (2026-08-27)** — contrato do Resumo integrado:
+  - `resumo_integrado.py` consome `ResumoFocusSemanal`, `LeituraCurva` e
+    `LeituraConvergencia` sem I/O, Streamlit ou nova fórmula. A prioridade é
+    determinística: convergência íntegra; revisão relevante do Focus; curva
+    atual; Focus atual; qualidade dos dados.
+  - A saída preserva veredito, duas a quatro provas sem cards de preenchimento,
+    datas separadas por fonte, limites e condições de mudança. Falha de uma
+    fonte mantém a leitura independente da outra; duas falhas não viram
+    síntese inventada.
+  - Sete testes novos cobrem regras de prioridade, degradação independente,
+    rastreabilidade das datas e composição sintética pelos três motores reais.
+    A interface permaneceu inalterada neste incremento; a integração visual é
+    o próximo item do plano.
+  - Gate final: 168 testes aprovados fora do sandbox; todos os módulos
+    compilados; `pip check` sem dependências quebradas; `git diff --check`
+    limpo. O primeiro run reproduziu apenas o `WinError 5` ambiental já
+    conhecido. A regressão visual real preservou título, Focus, Curva,
+    Convergência, skip link e movimento reduzido em 375, 768, 1024, 1440 e
+    844×390 px, sempre com `scrollWidth == innerWidth`.
 
 ## Fila priorizada
 
@@ -470,7 +498,7 @@ integração seguinte.
 | P0 | Entregue | Focus Semanal (`v1.12`) | Alto | Médio |
 | P1 | Entregue | Curva Tesouro (`v1.13`) | Muito alto | Alto |
 | P2 | Entregue | Focus × Curva (`v1.14`) | Muito alto | Alto |
-| P3 | Próxima | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
+| P3 | Em andamento (1/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
 | Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |
