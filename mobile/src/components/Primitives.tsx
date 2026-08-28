@@ -112,6 +112,55 @@ export function DemoPill() {
   return <DataModePill mode="demo" />;
 }
 
+export type PortfolioPresentationMode =
+  | "loading"
+  | "demo"
+  | "local"
+  | "unavailable"
+  | "error";
+
+export function PortfolioModePill({
+  mode,
+}: {
+  mode: PortfolioPresentationMode;
+}) {
+  if (mode === "local") {
+    return (
+      <View
+        accessibilityLabel="Carteira somente neste aparelho"
+        style={[styles.contextPill, styles.contextPillLocal]}
+      >
+        <View style={[styles.contextDot, styles.contextDotLocal]} />
+        <Text style={[styles.contextText, styles.contextTextLocal]}>
+          SÓ NO APARELHO
+        </Text>
+      </View>
+    );
+  }
+  if (mode === "error") {
+    return (
+      <View
+        accessibilityLabel="Cofre local bloqueado"
+        style={[styles.contextPill, styles.contextPillError]}
+      >
+        <View style={[styles.contextDot, styles.contextDotError]} />
+        <Text style={[styles.contextText, styles.contextTextError]}>
+          COFRE BLOQUEADO
+        </Text>
+      </View>
+    );
+  }
+  if (mode === "loading") {
+    return (
+      <View accessibilityLabel="Verificando carteira" style={styles.contextPill}>
+        <View style={styles.contextDot} />
+        <Text style={styles.contextText}>VERIFICANDO</Text>
+      </View>
+    );
+  }
+  return <DemoPill />;
+}
+
 export function DataModePill({ mode }: { mode: "demo" | "live" }) {
   const live = mode === "live";
   return (
@@ -226,5 +275,44 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: "800",
     letterSpacing: 0.7,
+  },
+  contextPill: {
+    alignItems: "center",
+    backgroundColor: colors.neutralSoft,
+    borderRadius: radius.pill,
+    flexDirection: "row",
+    gap: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+  },
+  contextPillLocal: {
+    backgroundColor: colors.primarySoft,
+  },
+  contextPillError: {
+    backgroundColor: colors.dangerSoft,
+  },
+  contextDot: {
+    backgroundColor: colors.neutral,
+    borderRadius: radius.pill,
+    height: 6,
+    width: 6,
+  },
+  contextDotLocal: {
+    backgroundColor: colors.primary,
+  },
+  contextDotError: {
+    backgroundColor: colors.danger,
+  },
+  contextText: {
+    color: colors.neutral,
+    fontSize: 10,
+    fontWeight: "800",
+    letterSpacing: 0.7,
+  },
+  contextTextLocal: {
+    color: colors.primaryDark,
+  },
+  contextTextError: {
+    color: colors.danger,
   },
 });

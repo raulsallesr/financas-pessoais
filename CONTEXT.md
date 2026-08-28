@@ -4,10 +4,13 @@
   A Etapa 5 móvel possui fundação React Native `v0.1` e contrato vivo `v1`
   concluídos em 2026-08-27. A configuração do development build foi concluída
   em 2026-08-28; os APKs `development` e `preview` foram gerados e instalados no
-  POCO X8 Pro. Quatro abas, snapshot, offline, rotação, paisagem e Voltar
-  passaram; TalkBack, texto ampliado e alvos de toque ainda aguardam evidência.
+  POCO X8 Pro com Android 16 (`BP2A.250605.031.A3`). Quatro abas, snapshot,
+  offline, rotação, paisagem e Voltar passaram; TalkBack, texto ampliado e alvos
+  de toque ainda aguardam evidência.
   O corte móvel `v0.4.0` já implementa editor, cofre local criptografado e
-  importação B3 sanitizada com prévia; o APK foi gerado e falta validá-lo no aparelho. O roadmap
+  importação B3 sanitizada com prévia; o APK foi instalado, BI-01 a BI-03 e
+  CL-02 a CL-10 foram aprovados no aparelho, mas o restante do ciclo físico
+  continua pendente. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
@@ -87,7 +90,9 @@
   do commit `60fa378`. Development e preview foram instalados no POCO X8 Pro;
   DB-01 a DB-05 e DB-07 a DB-09 estão aprovados; DB-06 é automatizado. O Metro LAN foi
   bloqueado pelo firewall corporativo, mas o preview reabriu e navegou em modo
-  avião. A versão do Android e DB-10 a DB-12 continuam pendentes.
+  avião. O aparelho usa Android 16 (`BP2A.250605.031.A3`); DB-10 a DB-12
+  continuam pendentes e foram pausados por decisão do Raul enquanto a utilidade
+  cotidiana do produto é refinada.
 - A Etapa 5B começou em 2026-08-28 com o corte móvel `v0.3.0`. O editor cria,
   edita e exclui posições; a primeira gravação substitui conscientemente a demo.
   `privatePortfolio.ts` define o contrato privado `v1`, `securePortfolioStorage.ts`
@@ -100,7 +105,14 @@
   ID. TypeScript, 20 testes, export web e bundle Android/Hermes com 633 módulos
   passaram. O preview EAS `67b97c57-ce20-4cb6-8c21-570c4742762e`, commit
   `9308f02` e fingerprint `a28c993ae571b5d58d7eea95f8fe6fc877c71023`
-  terminou `FINISHED`; falta instalar e validar no aparelho.
+  terminou `FINISHED`. O ciclo foi validado depois no preview `v0.4.0`: CL-02 a
+  CL-10 foram aprovados; CL-11 a CL-13 continuam pendentes.
+- Em 2026-08-28, o Raul interrompeu conscientemente o restante do checklist
+  físico porque o app ainda não despertava vontade de uso. O corte `v0.4.1`
+  inicia um refinamento de valor dentro da Etapa 5B: a Home passa a começar
+  pelo recorte pessoal, deixa explícita a cobertura real dos sinais, a Carteira
+  resume distribuição por classe e posições longas usam revelação progressiva.
+  Nenhum motor, contrato público `v1`, persistência ou item da Etapa 5C mudou.
 - Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
   Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
   piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
@@ -193,13 +205,15 @@
 
 ### Próximo incremento, sem ambiguidade
 
-- Entrega: **Etapa 5B.2 — validar carteira e importação B3 local `v0.4.0` em APK**.
-- Editor, contrato privado, cofre AES-GCM, leitor XLSX sanitizado e prévia de
-  substituição estão concluídos; instalar o `preview` no POCO X8 Pro e
-  validar o ciclo completo em modo avião.
-- Registrar a versão do Android e concluir TalkBack, texto ampliado e alvos de
-  toque. DB-10 a DB-12 permanecem abertos no documento de validação; DB-07 a
-  DB-09 já foram aprovados pelo Raul no aparelho.
+- Entrega: **Etapa 5B — avaliar o refinamento de utilidade `v0.4.1` em APK**.
+- A Home agora começa pela carteira, mostra concentração e declara quando os
+  sinais públicos não fornecem relação direta. A Carteira resume classes antes
+  das posições e mantém a lista longa sob demanda. O próximo ciclo é de uso e
+  crítica de produto, não de execução mecânica do checklist físico.
+- Evidência já fechada permanece válida: Android 16
+  (`BP2A.250605.031.A3`), BI-01 a BI-03 e CL-02 a CL-10 aprovados. BI-04 a
+  BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam pendentes, mas pausados até o
+  Raul considerar a experiência útil o suficiente para retomar os gates.
 - Não alterar os motores, o schema público `1` ou os três stashes. Histórico,
   favoritos, alertas explicáveis e E2E formam a Etapa 5C; autenticação, nuvem e
   Open Finance continuam posteriores.
@@ -221,14 +235,16 @@
 > `docs/VALIDACAO_DEVELOPMENT_BUILD.md`. A configuração
 > EAS/dev client já está pronta e validada; não a refaça. O projeto
 > `@raulsallesr/focuslens-br` está vinculado, e os APKs Android `development` e
-> `preview` anteriores já foram gerados e instalados no POCO X8 Pro. DB-01 a
-> DB-09 estão aprovados, com DB-06 automatizado. Instale e valide o novo preview
-> `v0.4.0`, registre a versão do Android, conclua DB-10 a DB-12 e preserve a rota
-> iOS. Valide a importação pelo roteiro dedicado sem enviar planilha ou valores
-> pelo chat e sem antecipar autenticação de cliente ou Open Finance. O build é
-> `c7695638-2f38-42a4-af07-92303f2a5ce0`, com APK e checklist em
-> `docs/VALIDACAO_IMPORTACAO_B3.md`. Rode os gates e faça commit/push somente no
-> git próprio do projeto.
+> `preview` anteriores já foram gerados e instalados no POCO X8 Pro com Android
+> 16 (`BP2A.250605.031.A3`). DB-01 a DB-09, BI-01 a BI-03 e CL-02 a CL-10 estão
+> aprovados, com DB-06 automatizado. Continue pelo refinamento de utilidade
+> `v0.4.1`: preserve a Home orientada ao recorte pessoal, a distribuição por
+> classe, a cobertura honesta dos sinais e a distinção entre carteira local e
+> demonstração. Os gates BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12 estão
+> pausados até nova decisão do Raul; não os marque como aprovados. Não envie
+> planilha ou valores pelo chat e não antecipe autenticação de cliente, Open
+> Finance, Etapa 5C ou Embedded. Rode os gates e faça commit/push somente no git
+> próprio do projeto.
 > O roadmap FocusLens Embedded já está aprovado e documentado, mas não antecipe
 > API, SDK, autenticação ou integração bancária durante esse incremento.
 
@@ -255,8 +271,9 @@
   o destino do produto; a fundação `v0.1` e o contrato vivo `v1` foram
   concluídos. A configuração nativa do development build foi concluída em
   2026-08-28; os primeiros APKs `development` e `preview` foram instalados e o
-  fluxo principal/offline foi aprovado. Acessibilidade física e o ciclo do
-  cofre/importação no preview `v0.4.0` continuam pendentes.
+  fluxo principal/offline foi aprovado. No `v0.4.0`, CL-02 a CL-10 e BI-01 a
+  BI-03 também foram aprovados. Acessibilidade e o restante da importação estão
+  pausados enquanto o corte `v0.4.1` prioriza utilidade percebida.
 - A direção institucional foi aprovada em 2026-08-27: o app pessoal será o
   cliente de referência e a futura camada **FocusLens Embedded** oferecerá API,
   receipt auditável, Exposure Adapter privado, SDK, Governance Studio e piloto
@@ -815,8 +832,8 @@
     encerrar e reabrir o preview em modo avião; DB-06 segue automatizado;
   - DB-07 a DB-09 aprovados depois da confirmação física de paisagem, safe areas,
     rotação e botão Voltar;
-  - pendência real: versão do Android e DB-10 a DB-12; a seção 13 permanece
-    aberta até o fechamento de acessibilidade.
+  - o aparelho usa Android 16 (`BP2A.250605.031.A3`); pendência real: DB-10 a
+    DB-12. A seção 13 permanece aberta até o fechamento de acessibilidade.
 - **Etapa 5B · carteira local segura `v0.3.0` (2026-08-28)** — implementação:
   - contrato privado `v1` separado do snapshot público, limitado a 100 posições
     e validado antes de leitura ou gravação;
@@ -833,7 +850,8 @@
     o primeiro Hermes no sandbox falhou com `spawn EPERM` e passou fora dele;
   - preview EAS `67b97c57-ce20-4cb6-8c21-570c4742762e` concluído para o commit
     `9308f02`, fingerprint `a28c993ae571b5d58d7eea95f8fe6fc877c71023`;
-  - pendência: instalação e validação física do ciclo completo do cofre.
+  - validação física posterior no `v0.4.0`: CL-02 a CL-10 aprovados; CL-11 a
+    CL-13 pendentes.
 - **Etapa 5B · importação B3 sanitizada `v0.4.0` (2026-08-28)** — implementação:
   - seletor nativo aceita somente XLSX de até 5 MB e cria cópia temporária no
     cache privado; a cópia é apagada depois da leitura e o original não é alterado;
@@ -853,7 +871,19 @@
   - preview EAS `c7695638-2f38-42a4-af07-92303f2a5ce0` concluído para o commit
     `c6bb875`, fingerprint `4df3790bd18465bb8a429b23f9814aabf1ac6dc8`,
     app `0.4.0`, build `4`; expira em 2026-09-11;
-  - pendência: instalar e validar cofre + importação pelo roteiro físico.
+  - validação física parcial: BI-01 a BI-03 aprovados no Android 16; BI-04 a
+    BI-13 pendentes.
+- **Etapa 5B · refinamento de utilidade `v0.4.1` (2026-08-28)** — implementação:
+  - Home reorganizada para começar pelo recorte da carteira, com quantidade de
+    posições/classes, concentração e cobertura real dos sinais;
+  - ausência de efeito no snapshot é mostrada como limite, sem inventar relação
+    por classe ou alterar o contrato público `v1`;
+  - Carteira resume distribuição por classe e mostra só as cinco maiores
+    posições inicialmente, com expansão explícita;
+  - Hoje deixou de depender de carrossel horizontal; selos e textos distinguem
+    corretamente carteira local, demonstração e cofre bloqueado;
+  - motores Python, snapshot público, cofre privado, importador e Etapa 5C não
+    foram alterados.
 
 ## Fila priorizada
 
@@ -868,8 +898,8 @@ integração seguinte.
 | P3 | Release candidate (5/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
-| P6 | Em andamento | Distribuição aprovada; fecha DB-10 a DB-12 | Alto | Alto |
-| P7 | Em andamento (`v0.4.0`) | APK pronto; falta validar cofre e importação B3 no aparelho | Muito alto | Alto |
+| P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
+| P7 | Em andamento (`v0.4.1`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
 | P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
@@ -889,9 +919,8 @@ integração seguinte.
   resolver ou aceitar formalmente as vulnerabilidades moderadas transitivas do
   toolchain Expo, além dos gates de segurança descritos na arquitetura móvel.
 - Os APKs internos anteriores foram instalados no POCO X8 Pro e expiram em
-  2026-09-11. O preview `v0.3.0` ainda não teve validação registrada e o
-  `v0.4.0` já foi gerado, mas precisa ser instalado; a versão do Android e os testes DB-10 a DB-12 ainda precisam
-  ser registrados;
+  2026-09-11. O preview `v0.4.0` foi instalado no Android 16 e aprovou BI-01 a
+  BI-03 e CL-02 a CL-10. Os testes restantes estão pausados, não aprovados;
   `adb`, Java e Android SDK não estão instalados nesta máquina.
 
 ## Conceitos relacionados

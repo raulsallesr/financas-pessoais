@@ -3,9 +3,13 @@
 **Status em 2026-08-28:** projeto EAS vinculado, APKs `development` e `preview`
 gerados e instalados em POCO X8 Pro. Quatro abas, snapshot empacotado e abertura
 offline, safe areas em paisagem, rotação e comportamento do botão Voltar foram
-aprovados. O preview `v0.4.0` com cofre/importação B3 também foi gerado e ainda
-precisa ser instalado. A versão do Android, TalkBack, texto ampliado e alvos de toque ainda
-precisam ser registrados.
+aprovados. O preview `v0.4.0` com cofre/importação B3 também foi gerado e
+instalado no POCO X8 Pro com Android 16 (`BP2A.250605.031.A3`). TalkBack,
+texto ampliado e alvos de toque ainda precisam ser registrados.
+
+**Pausa de produto:** DB-10 a DB-12 continuam pendentes, mas o Raul decidiu
+avaliar primeiro o refinamento de utilidade `v0.4.1`. A pausa não transforma
+nenhum item em aprovado nem invalida as evidências físicas já registradas.
 
 Este documento é a evidência operacional da seção 13 de
 `PLANO_FOCUSLENS.md`. Não marca o incremento como concluído enquanto o APK não
@@ -125,8 +129,8 @@ perfil e resultado da instalação.
 
 **Resultado em 2026-08-28:** development e preview instalados no POCO X8 Pro
 pela rota de link EAS. O preview substituiu o development build com a mesma
-assinatura e abriu o produto diretamente. A versão do Android ainda deve ser
-registrada.
+assinatura e abriu o produto diretamente. O aparelho usa Android 16, build
+`BP2A.250605.031.A3`.
 
 ## 7. Build interno para teste offline
 
@@ -150,8 +154,8 @@ POCO X8 Pro.
 commit `c6bb875`, fingerprint
 `4df3790bd18465bb8a429b23f9814aabf1ac6dc8`. O
 [APK direto](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk)
-expira em 2026-09-11 e aguarda instalação/validação pelos roteiros da carteira
-local e da importação B3.
+expira em 2026-09-11. Ele foi instalado no Android 16: CL-02 a CL-10 e BI-01 a
+BI-03 foram aprovados; os demais itens estão pendentes.
 
 Com o preview instalado:
 
@@ -174,7 +178,7 @@ navegáveis, sem carteira ou conexão de rede.
 | ID | Verificação | Estado | Evidência esperada |
 |---|---|---|---|
 | DB-01 | Development APK gerado | Aprovado | EAS `1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`, `FINISHED` |
-| DB-02 | APK instalado | Aprovado | development e preview no POCO X8 Pro; versão Android a registrar |
+| DB-02 | APK instalado | Aprovado | development e preview no POCO X8 Pro com Android 16 (`BP2A.250605.031.A3`) |
 | DB-03 | Hoje, Carteira, Cenários e Entenda | Aprovado | quatro abas abriram sem erro, inclusive offline |
 | DB-04 | Snapshot empacotado | Aprovado | `DADOS PÚBLICOS`, fotografia e fontes visíveis |
 | DB-05 | Abertura offline | Aprovado | preview reabriu e navegou em modo avião |
@@ -240,8 +244,9 @@ real.
 - `expo install --check`: dependências compatíveis;
 - Expo Doctor: `21/21` checks aprovados;
 - TypeScript: aprovado;
-- testes móveis: 25 aprovados, incluindo configuração EAS, snapshot empacotado,
-  fallback, proibição de carteira pública e importação B3 sanitizada;
+- testes móveis: 27 aprovados, incluindo configuração EAS, snapshot empacotado,
+  fallback, proibição de carteira pública, importação B3 sanitizada, distribuição
+  por classe e cobertura de sinais sem efeito inventado;
 - export Android/Hermes: aprovado com 640 módulos;
 - testes Python: 191 aprovados e `pip check` sem dependência quebrada;
 - EAS `development`, `preview` público e previews privados `v0.3.0`/`v0.4.0`:

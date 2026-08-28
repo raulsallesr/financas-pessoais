@@ -1,4 +1,6 @@
+import { useState } from "react";
 import {
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -13,16 +15,20 @@ import {
   DataModePill,
   Eyebrow,
   formatSnapshotDate,
+  PortfolioModePill,
+  PortfolioPresentationMode,
   SectionHeading,
   Surface,
 } from "../components/Primitives";
 import { TabKey } from "../components/BottomNav";
 import {
   ALL_CLASSES,
+  allocationByClass,
   availableClasses,
   ClassFilter,
   impactedAllocation,
   impactsForSignal,
+  signalCoverage,
   signalById,
 } from "../domain/insights";
 import { MarketSnapshot } from "../domain/types";
@@ -35,6 +41,7 @@ export function TodayScreen({
   classFilter,
   onClassFilter,
   onNavigate,
+  portfolioMode,
 }: {
   snapshot: MarketSnapshot;
   selectedSignalId: string;
@@ -42,12 +49,22 @@ export function TodayScreen({
   classFilter: ClassFilter;
   onClassFilter: (filter: ClassFilter) => void;
   onNavigate: (tab: TabKey) => void;
+  portfolioMode: PortfolioPresentationMode;
 }) {
+  const [showAllSignals, setShowAllSignals] = useState(false);
   const { width } = useWindowDimensions();
   const isWide = width >= 720;
   const selectedSignal = signalById(snapshot, selectedSignalId);
   const impacts = impactsForSignal(snapshot, selectedSignalId, classFilter);
   const allocation = impactedAllocation(impacts);
+  const classAllocation = allocationByClass(snapshot);
+  const coverage = signalCoverage(snapshot);
+  const visibleSignals = showAllSignals
+    ? snapshot.signals
+    : snapshot.signals.slice(0, 2);
+  const isLocalPortfolio = portfolioMode === "local";
+  const portfolioKind = isLocalPortfolio ? "carteira local" : "demonstração";
+  const selectedSignalHasEffects = Object.keys(selectedSignal.effects).length > 0;
   const filters = [ALL_CLASSES, ...availableClasses(snapshot)] as const;
   const availableSources = snapshot.sources
     .filter((source) => source.available)
@@ -103,25 +120,92 @@ export function TodayScreen({
         </Text>
       </View>
 
+      <Surface style={styles.portfolioPulse}>
+        <View style={styles.portfolioPulseTopline}>
+          <Eyebrow>Seu recorte</Eyebrow>
+          <PortfolioModePill mode={portfolioMode} />
+        </View>
+        <Text style={styles.portfolioPulseTitle}>
+          {snapshot.positions.length
+            ? `${snapshot.positions.length} ${snapshot.positions.length === 1 ? "posição" : "posições"} em ${classAllocation.length} ${classAllocation.length === 1 ? "classe" : "classes"}`
+            : "Sua carteira ainda não tem posições"}
+        </Text>
+        {snapshot.positions.length ? (
+          <View style={styles.portfolioMetrics}>
+            <View style={styles.portfolioMetric}>
+              <Text style={styles.portfolioMetricValue}>
+                {classAllocation[0]?.allocationPercent.toFixed(0) ?? "0"}%
+              </Text>
+              <Text style={styles.portfolioMetricLabel}>na maior classe</Text>
+              <Text numberOfLines={2} style={styles.portfolioMetricMeta}>
+                {classAllocation[0]?.assetClass ?? "Sem classe"}
+              </Text>
+            </View>
+            <View style={styles.portfolioMetric}>
+              <Text style={styles.portfolioMetricValue}>
+                {coverage.positionCount}
+              </Text>
+              <Text style={styles.portfolioMetricLabel}>
+                {coverage.positionCount === 1 ? "posição coberta" : "posições cobertas"}
+              </Text>
+              <Text style={styles.portfolioMetricMeta}>
+                {coverage.allocationPercent.toFixed(0)}% com relação direta
+              </Text>
+            </View>
+          </View>
+        ) : null}
+        <Text style={styles.portfolioPulseSupport}>
+          {coverage.positionCount
+            ? `${coverage.allocationPercent.toFixed(0)}% da ${portfolioKind} possui uma relação direta já classificada pelos sinais públicos atuais.`
+            : snapshot.positions.length
+              ? `Os sinais atuais não têm relação direta classificada com a ${portfolioKind}. O FocusLens não força um impacto quando o motor não fornece esse elo.`
+              : "Monte uma carteira local para enxergar concentração, classes e relações com os sinais públicos."}
+        </Text>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => onNavigate("portfolio")}
+          style={({ pressed }) => [
+            styles.portfolioAction,
+            pressed && styles.pressed,
+          ]}
+        >
+          <Text style={styles.portfolioActionText}>
+            {isLocalPortfolio ? "Revisar carteira" : "Usar minha carteira"}
+          </Text>
+          <Text accessibilityElementsHidden style={styles.portfolioActionArrow}>
+            →
+          </Text>
+        </Pressable>
+      </Surface>
+
       <SectionHeading
-        title="O mercado está dizendo"
-        support="Toque em um sinal para revelar onde ele encosta na carteira."
+        title="O que mudou"
+        support="Comece pelos sinais públicos; abra somente o detalhe que importa."
       />
-      <ScrollView
-        contentContainerStyle={styles.signalRail}
-        decelerationRate="fast"
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      >
-        {snapshot.signals.map((signal) => (
-          <MarketSignalCard
-            key={signal.id}
-            onPress={() => onSelectSignal(signal.id)}
-            selected={signal.id === selectedSignalId}
-            signal={signal}
-          />
+      <View style={[styles.signalGrid, isWide && styles.signalGridWide]}>
+        {visibleSignals.map((signal) => (
+          <View key={signal.id} style={isWide ? styles.signalGridItemWide : undefined}>
+            <MarketSignalCard
+              onPress={() => onSelectSignal(signal.id)}
+              selected={signal.id === selectedSignalId}
+              signal={signal}
+            />
+          </View>
         ))}
-      </ScrollView>
+      </View>
+      {snapshot.signals.length > 2 ? (
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => setShowAllSignals((current) => !current)}
+          style={({ pressed }) => [styles.signalToggle, pressed && styles.pressed]}
+        >
+          <Text style={styles.signalToggleText}>
+            {showAllSignals
+              ? "Recolher sinais"
+              : `Ver mais ${snapshot.signals.length - 2} sinais`}
+          </Text>
+        </Pressable>
+      ) : null}
 
       <Surface style={styles.signalDetail}>
         <Eyebrow>Leitura selecionada</Eyebrow>
@@ -138,11 +222,7 @@ export function TodayScreen({
         title="Como isso toca sua carteira"
         support="O filtro cruza a classe de cada posição com o sinal selecionado."
       />
-      <ScrollView
-        contentContainerStyle={styles.filterRail}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      >
+      <View style={styles.filterGrid}>
         {filters.map((filter) => {
           const selected = classFilter === filter;
           return (
@@ -169,7 +249,7 @@ export function TodayScreen({
             </Pressable>
           );
         })}
-      </ScrollView>
+      </View>
 
       <View style={styles.impactSummary}>
         <View>
@@ -180,7 +260,9 @@ export function TodayScreen({
           <Text style={styles.impactValue}>
             {allocation.toFixed(0)}%
           </Text>
-          <Text style={styles.impactLabel}>da carteira demo</Text>
+          <Text style={styles.impactLabel}>
+            {isLocalPortfolio ? "da carteira local" : "da demonstração"}
+          </Text>
         </View>
       </View>
 
@@ -197,9 +279,15 @@ export function TodayScreen({
         </View>
       ) : (
         <Surface style={styles.emptyState}>
-          <Text style={styles.emptyTitle}>Nenhuma posição neste recorte</Text>
+          <Text style={styles.emptyTitle}>
+            {selectedSignalHasEffects
+              ? "Nenhuma posição neste recorte"
+              : "Sem relação direta classificada"}
+          </Text>
           <Text style={styles.emptyText}>
-            Troque o filtro ou selecione outro sinal para continuar explorando.
+            {selectedSignalHasEffects
+              ? "Troque o filtro ou selecione outro sinal para continuar explorando."
+              : "Este sinal continua útil como contexto de mercado, mas o motor não fornece um elo direto com classes da carteira. Nenhum impacto foi inventado."}
           </Text>
         </Surface>
       )}
@@ -224,7 +312,7 @@ export function TodayScreen({
 
       <Text style={styles.guardrail}>
         {snapshot.mode === "live" ? "Mercado vindo de dados públicos; " : "Mercado em demonstração; "}
-        carteira sintética local. As relações mostram sensibilidade, não
+        {isLocalPortfolio ? "carteira privada somente neste aparelho" : "carteira sintética local"}. As relações mostram sensibilidade, não
         recomendação, promessa ou retorno futuro.
       </Text>
     </ScrollView>
@@ -234,6 +322,7 @@ export function TodayScreen({
 const styles = StyleSheet.create({
   content: {
     alignSelf: "center",
+    boxSizing: "border-box",
     gap: spacing.lg,
     maxWidth: 820,
     paddingBottom: spacing.xl,
@@ -275,7 +364,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.goldSoft,
     borderColor: "#EBCB91",
     gap: spacing.xs,
-    shadowOpacity: 0,
+    ...Platform.select({
+      web: { boxShadow: "none" },
+      default: { elevation: 0, shadowOpacity: 0 },
+    }),
   },
   fallbackText: {
     color: colors.textMuted,
@@ -340,9 +432,97 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 17,
   },
-  signalRail: {
+  portfolioPulse: {
+    gap: spacing.md,
+  },
+  portfolioPulseTopline: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: spacing.sm,
-    paddingRight: spacing.md,
+    justifyContent: "space-between",
+  },
+  portfolioPulseTitle: {
+    color: colors.text,
+    fontSize: 20,
+    fontWeight: "900",
+    letterSpacing: -0.4,
+    lineHeight: 26,
+  },
+  portfolioMetrics: {
+    flexDirection: "row",
+    gap: spacing.sm,
+  },
+  portfolioMetric: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radius.sm,
+    flex: 1,
+    gap: 2,
+    minHeight: 104,
+    padding: spacing.sm,
+  },
+  portfolioMetricValue: {
+    color: colors.primaryDark,
+    fontSize: 25,
+    fontVariant: ["tabular-nums"],
+    fontWeight: "900",
+  },
+  portfolioMetricLabel: {
+    color: colors.text,
+    fontSize: 11,
+    fontWeight: "800",
+  },
+  portfolioMetricMeta: {
+    color: colors.textMuted,
+    fontSize: 10,
+    lineHeight: 15,
+  },
+  portfolioPulseSupport: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  portfolioAction: {
+    alignItems: "center",
+    alignSelf: "flex-start",
+    flexDirection: "row",
+    gap: spacing.xs,
+    justifyContent: "center",
+    minHeight: 48,
+    paddingHorizontal: spacing.xs,
+  },
+  portfolioActionText: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: "900",
+  },
+  portfolioActionArrow: {
+    color: colors.primary,
+    fontSize: 18,
+  },
+  signalGrid: {
+    gap: spacing.sm,
+  },
+  signalGridWide: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+  },
+  signalGridItemWide: {
+    width: "49%",
+  },
+  signalToggle: {
+    alignItems: "center",
+    borderColor: colors.border,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 48,
+    paddingHorizontal: spacing.md,
+  },
+  signalToggleText: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: "800",
   },
   signalDetail: {
     gap: spacing.xs,
@@ -364,9 +544,10 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     marginTop: spacing.xxs,
   },
-  filterRail: {
+  filterGrid: {
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: spacing.xs,
-    paddingRight: spacing.md,
   },
   filterChip: {
     alignItems: "center",

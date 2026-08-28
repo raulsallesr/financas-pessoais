@@ -25,9 +25,9 @@ ao repositório ou aparecer em captura de tela.
 
 | ID | Teste | Resultado esperado | Estado |
 |---|---|---|---|
-| BI-01 | Instalar/atualizar o `v0.4.0` | App abre e preserva as quatro abas | Pendente |
-| BI-02 | Carteira → Escolher planilha XLSX | Seletor nativo abre com feedback de leitura | Pendente |
-| BI-03 | Cancelar o seletor | Carteira e eventual prévia anterior permanecem intactas | Pendente |
+| BI-01 | Instalar/atualizar o `v0.4.0` | App abre e preserva as quatro abas | Aprovado |
+| BI-02 | Carteira → Escolher planilha XLSX | Seletor nativo abre com feedback de leitura | Aprovado |
+| BI-03 | Cancelar o seletor | Carteira e eventual prévia anterior permanecem intactas | Aprovado |
 | BI-04 | Escolher exportação B3 válida | Prévia mostra posições, total, abas e exclusões; nada foi salvo | Pendente |
 | BI-05 | Tocar “Ver todas” e “Recolher” | Lista expande/recolhe sem travar ou perder a prévia | Pendente |
 | BI-06 | Tocar “Descartar prévia” | Prévia some e carteira anterior permanece | Pendente |
@@ -44,6 +44,16 @@ Build: commit `c6bb875`, fingerprint
 2026-09-11. Nenhuma variável `Plain text` ou `Sensitive` foi configurada no
 ambiente EAS do preview.
 
+**Evidência física parcial em 2026-08-28:** no POCO X8 Pro com Android 16
+(`BP2A.250605.031.A3`), o Raul confirmou que o `v0.4.0` abriu as quatro abas,
+o seletor XLSX foi aberto e o cancelamento preservou a carteira. Isso aprova
+BI-01 a BI-03; os demais itens continuam pendentes.
+
+**Pausa de produto em 2026-08-28:** por decisão explícita do Raul, BI-04 a
+BI-13 serão retomados somente depois da avaliação de utilidade do preview
+`v0.4.1`. Os três itens aprovados permanecem como evidência histórica; nenhum
+item pendente deve ser inferido como aprovado.
+
 ## O que relatar ao fechar o gate
 
 Envie apenas:
@@ -58,7 +68,8 @@ captura com valores visíveis.
 
 ## Gate de conclusão
 
-A Etapa 5B.2 só muda para concluída quando o APK `v0.4.0` estiver registrado e
+A Etapa 5B.2 só muda para concluída quando um APK compatível com a importação
+B3 estiver registrado e
 BI-01 a BI-13 estiverem aprovados ou justificados. Falha de leitura, descarte,
 confirmação, persistência offline ou preservação da carteira bloqueia o avanço
 para a Etapa 5C.

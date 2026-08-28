@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.4`
+## Estado do corte `mobile v0.4.1`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -49,6 +49,8 @@ exibida, porque não há cofre nativo equivalente nessa bancada.
 O domínio TypeScript faz apenas operações locais necessárias à experiência:
 
 - soma e peso da carteira ativa (demo ou privada);
+- agrupamento e peso por classe, sem classificação financeira nova;
+- cobertura dos sinais calculada apenas pela presença dos `effects` recebidos;
 - filtro de posições por classe;
 - junção entre o efeito já declarado no snapshot e as posições relacionadas;
 - sensibilidade educacional discreta a choques de juros.
@@ -56,6 +58,21 @@ O domínio TypeScript faz apenas operações locais necessárias à experiência
 A sensibilidade móvel é uma demonstração própria e está rotulada como tal. Ela
 não substitui `curva_cenarios.py`, não calcula preço ou retorno e não entra nos
 motores aprovados da `v2.0`.
+
+### Camada de utilidade `v0.4.1`
+
+O refinamento reorganiza somente a apresentação e cálculos locais derivados do
+documento já carregado. Hoje começa pela concentração da carteira e pela
+cobertura efetiva dos sinais; Carteira mostra distribuição por classe antes das
+posições e expande listas longas sob demanda. Sinais e filtros não dependem mais
+de gesto horizontal como interação principal.
+
+`allocationByClass` apenas soma valores por `AssetClass`. `signalCoverage`
+considera coberta uma posição somente quando algum sinal recebido contém um
+efeito não vazio para a classe. Um mapa `effects` vazio produz cobertura zero e
+uma mensagem de limite; nunca dispara inferência, remapeamento ou efeito criado
+no TypeScript. Motores Python, snapshot público `v1`, cofre privado e importador
+B3 permanecem idênticos.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -185,18 +202,20 @@ build atual.
 1. **concluído:** snapshot JSON público e versionado a partir dos motores
    Python, sem carteira, com schema e teste de compatibilidade;
 2. **concluído:** provider somente leitura com fallback local explícito;
-3. **em andamento:** configuração EAS/dev client, safe areas, rotação,
+3. **pausado após evidência parcial:** configuração EAS/dev client, safe areas, rotação,
    identificadores, splash e perfis internos concluída; APKs Android
    `development` e `preview` gerados e instalados no POCO X8 Pro, com fluxo
    principal/offline aprovado, acessibilidade física pendente e rota iOS em
    `VALIDACAO_DEVELOPMENT_BUILD.md`;
-4. **implementado; validação física pendente:** carteira local editável e
-   criptografada, sem nuvem por padrão;
-5. **implementado; validação física pendente:** importação B3 sanitizada para o
-   mesmo contrato privado;
-6. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
-7. adicionar testes de componentes e E2E Android/iOS;
-8. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+4. **implementado; CL-02 a CL-10 aprovados:** carteira local editável e
+   criptografada, sem nuvem por padrão; acessibilidade física pendente;
+5. **implementado; BI-01 a BI-03 aprovados:** importação B3 sanitizada para o
+   mesmo contrato privado; restante do ciclo físico pendente;
+6. **implementado localmente em `v0.4.1`:** recorte pessoal, distribuição por
+   classe, cobertura honesta e revelação progressiva; preview pendente;
+7. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
+8. adicionar testes de componentes e E2E Android/iOS;
+9. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 
@@ -226,8 +245,8 @@ toolchain, inclusive do Expo.
 - development e preview foram instalados no POCO X8 Pro; quatro abas, snapshot
   e abertura em modo avião foram aprovados;
 - rotação, safe areas em paisagem e botão Voltar foram aprovados no POCO X8
-  Pro; versão do Android, TalkBack, texto ampliado e alvos de toque permanecem
-  pendentes;
+  Pro com Android 16 (`BP2A.250605.031.A3`); TalkBack, texto ampliado e alvos de
+  toque permanecem pendentes e pausados;
 - a evidência operacional está em `VALIDACAO_DEVELOPMENT_BUILD.md`.
 
 ### Armazenamento nativo preparado em 2026-08-28
@@ -243,7 +262,7 @@ toolchain, inclusive do Expo.
 - a bancada web continua explicitamente em demonstração;
 - TypeScript, 20 testes, export web e bundle Android/Hermes com 633 módulos
   passaram; o preview nativo `67b97c57-ce20-4cb6-8c21-570c4742762e` foi gerado
-  para o commit `9308f02` e aguarda instalação no aparelho.
+  para o commit `9308f02`. CL-02 a CL-10 foram depois aprovados no `v0.4.0`.
 - o gate físico do cofre está em `VALIDACAO_CARTEIRA_LOCAL.md`.
 
 ### Importação B3 nativa preparada em 2026-08-28
@@ -256,5 +275,6 @@ toolchain, inclusive do Expo.
   completa mantém 11 moderadas transitivas do toolchain, sem alta ou crítica;
 - o preview `c7695638-2f38-42a4-af07-92303f2a5ce0`, commit `c6bb875` e
   fingerprint `4df3790bd18465bb8a429b23f9814aabf1ac6dc8` terminou `FINISHED`;
-- o APK `v0.4.0`, build `4`, expira em 2026-09-11 e aguarda BI-01 a BI-13 em
+- o APK `v0.4.0`, build `4`, expira em 2026-09-11; BI-01 a BI-03 foram
+  aprovados e BI-04 a BI-13 continuam pendentes em
   `VALIDACAO_IMPORTACAO_B3.md`.

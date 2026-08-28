@@ -643,10 +643,11 @@ DB-01 a DB-05 e DB-07 a DB-09 estão aprovados no POCO X8 Pro; DB-06 permanece c
 testes automatizados. O development build foi instalado, mas a conexão LAN com
 o Metro foi bloqueada pelo firewall corporativo `BlockInbound`; o preview foi
 instalado em seguida e aprovou quatro abas, snapshot e reabertura em modo avião.
-A versão do Android ainda deve ser registrada.
+O aparelho usa Android 16 (`BP2A.250605.031.A3`).
 
 Completar DB-10 a DB-12 em `docs/VALIDACAO_DEVELOPMENT_BUILD.md`: TalkBack,
-texto ampliado e alvos de toque.
+texto ampliado e alvos de toque. Esses gates foram pausados por decisão do Raul
+enquanto a utilidade cotidiana do produto é refinada no `v0.4.1`.
 Não marcar esta seção como concluída só porque o fluxo principal e o offline
 passaram; a evidência de acessibilidade continua obrigatória.
 
@@ -749,7 +750,7 @@ próprias, sem conta, backend ou nuvem e sem ampliar o snapshot público `v1`.
 
 ### Estado da execução em 2026-08-28
 
-**Implementação, gates locais e novo APK concluídos; instalação pendente.** O
+**Implementação e gates locais concluídos; ciclo funcional aprovado.** O
 corte móvel foi elevado a `v0.3.0`. `expo-crypto`, `expo-file-system` e
 `expo-secure-store` estão nas versões recomendadas para o Expo 57. O contrato
 privado aceita até 100 posições, valida identificadores, classes, nomes e valores
@@ -765,8 +766,9 @@ Android/Hermes com 633 módulos. A primeira tentativa do Hermes dentro do sandbo
 falhou com `spawn EPERM`; a repetição fora dele passou sem mudança de código.
 O preview EAS `67b97c57-ce20-4cb6-8c21-570c4742762e`, associado ao commit
 `9308f02` e fingerprint `a28c993ae571b5d58d7eea95f8fe6fc877c71023`,
-terminou com status `FINISHED`. O próximo gate é instalar esse APK e testar
-criar, reabrir, editar, excluir, ocultar e apagar a carteira no POCO X8 Pro.
+terminou com status `FINISHED`. O ciclo foi executado no preview `v0.4.0` no
+POCO X8 Pro: CL-02 a CL-10 foram aprovados; CL-11 a CL-13 permanecem pendentes
+e pausados.
 O roteiro e a matriz de evidência estão em
 `docs/VALIDACAO_CARTEIRA_LOCAL.md`.
 
@@ -811,7 +813,7 @@ snapshot público `v1`.
 ### Estado da execução em 2026-08-28
 
 **Implementação, gates locais e preview concluídos; validação física
-pendente.** O app foi elevado a `v0.4.0`, Android `versionCode 4` e iOS
+parcial.** O app foi elevado a `v0.4.0`, Android `versionCode 4` e iOS
 `buildNumber 4`. `expo-document-picker ~57.0.1` e `fflate 0.8.3` foram
 adicionados sem alterar motores Python ou o contrato público.
 
@@ -831,4 +833,46 @@ O preview EAS
 terminou `FINISHED` para o commit `c6bb875`, fingerprint
 `4df3790bd18465bb8a429b23f9814aabf1ac6dc8`, app `0.4.0` e build `4`. O
 [APK interno](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk)
-expira em 2026-09-11. A instalação e BI-01 a BI-13 permanecem pendentes.
+expira em 2026-09-11. No Android 16 (`BP2A.250605.031.A3`), BI-01 a BI-03
+foram aprovados. BI-04 a BI-13 permanecem pendentes e pausados.
+
+## 17. Refinamento de utilidade dentro da Etapa 5B — `v0.4.1`
+
+### Decisão de produto em 2026-08-28
+
+Depois de aprovar o ciclo funcional do cofre e o início do importador, o Raul
+interrompeu os checklists restantes: o app ainda parecia uma demonstração e não
+despertava vontade de uso. A prioridade passa temporariamente de validar mais
+casos para tornar o valor cotidiano visível. Isso não fecha os gates físicos e
+não antecipa a Etapa 5C.
+
+### Escopo fechado
+
+1. começar a Home pelo recorte da carteira, com posições, classes e maior
+   concentração;
+2. mostrar a cobertura que os sinais realmente possuem, declarando ausência de
+   relação quando `effects` vier vazio;
+3. resumir distribuição por classe antes da lista de posições;
+4. manter sinais e posições longas sob revelação progressiva, sem carrossel
+   horizontal como interação principal;
+5. distinguir carteira local, demonstração, carregamento e cofre bloqueado em
+   todas as telas que usam posições;
+6. preservar a identidade visual clara já aprovada e os alvos mínimos de 48 px.
+
+### Fora de escopo
+
+- alterar qualquer motor Python ou fórmula financeira;
+- ampliar ou reinterpretar o snapshot público `v1`;
+- mudar cofre, persistência, importador B3 ou dependências nativas;
+- implementar histórico, favoritos, alertas, E2E ou outro item da Etapa 5C;
+- iniciar autenticação, Open Finance ou FocusLens Embedded.
+
+### Estado da execução
+
+**Implementado localmente.** O app foi elevado a `v0.4.1`, Android
+`versionCode 5` e iOS `buildNumber 5`. A camada de apresentação ganhou resumo
+por classe e cobertura de sinais calculados somente a partir dos contratos já
+carregados. TypeScript, 27 testes móveis e export Android/Hermes com 640 módulos
+passaram. O próximo gate é gerar o preview e o Raul avaliar se o corte deixou de
+parecer demo; BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam
+explicitamente pendentes.

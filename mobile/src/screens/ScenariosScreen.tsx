@@ -1,4 +1,5 @@
 import {
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -8,8 +9,9 @@ import {
 
 import { ImpactCard } from "../components/ImpactCard";
 import {
-  DemoPill,
   Eyebrow,
+  PortfolioModePill,
+  PortfolioPresentationMode,
   SectionHeading,
   Surface,
 } from "../components/Primitives";
@@ -30,13 +32,16 @@ export function ScenariosScreen({
   snapshot,
   shockBps,
   onShockChange,
+  portfolioMode,
 }: {
   snapshot: MarketSnapshot;
   shockBps: number;
   onShockChange: (value: number) => void;
+  portfolioMode: PortfolioPresentationMode;
 }) {
   const scenario = buildRateScenario(snapshot, shockBps);
   const allocation = impactedAllocation(scenario.impacts);
+  const isLocalPortfolio = portfolioMode === "local";
 
   return (
     <ScrollView
@@ -50,7 +55,7 @@ export function ScenariosScreen({
             Cenários
           </Text>
         </View>
-        <DemoPill />
+        <PortfolioModePill mode={portfolioMode} />
       </View>
 
       <View style={styles.scenarioHero}>
@@ -102,7 +107,9 @@ export function ScenariosScreen({
         </Surface>
         <Surface style={styles.statCard}>
           <Text style={styles.statValue}>{allocation.toFixed(0)}%</Text>
-          <Text style={styles.statLabel}>da carteira demo</Text>
+          <Text style={styles.statLabel}>
+            {isLocalPortfolio ? "da carteira local" : "da demonstração"}
+          </Text>
         </Surface>
       </View>
 
@@ -147,6 +154,7 @@ export function ScenariosScreen({
 const styles = StyleSheet.create({
   content: {
     alignSelf: "center",
+    boxSizing: "border-box",
     gap: spacing.lg,
     maxWidth: 820,
     paddingBottom: spacing.xl,
@@ -261,7 +269,14 @@ const styles = StyleSheet.create({
     lineHeight: 17,
   },
   statsRow: { flexDirection: "row", gap: spacing.sm },
-  statCard: { flex: 1, gap: 2, shadowOpacity: 0 },
+  statCard: {
+    flex: 1,
+    gap: 2,
+    ...Platform.select({
+      web: { boxShadow: "none" },
+      default: { elevation: 0, shadowOpacity: 0 },
+    }),
+  },
   statValue: {
     color: colors.primaryDark,
     fontSize: 25,

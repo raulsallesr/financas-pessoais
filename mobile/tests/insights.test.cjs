@@ -3,11 +3,13 @@ const test = require("node:test");
 
 const {
   ALL_CLASSES,
+  allocationByClass,
   availableClasses,
   buildRateScenario,
   impactedAllocation,
   impactsForSignal,
   portfolioTotal,
+  signalCoverage,
 } = require("../.test-dist/domain/insights.js");
 const { demoSnapshot } = require("../.test-dist/data/demoSnapshot.js");
 
@@ -15,6 +17,34 @@ test("resume a carteira sintética sem perder classes", () => {
   assert.equal(portfolioTotal(demoSnapshot), 72_500);
   assert.equal(demoSnapshot.positions.length, 5);
   assert.equal(availableClasses(demoSnapshot).length, 5);
+});
+
+test("resume alocação por classe em ordem de peso", () => {
+  const allocation = allocationByClass(demoSnapshot);
+  assert.equal(allocation.length, 5);
+  assert.equal(allocation[0].assetClass, "Renda fixa pós-fixada");
+  assert.equal(allocation[0].positionCount, 1);
+  assert.ok(Math.abs(allocation[0].allocationPercent - 38.6206) < 0.001);
+  assert.ok(
+    Math.abs(
+      allocation.reduce((total, item) => total + item.allocationPercent, 0) - 100,
+    ) < 0.001,
+  );
+});
+
+test("mede cobertura sem inventar efeito ausente", () => {
+  const coverage = signalCoverage(demoSnapshot);
+  assert.equal(coverage.positionCount, 5);
+  assert.ok(Math.abs(coverage.allocationPercent - 100) < 0.001);
+
+  const noEffects = {
+    ...demoSnapshot,
+    signals: demoSnapshot.signals.map((signal) => ({ ...signal, effects: {} })),
+  };
+  assert.deepEqual(signalCoverage(noEffects), {
+    allocationPercent: 0,
+    positionCount: 0,
+  });
 });
 
 test("cruza o sinal da curva somente com posições relacionadas", () => {

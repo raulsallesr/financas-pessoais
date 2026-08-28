@@ -158,6 +158,7 @@ export default function App() {
       return (
         <ScenariosScreen
           onShockChange={setShockBps}
+          portfolioMode={portfolioState.kind}
           shockBps={shockBps}
           snapshot={effectiveSnapshot}
         />
@@ -172,6 +173,7 @@ export default function App() {
         onClassFilter={setClassFilter}
         onNavigate={setActiveTab}
         onSelectSignal={setSelectedSignalId}
+        portfolioMode={portfolioState.kind}
         selectedSignalId={selectedSignalId}
         snapshot={effectiveSnapshot}
       />

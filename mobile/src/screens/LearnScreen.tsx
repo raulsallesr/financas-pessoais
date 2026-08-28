@@ -1,6 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
-import { DemoPill, Eyebrow, SectionHeading, Surface } from "../components/Primitives";
+import { Eyebrow, SectionHeading, Surface } from "../components/Primitives";
 import { colors, radius, spacing } from "../theme";
 
 const steps = [
@@ -18,7 +18,6 @@ export function LearnScreen() {
           <Eyebrow>Sem economês</Eyebrow>
           <Text accessibilityRole="header" style={styles.title}>Entenda</Text>
         </View>
-        <DemoPill />
       </View>
       <View style={styles.hero}>
         <Eyebrow inverse>A lógica do FocusLens</Eyebrow>
@@ -74,7 +73,7 @@ export function LearnScreen() {
       <Surface style={styles.limitCard}>
         {[
           "Não conecta conta bancária nem corretora.",
-          "Não guarda dados pessoais nem uma carteira real.",
+          "Não envia a carteira para nuvem; o cofre privado fica no aparelho.",
           "Não recomenda compra, venda ou alocação.",
           "Não estima retorno, probabilidade ou preço-alvo.",
         ].map((item) => (
@@ -89,7 +88,7 @@ export function LearnScreen() {
 }
 
 const styles = StyleSheet.create({
-  content: { alignSelf: "center", gap: spacing.lg, maxWidth: 820, paddingBottom: spacing.xl, paddingHorizontal: spacing.md, paddingTop: spacing.md, width: "100%" },
+  content: { alignSelf: "center", boxSizing: "border-box", gap: spacing.lg, maxWidth: 820, paddingBottom: spacing.xl, paddingHorizontal: spacing.md, paddingTop: spacing.md, width: "100%" },
   headerRow: {
     alignItems: "center",
     flexDirection: "row",

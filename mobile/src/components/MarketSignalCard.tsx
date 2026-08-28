@@ -15,7 +15,7 @@ export function MarketSignalCard({
 }) {
   return (
     <Pressable
-      accessibilityHint="Mostra o efeito deste sinal na carteira de demonstração"
+      accessibilityHint="Abre a evidência e as relações disponíveis para este sinal"
       accessibilityLabel={`${signal.label}: ${signal.value}. ${signal.headline}`}
       accessibilityRole="button"
       accessibilityState={{ selected }}
@@ -52,9 +52,8 @@ const styles = StyleSheet.create({
     borderRadius: radius.md,
     borderWidth: 1,
     gap: spacing.xxs,
-    minHeight: 194,
+    minHeight: 158,
     padding: spacing.md,
-    width: 248,
   },
   cardSelected: {
     backgroundColor: "#F7FBFA",
@@ -77,11 +76,11 @@ const styles = StyleSheet.create({
   },
   value: {
     color: colors.text,
-    fontSize: 29,
+    fontSize: 25,
     fontVariant: ["tabular-nums"],
     fontWeight: "800",
     letterSpacing: -0.8,
-    marginTop: spacing.xs,
+    marginTop: spacing.xxs,
   },
   change: {
     color: colors.primary,
@@ -90,10 +89,10 @@ const styles = StyleSheet.create({
   },
   headline: {
     color: colors.text,
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: "700",
-    lineHeight: 20,
-    marginTop: spacing.sm,
+    lineHeight: 19,
+    marginTop: spacing.xs,
   },
   source: {
     color: colors.textMuted,

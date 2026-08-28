@@ -10,6 +10,18 @@ import {
 export const ALL_CLASSES = "Todos" as const;
 export type ClassFilter = typeof ALL_CLASSES | AssetClass;
 
+export type ClassAllocation = {
+  assetClass: AssetClass;
+  amount: number;
+  allocationPercent: number;
+  positionCount: number;
+};
+
+export type SignalCoverage = {
+  allocationPercent: number;
+  positionCount: number;
+};
+
 export function portfolioTotal(snapshot: MarketSnapshot): number {
   return snapshot.positions.reduce((total, position) => total + position.amount, 0);
 }
@@ -24,6 +36,49 @@ export function allocationPercent(
 
 export function availableClasses(snapshot: MarketSnapshot): readonly AssetClass[] {
   return [...new Set(snapshot.positions.map((position) => position.assetClass))];
+}
+
+export function allocationByClass(
+  snapshot: MarketSnapshot,
+): readonly ClassAllocation[] {
+  const total = portfolioTotal(snapshot);
+  const grouped = new Map<
+    AssetClass,
+    { amount: number; positionCount: number }
+  >();
+
+  for (const position of snapshot.positions) {
+    const current = grouped.get(position.assetClass) ?? {
+      amount: 0,
+      positionCount: 0,
+    };
+    grouped.set(position.assetClass, {
+      amount: current.amount + position.amount,
+      positionCount: current.positionCount + 1,
+    });
+  }
+
+  return [...grouped.entries()]
+    .map(([assetClass, group]) => ({
+      assetClass,
+      amount: group.amount,
+      allocationPercent: total > 0 ? (group.amount / total) * 100 : 0,
+      positionCount: group.positionCount,
+    }))
+    .sort((left, right) => right.amount - left.amount);
+}
+
+export function signalCoverage(snapshot: MarketSnapshot): SignalCoverage {
+  const covered = snapshot.positions.filter((position) =>
+    snapshot.signals.some((signal) => Boolean(signal.effects[position.assetClass])),
+  );
+  return {
+    allocationPercent: covered.reduce(
+      (total, position) => total + allocationPercent(snapshot, position.amount),
+      0,
+    ),
+    positionCount: covered.length,
+  };
 }
 
 export function signalById(snapshot: MarketSnapshot, signalId: string) {

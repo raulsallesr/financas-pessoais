@@ -8,13 +8,14 @@ onde isso encosta na minha carteira?**
 
 ## O que já funciona
 
-- **Hoje:** sinais públicos tocáveis com valor, movimento, data e fonte;
+- **Hoje:** recorte pessoal com quantidade de posições/classes, concentração,
+  cobertura real dos sinais e acesso direto à carteira;
 - **origem explícita:** “Dados públicos” quando o contrato vivo é válido e
   “Demonstração” quando o provider precisa usar o fallback local;
-- **impacto personalizado:** cada sinal revela somente as posições e classes
-  relacionadas na carteira de demonstração;
-- **Carteira:** criação, edição e exclusão de posições locais, exposição, peso
-  por posição e controle para ocultar valores;
+- **impacto sem falsa precisão:** cada sinal revela somente relações já
+  declaradas pelo motor; quando não há efeito por classe, o limite fica visível;
+- **Carteira:** criação, edição e exclusão de posições locais, distribuição por
+  classe, lista progressiva, peso por posição e controle para ocultar valores;
 - **cofre privado nativo:** chave no SecureStore e documento `v1` cifrado com
   AES-256-GCM no diretório persistente do app;
 - **importação B3 local:** seletor XLSX, sanitização, prévia e substituição
@@ -135,14 +136,17 @@ abertura offline; não publica em loja. Os IDs, links temporários, instalação
 checklist Android, rota iOS, evidências e limites estão em
 [`docs/VALIDACAO_DEVELOPMENT_BUILD.md`](../docs/VALIDACAO_DEVELOPMENT_BUILD.md).
 
-O corte `v0.4.0` adiciona o seletor nativo de documentos ao cofre já existente;
+O corte `v0.4.0` adicionou o seletor nativo de documentos ao cofre já existente;
 portanto exige um novo APK. O preview anterior continua válido para o fluxo
 público/offline, mas não contém a importação B3. O
 [preview `v0.3.0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/67b97c57-ce20-4cb6-8c21-570c4742762e)
 foi concluído em 2026-08-28. O
 [preview `v0.4.0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c7695638-2f38-42a4-af07-92303f2a5ce0)
 e seu [APK direto](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk)
-também estão concluídos e aguardam validação física no POCO X8 Pro.
+foram instalados no POCO X8 Pro com Android 16. BI-01 a BI-03 e CL-02 a CL-10
+foram aprovados. O corte `v0.4.1`, build `5`, reorganiza a experiência para
+utilidade cotidiana e aguarda um novo preview; os demais gates físicos estão
+pausados, não aprovados.
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
@@ -160,7 +164,8 @@ npm run export:android
 O gate atual cobre contrato demo, público e privado, schema incompatível,
 documento inválido, proibição de carteira no artefato público, valores e campos
 do editor, duplicidade, limite de posições, UTF-8, fallback, cálculo de peso,
-filtro por classe, impacto por sinal, configuração EAS/SecureStore, snapshot
+distribuição por classe, cobertura honesta dos sinais, filtro por classe,
+impacto por sinal, configuração EAS/SecureStore, snapshot
 empacotado, limites do cenário, parser B3, ZIP/XML malformado, macro, tamanho,
 classes não cobertas e linguagem não imperativa. O bundle Android é
 gerado pelo Metro sem depender do Streamlit.
@@ -198,6 +203,7 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo passo é instalar e validar o preview `v0.4.0` no POCO X8 Pro, incluindo
-cofre, importação B3, TalkBack, texto ampliado e alvos de toque, sem antecipar a
-camada institucional.
+O próximo passo é avaliar no POCO X8 Pro se o preview `v0.4.1` entrega valor
+cotidiano e deixa de parecer uma demonstração. Só depois dessa avaliação os
+gates restantes de importação, TalkBack, texto ampliado e alvos de toque serão
+retomados, sem antecipar a Etapa 5C ou a camada institucional.

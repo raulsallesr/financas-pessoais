@@ -13,14 +13,19 @@ import {
 } from "react-native";
 
 import {
-  DemoPill,
   Eyebrow,
   formatCurrency,
+  PortfolioModePill,
+  PortfolioPresentationMode,
   SectionHeading,
   Surface,
 } from "../components/Primitives";
 import { B3ImportPanel } from "../components/B3ImportPanel";
-import { allocationPercent, portfolioTotal } from "../domain/insights";
+import {
+  allocationByClass,
+  allocationPercent,
+  portfolioTotal,
+} from "../domain/insights";
 import {
   ASSET_CLASSES,
   buildPositionFromDraft,
@@ -31,12 +36,7 @@ import {
 import { MarketSnapshot, Position } from "../domain/types";
 import { colors, radius, spacing } from "../theme";
 
-export type PortfolioMode =
-  | "loading"
-  | "demo"
-  | "local"
-  | "unavailable"
-  | "error";
+export type PortfolioMode = PortfolioPresentationMode;
 
 type PortfolioScreenProps = {
   mode: PortfolioMode;
@@ -65,26 +65,6 @@ function portfolioSupport(mode: PortfolioMode, count: number): string {
   return `${count} ${count === 1 ? "posição fictícia" : "posições fictícias"} · demonstração local`;
 }
 
-function PortfolioPill({ mode }: { mode: PortfolioMode }) {
-  if (mode === "local") {
-    return (
-      <View accessibilityLabel="Carteira somente neste aparelho" style={styles.localPill}>
-        <View style={styles.localDot} />
-        <Text style={styles.localPillText}>SÓ NO APARELHO</Text>
-      </View>
-    );
-  }
-  if (mode === "error") {
-    return (
-      <View accessibilityLabel="Cofre local bloqueado" style={styles.errorPill}>
-        <View style={styles.errorDot} />
-        <Text style={styles.errorPillText}>COFRE BLOQUEADO</Text>
-      </View>
-    );
-  }
-  return <DemoPill />;
-}
-
 export function PortfolioScreen({
   mode,
   snapshot,
@@ -98,10 +78,13 @@ export function PortfolioScreen({
   const [draft, setDraft] = useState<PositionDraft>(EMPTY_DRAFT);
   const [errors, setErrors] = useState<PositionDraftErrors>({});
   const [saving, setSaving] = useState(false);
+  const [showAllPositions, setShowAllPositions] = useState(false);
   const [feedback, setFeedback] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
   const total = portfolioTotal(snapshot);
   const sorted = [...snapshot.positions].sort((a, b) => b.amount - a.amount);
+  const classAllocation = allocationByClass(snapshot);
+  const visiblePositions = showAllPositions ? sorted : sorted.slice(0, 5);
   const canEdit = mode === "demo" || mode === "local";
 
   function openNewPosition() {
@@ -288,7 +271,7 @@ export function PortfolioScreen({
               Carteira
             </Text>
           </View>
-          <PortfolioPill mode={mode} />
+          <PortfolioModePill mode={mode} />
         </View>
 
         <View style={styles.balanceCard}>
@@ -311,6 +294,12 @@ export function PortfolioScreen({
           <Text style={styles.balanceSupport}>
             {portfolioSupport(mode, snapshot.positions.length)}
           </Text>
+          {classAllocation[0] ? (
+            <Text style={styles.balanceInsight}>
+              Maior classe: {classAllocation[0].assetClass} ·{" "}
+              {classAllocation[0].allocationPercent.toFixed(0)}%
+            </Text>
+          ) : null}
         </View>
 
         {storageMessage ? (
@@ -526,8 +515,54 @@ export function PortfolioScreen({
         ) : null}
 
         <SectionHeading
-          title="Onde você está exposto"
-          support="A barra mostra peso, não qualidade nem recomendação."
+          title="Distribuição por classe"
+          support="Primeiro o mapa da carteira; os ativos individuais ficam logo abaixo."
+        />
+        <Surface style={styles.classAllocationCard}>
+          {classAllocation.length === 0 ? (
+            <View style={styles.emptyState}>
+              <Text style={styles.emptyTitle}>Nenhuma classe disponível</Text>
+              <Text style={styles.emptySupport}>
+                Adicione uma posição para montar o primeiro recorte da carteira.
+              </Text>
+            </View>
+          ) : (
+            classAllocation.map((item) => (
+              <View key={item.assetClass} style={styles.classAllocationRow}>
+                <View style={styles.classAllocationTopline}>
+                  <View style={styles.classAllocationCopy}>
+                    <Text style={styles.classAllocationName}>{item.assetClass}</Text>
+                    <Text style={styles.classAllocationCount}>
+                      {item.positionCount}{" "}
+                      {item.positionCount === 1 ? "posição" : "posições"}
+                    </Text>
+                  </View>
+                  <View style={styles.classAllocationValue}>
+                    <Text style={styles.classAllocationPercent}>
+                      {item.allocationPercent.toFixed(1).replace(".", ",")}%
+                    </Text>
+                    <Text style={styles.classAllocationAmount}>
+                      {formatCurrency(item.amount, hidden)}
+                    </Text>
+                  </View>
+                </View>
+                <View
+                  accessible
+                  accessibilityLabel={`${item.assetClass}: ${item.allocationPercent.toFixed(1)}% da carteira`}
+                  style={styles.track}
+                >
+                  <View
+                    style={[styles.bar, { width: `${item.allocationPercent}%` }]}
+                  />
+                </View>
+              </View>
+            ))
+          )}
+        </Surface>
+
+        <SectionHeading
+          title="Posições acompanhadas"
+          support="A lista começa pelas maiores posições. Peso não significa qualidade nem recomendação."
         />
         <Surface style={styles.allocationCard}>
           {sorted.length === 0 ? (
@@ -540,7 +575,7 @@ export function PortfolioScreen({
               </Text>
             </View>
           ) : (
-            sorted.map((position) => {
+            visiblePositions.map((position) => {
               const allocation = allocationPercent(snapshot, position.amount);
               return (
                 <View key={position.id} style={styles.allocationRow}>
@@ -599,6 +634,22 @@ export function PortfolioScreen({
               );
             })
           )}
+          {sorted.length > 5 ? (
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => setShowAllPositions((current) => !current)}
+              style={({ pressed }) => [
+                styles.positionToggle,
+                pressed && styles.pressed,
+              ]}
+            >
+              <Text style={styles.positionToggleText}>
+                {showAllPositions
+                  ? "Recolher posições"
+                  : `Ver todas as ${sorted.length} posições`}
+              </Text>
+            </Pressable>
+          ) : null}
         </Surface>
 
         {mode === "demo" || mode === "local" ? (
@@ -649,6 +700,7 @@ const styles = StyleSheet.create({
   keyboardArea: { flex: 1 },
   content: {
     alignSelf: "center",
+    boxSizing: "border-box",
     gap: spacing.lg,
     maxWidth: 820,
     paddingBottom: spacing.xl,
@@ -669,48 +721,6 @@ const styles = StyleSheet.create({
     fontSize: 31,
     fontWeight: "900",
     letterSpacing: -1,
-  },
-  localPill: {
-    alignItems: "center",
-    backgroundColor: colors.primarySoft,
-    borderRadius: radius.pill,
-    flexDirection: "row",
-    gap: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-  },
-  localDot: {
-    backgroundColor: colors.primary,
-    borderRadius: radius.pill,
-    height: 6,
-    width: 6,
-  },
-  localPillText: {
-    color: colors.primaryDark,
-    fontSize: 10,
-    fontWeight: "800",
-    letterSpacing: 0.7,
-  },
-  errorPill: {
-    alignItems: "center",
-    backgroundColor: colors.dangerSoft,
-    borderRadius: radius.pill,
-    flexDirection: "row",
-    gap: 6,
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-  },
-  errorDot: {
-    backgroundColor: colors.danger,
-    borderRadius: radius.pill,
-    height: 6,
-    width: 6,
-  },
-  errorPillText: {
-    color: colors.danger,
-    fontSize: 10,
-    fontWeight: "800",
-    letterSpacing: 0.7,
   },
   balanceCard: {
     backgroundColor: colors.primaryDark,
@@ -734,6 +744,13 @@ const styles = StyleSheet.create({
     letterSpacing: -1,
   },
   balanceSupport: { color: "#A9D2CA", fontSize: 12, lineHeight: 18 },
+  balanceInsight: {
+    color: colors.white,
+    fontSize: 12,
+    fontWeight: "800",
+    lineHeight: 18,
+    marginTop: spacing.xxs,
+  },
   privacyButton: {
     alignItems: "center",
     backgroundColor: "rgba(255,255,255,0.12)",
@@ -902,6 +919,34 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
   },
   dangerButtonText: { color: colors.danger, fontSize: 13, fontWeight: "800" },
+  classAllocationCard: { gap: spacing.md },
+  classAllocationRow: { gap: spacing.xs },
+  classAllocationTopline: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    gap: spacing.sm,
+    justifyContent: "space-between",
+  },
+  classAllocationCopy: { flex: 1, gap: 2 },
+  classAllocationName: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: "800",
+    lineHeight: 19,
+  },
+  classAllocationCount: { color: colors.textMuted, fontSize: 11 },
+  classAllocationValue: { alignItems: "flex-end", gap: 2 },
+  classAllocationPercent: {
+    color: colors.primaryDark,
+    fontSize: 16,
+    fontVariant: ["tabular-nums"],
+    fontWeight: "900",
+  },
+  classAllocationAmount: {
+    color: colors.textMuted,
+    fontSize: 11,
+    fontVariant: ["tabular-nums"],
+  },
   allocationCard: { gap: spacing.lg },
   allocationRow: { gap: spacing.xs },
   allocationTopline: {
@@ -952,6 +997,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
   },
   smallDangerText: { color: colors.danger, fontSize: 12, fontWeight: "800" },
+  positionToggle: {
+    alignItems: "center",
+    borderColor: colors.border,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 48,
+    paddingHorizontal: spacing.md,
+  },
+  positionToggleText: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: "800",
+  },
   emptyState: { gap: spacing.xs, paddingVertical: spacing.sm },
   emptyTitle: { color: colors.text, fontSize: 15, fontWeight: "900" },
   emptySupport: { color: colors.textMuted, fontSize: 13, lineHeight: 20 },
