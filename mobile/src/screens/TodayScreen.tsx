@@ -42,6 +42,7 @@ export function TodayScreen({
   onClassFilter,
   onNavigate,
   portfolioMode,
+  hideAmounts,
 }: {
   snapshot: MarketSnapshot;
   selectedSignalId: string;
@@ -50,6 +51,7 @@ export function TodayScreen({
   onClassFilter: (filter: ClassFilter) => void;
   onNavigate: (tab: TabKey) => void;
   portfolioMode: PortfolioPresentationMode;
+  hideAmounts: boolean;
 }) {
   const [showAllSignals, setShowAllSignals] = useState(false);
   const { width } = useWindowDimensions();
@@ -273,7 +275,7 @@ export function TodayScreen({
               key={impact.position.id}
               style={isWide ? styles.impactItemWide : undefined}
             >
-              <ImpactCard impact={impact} />
+              <ImpactCard hideAmount={hideAmounts} impact={impact} />
             </View>
           ))}
         </View>

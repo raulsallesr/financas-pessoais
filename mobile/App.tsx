@@ -53,7 +53,8 @@ export default function App() {
     currentSnapshot.signals[0].id,
   );
   const [classFilter, setClassFilter] = useState<ClassFilter>(ALL_CLASSES);
-  const [shockBps, setShockBps] = useState(0);
+  const [shockBps, setShockBps] = useState(50);
+  const [valuesHidden, setValuesHidden] = useState(false);
   const [portfolioState, setPortfolioState] = useState<PortfolioState>({
     kind: "loading",
   });
@@ -142,7 +143,9 @@ export default function App() {
     if (activeTab === "portfolio") {
       return (
         <PortfolioScreen
+          hidden={valuesHidden}
           mode={portfolioState.kind}
+          onHiddenChange={setValuesHidden}
           onReset={resetPortfolio}
           onSavePositions={savePortfolioPositions}
           snapshot={effectiveSnapshot}
@@ -157,7 +160,9 @@ export default function App() {
     if (activeTab === "scenarios") {
       return (
         <ScenariosScreen
+          hideAmounts={valuesHidden}
           onShockChange={setShockBps}
+          onToggleAmounts={() => setValuesHidden((hidden) => !hidden)}
           portfolioMode={portfolioState.kind}
           shockBps={shockBps}
           snapshot={effectiveSnapshot}
@@ -170,6 +175,7 @@ export default function App() {
     return (
       <TodayScreen
         classFilter={classFilter}
+        hideAmounts={valuesHidden}
         onClassFilter={setClassFilter}
         onNavigate={setActiveTab}
         onSelectSignal={setSelectedSignalId}

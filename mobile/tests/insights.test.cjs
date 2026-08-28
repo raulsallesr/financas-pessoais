@@ -10,6 +10,7 @@ const {
   impactsForSignal,
   portfolioTotal,
   signalCoverage,
+  summarizeScenarioAllocation,
 } = require("../.test-dist/domain/insights.js");
 const { demoSnapshot } = require("../.test-dist/data/demoSnapshot.js");
 
@@ -85,6 +86,29 @@ test("cenário de juros muda direção sem prometer retorno", () => {
   assert.equal(risingPrefix.effect.tone, "attention");
   assert.equal(fallingPrefix.effect.tone, "positive");
   assert.match(rising.explanation, /não uma previsão/);
+});
+
+test("resume o cenário por tom e explicita a parcela sem relação", () => {
+  const rising = buildRateScenario(demoSnapshot, 50);
+  const summary = summarizeScenarioAllocation(demoSnapshot, rising.impacts);
+  const attention = summary.byTone.find((item) => item.tone === "attention");
+  const positive = summary.byTone.find((item) => item.tone === "positive");
+
+  assert.equal(attention.positionCount, 2);
+  assert.ok(Math.abs(attention.allocationPercent - 36.5517) < 0.001);
+  assert.equal(positive.positionCount, 1);
+  assert.ok(Math.abs(positive.allocationPercent - 38.6206) < 0.001);
+  assert.ok(Math.abs(summary.coveredAllocationPercent - 75.1724) < 0.001);
+  assert.ok(Math.abs(summary.uncoveredAllocationPercent - 24.8276) < 0.001);
+});
+
+test("carteira vazia não vira cem por cento sem cobertura", () => {
+  const emptySnapshot = { ...demoSnapshot, positions: [] };
+  assert.deepEqual(summarizeScenarioAllocation(emptySnapshot, []), {
+    byTone: [],
+    coveredAllocationPercent: 0,
+    uncoveredAllocationPercent: 0,
+  });
 });
 
 test("cenário neutro e limites numéricos falham de forma explícita", () => {

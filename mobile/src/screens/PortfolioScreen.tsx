@@ -13,6 +13,7 @@ import {
 } from "react-native";
 
 import {
+  AmountVisibilityButton,
   Eyebrow,
   formatCurrency,
   PortfolioModePill,
@@ -39,7 +40,9 @@ import { colors, radius, spacing } from "../theme";
 export type PortfolioMode = PortfolioPresentationMode;
 
 type PortfolioScreenProps = {
+  hidden: boolean;
   mode: PortfolioMode;
+  onHiddenChange: (hidden: boolean) => void;
   snapshot: MarketSnapshot;
   storageMessage?: string;
   onSavePositions: (positions: readonly Position[]) => Promise<void>;
@@ -66,13 +69,14 @@ function portfolioSupport(mode: PortfolioMode, count: number): string {
 }
 
 export function PortfolioScreen({
+  hidden,
   mode,
+  onHiddenChange,
   snapshot,
   storageMessage,
   onSavePositions,
   onReset,
 }: PortfolioScreenProps) {
-  const [hidden, setHidden] = useState(false);
   const [editorOpen, setEditorOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [draft, setDraft] = useState<PositionDraft>(EMPTY_DRAFT);
@@ -277,18 +281,11 @@ export function PortfolioScreen({
         <View style={styles.balanceCard}>
           <View style={styles.balanceTopline}>
             <Text style={styles.balanceLabel}>Patrimônio acompanhado</Text>
-            <Pressable
-              accessibilityLabel={hidden ? "Mostrar valores" : "Ocultar valores"}
-              accessibilityRole="button"
-              onPress={() => setHidden((value) => !value)}
-              style={({ pressed }) => [
-                styles.privacyButton,
-                pressed && styles.pressed,
-              ]}
-            >
-              <View style={[styles.privacyDot, hidden && styles.privacyDotHidden]} />
-              <Text style={styles.privacyText}>{hidden ? "Mostrar" : "Ocultar"}</Text>
-            </Pressable>
+            <AmountVisibilityButton
+              hidden={hidden}
+              inverse
+              onPress={() => onHiddenChange(!hidden)}
+            />
           </View>
           <Text style={styles.balanceValue}>{formatCurrency(total, hidden)}</Text>
           <Text style={styles.balanceSupport}>
@@ -751,23 +748,6 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     marginTop: spacing.xxs,
   },
-  privacyButton: {
-    alignItems: "center",
-    backgroundColor: "rgba(255,255,255,0.12)",
-    borderRadius: radius.pill,
-    flexDirection: "row",
-    gap: 6,
-    minHeight: 48,
-    paddingHorizontal: 12,
-  },
-  privacyDot: {
-    backgroundColor: "#8FD3C5",
-    borderRadius: radius.pill,
-    height: 8,
-    width: 8,
-  },
-  privacyDotHidden: { backgroundColor: "#F8CF8B" },
-  privacyText: { color: colors.white, fontSize: 11, fontWeight: "700" },
   statusCard: {
     backgroundColor: colors.goldSoft,
     borderColor: colors.gold,

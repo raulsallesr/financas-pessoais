@@ -647,7 +647,7 @@ O aparelho usa Android 16 (`BP2A.250605.031.A3`).
 
 Completar DB-10 a DB-12 em `docs/VALIDACAO_DEVELOPMENT_BUILD.md`: TalkBack,
 texto ampliado e alvos de toque. Esses gates foram pausados por decisão do Raul
-enquanto a utilidade cotidiana do produto é refinada no `v0.4.1`.
+enquanto a utilidade cotidiana do produto é refinada no `v0.4.2`.
 Não marcar esta seção como concluída só porque o fluxo principal e o offline
 passaram; a evidência de acessibilidade continua obrigatória.
 
@@ -873,6 +873,42 @@ não antecipa a Etapa 5C.
 `versionCode 5` e iOS `buildNumber 5`. A camada de apresentação ganhou resumo
 por classe e cobertura de sinais calculados somente a partir dos contratos já
 carregados. TypeScript, 27 testes móveis e export Android/Hermes com 640 módulos
-passaram. O próximo gate é gerar o preview e o Raul avaliar se o corte deixou de
-parecer demo; BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam
-explicitamente pendentes.
+passaram. O corte foi absorvido pelo `v0.4.2` antes de gerar preview; a avaliação
+de utilidade continua na seção 18. BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12
+continuam explicitamente pendentes.
+
+## 18. Continuação do refinamento de utilidade — `v0.4.2`
+
+### Resultado esperado
+
+Fazer Cenários responder primeiro “qual parte da carteira muda de leitura?” e
+permitir consultar o app em público sem o reaparecimento de valores ao trocar
+de aba, ainda sem persistência nova ou regra de recomendação.
+
+### Escopo fechado
+
+1. elevar “Ocultar valores” para estado único da sessão;
+2. aplicar a máscara existente em Hoje, Carteira e Cenários;
+3. abrir Cenários em uma hipótese visível de +50 bps, mantendo a fotografia
+   observada e os cinco controles disponíveis;
+4. agregar impactos já produzidos por tom, quantidade de posições e percentual
+   da carteira;
+5. declarar o percentual sem relação mapeada em vez de aproximá-lo;
+6. mostrar quatro posições inicialmente e expandir a lista sob demanda.
+
+### Fora de escopo
+
+- persistir a preferência de ocultação ou qualquer estado de cenário;
+- mudar a matriz educacional, motores Python ou snapshot público `v1`;
+- calcular retorno, preço, probabilidade, recomendação ou rebalanceamento;
+- implementar histórico, alertas, favoritos, E2E, autenticação ou Embedded.
+
+### Estado da execução
+
+**Implementado localmente.** O app foi elevado a `v0.4.2`, Android
+`versionCode 6` e iOS `buildNumber 6`. TypeScript, 29 testes móveis e o export
+Android/Hermes com 640 módulos passaram. A Home e Cenários foram verificados em
+375×812, 430×932, 768×1024 e 844×390 com `scrollWidth` igual à viewport. O modo
+discreto permaneceu ativo entre Cenários e Carteira. O preview EAS ainda não foi
+gerado; os gates físicos anteriores continuam pausados e não foram marcados
+como aprovados.

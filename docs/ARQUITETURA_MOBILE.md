@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.4.1`
+## Estado do corte `mobile v0.4.2`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -73,6 +73,21 @@ efeito não vazio para a classe. Um mapa `effects` vazio produz cobertura zero e
 uma mensagem de limite; nunca dispara inferência, remapeamento ou efeito criado
 no TypeScript. Motores Python, snapshot público `v1`, cofre privado e importador
 B3 permanecem idênticos.
+
+### Modo discreto e resumo de Cenários `v0.4.2`
+
+O estado `valuesHidden` vive em `App.tsx` e é repassado às três telas que podem
+mostrar montantes. Ele dura somente durante a sessão: não entra no cofre, no
+filesystem, no snapshot público ou em nova preferência persistida. O mesmo
+controle acessível usa papel de switch e alvo mínimo de 48 px em Carteira e
+Cenários.
+
+`summarizeScenarioAllocation` recebe somente os `PortfolioImpact` já produzidos
+por `buildRateScenario`. A função soma percentuais por `SignalTone`, conta
+posições e calcula a parcela não coberta por diferença contra a carteira total.
+Ela não escolhe o efeito, não cria sensibilidade para classe ausente e não
+altera a matriz educacional. Cenários mostra essa síntese antes das posições e
+limita a lista inicial a quatro itens.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -212,10 +227,12 @@ build atual.
 5. **implementado; BI-01 a BI-03 aprovados:** importação B3 sanitizada para o
    mesmo contrato privado; restante do ciclo físico pendente;
 6. **implementado localmente em `v0.4.1`:** recorte pessoal, distribuição por
-   classe, cobertura honesta e revelação progressiva; preview pendente;
-7. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
-8. adicionar testes de componentes e E2E Android/iOS;
-9. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+   classe, cobertura honesta e revelação progressiva;
+7. **implementado localmente em `v0.4.2`:** modo discreto entre abas e resumo
+   de Cenários por tom/cobertura; preview pendente;
+8. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
+9. adicionar testes de componentes e E2E Android/iOS;
+10. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 

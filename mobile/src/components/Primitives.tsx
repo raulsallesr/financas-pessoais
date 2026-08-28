@@ -1,5 +1,6 @@
 import { ReactNode } from "react";
 import {
+  Pressable,
   StyleProp,
   StyleSheet,
   Text,
@@ -110,6 +111,49 @@ export function ToneBadge({
 
 export function DemoPill() {
   return <DataModePill mode="demo" />;
+}
+
+export function AmountVisibilityButton({
+  hidden,
+  inverse = false,
+  onPress,
+}: {
+  hidden: boolean;
+  inverse?: boolean;
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      accessibilityLabel={hidden ? "Mostrar valores" : "Ocultar valores"}
+      accessibilityRole="switch"
+      accessibilityState={{ checked: hidden }}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.visibilityButton,
+        inverse && styles.visibilityButtonInverse,
+        pressed && styles.pressed,
+      ]}
+    >
+      <View
+        accessibilityElementsHidden
+        importantForAccessibility="no"
+        style={[
+          styles.visibilityDot,
+          hidden && styles.visibilityDotHidden,
+          inverse && styles.visibilityDotInverse,
+          inverse && hidden && styles.visibilityDotInverseHidden,
+        ]}
+      />
+      <Text
+        style={[
+          styles.visibilityText,
+          inverse && styles.visibilityTextInverse,
+        ]}
+      >
+        {hidden ? "Mostrar valores" : "Ocultar valores"}
+      </Text>
+    </Pressable>
+  );
 }
 
 export type PortfolioPresentationMode =
@@ -315,4 +359,45 @@ const styles = StyleSheet.create({
   contextTextError: {
     color: colors.danger,
   },
+  visibilityButton: {
+    alignItems: "center",
+    alignSelf: "flex-start",
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.pill,
+    flexDirection: "row",
+    gap: 7,
+    justifyContent: "center",
+    minHeight: 48,
+    paddingHorizontal: spacing.sm,
+  },
+  visibilityButtonInverse: {
+    backgroundColor: "rgba(255,255,255,0.12)",
+  },
+  visibilityDot: {
+    backgroundColor: colors.primary,
+    borderColor: colors.primary,
+    borderRadius: radius.pill,
+    borderWidth: 1,
+    height: 8,
+    width: 8,
+  },
+  visibilityDotHidden: {
+    backgroundColor: "transparent",
+  },
+  visibilityDotInverse: {
+    backgroundColor: colors.white,
+    borderColor: colors.white,
+  },
+  visibilityDotInverseHidden: {
+    backgroundColor: "transparent",
+  },
+  visibilityText: {
+    color: colors.primaryDark,
+    fontSize: 12,
+    fontWeight: "800",
+  },
+  visibilityTextInverse: {
+    color: colors.white,
+  },
+  pressed: { opacity: 0.65 },
 });

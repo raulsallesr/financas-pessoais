@@ -22,6 +22,18 @@ export type SignalCoverage = {
   positionCount: number;
 };
 
+export type ScenarioToneAllocation = {
+  tone: SignalTone;
+  allocationPercent: number;
+  positionCount: number;
+};
+
+export type ScenarioAllocationSummary = {
+  byTone: readonly ScenarioToneAllocation[];
+  coveredAllocationPercent: number;
+  uncoveredAllocationPercent: number;
+};
+
 export function portfolioTotal(snapshot: MarketSnapshot): number {
   return snapshot.positions.reduce((total, position) => total + position.amount, 0);
 }
@@ -118,6 +130,35 @@ export function impactsForSignal(
 
 export function impactedAllocation(impacts: readonly PortfolioImpact[]): number {
   return impacts.reduce((total, impact) => total + impact.allocationPercent, 0);
+}
+
+export function summarizeScenarioAllocation(
+  snapshot: MarketSnapshot,
+  impacts: readonly PortfolioImpact[],
+): ScenarioAllocationSummary {
+  const tones: readonly SignalTone[] = ["attention", "positive", "neutral"];
+  const byTone = tones.flatMap((tone) => {
+    const matching = impacts.filter((impact) => impact.effect.tone === tone);
+    if (matching.length === 0) {
+      return [];
+    }
+    return [
+      {
+        tone,
+        allocationPercent: impactedAllocation(matching),
+        positionCount: matching.length,
+      },
+    ];
+  });
+  const coveredAllocationPercent = impactedAllocation(impacts);
+  return {
+    byTone,
+    coveredAllocationPercent,
+    uncoveredAllocationPercent:
+      portfolioTotal(snapshot) > 0
+        ? Math.max(0, 100 - coveredAllocationPercent)
+        : 0,
+  };
 }
 
 function scenarioEffect(

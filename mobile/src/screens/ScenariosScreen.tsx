@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Platform,
   Pressable,
@@ -9,13 +10,18 @@ import {
 
 import { ImpactCard } from "../components/ImpactCard";
 import {
+  AmountVisibilityButton,
   Eyebrow,
   PortfolioModePill,
   PortfolioPresentationMode,
   SectionHeading,
   Surface,
 } from "../components/Primitives";
-import { buildRateScenario, impactedAllocation } from "../domain/insights";
+import {
+  buildRateScenario,
+  summarizeScenarioAllocation,
+  toneLabel,
+} from "../domain/insights";
 import { MarketSnapshot } from "../domain/types";
 import { colors, radius, spacing } from "../theme";
 
@@ -28,20 +34,39 @@ function formatShock(value: number): string {
   return `${value > 0 ? "+" : "−"}${Math.abs(value)}`;
 }
 
+function formatShockChoice(value: number): string {
+  if (value === 0) {
+    return "Atual";
+  }
+  const points = (Math.abs(value) / 100).toFixed(value % 100 === 0 ? 0 : 1);
+  return `${value > 0 ? "+" : "−"}${points.replace(".", ",")} p.p.`;
+}
+
+function formatPercent(value: number): string {
+  return `${value.toFixed(1).replace(".", ",")}%`;
+}
+
 export function ScenariosScreen({
   snapshot,
   shockBps,
   onShockChange,
   portfolioMode,
+  hideAmounts,
+  onToggleAmounts,
 }: {
   snapshot: MarketSnapshot;
   shockBps: number;
   onShockChange: (value: number) => void;
   portfolioMode: PortfolioPresentationMode;
+  hideAmounts: boolean;
+  onToggleAmounts: () => void;
 }) {
+  const [showAllImpacts, setShowAllImpacts] = useState(false);
   const scenario = buildRateScenario(snapshot, shockBps);
-  const allocation = impactedAllocation(scenario.impacts);
-  const isLocalPortfolio = portfolioMode === "local";
+  const summary = summarizeScenarioAllocation(snapshot, scenario.impacts);
+  const visibleImpacts = showAllImpacts
+    ? scenario.impacts
+    : scenario.impacts.slice(0, 4);
 
   return (
     <ScrollView
@@ -50,16 +75,16 @@ export function ScenariosScreen({
     >
       <View style={styles.headerRow}>
         <View style={styles.headerCopy}>
-          <Eyebrow>Laboratório</Eyebrow>
+          <Eyebrow>Sensibilidade</Eyebrow>
           <Text accessibilityRole="header" style={styles.title}>
-            Cenários
+            E se os juros mudarem?
           </Text>
         </View>
         <PortfolioModePill mode={portfolioMode} />
       </View>
 
       <View style={styles.scenarioHero}>
-        <Eyebrow inverse>Choque paralelo da curva</Eyebrow>
+        <Eyebrow inverse>Cenário educacional</Eyebrow>
         <View style={styles.scenarioValueRow}>
           <Text style={styles.scenarioValue}>{formatShock(shockBps)}</Text>
           <Text style={styles.scenarioUnit}>bps</Text>
@@ -69,7 +94,7 @@ export function ScenariosScreen({
       </View>
 
       <Surface style={styles.controlCard}>
-        <Text style={styles.controlLabel}>MOVA A HIPÓTESE</Text>
+        <Text style={styles.controlLabel}>ESCOLHA UMA HIPÓTESE</Text>
         <View style={styles.controlTrack}>
           <View style={styles.trackLine} />
           {shocks.map((value) => {
@@ -89,39 +114,94 @@ export function ScenariosScreen({
               >
                 <View style={[styles.shockDot, selected && styles.shockDotSelected]} />
                 <Text style={[styles.shockText, selected && styles.shockTextSelected]}>
-                  {formatShock(value)}
+                  {formatShockChoice(value)}
                 </Text>
               </Pressable>
             );
           })}
         </View>
         <Text style={styles.controlHint}>
-          Taxas simuladas mantêm a inclinação; isto não estima probabilidade.
+          1 p.p. equivale a 100 bps. A régua não estima probabilidade ou retorno.
         </Text>
       </Surface>
 
-      <View style={styles.statsRow}>
-        <Surface style={styles.statCard}>
-          <Text style={styles.statValue}>{scenario.impacts.length}</Text>
-          <Text style={styles.statLabel}>posições sensíveis</Text>
-        </Surface>
-        <Surface style={styles.statCard}>
-          <Text style={styles.statValue}>{allocation.toFixed(0)}%</Text>
-          <Text style={styles.statLabel}>
-            {isLocalPortfolio ? "da carteira local" : "da demonstração"}
+      {shockBps !== 0 ? (
+        <Surface style={styles.summaryCard}>
+          <Eyebrow>Leitura rápida</Eyebrow>
+          <Text style={styles.summaryTitle}>
+            {summary.byTone
+              .map(
+                (item) =>
+                  `${formatPercent(item.allocationPercent)} ${toneLabel(item.tone).toLocaleLowerCase("pt-BR")}`,
+              )
+              .join(" · ") || "Sem sensibilidade classificada"}
           </Text>
+          <Text style={styles.summarySupport}>
+            {formatPercent(summary.coveredAllocationPercent)} da carteira possui
+            uma relação educacional mapeada para este choque.
+          </Text>
+          <View style={styles.summaryRows}>
+            {summary.byTone.map((item) => (
+              <View key={item.tone} style={styles.summaryRow}>
+                <View style={styles.summaryCopy}>
+                  <Text style={styles.summaryRowTitle}>{toneLabel(item.tone)}</Text>
+                  <Text style={styles.summaryRowMeta}>
+                    {item.positionCount} {item.positionCount === 1 ? "posição" : "posições"}
+                  </Text>
+                </View>
+                <Text style={styles.summaryPercent}>
+                  {formatPercent(item.allocationPercent)}
+                </Text>
+              </View>
+            ))}
+          </View>
+          {summary.uncoveredAllocationPercent > 0 ? (
+            <Text style={styles.uncoveredText}>
+              {formatPercent(summary.uncoveredAllocationPercent)} fica sem relação
+              classificada neste cenário; o app não preenche essa lacuna por
+              aproximação.
+            </Text>
+          ) : null}
         </Surface>
-      </View>
+      ) : null}
 
-      <SectionHeading
-        title="O que mudaria na leitura"
-        support="Cada cartão separa direção provável de certeza inexistente."
-      />
+      <View style={styles.positionHeading}>
+        <View style={styles.positionHeadingCopy}>
+          <SectionHeading
+            title="Posição por posição"
+            support="Abra o detalhe sem expor valores quando estiver em público."
+          />
+        </View>
+        <AmountVisibilityButton
+          hidden={hideAmounts}
+          onPress={onToggleAmounts}
+        />
+      </View>
       {scenario.impacts.length ? (
         <View style={styles.impactList}>
-          {scenario.impacts.map((impact) => (
-            <ImpactCard impact={impact} key={impact.position.id} />
+          {visibleImpacts.map((impact) => (
+            <ImpactCard
+              hideAmount={hideAmounts}
+              impact={impact}
+              key={impact.position.id}
+            />
           ))}
+          {scenario.impacts.length > 4 ? (
+            <Pressable
+              accessibilityRole="button"
+              onPress={() => setShowAllImpacts((current) => !current)}
+              style={({ pressed }) => [
+                styles.impactToggle,
+                pressed && styles.pressed,
+              ]}
+            >
+              <Text style={styles.impactToggleText}>
+                {showAllImpacts
+                  ? "Recolher posições"
+                  : `Ver todas as ${scenario.impacts.length} posições`}
+              </Text>
+            </Pressable>
+          ) : null}
         </View>
       ) : (
         <Surface style={styles.neutralCard}>
@@ -235,10 +315,11 @@ const styles = StyleSheet.create({
   shockButton: {
     alignItems: "center",
     borderRadius: radius.sm,
+    flex: 1,
     gap: spacing.xs,
     justifyContent: "flex-start",
     minHeight: 56,
-    minWidth: 48,
+    minWidth: 0,
     paddingTop: 11,
     zIndex: 1,
   },
@@ -258,7 +339,7 @@ const styles = StyleSheet.create({
   },
   shockText: {
     color: colors.textMuted,
-    fontSize: 11,
+    fontSize: 10,
     fontVariant: ["tabular-nums"],
     fontWeight: "700",
   },
@@ -268,27 +349,74 @@ const styles = StyleSheet.create({
     fontSize: 11,
     lineHeight: 17,
   },
-  statsRow: { flexDirection: "row", gap: spacing.sm },
-  statCard: {
-    flex: 1,
-    gap: 2,
+  summaryCard: {
+    gap: spacing.md,
     ...Platform.select({
       web: { boxShadow: "none" },
       default: { elevation: 0, shadowOpacity: 0 },
     }),
   },
-  statValue: {
+  summaryTitle: {
+    color: colors.text,
+    fontSize: 20,
+    fontWeight: "900",
+    letterSpacing: -0.3,
+    lineHeight: 27,
+  },
+  summarySupport: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  summaryRows: { gap: spacing.xs },
+  summaryRow: {
+    alignItems: "center",
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radius.sm,
+    flexDirection: "row",
+    gap: spacing.sm,
+    justifyContent: "space-between",
+    minHeight: 62,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  summaryCopy: { flex: 1, gap: 2 },
+  summaryRowTitle: { color: colors.text, fontSize: 13, fontWeight: "800" },
+  summaryRowMeta: { color: colors.textMuted, fontSize: 11 },
+  summaryPercent: {
     color: colors.primaryDark,
-    fontSize: 25,
+    fontSize: 18,
     fontVariant: ["tabular-nums"],
     fontWeight: "900",
   },
-  statLabel: {
+  uncoveredText: {
     color: colors.textMuted,
-    fontSize: 11,
-    fontWeight: "700",
+    fontSize: 12,
+    lineHeight: 19,
   },
+  positionHeading: {
+    alignItems: "flex-start",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.md,
+    justifyContent: "space-between",
+  },
+  positionHeadingCopy: { flex: 1, minWidth: 220 },
   impactList: { gap: spacing.sm },
+  impactToggle: {
+    alignItems: "center",
+    borderColor: colors.border,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    justifyContent: "center",
+    minHeight: 48,
+    paddingHorizontal: spacing.md,
+  },
+  impactToggleText: {
+    color: colors.primary,
+    fontSize: 13,
+    fontWeight: "800",
+  },
   neutralCard: { gap: spacing.xs },
   neutralTitle: { color: colors.text, fontSize: 16, fontWeight: "900" },
   neutralSupport: { color: colors.textMuted, fontSize: 13, lineHeight: 20 },

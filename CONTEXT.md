@@ -113,6 +113,12 @@
   pelo recorte pessoal, deixa explícita a cobertura real dos sinais, a Carteira
   resume distribuição por classe e posições longas usam revelação progressiva.
   Nenhum motor, contrato público `v1`, persistência ou item da Etapa 5C mudou.
+- O corte `v0.4.2` continua o mesmo refinamento: “Ocultar valores” agora é um
+  estado único da sessão e permanece ao trocar entre Carteira, Hoje e Cenários.
+  Cenários abre com uma hipótese explícita de +50 bps, resume a parcela que pede
+  atenção, a que pode favorecer e a que não possui relação classificada, antes
+  de abrir as posições. A agregação reutiliza somente os efeitos educacionais
+  já existentes no TypeScript; nenhum efeito, probabilidade ou retorno foi criado.
 - Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
   Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
   piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
@@ -205,11 +211,13 @@
 
 ### Próximo incremento, sem ambiguidade
 
-- Entrega: **Etapa 5B — avaliar o refinamento de utilidade `v0.4.1` em APK**.
+- Entrega: **Etapa 5B — avaliar o refinamento de utilidade `v0.4.2` em APK**.
 - A Home agora começa pela carteira, mostra concentração e declara quando os
   sinais públicos não fornecem relação direta. A Carteira resume classes antes
   das posições e mantém a lista longa sob demanda. O próximo ciclo é de uso e
   crítica de produto, não de execução mecânica do checklist físico.
+- Cenários agora entrega uma resposta imediata por tom e cobertura; o modo
+  discreto permanece ativo entre abas durante a sessão.
 - Evidência já fechada permanece válida: Android 16
   (`BP2A.250605.031.A3`), BI-01 a BI-03 e CL-02 a CL-10 aprovados. BI-04 a
   BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam pendentes, mas pausados até o
@@ -238,10 +246,12 @@
 > `preview` anteriores já foram gerados e instalados no POCO X8 Pro com Android
 > 16 (`BP2A.250605.031.A3`). DB-01 a DB-09, BI-01 a BI-03 e CL-02 a CL-10 estão
 > aprovados, com DB-06 automatizado. Continue pelo refinamento de utilidade
-> `v0.4.1`: preserve a Home orientada ao recorte pessoal, a distribuição por
+> `v0.4.2`: preserve a Home orientada ao recorte pessoal, a distribuição por
 > classe, a cobertura honesta dos sinais e a distinção entre carteira local e
-> demonstração. Os gates BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12 estão
-> pausados até nova decisão do Raul; não os marque como aprovados. Não envie
+> demonstração. Preserve também o modo discreto entre abas e o resumo de
+> Cenários sem inferir efeito ausente. Os gates BI-04 a BI-13, CL-11 a CL-13 e
+> DB-10 a DB-12 estão pausados até nova decisão do Raul; não os marque como
+> aprovados. Não envie
 > planilha ou valores pelo chat e não antecipe autenticação de cliente, Open
 > Finance, Etapa 5C ou Embedded. Rode os gates e faça commit/push somente no git
 > próprio do projeto.
@@ -273,7 +283,7 @@
   2026-08-28; os primeiros APKs `development` e `preview` foram instalados e o
   fluxo principal/offline foi aprovado. No `v0.4.0`, CL-02 a CL-10 e BI-01 a
   BI-03 também foram aprovados. Acessibilidade e o restante da importação estão
-  pausados enquanto o corte `v0.4.1` prioriza utilidade percebida.
+  pausados enquanto o corte `v0.4.2` prioriza utilidade percebida.
 - A direção institucional foi aprovada em 2026-08-27: o app pessoal será o
   cliente de referência e a futura camada **FocusLens Embedded** oferecerá API,
   receipt auditável, Exposure Adapter privado, SDK, Governance Studio e piloto
@@ -884,6 +894,18 @@
     corretamente carteira local, demonstração e cofre bloqueado;
   - motores Python, snapshot público, cofre privado, importador e Etapa 5C não
     foram alterados.
+- **Etapa 5B · modo discreto e Cenários úteis `v0.4.2` (2026-08-28)** — implementação:
+  - ocultação de valores elevada para o estado da sessão no `App.tsx`, mantendo
+    a preferência entre Carteira, Hoje e Cenários sem persistir novo dado;
+  - Cenários passa a abrir em +50 bps e traduz a régua também para pontos
+    percentuais, mantendo 0 e os cinco choques existentes disponíveis;
+  - resumo por tom agrega apenas `PortfolioImpact` já produzido pela matriz
+    educacional e expõe a parcela sem relação classificada;
+  - lista de impactos mostra quatro posições inicialmente e oferece expansão
+    explícita, com valores mascarados quando o modo discreto está ativo;
+  - TypeScript, 29 testes móveis e Android/Hermes com 640 módulos aprovados;
+    quatro viewports, inclusive 375×812 e 844×390, sem overflow horizontal.
+    Preview EAS ainda não gerado.
 
 ## Fila priorizada
 
@@ -899,7 +921,7 @@ integração seguinte.
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
-| P7 | Em andamento (`v0.4.1`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
+| P7 | Em andamento (`v0.4.2`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
 | P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |

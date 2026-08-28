@@ -20,8 +20,10 @@ onde isso encosta na minha carteira?**
   AES-256-GCM no diretório persistente do app;
 - **importação B3 local:** seletor XLSX, sanitização, prévia e substituição
   explícita da carteira sem upload do arquivo;
-- **Cenários:** choque ilustrativo de −100 a +100 bps com mudança imediata da
-  leitura por posição;
+- **Cenários:** hipótese de −100 a +100 bps, leitura rápida por tom, cobertura
+  explícita e detalhe progressivo por posição;
+- **modo discreto da sessão:** ocultar valores em Carteira também mascara Hoje
+  e Cenários até o app ser reiniciado;
 - **Entenda:** fluxo Sinal → Evidência → Exposição → Limite;
 - navegação inferior persistente, alvos de toque de pelo menos 44 px, tema
   claro e nenhuma informação transmitida somente por cor.
@@ -144,9 +146,9 @@ foi concluído em 2026-08-28. O
 [preview `v0.4.0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c7695638-2f38-42a4-af07-92303f2a5ce0)
 e seu [APK direto](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk)
 foram instalados no POCO X8 Pro com Android 16. BI-01 a BI-03 e CL-02 a CL-10
-foram aprovados. O corte `v0.4.1`, build `5`, reorganiza a experiência para
-utilidade cotidiana e aguarda um novo preview; os demais gates físicos estão
-pausados, não aprovados.
+foram aprovados. Os cortes `v0.4.1` e `v0.4.2`, agora no build `6`, reorganizam
+a experiência para utilidade cotidiana e aguardam um novo preview; os demais
+gates físicos estão pausados, não aprovados.
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
@@ -164,8 +166,9 @@ npm run export:android
 O gate atual cobre contrato demo, público e privado, schema incompatível,
 documento inválido, proibição de carteira no artefato público, valores e campos
 do editor, duplicidade, limite de posições, UTF-8, fallback, cálculo de peso,
-distribuição por classe, cobertura honesta dos sinais, filtro por classe,
-impacto por sinal, configuração EAS/SecureStore, snapshot
+distribuição por classe, cobertura honesta dos sinais, resumo de cenário por
+tom e parcela não coberta, filtro por classe, impacto por sinal, configuração
+EAS/SecureStore, snapshot
 empacotado, limites do cenário, parser B3, ZIP/XML malformado, macro, tamanho,
 classes não cobertas e linguagem não imperativa. O bundle Android é
 gerado pelo Metro sem depender do Streamlit.
@@ -203,7 +206,7 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo passo é avaliar no POCO X8 Pro se o preview `v0.4.1` entrega valor
+O próximo passo é avaliar no POCO X8 Pro se o preview `v0.4.2` entrega valor
 cotidiano e deixa de parecer uma demonstração. Só depois dessa avaliação os
 gates restantes de importação, TalkBack, texto ampliado e alvos de toque serão
 retomados, sem antecipar a Etapa 5C ou a camada institucional.
