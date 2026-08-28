@@ -28,8 +28,10 @@
 
 - O produto está estável e versionado até a `v1.14`; o commit funcional dessa
   entrega é `0f1458c` e recebeu a tag `v1.14`.
-- A branch de trabalho é `main`. `git pull --ff-only` confirmou em 2026-08-27
-  que ela estava sincronizada com `origin/main` antes deste fechamento.
+- A branch de trabalho é `main`. `git pull --ff-only` confirmou em 2026-08-28
+  que ela estava sincronizada com `origin/main` antes deste fechamento. O corte
+  funcional anterior a este registro de handoff é `0bd94ee`; o APK `v0.4.0`
+  foi construído a partir de `c6bb875`.
 - A **Etapa 4 — FocusLens BR integrado (`v2.0`)** está concluída tecnicamente
   como release candidate. Não refazer as Etapas 1–3 nem os cinco incrementos
   da Etapa 4.
@@ -55,12 +57,15 @@
   A Home foi validada em 375×812, 430×932, 768×1024 e 844×390, sempre com
   `scrollWidth == clientWidth`. A captura viva está em
   `docs/assets/focuslens-mobile-v0.2-live.png`.
-- Este fechamento revalidou a suíte Python completa, `py_compile`, `pip check`,
-  TypeScript, os 6 testes móveis, o bundle Android, os links locais dos cinco
-  documentos centrais e `git diff --check`. O primeiro pytest encontrou
-  `WinError 5` apenas na limpeza temporária e o primeiro export encontrou
-  `spawn EPERM` no Hermes dentro do sandbox; ambos passaram na repetição fora
-  do sandbox, sem mudança de código.
+- Este fechamento revalidou a suíte Python completa, `pip check`, TypeScript,
+  os 25 testes móveis, o bundle Android/Hermes com 640 módulos, os links locais
+  de 11 documentos canônicos, a ausência de chaves pessoais no snapshot
+  público, o scanner de assinaturas de segredo e `git diff --check`. O primeiro
+  pytest encontrou `WinError 5` apenas no temporário do sandbox e o primeiro
+  export encontrou `spawn EPERM` ao iniciar o Hermes; ambos passaram fora do
+  sandbox, sem mudança de código. `.test-dist` e `dist-android` foram removidos
+  após os gates; `mobile/node_modules` permanece como junction local válida e
+  não versionada.
 - `npm run web` já permite testar a mesma árvore de componentes React Native no
   navegador. Os APKs internos `development` e `preview` foram instalados e
   validados no POCO X8 Pro; a bancada web continua apenas como apoio visual.
@@ -220,8 +225,10 @@
 > DB-09 estão aprovados, com DB-06 automatizado. Instale e valide o novo preview
 > `v0.4.0`, registre a versão do Android, conclua DB-10 a DB-12 e preserve a rota
 > iOS. Valide a importação pelo roteiro dedicado sem enviar planilha ou valores
-> pelo chat e sem antecipar autenticação de cliente ou Open Finance. Rode os gates e faça commit/push
-> somente no git próprio do projeto.
+> pelo chat e sem antecipar autenticação de cliente ou Open Finance. O build é
+> `c7695638-2f38-42a4-af07-92303f2a5ce0`, com APK e checklist em
+> `docs/VALIDACAO_IMPORTACAO_B3.md`. Rode os gates e faça commit/push somente no
+> git próprio do projeto.
 > O roadmap FocusLens Embedded já está aprovado e documentado, mas não antecipe
 > API, SDK, autenticação ou integração bancária durante esse incremento.
 
@@ -247,8 +254,9 @@
 - A Etapa 5 começou em 2026-08-27 por decisão explícita do Raul. O app móvel é
   o destino do produto; a fundação `v0.1` e o contrato vivo `v1` foram
   concluídos. A configuração nativa do development build foi concluída em
-  2026-08-28; os perfis `development` e `preview` foram gerados, e instalação e
-  validação física continuam pendentes.
+  2026-08-28; os primeiros APKs `development` e `preview` foram instalados e o
+  fluxo principal/offline foi aprovado. Acessibilidade física e o ciclo do
+  cofre/importação no preview `v0.4.0` continuam pendentes.
 - A direção institucional foi aprovada em 2026-08-27: o app pessoal será o
   cliente de referência e a futura camada **FocusLens Embedded** oferecerá API,
   receipt auditável, Exposure Adapter privado, SDK, Governance Studio e piloto
