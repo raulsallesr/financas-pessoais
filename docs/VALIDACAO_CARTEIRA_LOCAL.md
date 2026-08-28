@@ -17,7 +17,7 @@ importação B3. Assim CL-02 a CL-13 e BI-01 a BI-13 podem ser validados na mesm
 instalação, sem manter dois APKs concorrentes.
 
 Depois de CL-02 a CL-10 passarem, o Raul pausou CL-11 a CL-13 para avaliar
-primeiro a utilidade do corte `v0.4.2`. A evidência aprovada abaixo permanece
+primeiro a utilidade do corte `v0.4.3`. A evidência aprovada abaixo permanece
 válida; a pausa não fecha acessibilidade.
 
 Este documento é a evidência operacional da seção 15 de

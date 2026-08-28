@@ -119,6 +119,11 @@
   atenção, a que pode favorecer e a que não possui relação classificada, antes
   de abrir as posições. A agregação reutiliza somente os efeitos educacionais
   já existentes no TypeScript; nenhum efeito, probabilidade ou retorno foi criado.
+- O corte `v0.4.3` corrige a hierarquia real da Home: o recorte pessoal agora
+  aparece antes do contexto de mercado e resume maior classe, maior posição e
+  cobertura sem expor montante. A ação principal leva à montagem da carteira na
+  demonstração e à sensibilidade quando a carteira já é local. É uma mudança de
+  apresentação e navegação sobre contratos existentes, sem persistência nova.
 - Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
   Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
   piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
@@ -211,7 +216,7 @@
 
 ### Próximo incremento, sem ambiguidade
 
-- Entrega: **Etapa 5B — avaliar o refinamento de utilidade `v0.4.2` em APK**.
+- Entrega: **Etapa 5B — avaliar o refinamento de utilidade `v0.4.3` em APK**.
 - A Home agora começa pela carteira, mostra concentração e declara quando os
   sinais públicos não fornecem relação direta. A Carteira resume classes antes
   das posições e mantém a lista longa sob demanda. O próximo ciclo é de uso e
@@ -246,7 +251,7 @@
 > `preview` anteriores já foram gerados e instalados no POCO X8 Pro com Android
 > 16 (`BP2A.250605.031.A3`). DB-01 a DB-09, BI-01 a BI-03 e CL-02 a CL-10 estão
 > aprovados, com DB-06 automatizado. Continue pelo refinamento de utilidade
-> `v0.4.2`: preserve a Home orientada ao recorte pessoal, a distribuição por
+> `v0.4.3`: preserve a Home orientada ao recorte pessoal, a distribuição por
 > classe, a cobertura honesta dos sinais e a distinção entre carteira local e
 > demonstração. Preserve também o modo discreto entre abas e o resumo de
 > Cenários sem inferir efeito ausente. Os gates BI-04 a BI-13, CL-11 a CL-13 e
@@ -283,7 +288,7 @@
   2026-08-28; os primeiros APKs `development` e `preview` foram instalados e o
   fluxo principal/offline foi aprovado. No `v0.4.0`, CL-02 a CL-10 e BI-01 a
   BI-03 também foram aprovados. Acessibilidade e o restante da importação estão
-  pausados enquanto o corte `v0.4.2` prioriza utilidade percebida.
+  pausados enquanto o corte `v0.4.3` prioriza utilidade percebida.
 - A direção institucional foi aprovada em 2026-08-27: o app pessoal será o
   cliente de referência e a futura camada **FocusLens Embedded** oferecerá API,
   receipt auditável, Exposure Adapter privado, SDK, Governance Studio e piloto
@@ -906,6 +911,18 @@
   - TypeScript, 29 testes móveis e Android/Hermes com 640 módulos aprovados;
     quatro viewports, inclusive 375×812 e 844×390, sem overflow horizontal.
     Preview EAS ainda não gerado.
+- **Etapa 5B · Home em 10 segundos `v0.4.3` (2026-08-28)** — implementação:
+  - a ordem visual passa a ser recorte pessoal → mercado → sinais, corrigindo a
+    divergência entre intenção documentada e renderização anterior;
+  - maior classe, maior posição e relações atuais aparecem como fatos derivados,
+    com percentuais e sem revelar qualquer montante;
+  - a Home possui uma ação principal contextual: montar carteira na demonstração
+    ou explorar sensibilidade quando a carteira local já existe;
+  - `largestPosition` deriva o destaque somente das posições carregadas; nenhum
+    contrato público, motor, matriz educacional ou persistência mudou;
+  - TypeScript, 30 testes móveis e Android/Hermes com 640 módulos aprovados;
+    ordem, conteúdo e ausência de overflow confirmados em 375×812, 430×932,
+    768×1024 e 844×390. Preview EAS ainda não gerado.
 
 ## Fila priorizada
 
@@ -921,7 +938,7 @@ integração seguinte.
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
-| P7 | Em andamento (`v0.4.2`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
+| P7 | Em andamento (`v0.4.3`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
 | P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |

@@ -8,6 +8,7 @@ const {
   buildRateScenario,
   impactedAllocation,
   impactsForSignal,
+  largestPosition,
   portfolioTotal,
   signalCoverage,
   summarizeScenarioAllocation,
@@ -31,6 +32,14 @@ test("resume alocação por classe em ordem de peso", () => {
       allocation.reduce((total, item) => total + item.allocationPercent, 0) - 100,
     ) < 0.001,
   );
+});
+
+test("destaca a maior posição sem depender do valor formatado", () => {
+  const largest = largestPosition(demoSnapshot);
+  assert.equal(largest.position.id, "pos-1");
+  assert.equal(largest.position.shortName, "Selic 2029");
+  assert.ok(Math.abs(largest.allocationPercent - 38.6206) < 0.001);
+  assert.equal(largestPosition({ ...demoSnapshot, positions: [] }), null);
 });
 
 test("mede cobertura sem inventar efeito ausente", () => {

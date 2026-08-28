@@ -8,7 +8,7 @@ instalado no POCO X8 Pro com Android 16 (`BP2A.250605.031.A3`). TalkBack,
 texto ampliado e alvos de toque ainda precisam ser registrados.
 
 **Pausa de produto:** DB-10 a DB-12 continuam pendentes, mas o Raul decidiu
-avaliar primeiro o refinamento de utilidade `v0.4.2`. A pausa não transforma
+avaliar primeiro o refinamento de utilidade `v0.4.3`. A pausa não transforma
 nenhum item em aprovado nem invalida as evidências físicas já registradas.
 
 Este documento é a evidência operacional da seção 13 de
@@ -157,9 +157,10 @@ commit `c6bb875`, fingerprint
 expira em 2026-09-11. Ele foi instalado no Android 16: CL-02 a CL-10 e BI-01 a
 BI-03 foram aprovados; os demais itens estão pendentes.
 
-**Corte local mais recente:** app `0.4.2`, build `6`, com recorte pessoal, modo
-discreto entre abas e resumo de Cenários. Os gates locais estão registrados na
-seção 11; ainda não existe build EAS nem evidência física deste corte.
+**Corte local mais recente:** app `0.4.3`, build `7`, com recorte pessoal antes
+do mercado, maior classe/posição, ação contextual, modo discreto entre abas e
+resumo de Cenários. Os gates locais estão registrados na seção 11; ainda não
+existe build EAS nem evidência física deste corte.
 
 Com o preview instalado:
 
@@ -248,10 +249,10 @@ real.
 - `expo install --check`: dependências compatíveis;
 - Expo Doctor: `21/21` checks aprovados;
 - TypeScript: aprovado;
-- testes móveis: 29 aprovados, incluindo configuração EAS, snapshot empacotado,
+- testes móveis: 30 aprovados, incluindo configuração EAS, snapshot empacotado,
   fallback, proibição de carteira pública, importação B3 sanitizada, distribuição
-  por classe, cobertura de sinais sem efeito inventado e resumo de cenário por
-  tom/parcela não coberta;
+  por classe, maior posição derivada, cobertura de sinais sem efeito inventado e
+  resumo de cenário por tom/parcela não coberta;
 - export Android/Hermes: aprovado com 640 módulos;
 - testes Python: 191 aprovados e `pip check` sem dependência quebrada;
 - EAS `development`, `preview` público e previews privados `v0.3.0`/`v0.4.0`:

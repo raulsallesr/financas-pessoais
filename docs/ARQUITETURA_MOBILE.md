@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.4.2`
+## Estado do corte `mobile v0.4.3`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -88,6 +88,19 @@ posições e calcula a parcela não coberta por diferença contra a carteira tot
 Ela não escolhe o efeito, não cria sensibilidade para classe ausente e não
 altera a matriz educacional. Cenários mostra essa síntese antes das posições e
 limita a lista inicial a quatro itens.
+
+### Hierarquia pessoal da Home `v0.4.3`
+
+A Home renderiza o recorte pessoal antes do contexto público. `largestPosition`
+seleciona somente a posição de maior `amount` já presente no contrato ativo e
+calcula seu percentual com `allocationPercent`; a interface exibe nome e peso,
+nunca o montante. Maior classe e cobertura continuam vindo de
+`allocationByClass` e `signalCoverage`.
+
+A ação principal é uma decisão de navegação, não financeira: demonstração ou
+cofre indisponível levam à Carteira; carteira local leva a Cenários. O mercado
+permanece inalterado e aparece depois sob “Mercado em uma frase”. Nenhum campo,
+efeito, estado persistido ou chamada de rede foi adicionado.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -230,9 +243,11 @@ build atual.
    classe, cobertura honesta e revelação progressiva;
 7. **implementado localmente em `v0.4.2`:** modo discreto entre abas e resumo
    de Cenários por tom/cobertura; preview pendente;
-8. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
-9. adicionar testes de componentes e E2E Android/iOS;
-10. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+8. **implementado localmente em `v0.4.3`:** Home centrada no recorte pessoal,
+   maior posição derivada e ação principal contextual; preview pendente;
+9. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
+10. adicionar testes de componentes e E2E Android/iOS;
+11. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 

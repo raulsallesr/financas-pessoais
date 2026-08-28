@@ -3,6 +3,7 @@ import {
   ClassEffect,
   MarketSnapshot,
   PortfolioImpact,
+  Position,
   RateScenario,
   SignalTone,
 } from "./types";
@@ -20,6 +21,11 @@ export type ClassAllocation = {
 export type SignalCoverage = {
   allocationPercent: number;
   positionCount: number;
+};
+
+export type PositionAllocation = {
+  allocationPercent: number;
+  position: Position;
 };
 
 export type ScenarioToneAllocation = {
@@ -78,6 +84,22 @@ export function allocationByClass(
       positionCount: group.positionCount,
     }))
     .sort((left, right) => right.amount - left.amount);
+}
+
+export function largestPosition(
+  snapshot: MarketSnapshot,
+): PositionAllocation | null {
+  const position = snapshot.positions.reduce<Position | null>(
+    (largest, current) =>
+      !largest || current.amount > largest.amount ? current : largest,
+    null,
+  );
+  return position
+    ? {
+        allocationPercent: allocationPercent(snapshot, position.amount),
+        position,
+      }
+    : null;
 }
 
 export function signalCoverage(snapshot: MarketSnapshot): SignalCoverage {

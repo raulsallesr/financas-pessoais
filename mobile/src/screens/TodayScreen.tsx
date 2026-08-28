@@ -28,6 +28,7 @@ import {
   ClassFilter,
   impactedAllocation,
   impactsForSignal,
+  largestPosition,
   signalCoverage,
   signalById,
 } from "../domain/insights";
@@ -60,6 +61,7 @@ export function TodayScreen({
   const impacts = impactsForSignal(snapshot, selectedSignalId, classFilter);
   const allocation = impactedAllocation(impacts);
   const classAllocation = allocationByClass(snapshot);
+  const largest = largestPosition(snapshot);
   const coverage = signalCoverage(snapshot);
   const visibleSignals = showAllSignals
     ? snapshot.signals
@@ -96,9 +98,96 @@ export function TodayScreen({
         </Surface>
       ) : null}
 
+      <Surface style={styles.portfolioPulse}>
+        <View style={styles.portfolioPulseTopline}>
+          <Eyebrow>Seu recorte</Eyebrow>
+          <PortfolioModePill mode={portfolioMode} />
+        </View>
+        <Text style={styles.portfolioPulseTitle}>
+          {snapshot.positions.length
+            ? `${snapshot.positions.length} ${snapshot.positions.length === 1 ? "posição" : "posições"} em ${classAllocation.length} ${classAllocation.length === 1 ? "classe" : "classes"}`
+            : "Sua carteira ainda não tem posições"}
+        </Text>
+        {snapshot.positions.length ? (
+          <View style={styles.portfolioFacts}>
+            <View style={styles.portfolioFact}>
+              <View style={styles.portfolioFactCopy}>
+                <Text style={styles.portfolioFactLabel}>Maior classe</Text>
+                <Text style={styles.portfolioFactValue}>
+                  {classAllocation[0]?.assetClass ?? "Sem classe"}
+                </Text>
+              </View>
+              <Text style={styles.portfolioFactPercent}>
+                {classAllocation[0]?.allocationPercent.toFixed(0) ?? "0"}%
+              </Text>
+            </View>
+            <View style={styles.portfolioFactDivider} />
+            <View style={styles.portfolioFact}>
+              <View style={styles.portfolioFactCopy}>
+                <Text style={styles.portfolioFactLabel}>Maior posição</Text>
+                <Text style={styles.portfolioFactValue}>
+                  {largest?.position.shortName ?? "Sem posição"}
+                </Text>
+              </View>
+              <Text style={styles.portfolioFactPercent}>
+                {largest?.allocationPercent.toFixed(0) ?? "0"}%
+              </Text>
+            </View>
+            <View style={styles.portfolioFactDivider} />
+            <View style={styles.portfolioFact}>
+              <View style={styles.portfolioFactCopy}>
+                <Text style={styles.portfolioFactLabel}>Relações atuais</Text>
+                <Text style={styles.portfolioFactValue}>
+                  {coverage.positionCount} de {snapshot.positions.length}{" "}
+                  {snapshot.positions.length === 1 ? "posição" : "posições"}
+                </Text>
+              </View>
+              <Text style={styles.portfolioFactPercent}>
+                {coverage.allocationPercent.toFixed(0)}%
+              </Text>
+            </View>
+          </View>
+        ) : null}
+        <Text style={styles.portfolioPulseSupport}>
+          {coverage.positionCount
+            ? `${coverage.allocationPercent.toFixed(0)}% da ${portfolioKind} possui uma relação direta já classificada pelos sinais públicos atuais.`
+            : snapshot.positions.length
+              ? `Os sinais atuais não têm relação direta classificada com a ${portfolioKind}. O FocusLens não força um impacto quando o motor não fornece esse elo.`
+              : "Monte uma carteira local para enxergar concentração, classes e relações com os sinais públicos."}
+        </Text>
+        <Pressable
+          accessibilityHint={
+            isLocalPortfolio
+              ? "Abre o simulador de sensibilidade sem alterar sua carteira"
+              : "Abre a área para montar uma carteira somente neste aparelho"
+          }
+          accessibilityRole="button"
+          onPress={() =>
+            onNavigate(isLocalPortfolio ? "scenarios" : "portfolio")
+          }
+          style={({ pressed }) => [
+            styles.portfolioAction,
+            pressed && styles.pressed,
+          ]}
+        >
+          <Text style={styles.portfolioActionText}>
+            {isLocalPortfolio ? "Explorar sensibilidade" : "Usar minha carteira"}
+          </Text>
+          <Text accessibilityElementsHidden style={styles.portfolioActionArrow}>
+            →
+          </Text>
+        </Pressable>
+      </Surface>
+
+      <SectionHeading
+        title="Mercado em uma frase"
+        support="Contexto público para interpretar o recorte, sem substituir sua carteira."
+      />
       <View style={styles.hero}>
         <Eyebrow inverse>
-          {snapshot.mode === "live" ? "Leitura com dados públicos" : "Fotografia de demonstração"}
+          {snapshot.mode === "live"
+            ? "Leitura com dados públicos"
+            : "Fotografia de demonstração"}
         </Eyebrow>
         <Text accessibilityRole="header" style={styles.heroTitle}>
           {snapshot.verdict}
@@ -121,64 +210,6 @@ export function TodayScreen({
           Fontes disponíveis: {availableSources || "nenhuma"}
         </Text>
       </View>
-
-      <Surface style={styles.portfolioPulse}>
-        <View style={styles.portfolioPulseTopline}>
-          <Eyebrow>Seu recorte</Eyebrow>
-          <PortfolioModePill mode={portfolioMode} />
-        </View>
-        <Text style={styles.portfolioPulseTitle}>
-          {snapshot.positions.length
-            ? `${snapshot.positions.length} ${snapshot.positions.length === 1 ? "posição" : "posições"} em ${classAllocation.length} ${classAllocation.length === 1 ? "classe" : "classes"}`
-            : "Sua carteira ainda não tem posições"}
-        </Text>
-        {snapshot.positions.length ? (
-          <View style={styles.portfolioMetrics}>
-            <View style={styles.portfolioMetric}>
-              <Text style={styles.portfolioMetricValue}>
-                {classAllocation[0]?.allocationPercent.toFixed(0) ?? "0"}%
-              </Text>
-              <Text style={styles.portfolioMetricLabel}>na maior classe</Text>
-              <Text numberOfLines={2} style={styles.portfolioMetricMeta}>
-                {classAllocation[0]?.assetClass ?? "Sem classe"}
-              </Text>
-            </View>
-            <View style={styles.portfolioMetric}>
-              <Text style={styles.portfolioMetricValue}>
-                {coverage.positionCount}
-              </Text>
-              <Text style={styles.portfolioMetricLabel}>
-                {coverage.positionCount === 1 ? "posição coberta" : "posições cobertas"}
-              </Text>
-              <Text style={styles.portfolioMetricMeta}>
-                {coverage.allocationPercent.toFixed(0)}% com relação direta
-              </Text>
-            </View>
-          </View>
-        ) : null}
-        <Text style={styles.portfolioPulseSupport}>
-          {coverage.positionCount
-            ? `${coverage.allocationPercent.toFixed(0)}% da ${portfolioKind} possui uma relação direta já classificada pelos sinais públicos atuais.`
-            : snapshot.positions.length
-              ? `Os sinais atuais não têm relação direta classificada com a ${portfolioKind}. O FocusLens não força um impacto quando o motor não fornece esse elo.`
-              : "Monte uma carteira local para enxergar concentração, classes e relações com os sinais públicos."}
-        </Text>
-        <Pressable
-          accessibilityRole="button"
-          onPress={() => onNavigate("portfolio")}
-          style={({ pressed }) => [
-            styles.portfolioAction,
-            pressed && styles.pressed,
-          ]}
-        >
-          <Text style={styles.portfolioActionText}>
-            {isLocalPortfolio ? "Revisar carteira" : "Usar minha carteira"}
-          </Text>
-          <Text accessibilityElementsHidden style={styles.portfolioActionArrow}>
-            →
-          </Text>
-        </Pressable>
-      </Surface>
 
       <SectionHeading
         title="O que mudou"
@@ -294,23 +325,25 @@ export function TodayScreen({
         </Surface>
       )}
 
-      <Pressable
-        accessibilityHint="Abre o simulador de sensibilidade a juros"
-        accessibilityRole="button"
-        onPress={() => onNavigate("scenarios")}
-        style={({ pressed }) => [styles.scenarioCta, pressed && styles.pressed]}
-      >
-        <View style={styles.ctaCopy}>
-          <Text style={styles.ctaEyebrow}>EXPERIMENTE</Text>
-          <Text style={styles.ctaTitle}>E se as taxas mudarem?</Text>
-          <Text style={styles.ctaSupport}>
-            Explore choques de −100 a +100 bps sem alterar sua carteira.
+      {!isLocalPortfolio ? (
+        <Pressable
+          accessibilityHint="Abre o simulador de sensibilidade a juros"
+          accessibilityRole="button"
+          onPress={() => onNavigate("scenarios")}
+          style={({ pressed }) => [styles.scenarioCta, pressed && styles.pressed]}
+        >
+          <View style={styles.ctaCopy}>
+            <Text style={styles.ctaEyebrow}>EXPLORE A DEMONSTRAÇÃO</Text>
+            <Text style={styles.ctaTitle}>E se as taxas mudarem?</Text>
+            <Text style={styles.ctaSupport}>
+              Explore choques de −100 a +100 bps sem alterar a carteira.
+            </Text>
+          </View>
+          <Text accessibilityElementsHidden style={styles.ctaArrow}>
+            →
           </Text>
-        </View>
-        <Text accessibilityElementsHidden style={styles.ctaArrow}>
-          →
-        </Text>
-      </Pressable>
+        </Pressable>
+      ) : null}
 
       <Text style={styles.guardrail}>
         {snapshot.mode === "live" ? "Mercado vindo de dados públicos; " : "Mercado em demonstração; "}
@@ -435,6 +468,7 @@ const styles = StyleSheet.create({
     lineHeight: 17,
   },
   portfolioPulse: {
+    backgroundColor: colors.primarySoft,
     gap: spacing.md,
   },
   portfolioPulseTopline: {
@@ -451,33 +485,44 @@ const styles = StyleSheet.create({
     letterSpacing: -0.4,
     lineHeight: 26,
   },
-  portfolioMetrics: {
-    flexDirection: "row",
-    gap: spacing.sm,
-  },
-  portfolioMetric: {
-    backgroundColor: colors.surfaceMuted,
+  portfolioFacts: {
+    backgroundColor: colors.surface,
     borderRadius: radius.sm,
-    flex: 1,
-    gap: 2,
-    minHeight: 104,
     padding: spacing.sm,
   },
-  portfolioMetricValue: {
+  portfolioFact: {
+    alignItems: "center",
+    flexDirection: "row",
+    gap: spacing.sm,
+    justifyContent: "space-between",
+    minHeight: 56,
+  },
+  portfolioFactCopy: {
+    flex: 1,
+    gap: 2,
+  },
+  portfolioFactLabel: {
+    color: colors.textMuted,
+    fontSize: 10,
+    fontWeight: "800",
+    letterSpacing: 0.6,
+    textTransform: "uppercase",
+  },
+  portfolioFactValue: {
+    color: colors.text,
+    fontSize: 14,
+    fontWeight: "800",
+    lineHeight: 19,
+  },
+  portfolioFactPercent: {
     color: colors.primaryDark,
-    fontSize: 25,
+    fontSize: 20,
     fontVariant: ["tabular-nums"],
     fontWeight: "900",
   },
-  portfolioMetricLabel: {
-    color: colors.text,
-    fontSize: 11,
-    fontWeight: "800",
-  },
-  portfolioMetricMeta: {
-    color: colors.textMuted,
-    fontSize: 10,
-    lineHeight: 15,
+  portfolioFactDivider: {
+    backgroundColor: colors.border,
+    height: 1,
   },
   portfolioPulseSupport: {
     color: colors.textMuted,
@@ -486,20 +531,22 @@ const styles = StyleSheet.create({
   },
   portfolioAction: {
     alignItems: "center",
-    alignSelf: "flex-start",
+    alignSelf: "stretch",
+    backgroundColor: colors.primary,
+    borderRadius: radius.sm,
     flexDirection: "row",
     gap: spacing.xs,
     justifyContent: "center",
     minHeight: 48,
-    paddingHorizontal: spacing.xs,
+    paddingHorizontal: spacing.md,
   },
   portfolioActionText: {
-    color: colors.primary,
+    color: colors.white,
     fontSize: 13,
     fontWeight: "900",
   },
   portfolioActionArrow: {
-    color: colors.primary,
+    color: colors.white,
     fontSize: 18,
   },
   signalGrid: {

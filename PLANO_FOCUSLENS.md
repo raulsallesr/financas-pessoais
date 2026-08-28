@@ -647,7 +647,7 @@ O aparelho usa Android 16 (`BP2A.250605.031.A3`).
 
 Completar DB-10 a DB-12 em `docs/VALIDACAO_DEVELOPMENT_BUILD.md`: TalkBack,
 texto ampliado e alvos de toque. Esses gates foram pausados por decisão do Raul
-enquanto a utilidade cotidiana do produto é refinada no `v0.4.2`.
+enquanto a utilidade cotidiana do produto é refinada no `v0.4.3`.
 Não marcar esta seção como concluída só porque o fluxo principal e o offline
 passaram; a evidência de acessibilidade continua obrigatória.
 
@@ -912,3 +912,37 @@ Android/Hermes com 640 módulos passaram. A Home e Cenários foram verificados e
 discreto permaneceu ativo entre Cenários e Carteira. O preview EAS ainda não foi
 gerado; os gates físicos anteriores continuam pausados e não foram marcados
 como aprovados.
+
+## 19. Home em 10 segundos — `v0.4.3`
+
+### Resultado esperado
+
+Fazer a primeira dobra responder “como minha carteira está distribuída e o que
+posso explorar agora?” antes de apresentar o mercado, sem revelar montantes nem
+transformar concentração em recomendação.
+
+### Escopo fechado
+
+1. renderizar o recorte da carteira antes do contexto público de mercado;
+2. mostrar maior classe, maior posição e cobertura atual como fatos percentuais;
+3. usar uma única ação principal contextual: montar carteira na demonstração ou
+   abrir a sensibilidade quando a carteira local já existe;
+4. manter o mercado como contexto secundário, sob o título “Mercado em uma frase”;
+5. ocultar o CTA redundante de Cenários quando a ação principal já leva à mesma aba.
+
+### Fora de escopo
+
+- sugerir compra, venda, rebalanceamento ou concentração desejável;
+- alterar motores Python, matriz educacional ou snapshot público `v1`;
+- mudar cofre, importação, persistência, dependências ou telemetria;
+- gerar preview EAS ou retomar os gates físicos sem decisão explícita do Raul;
+- antecipar histórico, alertas, E2E, autenticação ou Embedded.
+
+### Estado da execução
+
+**Implementado localmente.** O app foi elevado a `v0.4.3`, Android
+`versionCode 7` e iOS `buildNumber 7`. TypeScript, 30 testes móveis e o export
+Android/Hermes com 640 módulos passaram. A hierarquia, os três fatos, a ação
+principal e `scrollWidth` igual à viewport foram confirmados em 375×812,
+430×932, 768×1024 e 844×390. O preview EAS não foi gerado; BI-04 a BI-13,
+CL-11 a CL-13 e DB-10 a DB-12 continuam pausados e pendentes.
