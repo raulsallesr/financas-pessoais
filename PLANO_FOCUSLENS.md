@@ -631,17 +631,20 @@ fechada: Expo SDK `57.0.18`, `expo-dev-client`, EAS CLI mínimo `23.0.0`, perfis
 splash compatível. Expo Doctor passou `21/21`, TypeScript e 13 testes móveis
 passaram e o bundle Android/Hermes foi exportado com 603 módulos.
 
-A geração e a instalação ainda dependem de duas ações externas verificadas:
+O login foi concluído localmente como `raulsallesr`, sem registrar credencial no
+repositório. `eas init` criou `@raulsallesr/focuslens-br` e vinculou o
+`projectId` público. Os dois builds Android associados ao commit `60fa378` e ao
+mesmo fingerprint foram concluídos:
 
-- autenticar localmente a conta Expo/EAS (`eas whoami` retorna `Not logged in`);
-- disponibilizar um Android real; esta máquina não possui `adb`, Java ou SDK.
+- `development`: `1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`;
+- `preview`: `dd050dbe-5d0d-44e8-aae8-e13f613b7405`.
 
-O login deve ser feito pelo Raul no próprio terminal, sem compartilhar
-credencial. Depois disso: executar `eas init`, gerar o perfil `development`,
-instalar o APK e completar DB-03 a DB-12 em
-`docs/VALIDACAO_DEVELOPMENT_BUILD.md`. O perfil `preview` cobre a abertura
-autônoma/offline. Não marcar esta seção como concluída só porque o export Metro
-passou.
+DB-01 está aprovado. A única ação externa restante é disponibilizar um Android
+real: esta máquina não possui `adb`, Java ou SDK. Instalar primeiro o development
+APK, validar a bancada com Metro e depois instalar o preview para a abertura
+autônoma/offline. Completar DB-02 a DB-05 e DB-07 a DB-12 em
+`docs/VALIDACAO_DEVELOPMENT_BUILD.md`. Não marcar esta seção como concluída só
+porque os artefatos foram gerados; a evidência física continua obrigatória.
 
 ## 14. Roadmap aprovado — FocusLens Embedded
 

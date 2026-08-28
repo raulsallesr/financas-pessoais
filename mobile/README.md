@@ -84,12 +84,13 @@ versionar essa junção. Em outra máquina, prefira um clone curto, como
 Este corte usa Expo SDK 57. Para um projeto de produto, o caminho recomendado é
 um **development build** próprio, não depender do aplicativo genérico Expo Go.
 `eas.json`, `expo-dev-client`, identificadores Android/iOS, safe areas, rotação
-e splash nativo já estão configurados. O APK ainda não foi gerado nem instalado:
-em 2026-08-28, `eas whoami` confirmou que esta máquina não está autenticada e
-ela também não possui `adb`, Java ou Android SDK.
+e splash nativo já estão configurados. Em 2026-08-28, o projeto
+`@raulsallesr/focuslens-br` foi vinculado e os APKs `development` e `preview`
+foram gerados com sucesso. Eles ainda não foram instalados porque esta máquina
+não possui `adb`, Java ou Android SDK e o aparelho será atendido pelo link EAS.
 
-O login deve ser feito pelo Raul no próprio terminal, sem enviar credencial pelo
-chat:
+Para reproduzir os builds depois de autenticar localmente, sem enviar credencial
+pelo chat:
 
 ```powershell
 npx --yes eas-cli@23.0.0 login
@@ -104,8 +105,8 @@ npm run start:dev-client
 ```
 
 O perfil `preview` gera um APK interno com bundle incorporado para o teste de
-abertura offline; não publica em loja. Comandos, instalação, checklist Android,
-rota iOS, evidências e limites estão em
+abertura offline; não publica em loja. Os IDs, links temporários, instalação,
+checklist Android, rota iOS, evidências e limites estão em
 [`docs/VALIDACAO_DEVELOPMENT_BUILD.md`](../docs/VALIDACAO_DEVELOPMENT_BUILD.md).
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
@@ -155,5 +156,5 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo passo continua sendo autenticar o EAS, gerar o development APK e
-executar o checklist em aparelho real.
+O próximo passo é instalar primeiro o development APK e depois o preview,
+executando o checklist em aparelho real sem antecipar a camada institucional.

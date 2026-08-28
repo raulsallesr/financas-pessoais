@@ -1,7 +1,8 @@
 # Validação — FocusLens development build
 
-**Status em 2026-08-28:** configuração nativa concluída; build e validação em
-aparelho aguardam autenticação local no Expo/EAS e um Android disponível.
+**Status em 2026-08-28:** projeto EAS vinculado e APKs `development` e
+`preview` gerados com sucesso. A instalação e a validação física ainda aguardam
+um Android disponível.
 
 Este documento é a evidência operacional da seção 13 de
 `PLANO_FOCUSLENS.md`. Não marca o incremento como concluído enquanto o APK não
@@ -21,24 +22,25 @@ for gerado, instalado e validado em aparelho real.
 - splash migrado para o plugin suportado `expo-splash-screen`;
 - APK, AAB, IPA, credenciais e pastas nativas geradas ignorados pelo Git.
 
-O `projectId` do EAS ainda não existe porque a máquina não está autenticada. Ele
-é um identificador público do projeto, não uma credencial, e poderá ser
-versionado depois de `eas init`. Token, senha, chave e sessão permanecem fora do
-repositório.
+O projeto EAS é `@raulsallesr/focuslens-br`, com `owner` `raulsallesr` e
+`projectId` `a0f97a2a-f26f-4b53-ac1b-fafe4ef27b4b`. Esses identificadores são
+públicos e ficam versionados em `app.json`. Token, senha, chave, sessão e
+keystore permanecem fora do repositório.
 
-## 2. Bloqueio externo atual
+## 2. Estado externo atual
 
 As verificações locais de 2026-08-28 encontraram:
 
-- `eas whoami`: `Not logged in`;
+- `eas whoami`: `raulsallesr`;
 - `adb`: ausente;
 - Java/JDK: ausente;
 - Android SDK: ausente;
-- nenhum APK de development build gerado ou instalado.
+- APK `development`: gerado, ainda não instalado;
+- APK `preview`: gerado, ainda não instalado.
 
-Por isso, a rota preferida é EAS Build em nuvem. Não instalar Android Studio,
-JDK e SDK completos apenas para contornar a falta de login sem uma decisão
-explícita; isso acrescentaria uma cadeia local grande que o projeto não exige.
+A rota EAS Build em nuvem foi concluída sem instalar Android Studio, JDK ou SDK
+local. A pendência externa agora é somente disponibilizar um aparelho Android e
+instalar os artefatos; não ampliar a cadeia local sem necessidade.
 
 ## 3. Autenticação segura
 
@@ -57,6 +59,9 @@ npx --yes eas-cli@23.0.0 whoami
 Depois de `whoami` identificar a conta correta, o Codex pode continuar a
 configuração e os builds sem receber a credencial.
 
+**Executado em 2026-08-28:** login pelo navegador concluído e `whoami`
+confirmado como `raulsallesr`. Nenhuma credencial foi registrada no projeto.
+
 ## 4. Vincular o projeto EAS
 
 Executar uma única vez, de forma interativa:
@@ -69,6 +74,10 @@ Revisar o `owner` e o `extra.eas.projectId` que o comando acrescentar à
 configuração. Esses identificadores não são segredos, mas devem apontar para o
 projeto FocusLens correto antes do commit.
 
+**Executado em 2026-08-28:** criado e vinculado
+[`@raulsallesr/focuslens-br`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br).
+O diff de `app.json` contém somente o `owner` e o `projectId` públicos.
+
 ## 5. Gerar o development build Android
 
 ```powershell
@@ -77,6 +86,12 @@ npx --yes eas-cli@23.0.0 build --platform android --profile development
 
 O perfil gera APK interno com `expo-dev-client`; não publica em loja. O link do
 artefato deve ser registrado aqui, sem versionar o arquivo binário.
+
+**Build concluído em 2026-08-28:** perfil `development`, ID
+[`1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918),
+commit `60fa378`, fingerprint `519796b16038fd44ff83dee56fd0fcb3d868dffd`.
+O [APK de desenvolvimento](https://expo.dev/artifacts/eas/E6YGMQWwuHyyqCDzAEcW6Uxt6T4MXUoH0Wq7I_5-CDg.apk)
+expira em 2026-09-11. A geração está aprovada; a instalação permanece pendente.
 
 Depois de instalar o APK, iniciar o Metro no mesmo checkout:
 
@@ -113,6 +128,12 @@ interno `preview`, que incorpora o bundle JavaScript:
 npx --yes eas-cli@23.0.0 build --platform android --profile preview
 ```
 
+**Build concluído em 2026-08-28:** perfil `preview`, ID
+[`dd050dbe-5d0d-44e8-aae8-e13f613b7405`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/dd050dbe-5d0d-44e8-aae8-e13f613b7405),
+commit `60fa378`, mesmo fingerprint do development build. O
+[APK preview](https://expo.dev/artifacts/eas/QEsmnNjXMB21Q4YktNPkdk26UkIj0NN9ey_n75X60mE.apk)
+expira em 2026-09-11. A validação offline permanece pendente de instalação.
+
 Com o preview instalado:
 
 1. abrir conectado e confirmar `DADOS PÚBLICOS`, data e fontes;
@@ -129,7 +150,7 @@ temporário de teste; não adulterar nem commitar o snapshot público canônico.
 
 | ID | Verificação | Estado | Evidência esperada |
 |---|---|---|---|
-| DB-01 | Development APK gerado | Pendente | URL e ID do build EAS |
+| DB-01 | Development APK gerado | Aprovado | EAS `1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`, `FINISHED` |
 | DB-02 | APK instalado | Pendente | modelo/Android e resultado |
 | DB-03 | Hoje, Carteira, Cenários e Entenda | Pendente | quatro abas abrem sem erro |
 | DB-04 | Snapshot empacotado | Pendente | `DADOS PÚBLICOS`, data e fontes |
@@ -194,12 +215,15 @@ real.
 - testes móveis: 13 aprovados, incluindo configuração EAS, snapshot empacotado,
   fallback e proibição de carteira pública;
 - export Android/Hermes: aprovado com 603 módulos;
+- testes Python: 191 aprovados e `pip check` sem dependência quebrada;
+- EAS `development` e `preview`: concluídos com o mesmo fingerprint e sem
+  variável `Plain text` ou `Sensitive` configurada no ambiente de build;
 - `npm audit --omit=dev --audit-level=high`: zero vulnerabilidade alta ou
   crítica e 11 moderadas transitivas;
 - `npm audit fix --force` não foi aplicado: a correção sugerida faria downgrade
   incompatível de pacotes do toolchain, inclusive do Expo.
 
-Essas evidências não substituem DB-01 a DB-05 e DB-07 a DB-12.
+Essas evidências não substituem DB-02 a DB-05 e DB-07 a DB-12.
 
 ## 12. Critério de conclusão
 

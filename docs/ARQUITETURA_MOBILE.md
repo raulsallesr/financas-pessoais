@@ -104,8 +104,9 @@ build atual.
    Python, sem carteira, com schema e teste de compatibilidade;
 2. **concluído:** provider somente leitura com fallback local explícito;
 3. **em andamento:** configuração EAS/dev client, safe areas, rotação,
-   identificadores, splash e perfis internos concluída; gerar e instalar o APK
-   Android aguarda login EAS e aparelho, com rota iOS documentada em
+   identificadores, splash e perfis internos concluída; APKs Android
+   `development` e `preview` gerados no EAS, com instalação e validação física
+   pendentes de aparelho e rota iOS documentada em
    `VALIDACAO_DEVELOPMENT_BUILD.md`;
 4. criar carteira local editável e criptografada, sem nuvem por padrão;
 5. portar a importação B3 de forma sanitizada para um fluxo móvel seguro;
@@ -134,5 +135,8 @@ toolchain, inclusive do Expo.
 - controles que estavam em 44–46 px foram elevados para 48 px e os cabeçalhos
   podem quebrar de forma controlada com texto ampliado;
 - Expo Doctor aprovou `21/21` checks e o export Hermes aprovou 603 módulos;
-- build/instalação e testes físicos continuam pendentes de login EAS e aparelho;
+- `@raulsallesr/focuslens-br` foi vinculado ao `projectId` público e os builds
+  `development`/`preview` terminaram com o mesmo fingerprint do commit
+  `60fa378`;
+- instalação e testes físicos continuam pendentes de aparelho Android;
 - a evidência operacional está em `VALIDACAO_DEVELOPMENT_BUILD.md`.

@@ -35,6 +35,12 @@
           "backgroundColor": "#F3F7F5"
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "a0f97a2a-f26f-4b53-ac1b-fafe4ef27b4b"
+      }
+    },
+    "owner": "raulsallesr"
   }
 }

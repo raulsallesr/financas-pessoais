@@ -3,8 +3,9 @@
 - **Status**: motores FocusLens BR `v2.0` preservados como release candidate.
   A Etapa 5 móvel possui fundação React Native `v0.1` e contrato vivo `v1`
   concluídos em 2026-08-27. A configuração do development build foi concluída
-  em 2026-08-28, mas o APK e os testes físicos aguardam login EAS e aparelho
-  Android. O roadmap institucional **FocusLens Embedded** foi aprovado e
+  em 2026-08-28; os APKs `development` e `preview` foram gerados no EAS, mas a
+  instalação e os testes físicos aguardam aparelho Android. O roadmap
+  institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
   e-mail histórico.
@@ -18,7 +19,7 @@
 - **Curva oficial**: Tesouro Transparente, conjunto diário “Taxas dos Títulos
   Ofertados pelo Tesouro Direto”, CSV aberto sob ODbL 1.0.
 
-## Handoff para um novo chat — 2026-08-27
+## Handoff para um novo chat — 2026-08-28
 
 ### Ponto de partida verificado
 
@@ -58,8 +59,9 @@
   `spawn EPERM` no Hermes dentro do sandbox; ambos passaram na repetição fora
   do sandbox, sem mudança de código.
 - `npm run web` já permite testar a mesma árvore de componentes React Native no
-  navegador. Ainda não existe APK/AAB nem development build instalado; isso é
-  uma etapa distinta do contrato vivo e não deve ser apresentado como pronto.
+  navegador. Existem APKs internos `development` e `preview`, mas nenhum foi
+  instalado; a validação física é uma etapa distinta do contrato vivo e não
+  deve ser apresentada como pronta.
 - A configuração da seção 13 foi preparada em 2026-08-28: `eas.json` possui
   perfis `development`, `development-simulator` e `preview`; `app.json` possui
   identificadores `com.raulsallesr.focuslens`, scheme, rotação e splash por
@@ -70,10 +72,13 @@
   auditoria encontrou zero vulnerabilidade alta/crítica e 11 moderadas
   transitivas; `audit fix --force` não foi usado porque faria downgrade
   incompatível de pacotes do toolchain, inclusive do Expo.
-- O build não foi fingido como concluído: `eas whoami` respondeu `Not logged
-  in`, e esta máquina não possui `adb`, Java ou Android SDK. O Raul deve fazer o
-  login EAS no próprio terminal; depois, rodar `eas init`, gerar/instalar o APK
-  e preencher DB-01 a DB-12 em `docs/VALIDACAO_DEVELOPMENT_BUILD.md`.
+- O login local foi concluído como `raulsallesr`, sem registrar credencial. O
+  projeto `@raulsallesr/focuslens-br` foi criado e vinculado ao `projectId`
+  público. Os builds EAS `development`
+  (`1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`) e `preview`
+  (`dd050dbe-5d0d-44e8-aae8-e13f613b7405`) terminaram com o mesmo fingerprint
+  do commit `60fa378`; DB-01 está aprovado. Esta máquina continua sem `adb`,
+  Java ou Android SDK, então instalação e checklist físico aguardam aparelho.
 - Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
   Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
   piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
@@ -164,9 +169,10 @@
 ### Próximo incremento, sem ambiguidade
 
 - Entrega: **Etapa 5 — concluir o development build instalável**.
-- Configuração EAS/dev client já concluída. O Raul precisa executar `eas login`
-  no próprio terminal; depois, vincular o projeto com `eas init`, gerar o perfil
-  `development` e instalar o APK sem versionar credencial ou artefato.
+- Configuração, login, vinculação EAS e geração dos perfis `development` e
+  `preview` já concluídos. Instalar primeiro o development APK, validar com
+  Metro e depois instalar o preview para o teste autônomo/offline, sem
+  versionar credencial ou artefato.
 - Validar em aparelho real as quatro abas, o snapshot empacotado, o fallback
   demo offline, safe areas, gesto voltar, rotação, leitor de tela e tamanho de
   fonte. Registrar a evidência DB-01 a DB-12 no documento de validação.
@@ -188,12 +194,12 @@
 > `v1.12`–`v2.0`, não redesenhe o Streamlit, não replique fórmulas em TypeScript
 > e não coloque carteira no snapshot. Continue pela seção “13. Próxima execução
 > — Etapa 5” do plano e `docs/VALIDACAO_DEVELOPMENT_BUILD.md`. A configuração
-> EAS/dev client já está pronta e validada; não a refaça. O Raul deve autenticar
-> o EAS no próprio terminal. Depois rode `eas init`, gere e instale o perfil
-> Android `development`, gere `preview` para o teste offline, preencha DB-01 a
-> DB-12 e documente a rota iOS sem antecipar carteira pessoal, importação B3,
-> autenticação de cliente ou Open Finance. Rode os gates e faça commit/push
-> somente no git próprio do projeto.
+> EAS/dev client já está pronta e validada; não a refaça. O projeto
+> `@raulsallesr/focuslens-br` está vinculado, e os APKs Android `development` e
+> `preview` já foram gerados. Instale-os na ordem documentada, preencha DB-02 a
+> DB-05 e DB-07 a DB-12 e preserve a rota iOS sem antecipar carteira pessoal,
+> importação B3, autenticação de cliente ou Open Finance. Rode os gates e faça
+> commit/push somente no git próprio do projeto.
 > O roadmap FocusLens Embedded já está aprovado e documentado, mas não antecipe
 > API, SDK, autenticação ou integração bancária durante esse incremento.
 
@@ -219,7 +225,8 @@
 - A Etapa 5 começou em 2026-08-27 por decisão explícita do Raul. O app móvel é
   o destino do produto; a fundação `v0.1` e o contrato vivo `v1` foram
   concluídos. A configuração nativa do development build foi concluída em
-  2026-08-28; geração, instalação e validação física continuam pendentes.
+  2026-08-28; os perfis `development` e `preview` foram gerados, e instalação e
+  validação física continuam pendentes.
 - A direção institucional foi aprovada em 2026-08-27: o app pessoal será o
   cliente de referência e a futura camada **FocusLens Embedded** oferecerá API,
   receipt auditável, Exposure Adapter privado, SDK, Governance Studio e piloto
@@ -768,10 +775,14 @@
   - `expo install --check`, Expo Doctor `21/21`, TypeScript, 13 testes e export
     Android/Hermes com 603 módulos aprovados; npm audit sem alta/crítica e com
     11 moderadas transitivas sem correção compatível;
+  - a suíte Python completa aprovou 191 testes e `pip check` não encontrou
+    dependência quebrada;
   - `docs/VALIDACAO_DEVELOPMENT_BUILD.md` registra comandos, segurança,
     instalação, offline, checklist físico e rota iOS;
-  - pendência real: `eas whoami` não autenticado e nenhum Android/ADB disponível;
-    não existe APK instalado e a seção 13 permanece aberta.
+  - login EAS e vínculo de `@raulsallesr/focuslens-br` concluídos; os APKs
+    `development` e `preview` foram gerados com sucesso e DB-01 foi aprovado;
+  - pendência real: nenhum Android/ADB disponível; não existe APK instalado e a
+    seção 13 permanece aberta até a validação física.
 
 ## Fila priorizada
 
@@ -806,9 +817,9 @@ integração seguinte.
 - O app móvel pode ser testado localmente, mas publicação em loja exige
   resolver ou aceitar formalmente as vulnerabilidades moderadas transitivas do
   toolchain Expo, além dos gates de segurança descritos na arquitetura móvel.
-- A geração do development APK está bloqueada até o Raul autenticar o EAS no
-  próprio terminal. A validação física também exige aparelho Android; `adb`,
-  Java e Android SDK não estão instalados nesta máquina.
+- Os APKs internos foram gerados e expiram em 2026-09-11. A validação física
+  exige aparelho Android; `adb`, Java e Android SDK não estão instalados nesta
+  máquina.
 
 ## Conceitos relacionados
 
