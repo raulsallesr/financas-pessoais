@@ -105,8 +105,8 @@ build atual.
 2. **concluído:** provider somente leitura com fallback local explícito;
 3. **em andamento:** configuração EAS/dev client, safe areas, rotação,
    identificadores, splash e perfis internos concluída; APKs Android
-   `development` e `preview` gerados no EAS, com instalação e validação física
-   pendentes de aparelho e rota iOS documentada em
+   `development` e `preview` gerados e instalados no POCO X8 Pro, com fluxo
+   principal/offline aprovado, acessibilidade física pendente e rota iOS em
    `VALIDACAO_DEVELOPMENT_BUILD.md`;
 4. criar carteira local editável e criptografada, sem nuvem por padrão;
 5. portar a importação B3 de forma sanitizada para um fluxo móvel seguro;
@@ -138,5 +138,8 @@ toolchain, inclusive do Expo.
 - `@raulsallesr/focuslens-br` foi vinculado ao `projectId` público e os builds
   `development`/`preview` terminaram com o mesmo fingerprint do commit
   `60fa378`;
-- instalação e testes físicos continuam pendentes de aparelho Android;
+- development e preview foram instalados no POCO X8 Pro; quatro abas, snapshot
+  e abertura em modo avião foram aprovados;
+- versão do Android, rotação, voltar, TalkBack, texto ampliado e alvos de toque
+  permanecem pendentes;
 - a evidência operacional está em `VALIDACAO_DEVELOPMENT_BUILD.md`.

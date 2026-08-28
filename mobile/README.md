@@ -86,8 +86,9 @@ um **development build** próprio, não depender do aplicativo genérico Expo Go
 `eas.json`, `expo-dev-client`, identificadores Android/iOS, safe areas, rotação
 e splash nativo já estão configurados. Em 2026-08-28, o projeto
 `@raulsallesr/focuslens-br` foi vinculado e os APKs `development` e `preview`
-foram gerados com sucesso. Eles ainda não foram instalados porque esta máquina
-não possui `adb`, Java ou Android SDK e o aparelho será atendido pelo link EAS.
+foram gerados e instalados no POCO X8 Pro pela rota de link EAS. O preview
+aprovou as quatro abas, o snapshot empacotado e a reabertura em modo avião. Esta
+máquina continua sem `adb`, Java ou Android SDK.
 
 Para reproduzir os builds depois de autenticar localmente, sem enviar credencial
 pelo chat:
@@ -156,5 +157,5 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo passo é instalar primeiro o development APK e depois o preview,
-executando o checklist em aparelho real sem antecipar a camada institucional.
+O próximo passo é registrar a versão do Android e fechar rotação, voltar,
+TalkBack, texto ampliado e alvos de toque sem antecipar a camada institucional.

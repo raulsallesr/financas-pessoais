@@ -3,8 +3,9 @@
 - **Status**: motores FocusLens BR `v2.0` preservados como release candidate.
   A Etapa 5 móvel possui fundação React Native `v0.1` e contrato vivo `v1`
   concluídos em 2026-08-27. A configuração do development build foi concluída
-  em 2026-08-28; os APKs `development` e `preview` foram gerados no EAS, mas a
-  instalação e os testes físicos aguardam aparelho Android. O roadmap
+  em 2026-08-28; os APKs `development` e `preview` foram gerados e instalados no
+  POCO X8 Pro. Quatro abas, snapshot e offline passaram; rotação, voltar,
+  TalkBack, texto ampliado e alvos de toque ainda aguardam evidência. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
@@ -77,8 +78,10 @@
   público. Os builds EAS `development`
   (`1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`) e `preview`
   (`dd050dbe-5d0d-44e8-aae8-e13f613b7405`) terminaram com o mesmo fingerprint
-  do commit `60fa378`; DB-01 está aprovado. Esta máquina continua sem `adb`,
-  Java ou Android SDK, então instalação e checklist físico aguardam aparelho.
+  do commit `60fa378`. Development e preview foram instalados no POCO X8 Pro;
+  DB-01 a DB-05 estão aprovados e DB-06 é automatizado. O Metro LAN foi
+  bloqueado pelo firewall corporativo, mas o preview reabriu e navegou em modo
+  avião. A versão do Android e DB-07 a DB-12 continuam pendentes.
 - Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
   Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
   piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
@@ -169,13 +172,12 @@
 ### Próximo incremento, sem ambiguidade
 
 - Entrega: **Etapa 5 — concluir o development build instalável**.
-- Configuração, login, vinculação EAS e geração dos perfis `development` e
-  `preview` já concluídos. Instalar primeiro o development APK, validar com
-  Metro e depois instalar o preview para o teste autônomo/offline, sem
-  versionar credencial ou artefato.
-- Validar em aparelho real as quatro abas, o snapshot empacotado, o fallback
-  demo offline, safe areas, gesto voltar, rotação, leitor de tela e tamanho de
-  fonte. Registrar a evidência DB-01 a DB-12 no documento de validação.
+- Configuração, login, vinculação EAS, geração e instalação dos perfis
+  `development`/`preview` já concluídos. Quatro abas, snapshot empacotado e
+  abertura offline foram aprovados no POCO X8 Pro.
+- Registrar a versão do Android e concluir safe areas em paisagem, gesto voltar,
+  rotação, TalkBack, texto ampliado e alvos de toque. DB-07 a DB-12 permanecem
+  abertos no documento de validação.
 - Não alterar os motores, o schema público `1` ou os três stashes. Carteira
   editável, importação B3, alertas, autenticação, nuvem e Open Finance continuam
   em incrementos posteriores.
@@ -196,10 +198,11 @@
 > — Etapa 5” do plano e `docs/VALIDACAO_DEVELOPMENT_BUILD.md`. A configuração
 > EAS/dev client já está pronta e validada; não a refaça. O projeto
 > `@raulsallesr/focuslens-br` está vinculado, e os APKs Android `development` e
-> `preview` já foram gerados. Instale-os na ordem documentada, preencha DB-02 a
-> DB-05 e DB-07 a DB-12 e preserve a rota iOS sem antecipar carteira pessoal,
-> importação B3, autenticação de cliente ou Open Finance. Rode os gates e faça
-> commit/push somente no git próprio do projeto.
+> `preview` já foram gerados e instalados no POCO X8 Pro. DB-01 a DB-05 estão
+> aprovados e DB-06 é automatizado. Registre a versão do Android, conclua DB-07
+> a DB-12 e preserve a rota iOS sem antecipar carteira pessoal, importação B3,
+> autenticação de cliente ou Open Finance. Rode os gates e faça commit/push
+> somente no git próprio do projeto.
 > O roadmap FocusLens Embedded já está aprovado e documentado, mas não antecipe
 > API, SDK, autenticação ou integração bancária durante esse incremento.
 
@@ -780,9 +783,11 @@
   - `docs/VALIDACAO_DEVELOPMENT_BUILD.md` registra comandos, segurança,
     instalação, offline, checklist físico e rota iOS;
   - login EAS e vínculo de `@raulsallesr/focuslens-br` concluídos; os APKs
-    `development` e `preview` foram gerados com sucesso e DB-01 foi aprovado;
-  - pendência real: nenhum Android/ADB disponível; não existe APK instalado e a
-    seção 13 permanece aberta até a validação física.
+    `development` e `preview` foram gerados e instalados no POCO X8 Pro;
+  - DB-01 a DB-05 aprovados: quatro abas e snapshot continuaram disponíveis após
+    encerrar e reabrir o preview em modo avião; DB-06 segue automatizado;
+  - pendência real: versão do Android e DB-07 a DB-12; a seção 13 permanece
+    aberta até o fechamento de rotação e acessibilidade.
 
 ## Fila priorizada
 
@@ -797,7 +802,7 @@ integração seguinte.
 | P3 | Release candidate (5/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
-| P6 | Em andamento | Development build: config pronta; aguarda EAS/aparelho | Alto | Alto |
+| P6 | Em andamento | Development/preview instalados; fecha acessibilidade física | Alto | Alto |
 | P7 | Fila | Carteira local criptografada + importação B3 | Muito alto | Alto |
 | P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
@@ -817,9 +822,9 @@ integração seguinte.
 - O app móvel pode ser testado localmente, mas publicação em loja exige
   resolver ou aceitar formalmente as vulnerabilidades moderadas transitivas do
   toolchain Expo, além dos gates de segurança descritos na arquitetura móvel.
-- Os APKs internos foram gerados e expiram em 2026-09-11. A validação física
-  exige aparelho Android; `adb`, Java e Android SDK não estão instalados nesta
-  máquina.
+- Os APKs internos foram instalados no POCO X8 Pro e expiram em 2026-09-11. A
+  versão do Android e os testes DB-07 a DB-12 ainda precisam ser registrados;
+  `adb`, Java e Android SDK não estão instalados nesta máquina.
 
 ## Conceitos relacionados
 

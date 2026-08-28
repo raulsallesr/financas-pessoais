@@ -639,12 +639,16 @@ mesmo fingerprint foram concluídos:
 - `development`: `1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`;
 - `preview`: `dd050dbe-5d0d-44e8-aae8-e13f613b7405`.
 
-DB-01 está aprovado. A única ação externa restante é disponibilizar um Android
-real: esta máquina não possui `adb`, Java ou SDK. Instalar primeiro o development
-APK, validar a bancada com Metro e depois instalar o preview para a abertura
-autônoma/offline. Completar DB-02 a DB-05 e DB-07 a DB-12 em
-`docs/VALIDACAO_DEVELOPMENT_BUILD.md`. Não marcar esta seção como concluída só
-porque os artefatos foram gerados; a evidência física continua obrigatória.
+DB-01 a DB-05 estão aprovados no POCO X8 Pro e DB-06 permanece coberto pelos
+testes automatizados. O development build foi instalado, mas a conexão LAN com
+o Metro foi bloqueada pelo firewall corporativo `BlockInbound`; o preview foi
+instalado em seguida e aprovou quatro abas, snapshot e reabertura em modo avião.
+A versão do Android ainda deve ser registrada.
+
+Completar DB-07 a DB-12 em `docs/VALIDACAO_DEVELOPMENT_BUILD.md`: safe areas em
+paisagem, voltar Android, rotação, TalkBack, texto ampliado e alvos de toque.
+Não marcar esta seção como concluída só porque o fluxo principal e o offline
+passaram; a evidência de acessibilidade continua obrigatória.
 
 ## 14. Roadmap aprovado — FocusLens Embedded
 

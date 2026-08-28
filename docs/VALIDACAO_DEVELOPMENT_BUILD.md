@@ -1,8 +1,9 @@
 # Validação — FocusLens development build
 
-**Status em 2026-08-28:** projeto EAS vinculado e APKs `development` e
-`preview` gerados com sucesso. A instalação e a validação física ainda aguardam
-um Android disponível.
+**Status em 2026-08-28:** projeto EAS vinculado, APKs `development` e `preview`
+gerados e instalados em POCO X8 Pro. Quatro abas, snapshot empacotado e abertura
+offline foram aprovados; versão do Android, rotação e acessibilidade ainda
+precisam ser registrados.
 
 Este documento é a evidência operacional da seção 13 de
 `PLANO_FOCUSLENS.md`. Não marca o incremento como concluído enquanto o APK não
@@ -35,12 +36,14 @@ As verificações locais de 2026-08-28 encontraram:
 - `adb`: ausente;
 - Java/JDK: ausente;
 - Android SDK: ausente;
-- APK `development`: gerado, ainda não instalado;
-- APK `preview`: gerado, ainda não instalado.
+- APK `development`: instalado e shell do dev client aberto;
+- Metro LAN: indisponível porque o firewall corporativo bloqueia entrada e
+  aceita somente regras da política central;
+- APK `preview`: instalado sobre o development build e validado offline.
 
 A rota EAS Build em nuvem foi concluída sem instalar Android Studio, JDK ou SDK
-local. A pendência externa agora é somente disponibilizar um aparelho Android e
-instalar os artefatos; não ampliar a cadeia local sem necessidade.
+local. O preview foi a rota funcional para a validação sem depender da rede
+corporativa. Não ampliar a cadeia local nem adotar túnel externo sem necessidade.
 
 ## 3. Autenticação segura
 
@@ -118,6 +121,11 @@ adb install -r <caminho-do-apk>
 Não versionar o APK. Registrar somente URL do build EAS, identificador, data,
 perfil e resultado da instalação.
 
+**Resultado em 2026-08-28:** development e preview instalados no POCO X8 Pro
+pela rota de link EAS. O preview substituiu o development build com a mesma
+assinatura e abriu o produto diretamente. A versão do Android ainda deve ser
+registrada.
+
 ## 7. Build interno para teste offline
 
 O development client é a bancada de depuração e normalmente carrega o bundle
@@ -132,7 +140,8 @@ npx --yes eas-cli@23.0.0 build --platform android --profile preview
 [`dd050dbe-5d0d-44e8-aae8-e13f613b7405`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/dd050dbe-5d0d-44e8-aae8-e13f613b7405),
 commit `60fa378`, mesmo fingerprint do development build. O
 [APK preview](https://expo.dev/artifacts/eas/QEsmnNjXMB21Q4YktNPkdk26UkIj0NN9ey_n75X60mE.apk)
-expira em 2026-09-11. A validação offline permanece pendente de instalação.
+expira em 2026-09-11. A instalação e a validação offline foram aprovadas no
+POCO X8 Pro.
 
 Com o preview instalado:
 
@@ -146,17 +155,21 @@ O fallback demo para documento ausente, incompatível ou com chave pessoal é
 validado automaticamente. Uma reprodução visual em aparelho deve usar um build
 temporário de teste; não adulterar nem commitar o snapshot público canônico.
 
+**Evidência física em 2026-08-28:** após encerrar o app e ativar modo avião, o
+preview reabriu com `DADOS PÚBLICOS`, fotografia, fontes e as quatro abas
+navegáveis, sem carteira ou conexão de rede.
+
 ## 8. Checklist em aparelho real
 
 | ID | Verificação | Estado | Evidência esperada |
 |---|---|---|---|
 | DB-01 | Development APK gerado | Aprovado | EAS `1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`, `FINISHED` |
-| DB-02 | APK instalado | Pendente | modelo/Android e resultado |
-| DB-03 | Hoje, Carteira, Cenários e Entenda | Pendente | quatro abas abrem sem erro |
-| DB-04 | Snapshot empacotado | Pendente | `DADOS PÚBLICOS`, data e fontes |
-| DB-05 | Abertura offline | Pendente | preview abre em modo avião |
+| DB-02 | APK instalado | Aprovado | development e preview no POCO X8 Pro; versão Android a registrar |
+| DB-03 | Hoje, Carteira, Cenários e Entenda | Aprovado | quatro abas abriram sem erro, inclusive offline |
+| DB-04 | Snapshot empacotado | Aprovado | `DADOS PÚBLICOS`, fotografia e fontes visíveis |
+| DB-05 | Abertura offline | Aprovado | preview reabriu e navegou em modo avião |
 | DB-06 | Fallback demo | Automatizado | testes de provider aprovados |
-| DB-07 | Safe areas | Pendente | nada sob status/gesto/notch |
+| DB-07 | Safe areas | Parcial | retrato correto; paisagem e fonte ampliada pendentes |
 | DB-08 | Voltar Android | Pendente | aba interna → Hoje; Hoje → sistema |
 | DB-09 | Rotação | Pendente | retrato/paisagem sem corte ou overflow |
 | DB-10 | TalkBack | Pendente | ordem lógica e controles nomeados |
@@ -223,7 +236,7 @@ real.
 - `npm audit fix --force` não foi aplicado: a correção sugerida faria downgrade
   incompatível de pacotes do toolchain, inclusive do Expo.
 
-Essas evidências não substituem DB-02 a DB-05 e DB-07 a DB-12.
+Essas evidências não substituem o fechamento de DB-07 a DB-12.
 
 ## 12. Critério de conclusão
 
