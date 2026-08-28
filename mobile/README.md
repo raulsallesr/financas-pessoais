@@ -17,6 +17,8 @@ onde isso encosta na minha carteira?**
   por posição e controle para ocultar valores;
 - **cofre privado nativo:** chave no SecureStore e documento `v1` cifrado com
   AES-256-GCM no diretório persistente do app;
+- **importação B3 local:** seletor XLSX, sanitização, prévia e substituição
+  explícita da carteira sem upload do arquivo;
 - **Cenários:** choque ilustrativo de −100 a +100 bps com mudança imediata da
   leitura por posição;
 - **Entenda:** fluxo Sinal → Evidência → Exposição → Limite;
@@ -39,6 +41,10 @@ corretora ou Open Finance, não sincroniza carteira e não produz recomendação
 - chave ausente, arquivo alterado ou schema inválido bloqueiam a carteira sem
   misturar a demo;
 - “Apagar carteira local” remove arquivo e chave após confirmação;
+- a planilha B3 é copiada para o cache privado apenas durante a leitura, tem
+  limite de 5 MB e é descartada antes da prévia;
+- somente ativo, classe e valor entram na prévia; conta, CPF e colunas não
+  necessárias não são interpretados nem armazenados;
 - a bancada web continua somente em demonstração e não oferece falsa
   persistência segura.
 
@@ -129,11 +135,11 @@ abertura offline; não publica em loja. Os IDs, links temporários, instalação
 checklist Android, rota iOS, evidências e limites estão em
 [`docs/VALIDACAO_DEVELOPMENT_BUILD.md`](../docs/VALIDACAO_DEVELOPMENT_BUILD.md).
 
-O corte `v0.3.0` adiciona módulos nativos de criptografia, filesystem e
-SecureStore; portanto exige um novo APK. O preview anterior continua válido para
-o fluxo público/offline, mas não contém o cofre privado. O
+O corte `v0.4.0` adiciona o seletor nativo de documentos ao cofre já existente;
+portanto exige um novo APK. O preview anterior continua válido para o fluxo
+público/offline, mas não contém a importação B3. O
 [preview `v0.3.0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/67b97c57-ce20-4cb6-8c21-570c4742762e)
-foi concluído em 2026-08-28 e aguarda instalação/validação física.
+foi concluído em 2026-08-28; o `v0.4.0` ainda aguarda geração e validação física.
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
@@ -152,7 +158,8 @@ O gate atual cobre contrato demo, público e privado, schema incompatível,
 documento inválido, proibição de carteira no artefato público, valores e campos
 do editor, duplicidade, limite de posições, UTF-8, fallback, cálculo de peso,
 filtro por classe, impacto por sinal, configuração EAS/SecureStore, snapshot
-empacotado, limites do cenário e linguagem não imperativa. O bundle Android é
+empacotado, limites do cenário, parser B3, ZIP/XML malformado, macro, tamanho,
+classes não cobertas e linguagem não imperativa. O bundle Android é
 gerado pelo Metro sem depender do Streamlit.
 
 ## Estrutura
@@ -161,7 +168,7 @@ gerado pelo Metro sem depender do Streamlit.
 App.tsx                 estado e navegação principal
 src/components/         componentes móveis reutilizáveis
 src/data/               snapshot vivo, validação/provider e fallback demo
-src/domain/             contratos público/privado, filtros e sensibilidade
+src/domain/             contratos, parser B3, filtros e sensibilidade
 src/screens/            Hoje, Carteira, Cenários e Entenda
 src/storage/            cofre local criptografado para Android/iOS
 assets/                 marca determinística em SVG e PNG
@@ -177,6 +184,8 @@ A arquitetura e a fronteira entre os motores Python e o app estão em
 [`docs/ARQUITETURA_MOBILE.md`](../docs/ARQUITETURA_MOBILE.md).
 O roteiro físico do editor/cofre `v0.3.0` está em
 [`docs/VALIDACAO_CARTEIRA_LOCAL.md`](../docs/VALIDACAO_CARTEIRA_LOCAL.md).
+O roteiro da importação `v0.4.0` está em
+[`docs/VALIDACAO_IMPORTACAO_B3.md`](../docs/VALIDACAO_IMPORTACAO_B3.md).
 
 ## Relação com o produto institucional
 
@@ -186,6 +195,6 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo passo é gerar e validar o preview `v0.3.0` no POCO X8 Pro, fechar
-TalkBack, texto ampliado e alvos de toque, e então implementar a importação B3
-sanitizada sem antecipar a camada institucional.
+O próximo passo é gerar e validar o preview `v0.4.0` no POCO X8 Pro, incluindo
+cofre, importação B3, TalkBack, texto ampliado e alvos de toque, sem antecipar a
+camada institucional.

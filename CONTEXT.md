@@ -6,8 +6,8 @@
   em 2026-08-28; os APKs `development` e `preview` foram gerados e instalados no
   POCO X8 Pro. Quatro abas, snapshot, offline, rotação, paisagem e Voltar
   passaram; TalkBack, texto ampliado e alvos de toque ainda aguardam evidência.
-  O corte móvel `v0.3.0` já implementa editor e cofre local criptografado; falta
-  validar o novo APK e depois portar a importação B3 sanitizada. O roadmap
+  O corte móvel `v0.4.0` já implementa editor, cofre local criptografado e
+  importação B3 sanitizada com prévia; falta gerar e validar o novo APK. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
@@ -134,6 +134,8 @@
 | `mobile/README.md` | Comandos para executar e validar o app móvel. |
 | `docs/ARQUITETURA_MOBILE.md` | Fronteira Python → contrato → React Native. |
 | `docs/VALIDACAO_DEVELOPMENT_BUILD.md` | EAS, instalação, offline, acessibilidade e evidências físicas. |
+| `docs/VALIDACAO_CARTEIRA_LOCAL.md` | Ciclo físico do editor e cofre local. |
+| `docs/VALIDACAO_IMPORTACAO_B3.md` | Prévia, substituição, offline e privacidade do importador XLSX. |
 | `docs/ESTRATEGIA_INSTITUCIONAL.md` | Tese, produto Embedded, piloto, métricas e pacote comercial. |
 | `docs/ARQUITETURA_INSTITUCIONAL.md` | Arquitetura-alvo, contratos, segurança e gates institucionais. |
 | `docs/AUDITORIA_PUBLICACAO_V2.0.md` | Evidência e pendências da publicação web `v2.0`. |
@@ -146,8 +148,9 @@
 3. Leia `CLAUDE.md`, este `CONTEXT.md` e `PLANO_FOCUSLENS.md`, nessa ordem.
 4. Para continuar o app, leia `mobile/README.md` e
    `docs/ARQUITETURA_MOBILE.md`; siga a seção “Próxima execução — Etapa 5” do
-   plano. Para fechar o build, leia também
-   `docs/VALIDACAO_DEVELOPMENT_BUILD.md`. Para publicar a `v2.0` web, leia
+   plano. Para fechar o build e a Etapa 5B, leia também
+   `docs/VALIDACAO_DEVELOPMENT_BUILD.md`, `docs/VALIDACAO_CARTEIRA_LOCAL.md` e
+   `docs/VALIDACAO_IMPORTACAO_B3.md`. Para publicar a `v2.0` web, leia
    também
    `docs/AUDITORIA_PUBLICACAO_V2.0.md` e `docs/RELEASE_V2.0.md`.
 5. Para trabalhar na trilha B2B, leia `docs/ESTRATEGIA_INSTITUCIONAL.md` e
@@ -185,16 +188,16 @@
 
 ### Próximo incremento, sem ambiguidade
 
-- Entrega: **Etapa 5B.1 — validar a carteira local segura `v0.3.0` em APK**.
-- Editor, contrato privado, cofre AES-GCM e novo `preview` estão concluídos;
-  instalar no POCO X8 Pro e validar criar, reabrir, editar, excluir, ocultar e
-  apagar a carteira em modo avião.
+- Entrega: **Etapa 5B.2 — validar carteira e importação B3 local `v0.4.0` em APK**.
+- Editor, contrato privado, cofre AES-GCM, leitor XLSX sanitizado e prévia de
+  substituição estão concluídos; gerar o `preview`, instalar no POCO X8 Pro e
+  validar o ciclo completo em modo avião.
 - Registrar a versão do Android e concluir TalkBack, texto ampliado e alvos de
   toque. DB-10 a DB-12 permanecem abertos no documento de validação; DB-07 a
   DB-09 já foram aprovados pelo Raul no aparelho.
-- Não alterar os motores, o schema público `1` ou os três stashes. Importação
-  B3 sanitizada é o incremento seguinte; alertas, autenticação, nuvem e Open
-  Finance continuam posteriores.
+- Não alterar os motores, o schema público `1` ou os três stashes. Histórico,
+  favoritos, alertas explicáveis e E2E formam a Etapa 5C; autenticação, nuvem e
+  Open Finance continuam posteriores.
 - Não antecipar a Etapa 6/Embedded durante o development build. O roadmap
   institucional aprovado começa somente depois dos gates definidos na seção 14.
 - A definição completa está na seção “13. Próxima execução — Etapa 5” de
@@ -206,18 +209,18 @@
 > leia integralmente `CLAUDE.md`, `CONTEXT.md`, `PLANO_FOCUSLENS.md`,
 > `mobile/README.md` e `docs/ARQUITETURA_MOBILE.md`. Confira `git stash list`,
 > mas não aplique nem remova os três stashes documentados. A `v2.0` dos motores,
-> a fundação móvel `v0.1`, o contrato público `v1` e o editor/cofre privado
-> `v0.3.0` já estão implementados; não refaça
+> a fundação móvel `v0.1`, o contrato público `v1` e o editor/cofre privado com
+> importação B3 local `v0.4.0` já estão implementados; não refaça
 > `v1.12`–`v2.0`, não redesenhe o Streamlit, não replique fórmulas em TypeScript
-> e não coloque carteira no snapshot. Continue pelas seções 13 e 15 do plano e
+> e não coloque carteira no snapshot. Continue pelas seções 13, 15 e 16 do plano e
 > `docs/VALIDACAO_DEVELOPMENT_BUILD.md`. A configuração
 > EAS/dev client já está pronta e validada; não a refaça. O projeto
 > `@raulsallesr/focuslens-br` está vinculado, e os APKs Android `development` e
 > `preview` anteriores já foram gerados e instalados no POCO X8 Pro. DB-01 a
 > DB-09 estão aprovados, com DB-06 automatizado. Gere e valide o novo preview
-> `v0.3.0`, registre a versão do Android, conclua DB-10 a DB-12 e preserve a rota
-> iOS. Depois, implemente a importação B3 sanitizada sem antecipar autenticação
-> de cliente ou Open Finance. Rode os gates e faça commit/push
+> `v0.4.0`, registre a versão do Android, conclua DB-10 a DB-12 e preserve a rota
+> iOS. Valide a importação pelo roteiro dedicado sem enviar planilha ou valores
+> pelo chat e sem antecipar autenticação de cliente ou Open Finance. Rode os gates e faça commit/push
 > somente no git próprio do projeto.
 > O roadmap FocusLens Embedded já está aprovado e documentado, mas não antecipe
 > API, SDK, autenticação ou integração bancária durante esse incremento.
@@ -823,6 +826,22 @@
   - preview EAS `67b97c57-ce20-4cb6-8c21-570c4742762e` concluído para o commit
     `9308f02`, fingerprint `a28c993ae571b5d58d7eea95f8fe6fc877c71023`;
   - pendência: instalação e validação física do ciclo completo do cofre.
+- **Etapa 5B · importação B3 sanitizada `v0.4.0` (2026-08-28)** — implementação:
+  - seletor nativo aceita somente XLSX de até 5 MB e cria cópia temporária no
+    cache privado; a cópia é apagada depois da leitura e o original não é alterado;
+  - parser ZIP/XML mínimo lê somente as seis abas conhecidas da exportação B3,
+    ignora a dimensão `A1` incorreta e mantém apenas ativo, classe e valor;
+  - limites de expansão, entradas, XML, strings, linhas, células, posições e
+    valores bloqueiam arquivo excessivo ou malformado; macro e DTD/entidade são
+    recusados;
+  - classes ainda fora do contrato móvel, como cripto e ouro, não são
+    remapeadas: aparecem na contagem de exclusões da prévia;
+  - a pessoa revisa quantidade, total, abas, exclusões e posições antes de
+    confirmar; a importação substitui a carteira inteira, nunca mescla em silêncio;
+  - `expo-document-picker ~57.0.1` e `fflate 0.8.3` adicionados; app elevado a
+    `v0.4.0`, Android `versionCode 4` e iOS `buildNumber 4`;
+  - TypeScript, 25 testes, export web, compatibilidade Expo e bundle
+    Android/Hermes com 640 módulos aprovados; preview EAS ainda pendente.
 
 ## Fila priorizada
 
@@ -838,7 +857,7 @@ integração seguinte.
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Em andamento | Distribuição aprovada; fecha DB-10 a DB-12 | Alto | Alto |
-| P7 | Em andamento (`v0.3.0`) | APK pronto; valida cofre e depois importa B3 | Muito alto | Alto |
+| P7 | Em andamento (`v0.4.0`) | Cofre e importação B3 prontos; falta preview e validação física | Muito alto | Alto |
 | P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
@@ -858,8 +877,8 @@ integração seguinte.
   resolver ou aceitar formalmente as vulnerabilidades moderadas transitivas do
   toolchain Expo, além dos gates de segurança descritos na arquitetura móvel.
 - Os APKs internos anteriores foram instalados no POCO X8 Pro e expiram em
-  2026-09-11. O novo preview `v0.3.0` também expira nessa data e ainda precisa
-  ser instalado; a versão do Android e os testes DB-10 a DB-12 ainda precisam
+  2026-09-11. O preview `v0.3.0` ainda não teve validação registrada e o novo
+  `v0.4.0` precisa ser gerado; a versão do Android e os testes DB-10 a DB-12 ainda precisam
   ser registrados;
   `adb`, Java e Android SDK não estão instalados nesta máquina.
 

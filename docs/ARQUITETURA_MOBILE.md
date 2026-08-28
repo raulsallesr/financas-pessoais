@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.3`
+## Estado do corte `mobile v0.4`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -117,6 +117,43 @@ confundir criptografia em repouso com autenticação do usuário. Backup/restaur
 entre aparelhos não é prometido: uma carteira sem a chave local falha fechada e
 oferece reset explícito.
 
+### Fronteira implementada da importação B3
+
+```text
+DOCUMENT PICKER NATIVO
+XLSX escolhido pela pessoa
+        │  cópia temporária privada · até 5 MB
+        ▼
+LEITOR B3 MÍNIMO
+ZIP/XML em memória · abas permitidas · limites estruturais
+        │  ativo · classe · valor
+        ▼
+PRÉVIA SANITIZADA
+contagens · total · exclusões · posições
+        │  confirmação explícita
+        ▼
+CARTEIRA PRIVADA v1
+AES-256-GCM no aparelho
+```
+
+`src/storage/b3DocumentPicker.ts` abre a interface nativa, exige XLSX, lê a
+cópia criada em `Paths.cache` e a apaga antes de devolver a prévia. O original
+do provedor de documentos não é alterado. Web continua sem carteira privada e
+sem importação.
+
+`src/domain/b3Import.ts` não é um motor financeiro novo. Ele porta somente o
+adaptador de formato já testado em `b3_importacao.py`: reconhece as seis abas
+esperadas, ignora a dimensão `A1` incorreta, extrai os campos mínimos,
+classifica pelas mesmas regras cobertas no mobile e consolida duplicidades.
+Cripto e ouro não são forçados para classes incorretas; entram na contagem de
+linhas não suportadas e ficam fora da gravação.
+
+O parser extrai somente entradas OOXML conhecidas e limita arquivo comprimido,
+tamanho expandido, XML individual, entradas, shared strings, linhas, células,
+posições e valor. Arquivos macro-enabled, DTD/entidade XML, vínculos fora de
+`xl/worksheets/` ou contrato privado inválido falham fechados. A carteira atual
+só muda depois da prévia e da confirmação de substituição.
+
 ## Privacidade e guardrails
 
 - nenhuma conta, CPF, instituição, posição real ou planilha foi usada;
@@ -155,9 +192,11 @@ build atual.
    `VALIDACAO_DEVELOPMENT_BUILD.md`;
 4. **implementado; validação física pendente:** carteira local editável e
    criptografada, sem nuvem por padrão;
-5. portar a importação B3 de forma sanitizada para o mesmo contrato privado;
+5. **implementado; validação física pendente:** importação B3 sanitizada para o
+   mesmo contrato privado;
 6. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
-7. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+7. adicionar testes de componentes e E2E Android/iOS;
+8. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 

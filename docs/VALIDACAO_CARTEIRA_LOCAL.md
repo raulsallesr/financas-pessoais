@@ -95,4 +95,5 @@ A Etapa 5B.1 só muda para concluída quando:
 - CL-03 a CL-10 passarem com dados sintéticos;
 - não houver posição ou valor no snapshot público, log ou evidência versionada;
 - falhas encontradas forem registradas sem expor os dados usados no aparelho;
-- `CONTEXT.md` apontar a importação B3 sanitizada como próximo incremento.
+- `CONTEXT.md` registrar o resultado, ainda que o APK `v0.4.0` substitua o
+  `v0.3.0` no ciclo físico e valide cofre + importação em conjunto.

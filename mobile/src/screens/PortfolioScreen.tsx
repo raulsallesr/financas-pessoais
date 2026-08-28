@@ -19,6 +19,7 @@ import {
   SectionHeading,
   Surface,
 } from "../components/Primitives";
+import { B3ImportPanel } from "../components/B3ImportPanel";
 import { allocationPercent, portfolioTotal } from "../domain/insights";
 import {
   ASSET_CLASSES,
@@ -600,6 +601,14 @@ export function PortfolioScreen({
           )}
         </Surface>
 
+        {mode === "demo" || mode === "local" ? (
+          <B3ImportPanel
+            existingCount={snapshot.positions.length}
+            mode={mode}
+            onReplacePositions={onSavePositions}
+          />
+        ) : null}
+
         <SectionHeading title="Privacidade desde o começo" />
         <View style={styles.privacyCard}>
           <View accessibilityElementsHidden style={styles.lockMark}>
@@ -631,13 +640,6 @@ export function PortfolioScreen({
           </Pressable>
         ) : null}
 
-        <Surface style={styles.nextCard}>
-          <Eyebrow>Próximo incremento</Eyebrow>
-          <Text style={styles.nextTitle}>Importação B3 sanitizada</Text>
-          <Text style={styles.nextSupport}>
-            O editor seguro é a base. A próxima entrega importa um arquivo escolhido pelo usuário, valida somente os campos necessários e descarta o original após o processamento local.
-          </Text>
-        </Surface>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -994,8 +996,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
   },
   resetButtonText: { color: colors.danger, fontSize: 13, fontWeight: "800" },
-  nextCard: { gap: spacing.xs },
-  nextTitle: { color: colors.text, fontSize: 18, fontWeight: "900" },
-  nextSupport: { color: colors.textMuted, fontSize: 13, lineHeight: 20 },
   pressed: { opacity: 0.65 },
 });

@@ -667,8 +667,8 @@ observabilidade e gates estão em `docs/ARQUITETURA_INSTITUCIONAL.md`.
    development build Android instalado e validado; rota iOS documentada.
 2. **Etapa 5B — carteira pessoal segura.** Editor local, ocultação de valores,
    armazenamento criptografado e importação B3 sanitizada, sem nuvem por
-   padrão. O editor e o cofre privado `v1` estão implementados no corte móvel
-   `v0.3`; importação B3 e validação do novo APK permanecem no gate desta etapa.
+   padrão. Editor, cofre privado `v1` e importação B3 com prévia estão
+   implementados no corte móvel `v0.4`; a validação física permanece no gate.
 3. **Etapa 5C — acompanhamento explicável.** Histórico local de fotografias,
    favoritos, alertas com evidência, simulador de aportes, testes de componentes
    e E2E Android/iOS.
@@ -769,3 +769,59 @@ terminou com status `FINISHED`. O próximo gate é instalar esse APK e testar
 criar, reabrir, editar, excluir, ocultar e apagar a carteira no POCO X8 Pro.
 O roteiro e a matriz de evidência estão em
 `docs/VALIDACAO_CARTEIRA_LOCAL.md`.
+
+## 16. Execução da Etapa 5B, incremento 2 — importação B3 sanitizada
+
+### Resultado esperado
+
+Permitir que a pessoa escolha no Android/iOS a planilha XLSX da Área do
+Investidor B3, revise uma versão mínima da posição e substitua conscientemente
+a carteira local, sem backend, upload, persistência do original ou ampliação do
+snapshot público `v1`.
+
+### Escopo fechado
+
+1. usar o seletor nativo com cópia temporária no cache privado e limite de 5 MB;
+2. processar ZIP/XML somente em memória e apagar a cópia temporária em qualquer
+   saída, sem alterar o arquivo original;
+3. reconhecer apenas as abas B3 já cobertas pelo adaptador Python e extrair
+   somente ativo, classe e valor atualizado;
+4. consolidar linhas repetidas, ignorar subtotais e expor contagens de linhas
+   aceitas, ignoradas e de classes não suportadas;
+5. mostrar prévia com quantidade, total, abas e posições antes de qualquer
+   gravação;
+6. substituir a carteira inteira somente depois de confirmação explícita e
+   cifrar o mesmo contrato privado `v1` no cofre existente;
+7. manter web em demonstração e deixar CSV, PDF, nuvem, autenticação, Open
+   Finance e novas classes de ativos fora deste incremento.
+
+### Guardrails de arquivo
+
+- rejeitar arquivo vazio, acima de 5 MB, não ZIP, macro-enabled ou sem a
+  declaração XLSX esperada;
+- extrair apenas manifestos, workbook, relações, shared strings e worksheets;
+- limitar tamanho expandido, quantidade de entradas, XML individual, strings,
+  linhas, células, posições e valor por posição;
+- recusar DTD/entidades XML e relacionamento que saia de `xl/worksheets/`;
+- não usar a biblioteca `xlsx` legada do npm; o leitor mínimo usa `fflate`
+  somente para descompressão e interpreta o subconjunto OOXML necessário;
+- não registrar nome de ativo, valor, nome de arquivo ou conteúdo em log,
+  telemetria, EAS, snapshot ou documentação.
+
+### Estado da execução em 2026-08-28
+
+**Implementação e gates locais concluídos; preview e validação física
+pendentes.** O app foi elevado a `v0.4.0`, Android `versionCode 4` e iOS
+`buildNumber 4`. `expo-document-picker ~57.0.1` e `fflate 0.8.3` foram
+adicionados sem alterar motores Python ou o contrato público.
+
+O fluxo usa labels e estados acessíveis, botão bloqueado durante leitura/gravação,
+prévia progressiva, aviso explícito para classes excluídas e confirmação antes
+de substituir a carteira. A importação nunca soma com posições antigas sem que
+a pessoa perceba.
+
+TypeScript, 25 testes de domínio, export web, `expo install --check`, Expo
+Doctor `21/21` e bundle Android/Hermes com 640 módulos passaram. A auditoria de
+dependências de produção encontrou zero vulnerabilidade; a árvore completa
+mantém 11 moderadas transitivas do toolchain Expo, sem alta ou crítica. O
+roteiro físico está em `docs/VALIDACAO_IMPORTACAO_B3.md`.

@@ -15,11 +15,13 @@ test("configura um development build Android instalável", () => {
   const packageJson = readJson("package.json");
 
   assert.equal(app.orientation, "default");
-  assert.equal(app.version, "0.3.0");
-  assert.equal(packageJson.version, "0.3.0");
+  assert.equal(app.version, "0.4.0");
+  assert.equal(packageJson.version, "0.4.0");
   assert.equal(app.scheme, "focuslens");
   assert.equal(app.android.package, "com.raulsallesr.focuslens");
+  assert.equal(app.android.versionCode, 4);
   assert.equal(app.ios.bundleIdentifier, "com.raulsallesr.focuslens");
+  assert.equal(app.ios.buildNumber, "4");
   assert.equal(app.android.predictiveBackGestureEnabled, true);
   assert.equal(app.splash, undefined);
   assert.deepEqual(app.plugins[0], [
@@ -38,7 +40,9 @@ test("configura um development build Android instalável", () => {
   assert.equal(packageJson.dependencies.expo, "~57.0.18");
   assert.equal(packageJson.dependencies["expo-crypto"], "~57.0.2");
   assert.equal(packageJson.dependencies["expo-dev-client"], "~57.0.16");
+  assert.equal(packageJson.dependencies["expo-document-picker"], "~57.0.1");
   assert.equal(packageJson.dependencies["expo-file-system"], "~57.0.6");
+  assert.equal(packageJson.dependencies.fflate, "0.8.3");
   assert.equal(packageJson.dependencies["expo-secure-store"], "~57.0.2");
   assert.equal(packageJson.dependencies["expo-splash-screen"], "~57.0.8");
   assert.equal(
