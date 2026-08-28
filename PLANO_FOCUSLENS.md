@@ -623,6 +623,26 @@ equivalente para iOS, que depende de ambiente e assinatura Apple compatíveis.
 6. manter carteira editável, importação B3, alertas, autenticação e Open
    Finance fora deste incremento.
 
+### Estado da execução em 2026-08-28
+
+**Em andamento; ainda não concluída.** A configuração portátil do build está
+fechada: Expo SDK `57.0.18`, `expo-dev-client`, EAS CLI mínimo `23.0.0`, perfis
+`development`/`preview`, identificadores nativos, scheme, safe areas, rotação e
+splash compatível. Expo Doctor passou `21/21`, TypeScript e 13 testes móveis
+passaram e o bundle Android/Hermes foi exportado com 603 módulos.
+
+A geração e a instalação ainda dependem de duas ações externas verificadas:
+
+- autenticar localmente a conta Expo/EAS (`eas whoami` retorna `Not logged in`);
+- disponibilizar um Android real; esta máquina não possui `adb`, Java ou SDK.
+
+O login deve ser feito pelo Raul no próprio terminal, sem compartilhar
+credencial. Depois disso: executar `eas init`, gerar o perfil `development`,
+instalar o APK e completar DB-03 a DB-12 em
+`docs/VALIDACAO_DEVELOPMENT_BUILD.md`. O perfil `preview` cobre a abertura
+autônoma/offline. Não marcar esta seção como concluída só porque o export Metro
+passou.
+
 ## 14. Roadmap aprovado — FocusLens Embedded
 
 **Decisão de 2026-08-27:** o produto pessoal continuará evoluindo como app

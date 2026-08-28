@@ -247,6 +247,7 @@ const styles = StyleSheet.create({
   headerRow: {
     alignItems: "center",
     flexDirection: "row",
+    flexWrap: "wrap",
     gap: spacing.md,
     justifyContent: "space-between",
   },
@@ -374,7 +375,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     borderWidth: 1,
     justifyContent: "center",
-    minHeight: 46,
+    minHeight: 48,
     paddingHorizontal: spacing.md,
   },
   filterChipSelected: {

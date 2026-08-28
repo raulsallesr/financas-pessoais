@@ -141,6 +141,8 @@ const styles = StyleSheet.create({
   headerRow: {
     alignItems: "center",
     flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
     justifyContent: "space-between",
   },
   headerCopy: {
@@ -161,6 +163,8 @@ const styles = StyleSheet.create({
   balanceTopline: {
     alignItems: "center",
     flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
     justifyContent: "space-between",
   },
   balanceLabel: {
@@ -185,7 +189,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     flexDirection: "row",
     gap: 6,
-    minHeight: 44,
+    minHeight: 48,
     paddingHorizontal: 12,
   },
   privacyDot: {

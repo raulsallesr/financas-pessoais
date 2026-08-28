@@ -90,7 +90,13 @@ export function LearnScreen() {
 
 const styles = StyleSheet.create({
   content: { alignSelf: "center", gap: spacing.lg, maxWidth: 820, paddingBottom: spacing.xl, paddingHorizontal: spacing.md, paddingTop: spacing.md, width: "100%" },
-  headerRow: { alignItems: "center", flexDirection: "row", justifyContent: "space-between" },
+  headerRow: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
+    justifyContent: "space-between",
+  },
   headerCopy: { gap: spacing.xxs },
   title: { color: colors.text, fontSize: 31, fontWeight: "900", letterSpacing: -1 },
   hero: { backgroundColor: colors.primaryDark, borderRadius: radius.lg, gap: spacing.sm, padding: spacing.lg },

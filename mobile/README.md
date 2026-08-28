@@ -75,7 +75,7 @@ precisam ser executadas na mesma janela do PowerShell para que o `npm` portátil
 permaneça no `PATH`.
 
 Nesta máquina, `mobile/node_modules` é uma junção local ignorada pelo Git para
-`%LOCALAPPDATA%\focuslens-mobile\runtime\node_modules`. Não remover ou
+`%LOCALAPPDATA%\focuslens-mobile\development\node_modules`. Não remover ou
 versionar essa junção. Em outra máquina, prefira um clone curto, como
 `C:\dev\financas-pessoais`, e então rode `npm ci` dentro de `mobile/`.
 
@@ -83,16 +83,30 @@ versionar essa junção. Em outra máquina, prefira um clone curto, como
 
 Este corte usa Expo SDK 57. Para um projeto de produto, o caminho recomendado é
 um **development build** próprio, não depender do aplicativo genérico Expo Go.
-Depois que esse build estiver instalado no Android/iOS, inicie o Metro com:
+`eas.json`, `expo-dev-client`, identificadores Android/iOS, safe areas, rotação
+e splash nativo já estão configurados. O APK ainda não foi gerado nem instalado:
+em 2026-08-28, `eas whoami` confirmou que esta máquina não está autenticada e
+ela também não possui `adb`, Java ou Android SDK.
+
+O login deve ser feito pelo Raul no próprio terminal, sem enviar credencial pelo
+chat:
 
 ```powershell
-npm start
+npx --yes eas-cli@23.0.0 login
+npx --yes eas-cli@23.0.0 init
+npx --yes eas-cli@23.0.0 build --platform android --profile development
 ```
 
-O empacotamento instalável e a assinatura do development build são o próximo
-incremento de distribuição. O gate atual já gera o bundle Android, mas ainda
-não publica APK, AAB ou build iOS. O contrato vivo Python → mobile já está
-concluído e não depende desse empacotamento.
+Depois que o development APK estiver instalado, inicie o Metro com:
+
+```powershell
+npm run start:dev-client
+```
+
+O perfil `preview` gera um APK interno com bundle incorporado para o teste de
+abertura offline; não publica em loja. Comandos, instalação, checklist Android,
+rota iOS, evidências e limites estão em
+[`docs/VALIDACAO_DEVELOPMENT_BUILD.md`](../docs/VALIDACAO_DEVELOPMENT_BUILD.md).
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
@@ -109,8 +123,9 @@ npm run export:android
 
 O gate atual cobre contrato demo e live, schema incompatível, documento
 inválido, proibição de carteira no artefato público, fallback, cálculo de peso,
-filtro por classe, impacto por sinal, limites do cenário e linguagem não
-imperativa. O bundle Android é gerado pelo Metro sem depender do Streamlit.
+filtro por classe, impacto por sinal, configuração EAS, snapshot empacotado,
+limites do cenário e linguagem não imperativa. O bundle Android é gerado pelo
+Metro sem depender do Streamlit.
 
 ## Estrutura
 
@@ -140,4 +155,5 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo incremento continua sendo o development build em aparelho real.
+O próximo passo continua sendo autenticar o EAS, gerar o development APK e
+executar o checklist em aparelho real.

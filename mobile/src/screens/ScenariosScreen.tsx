@@ -157,6 +157,8 @@ const styles = StyleSheet.create({
   headerRow: {
     alignItems: "center",
     flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
     justifyContent: "space-between",
   },
   headerCopy: { gap: spacing.xxs },

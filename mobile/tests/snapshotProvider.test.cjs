@@ -1,6 +1,7 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
 
+const { currentSnapshot } = require("../.test-dist/data/currentSnapshot.js");
 const { impactsForSignal } = require("../.test-dist/domain/insights.js");
 const {
   selectMarketSnapshot,
@@ -56,6 +57,14 @@ function validDocument() {
     changeConditions: ["Nova fotografia pode mudar a leitura."],
   };
 }
+
+test("carrega a fotografia pública empacotada sem acionar fallback", () => {
+  assert.equal(currentSnapshot.mode, "live");
+  assert.equal(currentSnapshot.fallbackReason, undefined);
+  assert.equal(currentSnapshot.positions.length, 5);
+  assert.ok(currentSnapshot.signals.length > 0);
+  assert.ok(currentSnapshot.sources.length > 0);
+});
 
 test("aceita snapshot v1 e combina somente a carteira demo local", () => {
   const document = validDocument();

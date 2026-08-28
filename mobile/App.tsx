@@ -2,12 +2,15 @@ import { useEffect, useState } from "react";
 import {
   BackHandler,
   Platform,
-  SafeAreaView,
-  StatusBar as NativeStatusBar,
   StyleSheet,
   View,
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
+import {
+  initialWindowMetrics,
+  SafeAreaProvider,
+  SafeAreaView,
+} from "react-native-safe-area-context";
 
 import { BottomNav, TabKey } from "./src/components/BottomNav";
 import { currentSnapshot } from "./src/data/currentSnapshot";
@@ -72,13 +75,18 @@ export default function App() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar style="dark" />
-      <View accessibilityLanguage="pt-BR" style={styles.app}>
-        <View style={styles.screen}>{renderScreen()}</View>
-        <BottomNav activeTab={activeTab} onChange={setActiveTab} />
-      </View>
-    </SafeAreaView>
+    <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+      <SafeAreaView
+        edges={["top", "right", "bottom", "left"]}
+        style={styles.safeArea}
+      >
+        <StatusBar style="dark" />
+        <View accessibilityLanguage="pt-BR" style={styles.app}>
+          <View style={styles.screen}>{renderScreen()}</View>
+          <BottomNav activeTab={activeTab} onChange={setActiveTab} />
+        </View>
+      </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
@@ -86,8 +94,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.background,
-    paddingTop:
-      Platform.OS === "android" ? NativeStatusBar.currentHeight ?? 0 : 0,
   },
   app: {
     backgroundColor: colors.background,

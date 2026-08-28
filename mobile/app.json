@@ -3,15 +3,18 @@
     "name": "FocusLens BR",
     "slug": "focuslens-br",
     "version": "0.1.0",
-    "orientation": "portrait",
+    "orientation": "default",
+    "scheme": "focuslens",
     "icon": "./assets/focuslens-icon.png",
     "userInterfaceStyle": "light",
     "backgroundColor": "#F3F7F5",
     "primaryColor": "#0F766E",
     "ios": {
+      "bundleIdentifier": "com.raulsallesr.focuslens",
       "supportsTablet": true
     },
     "android": {
+      "package": "com.raulsallesr.focuslens",
       "adaptiveIcon": {
         "backgroundColor": "#E7F1EE",
         "foregroundImage": "./assets/focuslens-foreground.png",
@@ -22,10 +25,16 @@
     "web": {
       "favicon": "./assets/focuslens-icon.png"
     },
-    "splash": {
-      "image": "./assets/focuslens-foreground.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#F3F7F5"
-    }
+    "plugins": [
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/focuslens-foreground.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#F3F7F5"
+        }
+      ]
+    ]
   }
 }

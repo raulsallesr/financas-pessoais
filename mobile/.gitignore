@@ -37,6 +37,9 @@ yarn-error.*
 *.tsbuildinfo
 .test-dist/
 dist-android/
+*.apk
+*.aab
+*.ipa
 
 # generated native folders
 /ios

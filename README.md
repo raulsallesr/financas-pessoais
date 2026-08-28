@@ -183,9 +183,10 @@ npm ci
 npm run web
 ```
 
-A prévia imediata usa o renderer web da mesma base React Native. O SDK 57 será
-testado em aparelho por um development build próprio no próximo incremento; o
-bundle Android já faz parte do gate local:
+A prévia imediata usa o renderer web da mesma base React Native. A configuração
+do development build para SDK 57 está pronta e validada pelo Expo Doctor; a
+geração/instalação do APK aguarda login EAS e aparelho Android. O bundle Android
+continua no gate local:
 
 ```powershell
 npm run typecheck
@@ -195,6 +196,8 @@ npm run export:android
 
 O comando exato já validado no computador de trabalho, com Node portátil e
 dependências fora do OneDrive, está em [`mobile/README.md`](mobile/README.md).
+O roteiro de build, instalação, acessibilidade, offline e iOS está em
+[`docs/VALIDACAO_DEVELOPMENT_BUILD.md`](docs/VALIDACAO_DEVELOPMENT_BUILD.md).
 
 ## Como rodar a referência Streamlit
 

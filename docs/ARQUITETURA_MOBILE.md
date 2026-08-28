@@ -103,8 +103,10 @@ build atual.
 1. **concluído:** snapshot JSON público e versionado a partir dos motores
    Python, sem carteira, com schema e teste de compatibilidade;
 2. **concluído:** provider somente leitura com fallback local explícito;
-3. gerar e instalar um development build próprio para Android e preparar a
-   mesma rota no iOS;
+3. **em andamento:** configuração EAS/dev client, safe areas, rotação,
+   identificadores, splash e perfis internos concluída; gerar e instalar o APK
+   Android aguarda login EAS e aparelho, com rota iOS documentada em
+   `VALIDACAO_DEVELOPMENT_BUILD.md`;
 4. criar carteira local editável e criptografada, sem nuvem por padrão;
 5. portar a importação B3 de forma sanitizada para um fluxo móvel seguro;
 6. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
@@ -117,5 +119,20 @@ produção são obrigatórios: testes de componentes, E2E em Android/iOS, leitur
 por screen reader, armazenamento seguro, política de privacidade, threat model,
 telemetria sem dado financeiro, tratamento offline, assinatura de builds e
 zero vulnerabilidade alta ou crítica. A auditoria atual do npm encontrou zero
-alta/crítica e dez moderadas transitivas no toolchain Expo; não foi aplicado
-`audit fix --force`, pois a sugestão do npm faria downgrade incompatível.
+alta/crítica e 11 moderadas transitivas no toolchain Expo; não foi aplicado
+`audit fix --force`, pois a sugestão faria downgrade incompatível de pacotes do
+toolchain, inclusive do Expo.
+
+### Distribuição nativa preparada em 2026-08-28
+
+- `eas.json` possui development client interno em APK, simulador iOS e preview
+  interno para abertura offline;
+- `app.json` usa identificadores `com.raulsallesr.focuslens`, scheme
+  `focuslens`, orientação adaptável e plugin de splash aceito pelo SDK 57;
+- `App.tsx` usa `SafeAreaProvider` e aplica os quatro lados, inclusive gesto
+  inferior e recortes laterais em paisagem;
+- controles que estavam em 44–46 px foram elevados para 48 px e os cabeçalhos
+  podem quebrar de forma controlada com texto ampliado;
+- Expo Doctor aprovou `21/21` checks e o export Hermes aprovou 603 módulos;
+- build/instalação e testes físicos continuam pendentes de login EAS e aparelho;
+- a evidência operacional está em `VALIDACAO_DEVELOPMENT_BUILD.md`.
