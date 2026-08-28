@@ -34,15 +34,21 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.2`
+## Estado do corte `mobile v0.3`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
 permanece como fallback explícito e nunca é confundida com dado vivo.
 
+No Android/iOS, a pessoa já pode substituir conscientemente as posições
+fictícias por uma carteira privada `v1`, criada e editada no próprio aparelho.
+Essa carteira não altera o snapshot público nem entra no Git, EAS, telemetria
+ou rede. No renderer web, o editor permanece bloqueado e somente a demo é
+exibida, porque não há cofre nativo equivalente nessa bancada.
+
 O domínio TypeScript faz apenas operações locais necessárias à experiência:
 
-- soma e peso da carteira sintética;
+- soma e peso da carteira ativa (demo ou privada);
 - filtro de posições por classe;
 - junção entre o efeito já declarado no snapshot e as posições relacionadas;
 - sensibilidade educacional discreta a choques de juros.
@@ -68,15 +74,54 @@ isso, o adaptador mantém esse mapa vazio em vez de inventar o elo.
 
 No app, `snapshotProvider.ts` valida o JSON e escolhe fotografia viva ou demo.
 Somente depois dessa escolha a camada local combina os efeitos públicos com a
-carteira sintética. Schema ausente, desconhecido ou inválido degrada para a demo
+carteira ativa, privada quando disponível ou sintética na demo. Schema público
+ausente, desconhecido ou inválido degrada para a demo
 explicitamente rotulada, sem derrubar a navegação. O documento público é
 rejeitado se transportar `positions`, `amount` ou outra chave pessoal proibida.
+
+### Fronteira implementada do contrato privado `v1`
+
+```text
+SNAPSHOT PÚBLICO v1               CARTEIRA PRIVADA v1
+sinais · fontes · evidências      posições · classes · valores
+          │                                  │
+          │                    AES-256-GCM + cofre nativo
+          └──────────────────┬───────────────┘
+                             ▼
+                    COMPOSIÇÃO EM MEMÓRIA
+                    Hoje · Carteira · Cenários
+```
+
+`src/domain/privatePortfolio.ts` define um documento versionado, estrito e
+limitado a 100 posições. Nome, classe, identificador e valor são validados antes
+de qualquer gravação. O contrato público continua proibindo chaves pessoais;
+não existe migração ou ampliação de `liveSnapshot.json` para transportar
+carteira.
+
+`src/storage/securePortfolioStorage.ts` implementa a fronteira nativa:
+
+- gera uma chave AES de 256 bits e guarda somente sua codificação no
+  `expo-secure-store`;
+- usa `WHEN_UNLOCKED_THIS_DEVICE_ONLY` no Keychain e armazenamento protegido
+  pelo Android Keystore no Android;
+- cifra o JSON com AES-GCM e contexto autenticado fixo;
+- grava bytes em arquivo temporário dentro de `Paths.document` e move para o
+  destino com substituição, evitando aceitar gravação parcial;
+- rejeita chave ausente, autenticação inválida, ciphertext corrompido ou schema
+  desconhecido e não recua silenciosamente para a demo;
+- apaga arquivo e chave somente depois de confirmação explícita do usuário.
+
+O cofre guarda uma chave pequena; o documento financeiro fica cifrado no
+sistema de arquivos do app. Biometria não foi ativada neste incremento para não
+confundir criptografia em repouso com autenticação do usuário. Backup/restauração
+entre aparelhos não é prometido: uma carteira sem a chave local falha fechada e
+oferece reset explícito.
 
 ## Privacidade e guardrails
 
 - nenhuma conta, CPF, instituição, posição real ou planilha foi usada;
 - a carteira demo é sintética e versionável;
-- valores reais deverão ficar no aparelho por padrão;
+- valores reais ficam no aparelho por padrão no contrato privado `v1`;
 - sincronização, Open Finance ou backend exigirão consentimento explícito,
   autenticação, criptografia, revogação e revisão de segurança;
 - o app descreve sensibilidade e evidência, nunca compra, venda ou promessa;
@@ -108,8 +153,9 @@ build atual.
    `development` e `preview` gerados e instalados no POCO X8 Pro, com fluxo
    principal/offline aprovado, acessibilidade física pendente e rota iOS em
    `VALIDACAO_DEVELOPMENT_BUILD.md`;
-4. criar carteira local editável e criptografada, sem nuvem por padrão;
-5. portar a importação B3 de forma sanitizada para um fluxo móvel seguro;
+4. **implementado; validação física pendente:** carteira local editável e
+   criptografada, sem nuvem por padrão;
+5. portar a importação B3 de forma sanitizada para o mesmo contrato privado;
 6. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
 7. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
@@ -140,6 +186,21 @@ toolchain, inclusive do Expo.
   `60fa378`;
 - development e preview foram instalados no POCO X8 Pro; quatro abas, snapshot
   e abertura em modo avião foram aprovados;
-- versão do Android, rotação, voltar, TalkBack, texto ampliado e alvos de toque
-  permanecem pendentes;
+- rotação, safe areas em paisagem e botão Voltar foram aprovados no POCO X8
+  Pro; versão do Android, TalkBack, texto ampliado e alvos de toque permanecem
+  pendentes;
 - a evidência operacional está em `VALIDACAO_DEVELOPMENT_BUILD.md`.
+
+### Armazenamento nativo preparado em 2026-08-28
+
+- `expo-crypto ~57.0.2`, `expo-file-system ~57.0.6` e
+  `expo-secure-store ~57.0.2` foram instalados pela resolução compatível do Expo;
+- o plugin do SecureStore configura as exclusões de Android Auto Backup e não
+  declara permissão de Face ID, pois biometria não é usada neste corte;
+- a carteira demo nunca é persistida automaticamente: a troca acontece somente
+  ao salvar a primeira posição local;
+- edição, exclusão e reset atualizam o cofre; as demais telas recebem a carteira
+  privada somente por composição em memória;
+- a bancada web continua explicitamente em demonstração;
+- TypeScript, 20 testes, export web e bundle Android/Hermes com 633 módulos
+  passaram; um novo APK é obrigatório porque o corte adiciona módulos nativos.

@@ -2,7 +2,8 @@
 
 **Status em 2026-08-28:** projeto EAS vinculado, APKs `development` e `preview`
 gerados e instalados em POCO X8 Pro. Quatro abas, snapshot empacotado e abertura
-offline foram aprovados; versão do Android, rotação e acessibilidade ainda
+offline, safe areas em paisagem, rotação e comportamento do botão Voltar foram
+aprovados. A versão do Android, TalkBack, texto ampliado e alvos de toque ainda
 precisam ser registrados.
 
 Este documento é a evidência operacional da seção 13 de
@@ -169,15 +170,20 @@ navegáveis, sem carteira ou conexão de rede.
 | DB-04 | Snapshot empacotado | Aprovado | `DADOS PÚBLICOS`, fotografia e fontes visíveis |
 | DB-05 | Abertura offline | Aprovado | preview reabriu e navegou em modo avião |
 | DB-06 | Fallback demo | Automatizado | testes de provider aprovados |
-| DB-07 | Safe areas | Parcial | retrato correto; paisagem e fonte ampliada pendentes |
-| DB-08 | Voltar Android | Pendente | aba interna → Hoje; Hoje → sistema |
-| DB-09 | Rotação | Pendente | retrato/paisagem sem corte ou overflow |
+| DB-07 | Safe areas | Aprovado | retrato e paisagem funcionaram sem conteúdo sob recortes ou gesto inferior |
+| DB-08 | Voltar Android | Aprovado | aba interna → Hoje; Hoje → sistema |
+| DB-09 | Rotação | Aprovado | retrato/paisagem funcionaram sem corte ou erro |
 | DB-10 | TalkBack | Pendente | ordem lógica e controles nomeados |
 | DB-11 | Texto ampliado | Pendente | maior tamanho sem conteúdo inacessível |
 | DB-12 | Alvos de toque | Pendente | controles acionáveis sem precisão fina |
 
 Registrar nesta tabela somente observação sintética e técnica. Não incluir
 posição, valor, conta ou qualquer dado pessoal do aparelho.
+
+**Evidência física adicional em 2026-08-28:** o Raul confirmou no POCO X8 Pro
+que rotação, paisagem e comportamento do botão Voltar funcionaram sem erro.
+Essa confirmação fecha DB-07 a DB-09, mas não substitui os roteiros específicos
+de TalkBack, texto ampliado ou alvos de toque.
 
 ## 9. Roteiro de acessibilidade
 
@@ -236,7 +242,7 @@ real.
 - `npm audit fix --force` não foi aplicado: a correção sugerida faria downgrade
   incompatível de pacotes do toolchain, inclusive do Expo.
 
-Essas evidências não substituem o fechamento de DB-07 a DB-12.
+Essas evidências não substituem o fechamento de DB-10 a DB-12.
 
 ## 12. Critério de conclusão
 

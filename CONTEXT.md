@@ -4,8 +4,10 @@
   A Etapa 5 móvel possui fundação React Native `v0.1` e contrato vivo `v1`
   concluídos em 2026-08-27. A configuração do development build foi concluída
   em 2026-08-28; os APKs `development` e `preview` foram gerados e instalados no
-  POCO X8 Pro. Quatro abas, snapshot e offline passaram; rotação, voltar,
-  TalkBack, texto ampliado e alvos de toque ainda aguardam evidência. O roadmap
+  POCO X8 Pro. Quatro abas, snapshot, offline, rotação, paisagem e Voltar
+  passaram; TalkBack, texto ampliado e alvos de toque ainda aguardam evidência.
+  O corte móvel `v0.3.0` já implementa editor e cofre local criptografado; falta
+  validar o novo APK e depois portar a importação B3 sanitizada. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
@@ -60,9 +62,8 @@
   `spawn EPERM` no Hermes dentro do sandbox; ambos passaram na repetição fora
   do sandbox, sem mudança de código.
 - `npm run web` já permite testar a mesma árvore de componentes React Native no
-  navegador. Existem APKs internos `development` e `preview`, mas nenhum foi
-  instalado; a validação física é uma etapa distinta do contrato vivo e não
-  deve ser apresentada como pronta.
+  navegador. Os APKs internos `development` e `preview` foram instalados e
+  validados no POCO X8 Pro; a bancada web continua apenas como apoio visual.
 - A configuração da seção 13 foi preparada em 2026-08-28: `eas.json` possui
   perfis `development`, `development-simulator` e `preview`; `app.json` possui
   identificadores `com.raulsallesr.focuslens`, scheme, rotação e splash por
@@ -79,9 +80,20 @@
   (`1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`) e `preview`
   (`dd050dbe-5d0d-44e8-aae8-e13f613b7405`) terminaram com o mesmo fingerprint
   do commit `60fa378`. Development e preview foram instalados no POCO X8 Pro;
-  DB-01 a DB-05 estão aprovados e DB-06 é automatizado. O Metro LAN foi
+  DB-01 a DB-05 e DB-07 a DB-09 estão aprovados; DB-06 é automatizado. O Metro LAN foi
   bloqueado pelo firewall corporativo, mas o preview reabriu e navegou em modo
-  avião. A versão do Android e DB-07 a DB-12 continuam pendentes.
+  avião. A versão do Android e DB-10 a DB-12 continuam pendentes.
+- A Etapa 5B começou em 2026-08-28 com o corte móvel `v0.3.0`. O editor cria,
+  edita e exclui posições; a primeira gravação substitui conscientemente a demo.
+  `privatePortfolio.ts` define o contrato privado `v1`, `securePortfolioStorage.ts`
+  guarda a chave no SecureStore e cifra o documento com AES-256-GCM em arquivo
+  persistente com troca atômica. O web não persiste carteira; falha de chave,
+  autenticação ou schema bloqueia o dado e oferece reset explícito.
+- As dependências nativas `expo-crypto`, `expo-file-system` e
+  `expo-secure-store` foram instaladas nas versões compatíveis com Expo 57. O
+  plugin do SecureStore configura Android Auto Backup sem declarar uso de Face
+  ID. TypeScript, 20 testes, export web e bundle Android/Hermes com 633 módulos
+  passaram; o novo APK ainda precisa ser gerado e validado no aparelho.
 - Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
   Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
   piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
@@ -171,16 +183,16 @@
 
 ### Próximo incremento, sem ambiguidade
 
-- Entrega: **Etapa 5 — concluir o development build instalável**.
-- Configuração, login, vinculação EAS, geração e instalação dos perfis
-  `development`/`preview` já concluídos. Quatro abas, snapshot empacotado e
-  abertura offline foram aprovados no POCO X8 Pro.
-- Registrar a versão do Android e concluir safe areas em paisagem, gesto voltar,
-  rotação, TalkBack, texto ampliado e alvos de toque. DB-07 a DB-12 permanecem
-  abertos no documento de validação.
-- Não alterar os motores, o schema público `1` ou os três stashes. Carteira
-  editável, importação B3, alertas, autenticação, nuvem e Open Finance continuam
-  em incrementos posteriores.
+- Entrega: **Etapa 5B.1 — validar a carteira local segura `v0.3.0` em APK**.
+- Editor, contrato privado e cofre AES-GCM estão implementados; gerar um novo
+  `preview`, instalar no POCO X8 Pro e validar criar, reabrir, editar, excluir,
+  ocultar e apagar a carteira em modo avião.
+- Registrar a versão do Android e concluir TalkBack, texto ampliado e alvos de
+  toque. DB-10 a DB-12 permanecem abertos no documento de validação; DB-07 a
+  DB-09 já foram aprovados pelo Raul no aparelho.
+- Não alterar os motores, o schema público `1` ou os três stashes. Importação
+  B3 sanitizada é o incremento seguinte; alertas, autenticação, nuvem e Open
+  Finance continuam posteriores.
 - Não antecipar a Etapa 6/Embedded durante o development build. O roadmap
   institucional aprovado começa somente depois dos gates definidos na seção 14.
 - A definição completa está na seção “13. Próxima execução — Etapa 5” de
@@ -192,16 +204,18 @@
 > leia integralmente `CLAUDE.md`, `CONTEXT.md`, `PLANO_FOCUSLENS.md`,
 > `mobile/README.md` e `docs/ARQUITETURA_MOBILE.md`. Confira `git stash list`,
 > mas não aplique nem remova os três stashes documentados. A `v2.0` dos motores,
-> a fundação móvel `v0.1` e o contrato vivo `v1` já estão concluídos; não refaça
+> a fundação móvel `v0.1`, o contrato público `v1` e o editor/cofre privado
+> `v0.3.0` já estão implementados; não refaça
 > `v1.12`–`v2.0`, não redesenhe o Streamlit, não replique fórmulas em TypeScript
-> e não coloque carteira no snapshot. Continue pela seção “13. Próxima execução
-> — Etapa 5” do plano e `docs/VALIDACAO_DEVELOPMENT_BUILD.md`. A configuração
+> e não coloque carteira no snapshot. Continue pelas seções 13 e 15 do plano e
+> `docs/VALIDACAO_DEVELOPMENT_BUILD.md`. A configuração
 > EAS/dev client já está pronta e validada; não a refaça. O projeto
 > `@raulsallesr/focuslens-br` está vinculado, e os APKs Android `development` e
-> `preview` já foram gerados e instalados no POCO X8 Pro. DB-01 a DB-05 estão
-> aprovados e DB-06 é automatizado. Registre a versão do Android, conclua DB-07
-> a DB-12 e preserve a rota iOS sem antecipar carteira pessoal, importação B3,
-> autenticação de cliente ou Open Finance. Rode os gates e faça commit/push
+> `preview` anteriores já foram gerados e instalados no POCO X8 Pro. DB-01 a
+> DB-09 estão aprovados, com DB-06 automatizado. Gere e valide o novo preview
+> `v0.3.0`, registre a versão do Android, conclua DB-10 a DB-12 e preserve a rota
+> iOS. Depois, implemente a importação B3 sanitizada sem antecipar autenticação
+> de cliente ou Open Finance. Rode os gates e faça commit/push
 > somente no git próprio do projeto.
 > O roadmap FocusLens Embedded já está aprovado e documentado, mas não antecipe
 > API, SDK, autenticação ou integração bancária durante esse incremento.
@@ -786,8 +800,25 @@
     `development` e `preview` foram gerados e instalados no POCO X8 Pro;
   - DB-01 a DB-05 aprovados: quatro abas e snapshot continuaram disponíveis após
     encerrar e reabrir o preview em modo avião; DB-06 segue automatizado;
-  - pendência real: versão do Android e DB-07 a DB-12; a seção 13 permanece
-    aberta até o fechamento de rotação e acessibilidade.
+  - DB-07 a DB-09 aprovados depois da confirmação física de paisagem, safe areas,
+    rotação e botão Voltar;
+  - pendência real: versão do Android e DB-10 a DB-12; a seção 13 permanece
+    aberta até o fechamento de acessibilidade.
+- **Etapa 5B · carteira local segura `v0.3.0` (2026-08-28)** — implementação:
+  - contrato privado `v1` separado do snapshot público, limitado a 100 posições
+    e validado antes de leitura ou gravação;
+  - editor móvel com criar/editar/excluir, teclado decimal, erros junto aos
+    campos, ocultação de valores, confirmações destrutivas e alvos de 48 px;
+  - chave AES-256 no SecureStore e documento AES-GCM autenticado em
+    `Paths.document`, com gravação temporária e substituição do arquivo;
+  - falha fechada para chave ausente, conteúdo adulterado ou schema inválido;
+    web permanece em demonstração e não persiste carteira;
+  - `expo-crypto ~57.0.2`, `expo-file-system ~57.0.6` e
+    `expo-secure-store ~57.0.2` adicionados; plugin de backup Android configurado
+    e Face ID não declarado;
+  - TypeScript, 20 testes, export web e Android/Hermes com 633 módulos aprovados;
+    o primeiro Hermes no sandbox falhou com `spawn EPERM` e passou fora dele;
+  - pendência: novo preview EAS e validação física do ciclo completo do cofre.
 
 ## Fila priorizada
 
@@ -802,8 +833,8 @@ integração seguinte.
 | P3 | Release candidate (5/5) | FocusLens BR integrado (`v2.0`) | Muito alto | Alto |
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
-| P6 | Em andamento | Development/preview instalados; fecha acessibilidade física | Alto | Alto |
-| P7 | Fila | Carteira local criptografada + importação B3 | Muito alto | Alto |
+| P6 | Em andamento | Distribuição aprovada; fecha DB-10 a DB-12 | Alto | Alto |
+| P7 | Em andamento (`v0.3.0`) | Cofre/editor implementados; valida APK e importa B3 | Muito alto | Alto |
 | P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
@@ -822,8 +853,9 @@ integração seguinte.
 - O app móvel pode ser testado localmente, mas publicação em loja exige
   resolver ou aceitar formalmente as vulnerabilidades moderadas transitivas do
   toolchain Expo, além dos gates de segurança descritos na arquitetura móvel.
-- Os APKs internos foram instalados no POCO X8 Pro e expiram em 2026-09-11. A
-  versão do Android e os testes DB-07 a DB-12 ainda precisam ser registrados;
+- Os APKs internos anteriores foram instalados no POCO X8 Pro e expiram em
+  2026-09-11. O novo corte `v0.3.0` ainda precisa de APK próprio; a versão do
+  Android e os testes DB-10 a DB-12 ainda precisam ser registrados;
   `adb`, Java e Android SDK não estão instalados nesta máquina.
 
 ## Conceitos relacionados

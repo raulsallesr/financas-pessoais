@@ -9,15 +9,8 @@ import {
   SignalTone,
   SnapshotProof,
 } from "../domain/types";
+import { ASSET_CLASSES } from "../domain/privatePortfolio";
 
-const ASSET_CLASSES: readonly AssetClass[] = [
-  "Renda fixa pós-fixada",
-  "Renda fixa prefixada",
-  "Títulos IPCA+",
-  "Fundos imobiliários / FIAGRO",
-  "Bolsa brasileira",
-  "Exterior / dólar",
-];
 const SIGNAL_TONES: readonly SignalTone[] = ["positive", "attention", "neutral"];
 const FORBIDDEN_PUBLIC_KEYS = new Set([
   "amount",

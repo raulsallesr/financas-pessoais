@@ -625,11 +625,11 @@ equivalente para iOS, que depende de ambiente e assinatura Apple compatíveis.
 
 ### Estado da execução em 2026-08-28
 
-**Em andamento; ainda não concluída.** A configuração portátil do build está
+**Em andamento; fechamento de acessibilidade pendente.** A configuração portátil do build está
 fechada: Expo SDK `57.0.18`, `expo-dev-client`, EAS CLI mínimo `23.0.0`, perfis
 `development`/`preview`, identificadores nativos, scheme, safe areas, rotação e
-splash compatível. Expo Doctor passou `21/21`, TypeScript e 13 testes móveis
-passaram e o bundle Android/Hermes foi exportado com 603 módulos.
+splash compatível. Expo Doctor passou `21/21`, TypeScript e os testes móveis
+passaram e o bundle Android/Hermes foi exportado.
 
 O login foi concluído localmente como `raulsallesr`, sem registrar credencial no
 repositório. `eas init` criou `@raulsallesr/focuslens-br` e vinculou o
@@ -639,14 +639,14 @@ mesmo fingerprint foram concluídos:
 - `development`: `1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`;
 - `preview`: `dd050dbe-5d0d-44e8-aae8-e13f613b7405`.
 
-DB-01 a DB-05 estão aprovados no POCO X8 Pro e DB-06 permanece coberto pelos
+DB-01 a DB-05 e DB-07 a DB-09 estão aprovados no POCO X8 Pro; DB-06 permanece coberto pelos
 testes automatizados. O development build foi instalado, mas a conexão LAN com
 o Metro foi bloqueada pelo firewall corporativo `BlockInbound`; o preview foi
 instalado em seguida e aprovou quatro abas, snapshot e reabertura em modo avião.
 A versão do Android ainda deve ser registrada.
 
-Completar DB-07 a DB-12 em `docs/VALIDACAO_DEVELOPMENT_BUILD.md`: safe areas em
-paisagem, voltar Android, rotação, TalkBack, texto ampliado e alvos de toque.
+Completar DB-10 a DB-12 em `docs/VALIDACAO_DEVELOPMENT_BUILD.md`: TalkBack,
+texto ampliado e alvos de toque.
 Não marcar esta seção como concluída só porque o fluxo principal e o offline
 passaram; a evidência de acessibilidade continua obrigatória.
 
@@ -667,7 +667,8 @@ observabilidade e gates estão em `docs/ARQUITETURA_INSTITUCIONAL.md`.
    development build Android instalado e validado; rota iOS documentada.
 2. **Etapa 5B — carteira pessoal segura.** Editor local, ocultação de valores,
    armazenamento criptografado e importação B3 sanitizada, sem nuvem por
-   padrão.
+   padrão. O editor e o cofre privado `v1` estão implementados no corte móvel
+   `v0.3`; importação B3 e validação do novo APK permanecem no gate desta etapa.
 3. **Etapa 5C — acompanhamento explicável.** Histórico local de fotografias,
    favoritos, alertas com evidência, simulador de aportes, testes de componentes
    e E2E Android/iOS.
@@ -723,3 +724,44 @@ O snapshot móvel público `v1` continuará sem posição, valor ou identificado
 - IA generativa futura poderá resumir evidências aprovadas, nunca criar o
   veredito ou contornar a política institucional;
 - esta arquitetura é proposta técnica, não parecer regulatório.
+
+## 15. Execução da Etapa 5B, incremento 1 — carteira local segura
+
+### Resultado esperado
+
+Permitir que a pessoa substitua conscientemente a carteira fictícia por posições
+próprias, sem conta, backend ou nuvem e sem ampliar o snapshot público `v1`.
+
+### Escopo fechado
+
+1. criar, editar e excluir posições locais com nome, classe e valor;
+2. manter o controle de ocultação e conectar as posições locais às mesmas
+   leituras educacionais já existentes;
+3. guardar somente a chave criptográfica no cofre nativo do sistema;
+4. guardar o documento privado `v1` como arquivo AES-256-GCM autenticado, com
+   gravação temporária seguida de substituição atômica;
+5. falhar fechado se chave, autenticação ou contrato forem inválidos, oferecendo
+   reset explícito sem misturar a carteira demo;
+6. manter a bancada web em demonstração e o editor seguro somente nos apps
+   Android/iOS;
+7. deixar importação B3, biometria, sincronização, autenticação e Open Finance
+   fora deste incremento.
+
+### Estado da execução em 2026-08-28
+
+**Implementação e gates locais concluídos; validação do novo APK pendente.** O
+corte móvel foi elevado a `v0.3.0`. `expo-crypto`, `expo-file-system` e
+`expo-secure-store` estão nas versões recomendadas para o Expo 57. O contrato
+privado aceita até 100 posições, valida identificadores, classes, nomes e valores
+e permanece separado do snapshot público versionado.
+
+A interface usa labels visíveis, teclado decimal, validação junto ao campo,
+feedback de salvamento, confirmação destrutiva, estados indisponível/corrompido
+e alvos mínimos de 48 px. A inspeção visual do formulário e do estado de
+demonstração foi aprovada em renderer web; o web não persiste carteira.
+
+Os gates locais aprovaram TypeScript, 20 testes de domínio, export web e bundle
+Android/Hermes com 633 módulos. A primeira tentativa do Hermes dentro do sandbox
+falhou com `spawn EPERM`; a repetição fora dele passou sem mudança de código.
+O próximo gate é gerar/instalar um novo `preview` nativo e testar criar, reabrir,
+editar, excluir, ocultar e apagar a carteira no POCO X8 Pro.

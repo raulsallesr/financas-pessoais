@@ -13,7 +13,10 @@ onde isso encosta na minha carteira?**
   “Demonstração” quando o provider precisa usar o fallback local;
 - **impacto personalizado:** cada sinal revela somente as posições e classes
   relacionadas na carteira de demonstração;
-- **Carteira:** exposição, peso por posição e controle para ocultar valores;
+- **Carteira:** criação, edição e exclusão de posições locais, exposição, peso
+  por posição e controle para ocultar valores;
+- **cofre privado nativo:** chave no SecureStore e documento `v1` cifrado com
+  AES-256-GCM no diretório persistente do app;
 - **Cenários:** choque ilustrativo de −100 a +100 bps com mudança imediata da
   leitura por posição;
 - **Entenda:** fluxo Sinal → Evidência → Exposição → Limite;
@@ -21,10 +24,26 @@ onde isso encosta na minha carteira?**
   claro e nenhuma informação transmitida somente por cor.
 
 O mercado vem de `src/data/liveSnapshot.json`, gerado pelos motores Python a
-partir dos caches públicos versionados. A carteira e seus valores continuam
-**sintéticos e locais**: o JSON público não contém posição, quantia ou
-identificador pessoal. O app não conecta conta, corretora ou Open Finance, não
-persiste carteira real e não produz recomendação.
+partir dos caches públicos versionados. O JSON público não contém posição,
+quantia ou identificador pessoal. No Android/iOS, uma carteira criada pelo
+usuário fica criptografada somente no aparelho; até o primeiro salvamento, o app
+usa posições sintéticas claramente rotuladas. O app não conecta conta,
+corretora ou Open Finance, não sincroniza carteira e não produz recomendação.
+
+## Como a carteira local é protegida
+
+- a demo nunca é persistida automaticamente;
+- a chave AES de 256 bits fica no cofre nativo do sistema;
+- o documento privado `v1` fica cifrado com AES-GCM e contexto autenticado;
+- a gravação usa arquivo temporário e substituição do destino;
+- chave ausente, arquivo alterado ou schema inválido bloqueiam a carteira sem
+  misturar a demo;
+- “Apagar carteira local” remove arquivo e chave após confirmação;
+- a bancada web continua somente em demonstração e não oferece falsa
+  persistência segura.
+
+O corte não usa biometria, nuvem, autenticação ou telemetria financeira. Troca
+de aparelho e restauração de backup não são prometidas nesta versão.
 
 ## Como atualizar a fotografia pública
 
@@ -110,6 +129,10 @@ abertura offline; não publica em loja. Os IDs, links temporários, instalação
 checklist Android, rota iOS, evidências e limites estão em
 [`docs/VALIDACAO_DEVELOPMENT_BUILD.md`](../docs/VALIDACAO_DEVELOPMENT_BUILD.md).
 
+O corte `v0.3.0` adiciona módulos nativos de criptografia, filesystem e
+SecureStore; portanto exige um novo APK. O preview anterior continua válido para
+o fluxo público/offline, mas não contém o cofre privado.
+
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
 máquina, as dependências foram mantidas fora do OneDrive e ligadas por um
@@ -123,11 +146,12 @@ npm run test:domain
 npm run export:android
 ```
 
-O gate atual cobre contrato demo e live, schema incompatível, documento
-inválido, proibição de carteira no artefato público, fallback, cálculo de peso,
-filtro por classe, impacto por sinal, configuração EAS, snapshot empacotado,
-limites do cenário e linguagem não imperativa. O bundle Android é gerado pelo
-Metro sem depender do Streamlit.
+O gate atual cobre contrato demo, público e privado, schema incompatível,
+documento inválido, proibição de carteira no artefato público, valores e campos
+do editor, duplicidade, limite de posições, UTF-8, fallback, cálculo de peso,
+filtro por classe, impacto por sinal, configuração EAS/SecureStore, snapshot
+empacotado, limites do cenário e linguagem não imperativa. O bundle Android é
+gerado pelo Metro sem depender do Streamlit.
 
 ## Estrutura
 
@@ -135,8 +159,9 @@ Metro sem depender do Streamlit.
 App.tsx                 estado e navegação principal
 src/components/         componentes móveis reutilizáveis
 src/data/               snapshot vivo, validação/provider e fallback demo
-src/domain/             contrato, filtros e sensibilidade educacional
+src/domain/             contratos público/privado, filtros e sensibilidade
 src/screens/            Hoje, Carteira, Cenários e Entenda
+src/storage/            cofre local criptografado para Android/iOS
 assets/                 marca determinística em SVG e PNG
 tests/                  testes do domínio TypeScript
 ```
@@ -157,5 +182,6 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo passo é registrar a versão do Android e fechar rotação, voltar,
-TalkBack, texto ampliado e alvos de toque sem antecipar a camada institucional.
+O próximo passo é gerar e validar o preview `v0.3.0` no POCO X8 Pro, fechar
+TalkBack, texto ampliado e alvos de toque, e então implementar a importação B3
+sanitizada sem antecipar a camada institucional.

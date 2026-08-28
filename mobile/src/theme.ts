@@ -14,6 +14,8 @@ export const colors = {
   border: "#D8E5E1",
   attention: "#B45309",
   attentionSoft: "#FEF3E3",
+  danger: "#B42318",
+  dangerSoft: "#FEECEB",
   positive: "#0F766E",
   positiveSoft: "#E2F3EE",
   neutral: "#536964",

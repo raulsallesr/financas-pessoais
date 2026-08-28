@@ -2,7 +2,7 @@
   "expo": {
     "name": "FocusLens BR",
     "slug": "focuslens-br",
-    "version": "0.1.0",
+    "version": "0.3.0",
     "orientation": "default",
     "scheme": "focuslens",
     "icon": "./assets/focuslens-icon.png",
@@ -33,6 +33,13 @@
           "imageWidth": 200,
           "resizeMode": "contain",
           "backgroundColor": "#F3F7F5"
+        }
+      ],
+      [
+        "expo-secure-store",
+        {
+          "configureAndroidBackup": true,
+          "faceIDPermission": false
         }
       ]
     ],

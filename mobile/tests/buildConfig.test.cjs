@@ -15,6 +15,8 @@ test("configura um development build Android instalável", () => {
   const packageJson = readJson("package.json");
 
   assert.equal(app.orientation, "default");
+  assert.equal(app.version, "0.3.0");
+  assert.equal(packageJson.version, "0.3.0");
   assert.equal(app.scheme, "focuslens");
   assert.equal(app.android.package, "com.raulsallesr.focuslens");
   assert.equal(app.ios.bundleIdentifier, "com.raulsallesr.focuslens");
@@ -29,8 +31,15 @@ test("configura um development build Android instalável", () => {
       backgroundColor: "#F3F7F5",
     },
   ]);
+  assert.deepEqual(app.plugins[1], [
+    "expo-secure-store",
+    { configureAndroidBackup: true, faceIDPermission: false },
+  ]);
   assert.equal(packageJson.dependencies.expo, "~57.0.18");
+  assert.equal(packageJson.dependencies["expo-crypto"], "~57.0.2");
   assert.equal(packageJson.dependencies["expo-dev-client"], "~57.0.16");
+  assert.equal(packageJson.dependencies["expo-file-system"], "~57.0.6");
+  assert.equal(packageJson.dependencies["expo-secure-store"], "~57.0.2");
   assert.equal(packageJson.dependencies["expo-splash-screen"], "~57.0.8");
   assert.equal(
     packageJson.dependencies["react-native-safe-area-context"],
