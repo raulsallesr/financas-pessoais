@@ -139,7 +139,10 @@ O corte `v0.4.0` adiciona o seletor nativo de documentos ao cofre já existente;
 portanto exige um novo APK. O preview anterior continua válido para o fluxo
 público/offline, mas não contém a importação B3. O
 [preview `v0.3.0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/67b97c57-ce20-4cb6-8c21-570c4742762e)
-foi concluído em 2026-08-28; o `v0.4.0` ainda aguarda geração e validação física.
+foi concluído em 2026-08-28. O
+[preview `v0.4.0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c7695638-2f38-42a4-af07-92303f2a5ce0)
+e seu [APK direto](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk)
+também estão concluídos e aguardam validação física no POCO X8 Pro.
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
@@ -195,6 +198,6 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo passo é gerar e validar o preview `v0.4.0` no POCO X8 Pro, incluindo
+O próximo passo é instalar e validar o preview `v0.4.0` no POCO X8 Pro, incluindo
 cofre, importação B3, TalkBack, texto ampliado e alvos de toque, sem antecipar a
 camada institucional.

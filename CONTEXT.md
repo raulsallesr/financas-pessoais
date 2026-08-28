@@ -7,7 +7,7 @@
   POCO X8 Pro. Quatro abas, snapshot, offline, rotação, paisagem e Voltar
   passaram; TalkBack, texto ampliado e alvos de toque ainda aguardam evidência.
   O corte móvel `v0.4.0` já implementa editor, cofre local criptografado e
-  importação B3 sanitizada com prévia; falta gerar e validar o novo APK. O roadmap
+  importação B3 sanitizada com prévia; o APK foi gerado e falta validá-lo no aparelho. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
@@ -190,7 +190,7 @@
 
 - Entrega: **Etapa 5B.2 — validar carteira e importação B3 local `v0.4.0` em APK**.
 - Editor, contrato privado, cofre AES-GCM, leitor XLSX sanitizado e prévia de
-  substituição estão concluídos; gerar o `preview`, instalar no POCO X8 Pro e
+  substituição estão concluídos; instalar o `preview` no POCO X8 Pro e
   validar o ciclo completo em modo avião.
 - Registrar a versão do Android e concluir TalkBack, texto ampliado e alvos de
   toque. DB-10 a DB-12 permanecem abertos no documento de validação; DB-07 a
@@ -217,7 +217,7 @@
 > EAS/dev client já está pronta e validada; não a refaça. O projeto
 > `@raulsallesr/focuslens-br` está vinculado, e os APKs Android `development` e
 > `preview` anteriores já foram gerados e instalados no POCO X8 Pro. DB-01 a
-> DB-09 estão aprovados, com DB-06 automatizado. Gere e valide o novo preview
+> DB-09 estão aprovados, com DB-06 automatizado. Instale e valide o novo preview
 > `v0.4.0`, registre a versão do Android, conclua DB-10 a DB-12 e preserve a rota
 > iOS. Valide a importação pelo roteiro dedicado sem enviar planilha ou valores
 > pelo chat e sem antecipar autenticação de cliente ou Open Finance. Rode os gates e faça commit/push
@@ -841,7 +841,11 @@
   - `expo-document-picker ~57.0.1` e `fflate 0.8.3` adicionados; app elevado a
     `v0.4.0`, Android `versionCode 4` e iOS `buildNumber 4`;
   - TypeScript, 25 testes, export web, compatibilidade Expo e bundle
-    Android/Hermes com 640 módulos aprovados; preview EAS ainda pendente.
+    Android/Hermes com 640 módulos aprovados;
+  - preview EAS `c7695638-2f38-42a4-af07-92303f2a5ce0` concluído para o commit
+    `c6bb875`, fingerprint `4df3790bd18465bb8a429b23f9814aabf1ac6dc8`,
+    app `0.4.0`, build `4`; expira em 2026-09-11;
+  - pendência: instalar e validar cofre + importação pelo roteiro físico.
 
 ## Fila priorizada
 
@@ -857,7 +861,7 @@ integração seguinte.
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Em andamento | Distribuição aprovada; fecha DB-10 a DB-12 | Alto | Alto |
-| P7 | Em andamento (`v0.4.0`) | Cofre e importação B3 prontos; falta preview e validação física | Muito alto | Alto |
+| P7 | Em andamento (`v0.4.0`) | APK pronto; falta validar cofre e importação B3 no aparelho | Muito alto | Alto |
 | P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
@@ -877,8 +881,8 @@ integração seguinte.
   resolver ou aceitar formalmente as vulnerabilidades moderadas transitivas do
   toolchain Expo, além dos gates de segurança descritos na arquitetura móvel.
 - Os APKs internos anteriores foram instalados no POCO X8 Pro e expiram em
-  2026-09-11. O preview `v0.3.0` ainda não teve validação registrada e o novo
-  `v0.4.0` precisa ser gerado; a versão do Android e os testes DB-10 a DB-12 ainda precisam
+  2026-09-11. O preview `v0.3.0` ainda não teve validação registrada e o
+  `v0.4.0` já foi gerado, mas precisa ser instalado; a versão do Android e os testes DB-10 a DB-12 ainda precisam
   ser registrados;
   `adb`, Java e Android SDK não estão instalados nesta máquina.
 

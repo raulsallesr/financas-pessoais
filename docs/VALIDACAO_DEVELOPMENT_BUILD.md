@@ -3,7 +3,8 @@
 **Status em 2026-08-28:** projeto EAS vinculado, APKs `development` e `preview`
 gerados e instalados em POCO X8 Pro. Quatro abas, snapshot empacotado e abertura
 offline, safe areas em paisagem, rotação e comportamento do botão Voltar foram
-aprovados. A versão do Android, TalkBack, texto ampliado e alvos de toque ainda
+aprovados. O preview `v0.4.0` com cofre/importação B3 também foi gerado e ainda
+precisa ser instalado. A versão do Android, TalkBack, texto ampliado e alvos de toque ainda
 precisam ser registrados.
 
 Este documento é a evidência operacional da seção 13 de
@@ -144,6 +145,14 @@ commit `60fa378`, mesmo fingerprint do development build. O
 expira em 2026-09-11. A instalação e a validação offline foram aprovadas no
 POCO X8 Pro.
 
+**Preview funcional mais recente:** app `0.4.0`, build `4`, EAS
+[`c7695638-2f38-42a4-af07-92303f2a5ce0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c7695638-2f38-42a4-af07-92303f2a5ce0),
+commit `c6bb875`, fingerprint
+`4df3790bd18465bb8a429b23f9814aabf1ac6dc8`. O
+[APK direto](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk)
+expira em 2026-09-11 e aguarda instalação/validação pelos roteiros da carteira
+local e da importação B3.
+
 Com o preview instalado:
 
 1. abrir conectado e confirmar `DADOS PÚBLICOS`, data e fontes;
@@ -231,14 +240,14 @@ real.
 - `expo install --check`: dependências compatíveis;
 - Expo Doctor: `21/21` checks aprovados;
 - TypeScript: aprovado;
-- testes móveis: 13 aprovados, incluindo configuração EAS, snapshot empacotado,
-  fallback e proibição de carteira pública;
-- export Android/Hermes: aprovado com 603 módulos;
+- testes móveis: 25 aprovados, incluindo configuração EAS, snapshot empacotado,
+  fallback, proibição de carteira pública e importação B3 sanitizada;
+- export Android/Hermes: aprovado com 640 módulos;
 - testes Python: 191 aprovados e `pip check` sem dependência quebrada;
-- EAS `development` e `preview`: concluídos com o mesmo fingerprint e sem
-  variável `Plain text` ou `Sensitive` configurada no ambiente de build;
-- `npm audit --omit=dev --audit-level=high`: zero vulnerabilidade alta ou
-  crítica e 11 moderadas transitivas;
+- EAS `development`, `preview` público e previews privados `v0.3.0`/`v0.4.0`:
+  concluídos sem variável `Plain text` ou `Sensitive` no ambiente de build;
+- `npm audit --omit=dev`: zero vulnerabilidade na árvore de produção; a árvore
+  completa tem 11 moderadas transitivas e nenhuma alta/crítica;
 - `npm audit fix --force` não foi aplicado: a correção sugerida faria downgrade
   incompatível de pacotes do toolchain, inclusive do Expo.
 

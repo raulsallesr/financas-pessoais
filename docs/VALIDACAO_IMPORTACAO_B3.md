@@ -9,7 +9,10 @@ ao repositório ou aparecer em captura de tela.
 
 ## Preparação
 
-- instalar o APK `preview` `v0.4.0` quando o link estiver registrado aqui;
+- instalar o
+  [APK `preview` `v0.4.0`](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk),
+  build `4`, EAS
+  [`c7695638-2f38-42a4-af07-92303f2a5ce0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c7695638-2f38-42a4-af07-92303f2a5ce0);
 - manter uma exportação XLSX original da Área do Investidor B3 apenas no
   aparelho ou em armazenamento pessoal controlado;
 - não renomear PDF, CSV ou ZIP para `.xlsx`;
@@ -35,6 +38,11 @@ ao repositório ou aparecer em captura de tela.
 | BI-11 | Planilha com linha ignorada/não suportada, se houver | Contagem é visível; nenhuma classe é remapeada silenciosamente | Pendente |
 | BI-12 | TalkBack na área de importação | Botões, estado ocupado, prévia e expansão têm leitura coerente | Pendente |
 | BI-13 | Texto ampliado e paisagem | Sem corte horizontal; ações continuam alcançáveis | Pendente |
+
+Build: commit `c6bb875`, fingerprint
+`4df3790bd18465bb8a429b23f9814aabf1ac6dc8`, status `FINISHED`, expiração em
+2026-09-11. Nenhuma variável `Plain text` ou `Sensitive` foi configurada no
+ambiente EAS do preview.
 
 ## O que relatar ao fechar o gate
 

@@ -9,6 +9,12 @@ POCO X8 Pro ainda pendentes.
 O [APK preview `v0.3.0`](https://expo.dev/artifacts/eas/ym42IqE6aIjdXG81aqx0ZotUZ0R3v6f2Twp5W_UNuwM.apk)
 expira em 2026-09-11. Ele é distribuição interna e não publica em loja.
 
+O ciclo físico atual deve preferir o
+[APK `v0.4.0`](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk),
+que inclui integralmente o cofre `v0.3.0`, usa build `4` e acrescenta a
+importação B3. Assim CL-02 a CL-13 e BI-01 a BI-13 podem ser validados na mesma
+instalação, sem manter dois APKs concorrentes.
+
 Este documento é a evidência operacional da seção 15 de
 `PLANO_FOCUSLENS.md`. Não registrar aqui nome de ativo real, valor, conta,
 instituição, print da carteira pessoal ou qualquer outro dado financeiro.

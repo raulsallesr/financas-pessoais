@@ -245,3 +245,16 @@ toolchain, inclusive do Expo.
   passaram; o preview nativo `67b97c57-ce20-4cb6-8c21-570c4742762e` foi gerado
   para o commit `9308f02` e aguarda instalação no aparelho.
 - o gate físico do cofre está em `VALIDACAO_CARTEIRA_LOCAL.md`.
+
+### Importação B3 nativa preparada em 2026-08-28
+
+- `expo-document-picker ~57.0.1` abre o seletor nativo e `fflate 0.8.3`
+  descomprime somente o subconjunto OOXML permitido;
+- TypeScript, 25 testes, export web, Expo Doctor `21/21` e bundle
+  Android/Hermes com 640 módulos passaram;
+- a auditoria da árvore de produção encontrou zero vulnerabilidade; a árvore
+  completa mantém 11 moderadas transitivas do toolchain, sem alta ou crítica;
+- o preview `c7695638-2f38-42a4-af07-92303f2a5ce0`, commit `c6bb875` e
+  fingerprint `4df3790bd18465bb8a429b23f9814aabf1ac6dc8` terminou `FINISHED`;
+- o APK `v0.4.0`, build `4`, expira em 2026-09-11 e aguarda BI-01 a BI-13 em
+  `VALIDACAO_IMPORTACAO_B3.md`.

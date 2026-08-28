@@ -810,8 +810,8 @@ snapshot público `v1`.
 
 ### Estado da execução em 2026-08-28
 
-**Implementação e gates locais concluídos; preview e validação física
-pendentes.** O app foi elevado a `v0.4.0`, Android `versionCode 4` e iOS
+**Implementação, gates locais e preview concluídos; validação física
+pendente.** O app foi elevado a `v0.4.0`, Android `versionCode 4` e iOS
 `buildNumber 4`. `expo-document-picker ~57.0.1` e `fflate 0.8.3` foram
 adicionados sem alterar motores Python ou o contrato público.
 
@@ -825,3 +825,10 @@ Doctor `21/21` e bundle Android/Hermes com 640 módulos passaram. A auditoria de
 dependências de produção encontrou zero vulnerabilidade; a árvore completa
 mantém 11 moderadas transitivas do toolchain Expo, sem alta ou crítica. O
 roteiro físico está em `docs/VALIDACAO_IMPORTACAO_B3.md`.
+
+O preview EAS
+[`c7695638-2f38-42a4-af07-92303f2a5ce0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c7695638-2f38-42a4-af07-92303f2a5ce0)
+terminou `FINISHED` para o commit `c6bb875`, fingerprint
+`4df3790bd18465bb8a429b23f9814aabf1ac6dc8`, app `0.4.0` e build `4`. O
+[APK interno](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk)
+expira em 2026-09-11. A instalação e BI-01 a BI-13 permanecem pendentes.
