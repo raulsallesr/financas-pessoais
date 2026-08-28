@@ -131,7 +131,9 @@ checklist Android, rota iOS, evidências e limites estão em
 
 O corte `v0.3.0` adiciona módulos nativos de criptografia, filesystem e
 SecureStore; portanto exige um novo APK. O preview anterior continua válido para
-o fluxo público/offline, mas não contém o cofre privado.
+o fluxo público/offline, mas não contém o cofre privado. O
+[preview `v0.3.0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/67b97c57-ce20-4cb6-8c21-570c4742762e)
+foi concluído em 2026-08-28 e aguarda instalação/validação física.
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
@@ -173,6 +175,8 @@ com `demoSnapshot.ts` em memória.
 
 A arquitetura e a fronteira entre os motores Python e o app estão em
 [`docs/ARQUITETURA_MOBILE.md`](../docs/ARQUITETURA_MOBILE.md).
+O roteiro físico do editor/cofre `v0.3.0` está em
+[`docs/VALIDACAO_CARTEIRA_LOCAL.md`](../docs/VALIDACAO_CARTEIRA_LOCAL.md).
 
 ## Relação com o produto institucional
 

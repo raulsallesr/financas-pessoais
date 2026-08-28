@@ -203,4 +203,6 @@ toolchain, inclusive do Expo.
   privada somente por composição em memória;
 - a bancada web continua explicitamente em demonstração;
 - TypeScript, 20 testes, export web e bundle Android/Hermes com 633 módulos
-  passaram; um novo APK é obrigatório porque o corte adiciona módulos nativos.
+  passaram; o preview nativo `67b97c57-ce20-4cb6-8c21-570c4742762e` foi gerado
+  para o commit `9308f02` e aguarda instalação no aparelho.
+- o gate físico do cofre está em `VALIDACAO_CARTEIRA_LOCAL.md`.

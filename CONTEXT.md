@@ -93,7 +93,9 @@
   `expo-secure-store` foram instaladas nas versões compatíveis com Expo 57. O
   plugin do SecureStore configura Android Auto Backup sem declarar uso de Face
   ID. TypeScript, 20 testes, export web e bundle Android/Hermes com 633 módulos
-  passaram; o novo APK ainda precisa ser gerado e validado no aparelho.
+  passaram. O preview EAS `67b97c57-ce20-4cb6-8c21-570c4742762e`, commit
+  `9308f02` e fingerprint `a28c993ae571b5d58d7eea95f8fe6fc877c71023`
+  terminou `FINISHED`; falta instalar e validar no aparelho.
 - Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
   Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
   piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
@@ -184,9 +186,9 @@
 ### Próximo incremento, sem ambiguidade
 
 - Entrega: **Etapa 5B.1 — validar a carteira local segura `v0.3.0` em APK**.
-- Editor, contrato privado e cofre AES-GCM estão implementados; gerar um novo
-  `preview`, instalar no POCO X8 Pro e validar criar, reabrir, editar, excluir,
-  ocultar e apagar a carteira em modo avião.
+- Editor, contrato privado, cofre AES-GCM e novo `preview` estão concluídos;
+  instalar no POCO X8 Pro e validar criar, reabrir, editar, excluir, ocultar e
+  apagar a carteira em modo avião.
 - Registrar a versão do Android e concluir TalkBack, texto ampliado e alvos de
   toque. DB-10 a DB-12 permanecem abertos no documento de validação; DB-07 a
   DB-09 já foram aprovados pelo Raul no aparelho.
@@ -818,7 +820,9 @@
     e Face ID não declarado;
   - TypeScript, 20 testes, export web e Android/Hermes com 633 módulos aprovados;
     o primeiro Hermes no sandbox falhou com `spawn EPERM` e passou fora dele;
-  - pendência: novo preview EAS e validação física do ciclo completo do cofre.
+  - preview EAS `67b97c57-ce20-4cb6-8c21-570c4742762e` concluído para o commit
+    `9308f02`, fingerprint `a28c993ae571b5d58d7eea95f8fe6fc877c71023`;
+  - pendência: instalação e validação física do ciclo completo do cofre.
 
 ## Fila priorizada
 
@@ -834,7 +838,7 @@ integração seguinte.
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Em andamento | Distribuição aprovada; fecha DB-10 a DB-12 | Alto | Alto |
-| P7 | Em andamento (`v0.3.0`) | Cofre/editor implementados; valida APK e importa B3 | Muito alto | Alto |
+| P7 | Em andamento (`v0.3.0`) | APK pronto; valida cofre e depois importa B3 | Muito alto | Alto |
 | P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
@@ -854,8 +858,9 @@ integração seguinte.
   resolver ou aceitar formalmente as vulnerabilidades moderadas transitivas do
   toolchain Expo, além dos gates de segurança descritos na arquitetura móvel.
 - Os APKs internos anteriores foram instalados no POCO X8 Pro e expiram em
-  2026-09-11. O novo corte `v0.3.0` ainda precisa de APK próprio; a versão do
-  Android e os testes DB-10 a DB-12 ainda precisam ser registrados;
+  2026-09-11. O novo preview `v0.3.0` também expira nessa data e ainda precisa
+  ser instalado; a versão do Android e os testes DB-10 a DB-12 ainda precisam
+  ser registrados;
   `adb`, Java e Android SDK não estão instalados nesta máquina.
 
 ## Conceitos relacionados

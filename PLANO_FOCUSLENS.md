@@ -749,7 +749,7 @@ próprias, sem conta, backend ou nuvem e sem ampliar o snapshot público `v1`.
 
 ### Estado da execução em 2026-08-28
 
-**Implementação e gates locais concluídos; validação do novo APK pendente.** O
+**Implementação, gates locais e novo APK concluídos; instalação pendente.** O
 corte móvel foi elevado a `v0.3.0`. `expo-crypto`, `expo-file-system` e
 `expo-secure-store` estão nas versões recomendadas para o Expo 57. O contrato
 privado aceita até 100 posições, valida identificadores, classes, nomes e valores
@@ -763,5 +763,9 @@ demonstração foi aprovada em renderer web; o web não persiste carteira.
 Os gates locais aprovaram TypeScript, 20 testes de domínio, export web e bundle
 Android/Hermes com 633 módulos. A primeira tentativa do Hermes dentro do sandbox
 falhou com `spawn EPERM`; a repetição fora dele passou sem mudança de código.
-O próximo gate é gerar/instalar um novo `preview` nativo e testar criar, reabrir,
-editar, excluir, ocultar e apagar a carteira no POCO X8 Pro.
+O preview EAS `67b97c57-ce20-4cb6-8c21-570c4742762e`, associado ao commit
+`9308f02` e fingerprint `a28c993ae571b5d58d7eea95f8fe6fc877c71023`,
+terminou com status `FINISHED`. O próximo gate é instalar esse APK e testar
+criar, reabrir, editar, excluir, ocultar e apagar a carteira no POCO X8 Pro.
+O roteiro e a matriz de evidência estão em
+`docs/VALIDACAO_CARTEIRA_LOCAL.md`.
