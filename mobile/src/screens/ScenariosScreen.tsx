@@ -8,6 +8,7 @@ import {
   View,
 } from "react-native";
 
+import { ContributionSimulatorPanel } from "../components/ContributionSimulatorPanel";
 import { ImpactCard } from "../components/ImpactCard";
 import {
   AmountVisibilityButton,
@@ -75,13 +76,23 @@ export function ScenariosScreen({
     >
       <View style={styles.headerRow}>
         <View style={styles.headerCopy}>
-          <Eyebrow>Sensibilidade</Eyebrow>
+          <Eyebrow>Cenários</Eyebrow>
           <Text accessibilityRole="header" style={styles.title}>
-            E se os juros mudarem?
+            Teste hipóteses sem mexer na carteira
           </Text>
         </View>
         <PortfolioModePill mode={portfolioMode} />
       </View>
+
+      <ContributionSimulatorPanel
+        hideAmounts={hideAmounts}
+        snapshot={snapshot}
+      />
+
+      <SectionHeading
+        title="E se os juros mudarem?"
+        support="Explore a sensibilidade educacional das posições ao nível das taxas."
+      />
 
       <View style={styles.scenarioHero}>
         <Eyebrow inverse>Cenário educacional</Eyebrow>
@@ -249,7 +260,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     justifyContent: "space-between",
   },
-  headerCopy: { gap: spacing.xxs },
+  headerCopy: { flex: 1, gap: spacing.xxs, minWidth: 220 },
   title: {
     color: colors.text,
     fontSize: 31,

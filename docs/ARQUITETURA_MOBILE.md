@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.5.0`
+## Estado do corte `mobile v0.5.1`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -53,7 +53,8 @@ O domínio TypeScript faz apenas operações locais necessárias à experiência
 - cobertura dos sinais calculada apenas pela presença dos `effects` recebidos;
 - filtro de posições por classe;
 - junção entre o efeito já declarado no snapshot e as posições relacionadas;
-- sensibilidade educacional discreta a choques de juros.
+- sensibilidade educacional discreta a choques de juros;
+- simulação aritmética de um aporte escolhido pela pessoa sobre pesos por classe.
 
 A sensibilidade móvel é uma demonstração própria e está rotulada como tal. Ela
 não substitui `curva_cenarios.py`, não calcula preço ou retorno e não entra nos
@@ -135,6 +136,19 @@ recebidos e com `impactsForSignal`. A saída separa mudança, prova, alcance e
 limite. Se o mapa de efeitos vier vazio, a resposta declara ausência de relação
 classificada. Favoritar muda somente a ordem da lista; não altera prioridade,
 tom ou conteúdo do sinal.
+
+### Simulador local de aportes `v0.5.1`
+
+`simulateClassContribution` recebe o snapshot ativo, um valor positivo e uma
+`AssetClass` já prevista no contrato. A função agrupa os montantes existentes,
+soma o aporte somente à classe escolhida e devolve total, percentual e variação
+em pontos percentuais antes/depois. A fotografia recebida não é mutada.
+
+O estado do formulário e da hipótese permanece em `ContributionSimulatorPanel`.
+Ele não usa storage, filesystem, rede ou identificador de posição; alterar valor
+ou classe descarta o resultado anterior. A UI exige seleção explícita, aceita
+entrada monetária brasileira e deixa retorno, risco, imposto, produto e ordem
+fora do resultado. Motores Python e snapshot público `v1` permanecem inalterados.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -284,8 +298,10 @@ build atual.
    instalação e avaliação física pendentes;
 10. **implementado localmente em `v0.5.0`:** alertas explicáveis, favoritos e
     comparação entre até oito fotografias públicas, sem carteira no histórico;
-11. adicionar simulador de aportes local, testes de componentes e E2E Android/iOS;
-12. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+11. **implementado localmente em `v0.5.1`:** simulador de aportes por classe,
+    sem persistência, retorno previsto, produto ou ordem;
+12. adicionar testes de componentes e E2E Android/iOS;
+13. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 

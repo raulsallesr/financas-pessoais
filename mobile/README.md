@@ -76,6 +76,18 @@ O histórico é atualizado apenas quando `generatedAt` muda e mantém as oito
 fotografias mais recentes. A versão é `0.5.0`, Android `versionCode 9` e iOS
 `buildNumber 9`.
 
+## Simulador local de aportes `v0.5.1`
+
+Na aba Cenários, a pessoa pode informar um valor hipotético e escolher a classe
+que o receberia. O app compara o total e os pesos por classe antes/depois,
+inclusive quando a classe ainda não existe na carteira ou a carteira está vazia.
+
+O formulário não oferece valor ou classe padrão. O resultado existe somente na
+memória da tela, é descartado quando a hipótese muda e não escreve no cofre, no
+histórico público ou em qualquer serviço. A conta não estima retorno, risco,
+imposto, ativo, produto ou ordem. A versão é `0.5.1`, Android `versionCode 10` e
+iOS `buildNumber 10`.
+
 ## Como atualizar a fotografia pública
 
 Na raiz do projeto, usando o `.venv` externo já documentado:
@@ -235,8 +247,8 @@ carteira em nuvem. A estratégia aprovada está em
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
 O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
-2026-08-31. Histórico público, favoritos e alertas explicáveis formam a
-`v0.5.0`; o próximo corte é o simulador de aportes local, seguido por testes de
+2026-08-31. Histórico público, favoritos, alertas explicáveis e o simulador
+local de aportes formam a `v0.5.1`; o próximo corte adiciona testes de
 componentes e E2E. O preview `v0.4.4` ainda precisa de avaliação física, e os
 gates de importação, TalkBack, texto ampliado e alvos de toque continuam
 pendentes. A Etapa 6 e a camada institucional não foram antecipadas.

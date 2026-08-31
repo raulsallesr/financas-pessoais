@@ -1042,3 +1042,39 @@ Implementar o simulador de aportes como ferramenta local de distribuição: a
 pessoa informa um valor hipotético e explora como ele altera pesos por classe,
 sem estimar retorno, sugerir ativo, selecionar produto ou criar ordem. Depois,
 adicionar testes de componentes e E2E Android/iOS antes de qualquer Etapa 6.
+
+## 22. Etapa 5C, incremento 2 — simulador local de aportes `v0.5.1`
+
+### Resultado esperado
+
+Permitir que a pessoa responda uma pergunta prática — “como ficariam os pesos se
+eu aportasse nesta classe?” — sem alterar a carteira real e sem confundir
+distribuição com previsão ou recomendação.
+
+### Escopo fechado
+
+1. receber um valor hipotético em formato brasileiro;
+2. exigir que a pessoa escolha uma das seis classes já suportadas;
+3. mostrar total da carteira e pesos por classe antes/depois;
+4. incluir corretamente uma classe ainda ausente e uma carteira inicialmente
+   vazia;
+5. manter o cenário somente em memória, descartando o resultado quando valor ou
+   classe mudarem;
+6. declarar que retorno, risco, imposto, ativo, produto e ordem ficam fora da
+   conta.
+
+### Estado da execução
+
+**Implementado localmente em 2026-08-31.** O app foi elevado a `v0.5.1`,
+Android `versionCode 10` e iOS `buildNumber 10`. TypeScript e 42 testes móveis
+passaram; o export Android/Hermes concluiu 649 módulos. O renderer web executou
+o caminho valor → classe → comparação e confirmou o resultado e os limites nos
+viewports 375×812, 430×932, 768×1024 e 844×390, sem overflow horizontal ou alvo
+interativo abaixo de 44 px. Motores, snapshot público `v1`, parser B3, cofre da
+carteira e persistências da `v0.5.0` não mudaram. Não foi gerado preview EAS.
+
+### Próximo incremento da 5C
+
+Adicionar testes de componentes para estados e interações críticas e preparar
+E2E Android/iOS reproduzível. Os gates físicos pendentes continuam preservados;
+Etapa 6/Embedded permanece posterior ao fechamento definido na seção 14.

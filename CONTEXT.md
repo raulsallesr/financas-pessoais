@@ -12,9 +12,10 @@
   CL-02 a CL-10 foram aprovados no aparelho, mas o restante do ciclo físico
   continua pendente. O preview `v0.4.4`, build `8`, foi gerado em 2026-08-31 e
   ainda aguarda instalação e avaliação de utilidade. Por decisão explícita do
-  Raul em 2026-08-31, o desenvolvimento da Etapa 5C começou no corte local
-  `v0.5.0`; os gates físicos anteriores continuam pendentes, sem serem
-  inferidos como aprovados. O roadmap
+  Raul em 2026-08-31, o desenvolvimento da Etapa 5C chegou ao corte local
+  `v0.5.1`, que também simula aportes por classe sem persistir ou recomendar;
+  os gates físicos anteriores continuam pendentes, sem serem inferidos como
+  aprovados. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
@@ -227,7 +228,7 @@
 
 ### Próximo incremento, sem ambiguidade
 
-- Entrega atual: **Etapa 5C — acompanhamento explicável `v0.5.0`**.
+- Entrega atual: **Etapa 5C — simulador local de aportes `v0.5.1`**.
 - O primeiro corte 5C guarda no máximo oito fotografias públicas somente no
   aparelho, compara campos literais do contrato `v1`, permite favoritar IDs de
   sinais e estrutura o detalhe em `o que mudou`, `o que prova`, `onde afeta` e
@@ -235,14 +236,15 @@
 - Nenhuma posição entra no histórico público; favoritos guardam apenas IDs. A
   relação com a carteira reutiliza exclusivamente `effects` já recebidos e
   declara ausência de elo quando o snapshot vier vazio.
-- O próximo corte funcional da 5C é o simulador de aportes local, seguido por
-  testes de componentes e E2E Android/iOS. Ele não deve calcular retorno,
-  recomendar ativo ou transformar a alocação-alvo em ordem.
+- O simulador recebe valor e classe escolhidos pela pessoa e mostra os pesos
+  antes/depois; ele não persiste o cenário, calcula retorno, recomenda ativo ou
+  transforma a hipótese em ordem. O próximo corte da 5C é a camada de testes de
+  componentes e E2E Android/iOS.
 - O APK interno `v0.4.4` continua disponível para a evidência física anterior: build
   [`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566),
   [download direto](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk),
   expira em 2026-09-14. O build concluído não aprova nenhum gate físico, e ainda
-  não existe preview EAS da `v0.5.0`.
+  não existe preview EAS da `v0.5.1`.
 - Evidência já fechada permanece válida: Android 16
   (`BP2A.250605.031.A3`), BI-01 a BI-03 e CL-02 a CL-10 aprovados. BI-04 a
   BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam pendentes, mas pausados até o
@@ -272,10 +274,10 @@
 > aprovados, com DB-06 automatizado. O preview `v0.4.4`, build `8`, EAS
 > `6199d700-82ca-44df-8ede-6987679c2566`, já está `FINISHED`, mas ainda não foi
 > instalado nem avaliado fisicamente. O Raul autorizou iniciar a Etapa 5C em
-> 2026-08-31; a `v0.5.0` local já implementa histórico de fotografias públicas,
-> favoritos e alertas explicáveis. Continue pelo simulador de aportes local sem
-> calcular retorno ou recomendar ativo; depois adicione testes de componentes e
-> E2E. Preserve a Home orientada ao recorte pessoal, a cobertura honesta, a
+> 2026-08-31; a `v0.5.1` local já implementa histórico de fotografias públicas,
+> favoritos, alertas explicáveis e simulador de aportes por classe. Continue por
+> testes de componentes e E2E Android/iOS, sem calcular retorno, recomendar ativo
+> ou persistir cenários. Preserve a Home orientada ao recorte pessoal, a cobertura honesta, a
 > distinção entre carteira local e demonstração, a entrada B3 antes do exemplo
 > fictício e o modo discreto. BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12
 > continuam pausados e pendentes; não os marque como aprovados. Não envie
@@ -977,6 +979,17 @@
     TypeScript, 37 testes e Android/Hermes com 647 módulos aprovados;
   - layout e interação aprovados em 375×812, 430×932, 768×1024 e 844×390,
     sem overflow horizontal ou alvo abaixo de 44 px. Preview EAS não gerado.
+- **Etapa 5C · simulador local de aportes `v0.5.1` (2026-08-31)** — implementação:
+  - a pessoa informa um valor hipotético e escolhe explicitamente uma das seis
+    classes do contrato privado; não há valor, classe ou produto sugerido;
+  - o domínio soma o aporte somente à classe selecionada e compara total e pesos
+    antes/depois, inclusive para classe ausente ou carteira vazia;
+  - a hipótese vive apenas no estado da tela: não altera carteira, cofre,
+    histórico público, favoritos, snapshot ou rede;
+  - app elevado a `v0.5.1`, Android `versionCode 10` e iOS `buildNumber 10`;
+    TypeScript, 42 testes e Android/Hermes com 649 módulos aprovados;
+  - formulário e resultado aprovados em 375×812, 430×932, 768×1024 e 844×390,
+    sem overflow horizontal ou alvo abaixo de 44 px. Preview EAS não gerado.
 
 ## Fila priorizada
 
@@ -993,7 +1006,7 @@ integração seguinte.
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
 | P7 | Entregue (`v0.4.4`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
-| P8 | Em andamento (`v0.5.0`) | Histórico, favoritos e alertas entregues; simulador e E2E na fila | Muito alto | Alto |
+| P8 | Em andamento (`v0.5.1`) | Histórico, favoritos, alertas e simulador entregues; componentes/E2E na fila | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
 | Depois | Planejado | Open Finance + Advisor Copilot, após gates | Muito alto | Muito alto |
