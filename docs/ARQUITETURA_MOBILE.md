@@ -166,6 +166,13 @@ registrado ou texto com marcador de dado pessoal. A execução estática não é
 evidência física: os dois fluxos em `e2e/maestro/flows` ainda precisam rodar em
 Android e iOS.
 
+No Windows, `scripts/run-maestro-windows.ps1` resolve o toolchain portátil apenas
+para o processo atual, impede execuções Maestro concorrentes e falha antes da
+jornada se o ADB não tiver um aparelho autorizado selecionado ou se package,
+`versionName` e `versionCode` divergirem de `app.json`. A checagem de sintaxe foi
+executada no Maestro `2.9.0`; nenhum dispositivo estava conectado, portanto isso
+não constitui evidência E2E física.
+
 As dependências de teste permanecem em `devDependencies`; Metro confirmou 650
 módulos no bundle Android. Nenhum motor, storage ou contrato público/privado foi
 alterado.

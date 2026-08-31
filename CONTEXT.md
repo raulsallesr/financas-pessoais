@@ -14,9 +14,11 @@
   ainda aguarda instalação e avaliação de utilidade. Por decisão explícita do
   Raul em 2026-08-31, o desenvolvimento da Etapa 5C chegou ao corte local
   `v0.5.2`: além do simulador, a suíte agora separa domínio, componentes e
-  contratos E2E, com dois fluxos Maestro prontos para o binário nativo. A
-  execução desses fluxos no Android/iOS e os gates físicos anteriores continuam
-  pendentes, sem serem inferidos como aprovados. O roadmap
+  contratos E2E, com dois fluxos Maestro prontos para o binário nativo. O
+  toolchain Windows portátil foi instalado e os dois YAMLs passaram no Maestro
+  `2.9.0`; o executor falha fechado porque nenhum Android está conectado e não
+  há binário `v0.5.2/11` instalado. A execução das jornadas e os gates físicos
+  anteriores continuam pendentes, sem serem inferidos como aprovados. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
@@ -243,6 +245,9 @@
 - Os testes estão separados em `tests/domain`, `tests/components` e `tests/e2e`;
   `e2e/maestro` contém os fluxos de navegação e simulador. O mapa único
   `src/testing/testIds.json` impede divergência entre app, Jest e Maestro.
+- `scripts/run-maestro-windows.ps1` descobre o toolchain portátil sem mudar o
+  `PATH` global, serializa execuções e exige Android autorizado, package correto
+  e build `0.5.2/11` antes de iniciar as jornadas.
 - O próximo gate da 5C é executar os fluxos Maestro em binários Android/iOS e
   retomar as evidências físicas pendentes; preparar o fluxo não equivale a
   aprová-lo.
@@ -283,7 +288,12 @@
 > 2026-08-31; a `v0.5.2` local já implementa histórico de fotografias públicas,
 > favoritos, alertas explicáveis, simulador de aportes e testes de componentes.
 > Os dois fluxos Maestro e seus seletores canônicos estão preparados, mas ainda
-> não foram executados em binários Android/iOS. Continue pela execução E2E e
+> não foram executados em binários Android/iOS. No Windows, Temurin `17.0.20.1`,
+> Maestro `2.9.0` e ADB `37.0.1` estão instalados de forma portátil; os YAMLs
+> passaram em `npm run e2e:maestro:check:windows`, e o runner confirmou o bloqueio
+> por ausência de Android conectado. Continue conectando um aparelho autorizado
+> e disponibilizando nele o build exato `0.5.2/11`; então rode
+> `npm run e2e:maestro:windows`. Continue pela execução E2E e
 > pelos gates físicos pendentes, sem calcular retorno, recomendar ativo ou
 > persistir cenários. Preserve a Home orientada ao recorte pessoal, a cobertura honesta, a
 > distinção entre carteira local e demonstração, a entrada B3 antes do exemplo
@@ -1003,9 +1013,13 @@
   - `jest-expo ~57.0.5`, Jest `~29.7.0` e React Native Testing Library `14.0.1`
     ficam somente em `devDependencies`; o junction externo de `node_modules`
     foi preservado;
-  - 42 testes de domínio, 6 de componentes e 3 contratos Maestro passaram;
+  - 42 testes de domínio, 6 de componentes e 4 contratos Maestro passaram;
   - dois fluxos Maestro usam `testID` de um mapa JSON canônico para percorrer as
     quatro abas e o simulador; execução em Android/iOS ainda pendente;
+  - executor Windows portátil valida Java/Maestro/ADB, sintaxe, exclusão mútua,
+    autorização USB, package e versão nativa antes de executar; Temurin
+    `17.0.20.1`, Maestro `2.9.0` e ADB `37.0.1` foram validados, mas nenhum
+    dispositivo estava conectado nesta sessão;
   - app elevado a `v0.5.2`, Android `versionCode 11` e iOS `buildNumber 11`;
     TypeScript e Android/Hermes com 650 módulos aprovados;
   - auditoria npm permanece com zero vulnerabilidade alta/crítica e 11 moderadas
@@ -1027,7 +1041,7 @@ integração seguinte.
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
 | P7 | Entregue (`v0.4.4`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
-| P8 | Em andamento (`v0.5.2`) | Funcionalidades e componentes cobertos; execução E2E/física pendente | Muito alto | Alto |
+| P8 | Em andamento (`v0.5.2`) | Harness E2E pronto; falta aparelho com build exato e gates físicos | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
 | Depois | Planejado | Open Finance + Advisor Copilot, após gates | Muito alto | Muito alto |

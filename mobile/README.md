@@ -94,7 +94,7 @@ A suíte móvel está separada por responsabilidade:
 
 - `tests/domain/`: 42 testes de contratos e funções puras em `node:test`;
 - `tests/components/`: 6 testes com `jest-expo` e React Native Testing Library;
-- `tests/e2e/`: 3 contratos que evitam divergência entre app e Maestro;
+- `tests/e2e/`: 4 contratos que evitam divergência entre app e Maestro;
 - `e2e/maestro/flows/`: duas jornadas nativas para navegação e simulador.
 
 Os fluxos usam somente os seletores registrados em
@@ -105,10 +105,19 @@ Android `versionCode 11` e iOS `buildNumber 11`.
 ```powershell
 npm test
 npm run e2e:maestro # requer Maestro e um binário instalado
+npm run e2e:maestro:check:windows # valida o ambiente portátil e os YAMLs
+npm run e2e:maestro:windows # exige Android autorizado e build 0.5.2/11
 ```
 
 Os testes automatizados locais passaram, mas os fluxos Maestro ainda precisam
-ser executados em Android/iOS. Não há preview EAS da `v0.5.2`.
+ser executados em Android/iOS. Os YAMLs passaram no Maestro `2.9.0`; o runner
+Windows bloqueou corretamente antes das jornadas porque não havia Android
+conectado. Não há preview EAS da `v0.5.2`.
+
+No Windows, `scripts/run-maestro-windows.ps1` procura Java, Maestro e ADB em
+`%LOCALAPPDATA%\focuslens-tools`, sem alterar o `PATH` global. Antes do E2E, ele
+confere a autorização USB, o package `com.raulsallesr.focuslens` e a versão
+nativa declarada em `app.json`; um APK antigo é recusado explicitamente.
 
 ## Como atualizar a fotografia pública
 

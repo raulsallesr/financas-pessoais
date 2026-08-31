@@ -1096,15 +1096,23 @@ Etapa 6/Embedded permanece posterior ao fechamento definido na seção 14.
 
 **Implementado localmente em 2026-08-31.** O app foi elevado a `v0.5.2`,
 Android `versionCode 11` e iOS `buildNumber 11`. Passaram 42 testes de domínio,
-6 testes de componentes e 3 contratos E2E; TypeScript e o export Android/Hermes
+6 testes de componentes e 4 contratos E2E; TypeScript e o export Android/Hermes
 com 650 módulos também passaram. As versões oficiais compatíveis com Expo 57
 ficaram em `devDependencies`, e `node_modules` voltou à junção externa prevista
 para esta máquina.
 
-Dois fluxos Maestro cobrem as quatro abas e o caminho do simulador. Eles ainda
-não foram executados em aparelho ou simulador porque o CLI Maestro não está
-instalado e não foi gerado um novo binário `v0.5.2`. Isso mantém E2E Android/iOS
-e todos os gates físicos como pendentes. Não foi gerado preview EAS.
+Dois fluxos Maestro cobrem as quatro abas e o caminho do simulador. O ambiente
+Windows portátil foi preparado fora do OneDrive com Temurin `17.0.20.1`, Maestro
+`2.9.0` e ADB `37.0.1`; hashes oficiais e assinatura Google foram conferidos, e
+os dois YAMLs passaram no CLI real.
+
+`scripts/run-maestro-windows.ps1` deixa a execução reproduzível sem alterar o
+`PATH` global: ele serializa instâncias, exige Android autorizado e recusa package
+ou `versionName/versionCode` diferente de `app.json`. O caminho sem aparelho foi
+testado e bloqueou antes de abrir qualquer app. As jornadas ainda não rodaram
+porque nenhum Android estava conectado e não foi gerado um novo binário
+`v0.5.2`. Isso mantém E2E Android/iOS e todos os gates físicos como pendentes.
+Não foi gerado preview EAS.
 
 A auditoria inclui zero vulnerabilidade alta/crítica e 11 moderadas transitivas
 no toolchain Expo. `npm audit fix --force` não foi aplicado: a correção sugerida
@@ -1112,6 +1120,7 @@ troca o projeto para Expo 46 e rompe a compatibilidade do SDK 57.
 
 ### Próximo gate da 5C
 
-Executar os fluxos Maestro em Android e iOS, registrar a evidência e retomar
+Conectar um Android autorizado com o build exato `0.5.2/11`, executar
+`npm run e2e:maestro:windows`, repetir em iOS, registrar a evidência e retomar
 BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12. Etapa 6/Embedded continua
 bloqueada até esses gates e as demais condições da seção 14 serem fechados.

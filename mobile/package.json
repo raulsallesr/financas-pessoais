@@ -40,6 +40,8 @@
     "test:components": "npm run typecheck:components && jest --config jest.config.cjs --runInBand",
     "test:e2e:contracts": "node --test --test-isolation=none tests/e2e/*.test.cjs",
     "e2e:maestro": "maestro test e2e/maestro",
+    "e2e:maestro:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-maestro-windows.ps1",
+    "e2e:maestro:check:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-maestro-windows.ps1 -CheckSyntaxOnly",
     "export:android": "expo export --platform android --output-dir dist-android"
   },
   "private": true

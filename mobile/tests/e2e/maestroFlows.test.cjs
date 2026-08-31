@@ -65,3 +65,21 @@ test("fluxos partem de estado limpo e não carregam dado pessoal", () => {
   assert.equal((combined.match(/clearState: true/g) ?? []).length, 2);
   assert.doesNotMatch(combined, /cpf|cnpj|password|token|secret|accountId/i);
 });
+
+test("executor Windows falha fechado antes de acionar o binário errado", () => {
+  const runner = fs.readFileSync(
+    path.join(mobileRoot, "scripts", "run-maestro-windows.ps1"),
+    "utf8",
+  );
+
+  assert.match(runner, /FOCUSLENS_JAVA_HOME/);
+  assert.match(runner, /FOCUSLENS_MAESTRO_HOME/);
+  assert.match(runner, /FOCUSLENS_ANDROID_PLATFORM_TOOLS/);
+  assert.match(runner, /FOCUSLENS_ANDROID_DEVICE/);
+  assert.match(runner, /versionName/);
+  assert.match(runner, /versionCode/);
+  assert.match(runner, /Build incompatível/);
+  assert.match(runner, /MAESTRO_CLI_NO_ANALYTICS/);
+  assert.match(runner, /FocusLensMaestroCli/);
+  assert.doesNotMatch(runner, /SetEnvironmentVariable|eas\s+build|eas\.cmd/);
+});

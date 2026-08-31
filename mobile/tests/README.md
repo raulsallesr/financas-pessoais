@@ -27,6 +27,24 @@ emulador, simulador ou aparelho conectado:
 npm run e2e:maestro
 ```
 
+No Windows, o executor recomendado descobre o toolchain portátil em
+`%LOCALAPPDATA%\focuslens-tools`, valida todos os YAMLs, exige exatamente um
+Android autorizado — ou um selecionado explicitamente — e confere
+`versionName`/`versionCode` antes de tocar no app:
+
+```powershell
+npm run e2e:maestro:check:windows
+npm run e2e:maestro:windows
+```
+
+Os caminhos podem ser sobrescritos somente para a sessão por
+`FOCUSLENS_JAVA_HOME`, `FOCUSLENS_MAESTRO_HOME` e
+`FOCUSLENS_ANDROID_PLATFORM_TOOLS`. Havendo mais de um aparelho, use
+`FOCUSLENS_ANDROID_DEVICE`. O script não altera o `PATH` global e não cria build
+EAS; ele falha fechado se o pacote ou a versão instalada divergir de
+`app.json`. Um mutex também impede duas instâncias locais do Maestro de disputar
+a mesma pasta de logs no Windows.
+
 `src/testing/testIds.json` é a única fonte dos seletores estáveis. Mudanças de
 copy não devem exigir alteração dos fluxos; novos IDs precisam entrar primeiro
 nesse mapa e passar por `test:e2e:contracts`.
