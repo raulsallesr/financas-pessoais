@@ -38,11 +38,13 @@ export function formatSnapshotDate(value: string): string {
 export function Surface({
   children,
   style,
+  testID,
 }: {
   children: ReactNode;
   style?: StyleProp<ViewStyle>;
+  testID?: string;
 }) {
-  return <View style={[styles.surface, style]}>{children}</View>;
+  return <View style={[styles.surface, style]} testID={testID}>{children}</View>;
 }
 
 export function Eyebrow({

@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.5.2`
+## Estado do corte `mobile v0.5.3`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -182,6 +182,35 @@ local que precise ser preservada.
 As dependências de teste permanecem em `devDependencies`; Metro confirmou 650
 módulos no bundle Android. Nenhum motor, storage ou contrato público/privado foi
 alterado.
+
+### Revisão guiada da semana `v0.5.3`
+
+`App.tsx` mantém um `WeeklyReviewSession` efêmero com somente ID público do
+sinal, passo atual e a informação de retorno de Cenários. Esse objeto não entra
+em SecureStore, filesystem, histórico público, carteira privada ou qualquer
+provider. Reiniciar o processo descarta a revisão inteira.
+
+`WeeklyReviewPanel` é uma orquestração de apresentação sobre funções e objetos
+existentes:
+
+- `comparePublicSnapshots` fornece a mudança literal, sem converter o valor;
+- `buildExplainableAlert` fornece prova, alcance e limite;
+- `impactsForSignal` fornece os efeitos e posições já compostos em memória;
+- os IDs persistidos de favoritos servem apenas como contexto visual;
+- fonte e data vêm do próprio `MarketSignal` selecionado.
+
+A sequência abre um passo por vez: mudança, prova, relação com a carteira,
+exploração em Cenários e limite. Sem duas fotografias, declara ausência de
+comparação; sem `effects`, não cria impacto. A navegação para Cenários apenas
+troca a aba e marca o retorno: não escreve valor, classe ou choque. O painel de
+contexto em Cenários devolve a pessoa à etapa final da mesma sessão.
+
+Entenda preserva a metodologia geral sob revelação progressiva. Hoje mantém o
+recorte pessoal e a leitura pública antes da entrada da revisão. As quatro abas,
+safe areas, modo discreto e composições de carteira permanecem inalterados.
+TypeScript, 42 testes de domínio, 10 de componentes, 4 contratos E2E e o bundle
+Android/Hermes com 651 módulos passaram; os quatro viewports canônicos ficaram
+sem overflow ou alvo visível abaixo de 44 px.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -336,8 +365,8 @@ build atual.
 12. **implementado e empacotado em `v0.5.2`:** testes de componentes e contratos
     E2E; preview Android build `11` instalado por relato e fluxos Maestro
     preparados, mas ainda não executados no aparelho;
-13. **próximo — `v0.5.3`:** revisão guiada da semana e Entenda contextual,
-    somente com estado de sessão e contratos existentes;
+13. **implementado localmente em `v0.5.3`:** revisão guiada da semana e
+    Entenda contextual, somente com estado de sessão e contratos existentes;
 14. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
 15. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 

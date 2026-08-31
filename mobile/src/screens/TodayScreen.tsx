@@ -48,6 +48,7 @@ export function TodayScreen({
   classFilter,
   onClassFilter,
   onNavigate,
+  onReviewWeek,
   portfolioMode,
   hideAmounts,
   favoriteSignalIds,
@@ -57,6 +58,7 @@ export function TodayScreen({
   snapshotHistory,
   snapshotHistoryLoading,
   snapshotHistoryMessage,
+  reviewSignalId,
 }: {
   snapshot: MarketSnapshot;
   selectedSignalId: string;
@@ -64,6 +66,7 @@ export function TodayScreen({
   classFilter: ClassFilter;
   onClassFilter: (filter: ClassFilter) => void;
   onNavigate: (tab: TabKey) => void;
+  onReviewWeek: () => void;
   portfolioMode: PortfolioPresentationMode;
   hideAmounts: boolean;
   favoriteSignalIds: readonly string[];
@@ -73,6 +76,7 @@ export function TodayScreen({
   snapshotHistory: PublicSnapshotHistoryV1 | null;
   snapshotHistoryLoading: boolean;
   snapshotHistoryMessage?: string;
+  reviewSignalId?: string;
 }) {
   const [showAllSignals, setShowAllSignals] = useState(false);
   const { width } = useWindowDimensions();
@@ -92,6 +96,11 @@ export function TodayScreen({
     : orderedSignals.slice(0, 2);
   const explainableAlert = buildExplainableAlert(snapshot, selectedSignalId);
   const selectedSignalIsFavorite = favoriteSignalIds.includes(selectedSignalId);
+  const reviewSignal = signalById(
+    snapshot,
+    reviewSignalId ?? selectedSignalId,
+  );
+  const reviewSignalIsFavorite = favoriteSignalIds.includes(reviewSignal.id);
   const isLocalPortfolio = portfolioMode === "local";
   const portfolioKind = isLocalPortfolio ? "carteira local" : "demonstração";
   const selectedSignalHasEffects = Object.keys(selectedSignal.effects).length > 0;
@@ -243,6 +252,39 @@ export function TodayScreen({
         loading={snapshotHistoryLoading}
         message={snapshotHistoryMessage}
       />
+
+      <Surface style={styles.reviewEntry} testID={testIds.weeklyReview.entry}>
+        <View style={styles.reviewEntryTopline}>
+          <Eyebrow>Rotina opcional</Eyebrow>
+          {reviewSignalIsFavorite ? (
+            <View style={styles.reviewFavoritePill}>
+              <Text style={styles.reviewFavoriteText}>Acompanhando</Text>
+            </View>
+          ) : null}
+        </View>
+        <Text style={styles.reviewEntryTitle}>
+          {reviewSignalId ? "Retomar a revisão" : "Revisar a semana"}
+        </Text>
+        <Text style={styles.reviewEntrySignal}>
+          {reviewSignal.label} · {reviewSignal.value}
+        </Text>
+        <Text style={styles.reviewEntryText}>
+          {reviewSignalId
+            ? "A sequência continua somente nesta sessão, do ponto em que você parou."
+            : "Conecte mudança, prova, carteira, Cenários e limite em cinco passos curtos."}
+        </Text>
+        <Pressable
+          accessibilityHint="Abre uma revisão guiada sem alterar a carteira"
+          accessibilityRole="button"
+          onPress={onReviewWeek}
+          style={({ pressed }) => [styles.reviewButton, pressed && styles.pressed]}
+        >
+          <Text style={styles.reviewButtonText}>
+            {reviewSignalId ? "Continuar revisão" : "Começar revisão"}
+          </Text>
+          <Text accessibilityElementsHidden style={styles.reviewButtonArrow}>→</Text>
+        </Pressable>
+      </Surface>
 
       <SectionHeading
         title="Acompanhe o que mudou"
@@ -577,6 +619,67 @@ const styles = StyleSheet.create({
     fontWeight: "900",
   },
   portfolioActionArrow: {
+    color: colors.white,
+    fontSize: 18,
+  },
+  reviewEntry: {
+    backgroundColor: colors.goldSoft,
+    borderColor: "#EBCB91",
+    gap: spacing.sm,
+  },
+  reviewEntryTopline: {
+    alignItems: "center",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: spacing.sm,
+    justifyContent: "space-between",
+  },
+  reviewFavoritePill: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
+  reviewFavoriteText: {
+    color: colors.primaryDark,
+    fontSize: 10,
+    fontWeight: "900",
+    letterSpacing: 0.4,
+    textTransform: "uppercase",
+  },
+  reviewEntryTitle: {
+    color: colors.text,
+    fontSize: 21,
+    fontWeight: "900",
+    letterSpacing: -0.3,
+    lineHeight: 27,
+  },
+  reviewEntrySignal: {
+    color: colors.gold,
+    fontSize: 13,
+    fontWeight: "900",
+  },
+  reviewEntryText: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  reviewButton: {
+    alignItems: "center",
+    backgroundColor: colors.primary,
+    borderRadius: radius.sm,
+    flexDirection: "row",
+    gap: spacing.xs,
+    justifyContent: "center",
+    minHeight: 48,
+    paddingHorizontal: spacing.md,
+  },
+  reviewButtonText: {
+    color: colors.white,
+    fontSize: 13,
+    fontWeight: "900",
+  },
+  reviewButtonArrow: {
     color: colors.white,
     fontSize: 18,
   },

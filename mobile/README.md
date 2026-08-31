@@ -26,7 +26,8 @@ onde isso encosta na minha carteira?**
   explícita e detalhe progressivo por posição;
 - **modo discreto da sessão:** ocultar valores em Carteira também mascara Hoje
   e Cenários até o app ser reiniciado;
-- **Entenda:** fluxo Sinal → Evidência → Exposição → Limite;
+- **Entenda contextual:** revisão semanal opcional em cinco passos, ligada ao
+  sinal escolhido, à comparação literal, à carteira em memória e a Cenários;
 - navegação inferior persistente, alvos de toque de pelo menos 44 px, tema
   claro e nenhuma informação transmitida somente por cor.
 
@@ -127,13 +128,33 @@ Os fluxos atuais iniciam com `clearState: true` e apagam o estado local do app.
 Não os execute em uma carteira que precise ser preservada; use uma instalação
 de demonstração descartável ou uma futura variante não destrutiva.
 
-## Próxima melhoria — revisão guiada da semana `v0.5.3`
+## Revisão guiada da semana `v0.5.3`
 
-O próximo incremento continua dentro da Etapa 5C e transforma a aba Entenda em
-uma trilha contextual. A proposta conecta, em uma sequência curta e opcional,
-mudança, evidência, relação com a carteira, exploração em Cenários e limite da
-leitura. Ela reutiliza os contratos já carregados, mantém o estado somente na
-sessão e não adiciona fórmula, persistência, dependência, rede ou recomendação.
+A Home oferece “Revisar a semana” depois da fotografia e do histórico, sem
+tirar o recorte pessoal do topo. A sequência usa o sinal escolhido em Hoje e
+abre um passo por vez em Entenda:
+
+1. o que mudou literalmente entre fotografias;
+2. qual número, movimento, fonte e data sustentam a leitura;
+3. onde os `effects` já recebidos encontram as posições em memória;
+4. o que explorar em Cenários por escolha da pessoa;
+5. o que a leitura não prova.
+
+Favoritos aparecem como contexto, mas não mudam o conteúdo do sinal. Sem duas
+fotografias públicas, o primeiro passo declara que ainda não há comparação; sem
+efeito, a revisão preserva a relação vazia. A ida a Cenários não preenche valor,
+classe ou choque e oferece retorno explícito para fechar o limite. Todo o
+progresso vive apenas em `App.tsx` e é descartado ao reiniciar o app.
+
+A explicação geral de Entenda foi preservada sob revelação progressiva. A
+versão é `0.5.3`, Android `versionCode 12` e iOS `buildNumber 12`; nenhum
+storage, snapshot, motor, dependência ou rede foi alterado.
+
+TypeScript, 42 testes de domínio, 10 de componentes, 4 contratos E2E e o
+export Android/Hermes com 651 módulos passaram. A jornada completa foi
+percorrida em 375×812, 430×932, 768×1024 e 844×390, sem overflow horizontal
+nem alvo visível abaixo de 44 px. Isso é evidência local; não substitui os
+gates físicos pausados.
 
 Os checklists físicos continuam preservados, porém pausados por decisão de
 produto enquanto a utilidade melhora. O escopo executável está na seção 24 de
@@ -272,10 +293,10 @@ resumo de cenário por tom e parcela não coberta, filtro por classe, impacto po
 sinal, configuração EAS/SecureStore, snapshot empacotado, limites do cenário,
 parser B3, ZIP/XML malformado, macro, tamanho,
 classes não cobertas e linguagem não imperativa. A camada de componentes cobre
-navegação, validação, comparação, descarte de resultado obsoleto, modo discreto
-e coexistência entre aporte e sensibilidade. Os contratos E2E conferem app ID,
-seletores e ausência de dado pessoal. O bundle Android é gerado pelo Metro sem
-depender do Streamlit.
+navegação, validação, comparação, descarte de resultado obsoleto, modo discreto,
+coexistência entre aporte e sensibilidade e a revisão guiada com estados sem
+histórico ou sem efeito. Os contratos E2E conferem app ID, seletores e ausência
+de dado pessoal. O bundle Android é gerado pelo Metro sem depender do Streamlit.
 
 ## Estrutura
 
@@ -315,8 +336,8 @@ carteira em nuvem. A estratégia aprovada está em
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
 O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
-2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador e a
-cobertura automatizada organizada formam a `v0.5.2`; os fluxos E2E nativos ainda
-aguardam execução. O próximo incremento é a revisão guiada da semana `v0.5.3`;
-os gates de importação, TalkBack, texto ampliado e alvos de toque continuam
-pausados e pendentes. A Etapa 6 e a camada institucional não foram antecipadas.
+2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador,
+cobertura automatizada e revisão guiada formam a `v0.5.3`; os fluxos E2E nativos
+ainda aguardam execução. Os gates de importação, TalkBack, texto ampliado e
+alvos de toque continuam pausados e pendentes. A Etapa 6 e a camada
+institucional não foram antecipadas.

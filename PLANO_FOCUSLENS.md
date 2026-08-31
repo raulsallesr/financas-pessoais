@@ -276,8 +276,9 @@ sincronização de conta, Open Finance, cloud de carteira ou publicação em loj
 **Estado:** fundação `v0.1`, contrato vivo `v1`, distribuição Android, carteira
 local, importação B3 e os três primeiros incrementos da Etapa 5C chegaram ao
 preview `v0.5.2/11`. O Raul confirmou a instalação desse APK em 2026-08-31;
-gates físicos permanecem parciais e pausados. A próxima melhoria é a revisão
-guiada da semana `v0.5.3`, definida na seção 24.
+gates físicos permanecem parciais e pausados. A revisão guiada da semana
+`v0.5.3` foi concluída localmente e está documentada na seção 24; o próximo
+incremento de utilidade ainda precisa ser escolhido.
 
 ## 6. Arquitetura
 
@@ -1185,3 +1186,30 @@ recompensa, streak ou incentivo a giro.
 `npm run typecheck`, `npm test`, `npm run export:android` e validação visual nos
 viewports já usados pelo projeto. O handoff deve registrar separadamente o que
 foi comprovado localmente e o que continua dependendo de aparelho real.
+
+### Estado da execução
+
+**Implementado localmente em 2026-08-31.** A Home ganhou uma entrada opcional
+depois da fotografia e do histórico, sem deslocar o recorte pessoal da primeira
+dobra. O sinal escolhido em Hoje inicia uma sequência de cinco passos em
+Entenda: comparação literal, evidência, relação com posições, exploração em
+Cenários e limite. Favorito, fonte, data, `effects`, impactos e posições vêm
+somente dos objetos já compostos em memória.
+
+O progresso vive em `App.tsx` e desaparece ao reiniciar o app. A ida a Cenários
+preserva valor, classe e choque que já estavam na tela, não preenche hipótese e
+oferece retorno explícito à etapa final. Sem duas fotografias, a revisão declara
+ausência de comparação; sem efeito, mantém a relação vazia e não inventa posição
+ou impacto. A explicação geral de Entenda continua disponível sob revelação
+progressiva, e as quatro abas foram preservadas.
+
+O app foi elevado a `v0.5.3`, Android `versionCode 12` e iOS `buildNumber 12`.
+Passaram TypeScript, 42 testes de domínio, 10 de componentes e 4 contratos E2E.
+O export Android/Hermes concluiu 651 módulos fora do sandbox depois de a primeira
+tentativa reproduzir o `spawn EPERM` conhecido. A jornada completa passou em
+375×812, 430×932, 768×1024 e 844×390, sem overflow horizontal nem alvo visível
+abaixo de 44 px.
+
+Nenhum Maestro ou gate físico foi executado. O preview instalado continua sendo
+o `v0.5.2/11`; BI-04 a BI-13, CL-11 a CL-13, DB-10 a DB-12 e E2E Android/iOS
+permanecem pausados e pendentes.

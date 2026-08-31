@@ -14,8 +14,9 @@
   2026-08-31 e o Raul confirmou a instalação no aparelho; a versão instalada não
   foi conferida por ADB e o corte ainda não recebeu avaliação física. Por decisão explícita do
   Raul em 2026-08-31, o desenvolvimento da Etapa 5C chegou ao corte local
-  `v0.5.2`: além do simulador, a suíte agora separa domínio, componentes e
-  contratos E2E, com dois fluxos Maestro prontos para o binário nativo. O
+  `v0.5.3`: além do simulador e da cobertura automatizada, Hoje e Entenda agora
+  oferecem uma revisão semanal guiada em cinco passos, com todo o progresso
+  somente na sessão. Os dois fluxos Maestro continuam prontos para o binário nativo. O
   toolchain Windows portátil foi instalado e os dois YAMLs passaram no Maestro
   `2.9.0`; a última consulta ADB encontrou zero aparelhos conectados. A execução
   das jornadas e os gates físicos
@@ -231,11 +232,11 @@
 - Motores não conhecerão identidade, consentimento ou catálogo. Explicação
   educacional e recomendação comercial continuarão separadas.
 
-### Próximo incremento, sem ambiguidade
+### Estado atual e próxima decisão, sem ambiguidade
 
-- Entrega atual: **Etapa 5C — cobertura automatizada organizada `v0.5.2`**.
-  Histórico público local, favoritos, alertas explicáveis, simulador de aportes,
-  testes de componentes e contratos E2E estão implementados.
+- Entrega atual: **Etapa 5C — revisão guiada da semana `v0.5.3`**. Histórico
+  público local, favoritos, alertas explicáveis, simulador, cobertura
+  automatizada e a trilha contextual de Entenda estão implementados.
 - O APK interno mais recente é o `v0.5.2`, build `11`: EAS
   [`c08e5397-427f-42c2-a163-ab5cd815cb55`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55),
   [download direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk),
@@ -243,18 +244,17 @@
   expiração em 2026-09-14. O Raul confirmou a instalação por cima do app em
   2026-08-31; como o aparelho não estava conectado ao ADB, package/versão e as
   jornadas ainda não foram verificados. Instalação declarada não aprova gate físico.
-- Decisão de produto do Raul em 2026-08-31: **continuar melhorando o app antes
-  de priorizar os checklists físicos**. A próxima entrega é **Etapa 5C,
-  incremento 4 — revisão guiada da semana `v0.5.3`**, preenchendo a trilha
-  educativa prevista no roadmap sem criar gamificação de giro ou risco.
-- A revisão guiada deve conectar, em uma sequência curta e opcional, os blocos
-  já existentes: `o que mudou` → `o que prova` → `onde toca a carteira` →
-  `o que explorar em Cenários` → `o que não prova`. Ela deve usar somente a
-  fotografia, os favoritos, os `effects` e as posições já compostas em memória.
-- O incremento deve tornar `Entenda` contextual e acionável, preservar as quatro
-  abas e usar revelação progressiva, feedback de toque e alvos mínimos de 44 px.
-  Não adicionar persistência, dependência, motor, fórmula, retorno, recomendação
-  ou campo ao snapshot público `v1`.
+- A `v0.5.3` conecta `o que mudou` → `o que prova` → `onde toca a carteira` →
+  `o que explorar em Cenários` → `o que não prova`, somente com fotografia,
+  favoritos, `effects`, impactos e posições já compostos em memória. A ida a
+  Cenários não preenche hipótese e oferece retorno explícito à revisão.
+- TypeScript, 42 testes de domínio, 10 de componentes, 4 contratos E2E e o
+  export Android/Hermes com 651 módulos passaram. A jornada completa foi
+  percorrida em 375×812, 430×932, 768×1024 e 844×390 sem overflow horizontal
+  ou alvo visível abaixo de 44 px. Essa evidência é local, não física.
+- A próxima melhoria de produto ainda precisa ser escolhida; não há incremento
+  técnico posterior autorizado por inferência. A decisão vigente continua sendo
+  melhorar a utilidade antes de priorizar os checklists físicos.
 - Evidência já fechada permanece válida: Android 16
   (`BP2A.250605.031.A3`), BI-01 a BI-03 e CL-02 a CL-10 aprovados. BI-04 a
   BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam pendentes, mas pausados até o
@@ -266,7 +266,7 @@
   usar um estado de demonstração descartável ou preparar fluxos não destrutivos.
 - Não antecipar a Etapa 6/Embedded durante o development build. O roadmap
   institucional aprovado começa somente depois dos gates definidos na seção 14.
-- A definição completa do próximo incremento está na seção 24 de
+- A definição e a evidência completa da `v0.5.3` estão na seção 24 de
   `PLANO_FOCUSLENS.md`.
 
 ### Prompt pronto para abrir o próximo chat
@@ -287,26 +287,29 @@
 > `c08e5397-427f-42c2-a163-ab5cd815cb55`, está `FINISHED` e o Raul confirmou sua
 > instalação, mas o aparelho não estava conectado ao ADB e o corte ainda não foi
 > avaliado fisicamente. O Raul autorizou iniciar a Etapa 5C em
-> 2026-08-31; a `v0.5.2` local já implementa histórico de fotografias públicas,
-> favoritos, alertas explicáveis, simulador de aportes e testes de componentes.
+> 2026-08-31; a `v0.5.3` local já implementa histórico de fotografias públicas,
+> favoritos, alertas explicáveis, simulador de aportes, cobertura automatizada e
+> revisão guiada da semana. Hoje oferece a entrada opcional e Entenda percorre
+> mudança, prova, relação com a carteira, Cenários e limite somente em estado de
+> sessão. A ida a Cenários não preenche hipótese e possui retorno explícito.
 > Os dois fluxos Maestro e seus seletores canônicos estão preparados, mas ainda
 > não foram executados em binários Android/iOS. No Windows, Temurin `17.0.20.1`,
 > Maestro `2.9.0` e ADB `37.0.1` estão instalados de forma portátil; os YAMLs
 > passaram em `npm run e2e:maestro:check:windows`, e o runner confirmou o bloqueio
 > por ausência de Android conectado. Não rode esses fluxos automaticamente: os
 > YAMLs atuais usam `clearState: true` e podem apagar a carteira local. O Raul
-> prefere continuar nas melhorias antes dos testes. Continue pela seção 24 do
-> plano: implemente a revisão guiada da semana `v0.5.3`, conectando mudança,
-> evidência, impacto, Cenários e limite com a aba Entenda, sem nova persistência,
-> dependência ou fórmula. Preserve a Home orientada ao recorte pessoal, a cobertura honesta, a
+> prefere continuar nas melhorias antes dos testes. A seção 24 do plano está
+> concluída localmente e os gates passaram; o próximo incremento de utilidade
+> ainda deve ser escolhido, sem antecipar escopo. Preserve a Home orientada ao
+> recorte pessoal, a cobertura honesta, a
 > distinção entre carteira local e demonstração, a entrada B3 antes do exemplo
 > fictício e o modo discreto. BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12
 > continuam pausados e pendentes; não os marque como aprovados. Não envie
 > planilha ou valores pelo chat e não antecipe autenticação de cliente, Open
 > Finance ou Embedded.
 > O roadmap FocusLens Embedded já está aprovado e documentado, mas não antecipe
-> API, SDK, autenticação ou integração bancária durante esse incremento. Rode
-> TypeScript, testes móveis e export Android; faça commit/push apenas no git próprio.
+> API, SDK, autenticação ou integração bancária. Rode TypeScript, testes móveis
+> e export Android em qualquer novo incremento; faça commit/push apenas no git próprio.
 
 ## Direção aprovada — FocusLens BR
 
@@ -1039,6 +1042,23 @@
     módulos, links locais e `git diff --check`. O primeiro export encontrou o
     `spawn EPERM` já conhecido dentro do sandbox e passou fora dele sem mudança
     de código.
+- **Etapa 5C · revisão guiada da semana `v0.5.3` (2026-08-31)** — implementação:
+  - Hoje oferece uma entrada opcional depois da fotografia e do histórico; uma
+    revisão em andamento pode ser retomada sem deslocar o recorte pessoal do topo;
+  - Entenda abre somente um dos cinco passos por vez: mudança literal, prova,
+    relação com a carteira, exploração em Cenários e limite;
+  - o sinal escolhido, favorito, fonte, data, `effects`, impactos e posições vêm
+    somente dos objetos existentes em memória; ausência de histórico ou efeito
+    permanece explícita, sem completar lacunas;
+  - a ida a Cenários não muda valor, classe ou choque e oferece retorno direto à
+    etapa final; todo o progresso vive em `App.tsx` e some ao reiniciar o app;
+  - app elevado a `v0.5.3`, Android `versionCode 12` e iOS `buildNumber 12`;
+  - TypeScript, 42 testes de domínio, 10 de componentes, 4 contratos E2E e o
+    export Android/Hermes com 651 módulos passaram;
+  - a jornada completa passou em 375×812, 430×932, 768×1024 e 844×390, sem
+    overflow horizontal ou alvo visível abaixo de 44 px;
+  - nenhum preview EAS, Maestro ou gate físico foi executado. O APK instalado
+    permanece `v0.5.2/11`; os gates físicos anteriores continuam pendentes.
 
 ## Fila priorizada
 
@@ -1056,7 +1076,7 @@ integração seguinte.
 | P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
 | P7 | Entregue (`v0.4.4`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
 | P8 | Entregue (`v0.5.2`) | APK instalado por relato; harness E2E pronto e gates físicos pausados | Muito alto | Alto |
-| P8.1 | Próximo (`v0.5.3`) | Revisão guiada da semana e Entenda contextual | Muito alto | Médio |
+| P8.1 | Entregue (`v0.5.3`) | Revisão guiada da semana e Entenda contextual | Muito alto | Médio |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
 | Depois | Planejado | Open Finance + Advisor Copilot, após gates | Muito alto | Muito alto |

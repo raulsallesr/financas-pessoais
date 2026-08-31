@@ -13,6 +13,7 @@ import {
 } from "react-native-safe-area-context";
 
 import { BottomNav, TabKey } from "./src/components/BottomNav";
+import { WeeklyReviewStep } from "./src/components/WeeklyReviewPanel";
 import {
   currentPublicSnapshot,
   currentSnapshot,
@@ -68,6 +69,12 @@ type SnapshotHistoryState =
   | { kind: "unavailable"; message: string }
   | { kind: "error"; message: string };
 
+type WeeklyReviewSession = {
+  signalId: string;
+  step: WeeklyReviewStep;
+  scenarioVisited: boolean;
+};
+
 function storageErrorMessage(error: unknown): string {
   if (error instanceof SecurePortfolioStorageError) {
     return error.message;
@@ -94,6 +101,8 @@ export default function App() {
   const [favoriteMessage, setFavoriteMessage] = useState<string>();
   const [snapshotHistoryState, setSnapshotHistoryState] =
     useState<SnapshotHistoryState>({ kind: "loading" });
+  const [weeklyReview, setWeeklyReview] =
+    useState<WeeklyReviewSession | null>(null);
   const [portfolioState, setPortfolioState] = useState<PortfolioState>({
     kind: "loading",
   });
@@ -317,6 +326,48 @@ export default function App() {
     }
   }
 
+  function startOrResumeWeeklyReview() {
+    if (!weeklyReview) {
+      setWeeklyReview({
+        signalId: selectedSignalId,
+        step: 0,
+        scenarioVisited: false,
+      });
+    }
+    setActiveTab("learn");
+  }
+
+  function changeWeeklyReviewStep(step: WeeklyReviewStep) {
+    setWeeklyReview((current) =>
+      current ? { ...current, step, scenarioVisited: false } : current,
+    );
+  }
+
+  function exploreScenariosFromReview() {
+    setWeeklyReview((current) =>
+      current ? { ...current, step: 4, scenarioVisited: true } : current,
+    );
+    setActiveTab("scenarios");
+  }
+
+  function finishWeeklyReview() {
+    if (weeklyReview) {
+      setSelectedSignalId(weeklyReview.signalId);
+    }
+    setWeeklyReview(null);
+    setActiveTab("today");
+  }
+
+  const snapshotHistory =
+    snapshotHistoryState.kind === "ready"
+      ? snapshotHistoryState.history
+      : null;
+  const reviewSignalLabel = weeklyReview
+    ? effectiveSnapshot.signals.find(
+        (signal) => signal.id === weeklyReview.signalId,
+      )?.label ?? "Sinal selecionado"
+    : undefined;
+
   const renderScreen = () => {
     if (activeTab === "portfolio") {
       return (
@@ -342,13 +393,34 @@ export default function App() {
           onShockChange={setShockBps}
           onToggleAmounts={() => setValuesHidden((hidden) => !hidden)}
           portfolioMode={portfolioState.kind}
+          reviewContext={
+            weeklyReview?.scenarioVisited
+              ? {
+                  signalLabel: reviewSignalLabel ?? "Sinal selecionado",
+                  onReturn: () => setActiveTab("learn"),
+                }
+              : undefined
+          }
           shockBps={shockBps}
           snapshot={effectiveSnapshot}
         />
       );
     }
     if (activeTab === "learn") {
-      return <LearnScreen />;
+      return (
+        <LearnScreen
+          favoriteSignalIds={favoriteSignals.signalIds}
+          onCancelReview={() => setWeeklyReview(null)}
+          onExploreScenarios={exploreScenariosFromReview}
+          onFinishReview={finishWeeklyReview}
+          onStartReview={startOrResumeWeeklyReview}
+          onStepChange={changeWeeklyReviewStep}
+          reviewSignalId={weeklyReview?.signalId ?? selectedSignalId}
+          reviewStep={weeklyReview?.step ?? null}
+          snapshot={effectiveSnapshot}
+          snapshotHistory={snapshotHistory}
+        />
+      );
     }
     return (
       <TodayScreen
@@ -356,6 +428,7 @@ export default function App() {
         hideAmounts={valuesHidden}
         onClassFilter={setClassFilter}
         onNavigate={setActiveTab}
+        onReviewWeek={startOrResumeWeeklyReview}
         onSelectSignal={setSelectedSignalId}
         portfolioMode={portfolioState.kind}
         selectedSignalId={selectedSignalId}
@@ -366,11 +439,8 @@ export default function App() {
         onToggleFavorite={(signalId) => {
           void toggleSignalFavorite(signalId);
         }}
-        snapshotHistory={
-          snapshotHistoryState.kind === "ready"
-            ? snapshotHistoryState.history
-            : null
-        }
+        reviewSignalId={weeklyReview?.signalId}
+        snapshotHistory={snapshotHistory}
         snapshotHistoryLoading={snapshotHistoryState.kind === "loading"}
         snapshotHistoryMessage={
           snapshotHistoryState.kind === "unavailable" ||

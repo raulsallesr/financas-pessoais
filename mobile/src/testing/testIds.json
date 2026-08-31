@@ -11,6 +11,18 @@
     "scenarios": "screen-scenarios",
     "learn": "screen-learn"
   },
+  "weeklyReview": {
+    "entry": "weekly-review-entry",
+    "startFromLearn": "weekly-review-start-learn",
+    "panel": "weekly-review-panel",
+    "progress": "weekly-review-progress",
+    "cancel": "weekly-review-cancel",
+    "previous": "weekly-review-previous",
+    "next": "weekly-review-next",
+    "exploreScenarios": "weekly-review-explore-scenarios",
+    "returnFromScenarios": "weekly-review-return-scenarios",
+    "finish": "weekly-review-finish"
+  },
   "contribution": {
     "amountInput": "contribution-amount-input",
     "submit": "contribution-submit",

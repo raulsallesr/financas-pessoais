@@ -30,4 +30,37 @@ describe("ScenariosScreen", () => {
     expect(onShockChange).toHaveBeenCalledWith(-50);
     expect(screen.queryByTestId(testIds.contribution.result)).toBeNull();
   });
+
+  test("retorna à revisão sem preencher uma hipótese nova", async () => {
+    const onReturn = jest.fn();
+    const onShockChange = jest.fn();
+    const user = userEvent.setup();
+    await render(
+      <ScenariosScreen
+        hideAmounts={false}
+        onShockChange={onShockChange}
+        onToggleAmounts={jest.fn()}
+        portfolioMode="demo"
+        reviewContext={{
+          signalLabel: "Curva prefixada",
+          onReturn,
+        }}
+        shockBps={50}
+        snapshot={demoSnapshot}
+      />,
+    );
+
+    expect(
+      screen.getByText(
+        "A revisão não mudou valor, classe ou choque. Explore uma hipótese por conta própria e volte para fechar com o limite da leitura.",
+      ),
+    ).toBeTruthy();
+    expect(onShockChange).not.toHaveBeenCalled();
+
+    await user.press(
+      screen.getByTestId(testIds.weeklyReview.returnFromScenarios),
+    );
+    expect(onReturn).toHaveBeenCalledTimes(1);
+    expect(onShockChange).not.toHaveBeenCalled();
+  });
 });

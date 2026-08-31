@@ -55,6 +55,7 @@ export function ScenariosScreen({
   portfolioMode,
   hideAmounts,
   onToggleAmounts,
+  reviewContext,
 }: {
   snapshot: MarketSnapshot;
   shockBps: number;
@@ -62,6 +63,10 @@ export function ScenariosScreen({
   portfolioMode: PortfolioPresentationMode;
   hideAmounts: boolean;
   onToggleAmounts: () => void;
+  reviewContext?: {
+    signalLabel: string;
+    onReturn: () => void;
+  };
 }) {
   const [showAllImpacts, setShowAllImpacts] = useState(false);
   const scenario = buildRateScenario(snapshot, shockBps);
@@ -85,6 +90,30 @@ export function ScenariosScreen({
         </View>
         <PortfolioModePill mode={portfolioMode} />
       </View>
+
+      {reviewContext ? (
+        <Surface style={styles.reviewContext}>
+          <Eyebrow>Exploração da revisão</Eyebrow>
+          <Text style={styles.reviewContextTitle}>{reviewContext.signalLabel}</Text>
+          <Text style={styles.reviewContextText}>
+            A revisão não mudou valor, classe ou choque. Explore uma hipótese
+            por conta própria e volte para fechar com o limite da leitura.
+          </Text>
+          <Pressable
+            accessibilityHint="Retorna ao último passo da revisão guiada"
+            accessibilityRole="button"
+            onPress={reviewContext.onReturn}
+            style={({ pressed }) => [
+              styles.reviewReturnButton,
+              pressed && styles.pressed,
+            ]}
+            testID={testIds.weeklyReview.returnFromScenarios}
+          >
+            <Text style={styles.reviewReturnText}>Voltar à revisão</Text>
+            <Text accessibilityElementsHidden style={styles.reviewReturnArrow}>→</Text>
+          </Pressable>
+        </Surface>
+      ) : null}
 
       <ContributionSimulatorPanel
         hideAmounts={hideAmounts}
@@ -268,6 +297,43 @@ const styles = StyleSheet.create({
     fontSize: 31,
     fontWeight: "900",
     letterSpacing: -1,
+  },
+  reviewContext: {
+    backgroundColor: colors.goldSoft,
+    borderColor: "#EBCB91",
+    gap: spacing.sm,
+  },
+  reviewContextTitle: {
+    color: colors.text,
+    fontSize: 18,
+    fontWeight: "900",
+    lineHeight: 24,
+  },
+  reviewContextText: {
+    color: colors.textMuted,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  reviewReturnButton: {
+    alignItems: "center",
+    alignSelf: "stretch",
+    borderColor: colors.primary,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: spacing.xs,
+    justifyContent: "center",
+    minHeight: 48,
+    paddingHorizontal: spacing.md,
+  },
+  reviewReturnText: {
+    color: colors.primaryDark,
+    fontSize: 13,
+    fontWeight: "900",
+  },
+  reviewReturnArrow: {
+    color: colors.primary,
+    fontSize: 18,
   },
   scenarioHero: {
     backgroundColor: colors.primaryDark,
