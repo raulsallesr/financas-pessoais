@@ -1,0 +1,25 @@
+appId: com.raulsallesr.focuslens
+name: Navegação principal
+tags:
+  - smoke
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: "screen-today"
+- tapOn:
+    id: "tab-portfolio"
+- assertVisible:
+    id: "screen-portfolio"
+- tapOn:
+    id: "tab-scenarios"
+- assertVisible:
+    id: "screen-scenarios"
+- tapOn:
+    id: "tab-learn"
+- assertVisible:
+    id: "screen-learn"
+- tapOn:
+    id: "tab-today"
+- assertVisible:
+    id: "screen-today"

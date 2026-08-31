@@ -12,8 +12,8 @@ const {
   portfolioTotal,
   signalCoverage,
   summarizeScenarioAllocation,
-} = require("../.test-dist/domain/insights.js");
-const { demoSnapshot } = require("../.test-dist/data/demoSnapshot.js");
+} = require("../../.test-dist/domain/insights.js");
+const { demoSnapshot } = require("../../.test-dist/data/demoSnapshot.js");
 
 test("resume a carteira sintética sem perder classes", () => {
   assert.equal(portfolioTotal(demoSnapshot), 72_500);

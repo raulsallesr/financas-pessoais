@@ -1,0 +1,27 @@
+{
+  "tabs": {
+    "today": "tab-today",
+    "portfolio": "tab-portfolio",
+    "scenarios": "tab-scenarios",
+    "learn": "tab-learn"
+  },
+  "screens": {
+    "today": "screen-today",
+    "portfolio": "screen-portfolio",
+    "scenarios": "screen-scenarios",
+    "learn": "screen-learn"
+  },
+  "contribution": {
+    "amountInput": "contribution-amount-input",
+    "submit": "contribution-submit",
+    "result": "contribution-result",
+    "classes": {
+      "postFixed": "contribution-class-post-fixed",
+      "fixedRate": "contribution-class-fixed-rate",
+      "inflationLinked": "contribution-class-inflation-linked",
+      "realEstate": "contribution-class-real-estate",
+      "brazilEquity": "contribution-class-brazil-equity",
+      "international": "contribution-class-international"
+    }
+  }
+}

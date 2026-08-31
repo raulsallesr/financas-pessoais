@@ -14,12 +14,22 @@ import {
 } from "../domain/contributionSimulator";
 import { ASSET_CLASSES, parsePositionAmount } from "../domain/privatePortfolio";
 import { AssetClass, MarketSnapshot } from "../domain/types";
+import testIds from "../testing/testIds.json";
 import { colors, radius, spacing } from "../theme";
 import { Eyebrow, formatCurrency, Surface } from "./Primitives";
 
 type SubmittedContribution = {
   amount: number;
   targetClass: AssetClass;
+};
+
+const classTestIds: Record<AssetClass, string> = {
+  "Renda fixa pós-fixada": testIds.contribution.classes.postFixed,
+  "Renda fixa prefixada": testIds.contribution.classes.fixedRate,
+  "Títulos IPCA+": testIds.contribution.classes.inflationLinked,
+  "Fundos imobiliários / FIAGRO": testIds.contribution.classes.realEstate,
+  "Bolsa brasileira": testIds.contribution.classes.brazilEquity,
+  "Exterior / dólar": testIds.contribution.classes.international,
 };
 
 function formatPercent(value: number): string {
@@ -112,6 +122,7 @@ export function ContributionSimulatorPanel({
           placeholderTextColor={colors.textMuted}
           returnKeyType="done"
           style={[styles.input, amountError && styles.inputError]}
+          testID={testIds.contribution.amountInput}
           value={amountText}
         />
         {amountError ? (
@@ -141,6 +152,7 @@ export function ContributionSimulatorPanel({
                   selected && styles.classOptionSelected,
                   pressed && styles.pressed,
                 ]}
+                testID={classTestIds[assetClass]}
               >
                 <View style={[styles.classDot, selected && styles.classDotSelected]} />
                 <Text
@@ -166,12 +178,17 @@ export function ContributionSimulatorPanel({
         accessibilityRole="button"
         onPress={submit}
         style={({ pressed }) => [styles.submitButton, pressed && styles.submitPressed]}
+        testID={testIds.contribution.submit}
       >
         <Text style={styles.submitText}>Comparar distribuição</Text>
       </Pressable>
 
       {simulation ? (
-        <View accessibilityLiveRegion="polite" style={styles.resultBlock}>
+        <View
+          accessibilityLiveRegion="polite"
+          style={styles.resultBlock}
+          testID={testIds.contribution.result}
+        >
           <View style={styles.resultSummary}>
             <Text style={styles.resultEyebrow}>CENÁRIO HIPOTÉTICO</Text>
             <Text style={styles.resultTitle}>

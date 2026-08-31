@@ -35,6 +35,7 @@ import {
   PositionDraftErrors,
 } from "../domain/privatePortfolio";
 import { MarketSnapshot, Position } from "../domain/types";
+import testIds from "../testing/testIds.json";
 import { colors, radius, spacing } from "../theme";
 
 export type PortfolioMode = PortfolioPresentationMode;
@@ -276,6 +277,7 @@ export function PortfolioScreen({
         contentContainerStyle={styles.content}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
+        testID={testIds.screens.portfolio}
       >
         <View style={styles.headerRow}>
           <View style={styles.headerCopy}>

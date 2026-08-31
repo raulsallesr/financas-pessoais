@@ -3,8 +3,8 @@ const test = require("node:test");
 
 const {
   simulateClassContribution,
-} = require("../.test-dist/domain/contributionSimulator.js");
-const { demoSnapshot } = require("../.test-dist/data/demoSnapshot.js");
+} = require("../../.test-dist/domain/contributionSimulator.js");
+const { demoSnapshot } = require("../../.test-dist/data/demoSnapshot.js");
 
 function rowFor(simulation, assetClass) {
   return simulation.allocations.find((item) => item.assetClass === assetClass);

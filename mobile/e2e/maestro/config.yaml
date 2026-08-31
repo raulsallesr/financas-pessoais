@@ -1,0 +1,4 @@
+appId: com.raulsallesr.focuslens
+flows:
+  - "flows/**/*.yaml"
+testOutputDir: ".artifacts"

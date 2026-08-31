@@ -37,6 +37,7 @@ yarn-error.*
 *.tsbuildinfo
 .test-dist/
 dist-android/
+e2e/maestro/.artifacts/
 *.apk
 *.aab
 *.ipa

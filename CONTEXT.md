@@ -13,9 +13,10 @@
   continua pendente. O preview `v0.4.4`, build `8`, foi gerado em 2026-08-31 e
   ainda aguarda instalação e avaliação de utilidade. Por decisão explícita do
   Raul em 2026-08-31, o desenvolvimento da Etapa 5C chegou ao corte local
-  `v0.5.1`, que também simula aportes por classe sem persistir ou recomendar;
-  os gates físicos anteriores continuam pendentes, sem serem inferidos como
-  aprovados. O roadmap
+  `v0.5.2`: além do simulador, a suíte agora separa domínio, componentes e
+  contratos E2E, com dois fluxos Maestro prontos para o binário nativo. A
+  execução desses fluxos no Android/iOS e os gates físicos anteriores continuam
+  pendentes, sem serem inferidos como aprovados. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
@@ -228,7 +229,7 @@
 
 ### Próximo incremento, sem ambiguidade
 
-- Entrega atual: **Etapa 5C — simulador local de aportes `v0.5.1`**.
+- Entrega atual: **Etapa 5C — cobertura automatizada organizada `v0.5.2`**.
 - O primeiro corte 5C guarda no máximo oito fotografias públicas somente no
   aparelho, compara campos literais do contrato `v1`, permite favoritar IDs de
   sinais e estrutura o detalhe em `o que mudou`, `o que prova`, `onde afeta` e
@@ -238,13 +239,18 @@
   declara ausência de elo quando o snapshot vier vazio.
 - O simulador recebe valor e classe escolhidos pela pessoa e mostra os pesos
   antes/depois; ele não persiste o cenário, calcula retorno, recomenda ativo ou
-  transforma a hipótese em ordem. O próximo corte da 5C é a camada de testes de
-  componentes e E2E Android/iOS.
+  transforma a hipótese em ordem.
+- Os testes estão separados em `tests/domain`, `tests/components` e `tests/e2e`;
+  `e2e/maestro` contém os fluxos de navegação e simulador. O mapa único
+  `src/testing/testIds.json` impede divergência entre app, Jest e Maestro.
+- O próximo gate da 5C é executar os fluxos Maestro em binários Android/iOS e
+  retomar as evidências físicas pendentes; preparar o fluxo não equivale a
+  aprová-lo.
 - O APK interno `v0.4.4` continua disponível para a evidência física anterior: build
   [`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566),
   [download direto](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk),
   expira em 2026-09-14. O build concluído não aprova nenhum gate físico, e ainda
-  não existe preview EAS da `v0.5.1`.
+  não existe preview EAS da `v0.5.2`.
 - Evidência já fechada permanece válida: Android 16
   (`BP2A.250605.031.A3`), BI-01 a BI-03 e CL-02 a CL-10 aprovados. BI-04 a
   BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam pendentes, mas pausados até o
@@ -274,10 +280,12 @@
 > aprovados, com DB-06 automatizado. O preview `v0.4.4`, build `8`, EAS
 > `6199d700-82ca-44df-8ede-6987679c2566`, já está `FINISHED`, mas ainda não foi
 > instalado nem avaliado fisicamente. O Raul autorizou iniciar a Etapa 5C em
-> 2026-08-31; a `v0.5.1` local já implementa histórico de fotografias públicas,
-> favoritos, alertas explicáveis e simulador de aportes por classe. Continue por
-> testes de componentes e E2E Android/iOS, sem calcular retorno, recomendar ativo
-> ou persistir cenários. Preserve a Home orientada ao recorte pessoal, a cobertura honesta, a
+> 2026-08-31; a `v0.5.2` local já implementa histórico de fotografias públicas,
+> favoritos, alertas explicáveis, simulador de aportes e testes de componentes.
+> Os dois fluxos Maestro e seus seletores canônicos estão preparados, mas ainda
+> não foram executados em binários Android/iOS. Continue pela execução E2E e
+> pelos gates físicos pendentes, sem calcular retorno, recomendar ativo ou
+> persistir cenários. Preserve a Home orientada ao recorte pessoal, a cobertura honesta, a
 > distinção entre carteira local e demonstração, a entrada B3 antes do exemplo
 > fictício e o modo discreto. BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12
 > continuam pausados e pendentes; não os marque como aprovados. Não envie
@@ -990,6 +998,19 @@
     TypeScript, 42 testes e Android/Hermes com 649 módulos aprovados;
   - formulário e resultado aprovados em 375×812, 430×932, 768×1024 e 844×390,
     sem overflow horizontal ou alvo abaixo de 44 px. Preview EAS não gerado.
+- **Etapa 5C · cobertura automatizada `v0.5.2` (2026-08-31)** — implementação:
+  - testes reorganizados por camada, sem misturar domínio, componentes e E2E;
+  - `jest-expo ~57.0.5`, Jest `~29.7.0` e React Native Testing Library `14.0.1`
+    ficam somente em `devDependencies`; o junction externo de `node_modules`
+    foi preservado;
+  - 42 testes de domínio, 6 de componentes e 3 contratos Maestro passaram;
+  - dois fluxos Maestro usam `testID` de um mapa JSON canônico para percorrer as
+    quatro abas e o simulador; execução em Android/iOS ainda pendente;
+  - app elevado a `v0.5.2`, Android `versionCode 11` e iOS `buildNumber 11`;
+    TypeScript e Android/Hermes com 650 módulos aprovados;
+  - auditoria npm permanece com zero vulnerabilidade alta/crítica e 11 moderadas
+    transitivas no toolchain Expo; `audit fix --force` não foi aplicado porque
+    propõe downgrade incompatível para Expo 46. Preview EAS não gerado.
 
 ## Fila priorizada
 
@@ -1006,7 +1027,7 @@ integração seguinte.
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
 | P7 | Entregue (`v0.4.4`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
-| P8 | Em andamento (`v0.5.1`) | Histórico, favoritos, alertas e simulador entregues; componentes/E2E na fila | Muito alto | Alto |
+| P8 | Em andamento (`v0.5.2`) | Funcionalidades e componentes cobertos; execução E2E/física pendente | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
 | Depois | Planejado | Open Finance + Advisor Copilot, após gates | Muito alto | Muito alto |

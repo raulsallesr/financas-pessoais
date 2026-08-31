@@ -1,0 +1,36 @@
+appId: com.raulsallesr.focuslens
+name: Simulador local de aportes
+tags:
+  - critical
+  - scenarios
+---
+- launchApp:
+    clearState: true
+- tapOn:
+    id: "tab-scenarios"
+- assertVisible:
+    id: "screen-scenarios"
+- tapOn:
+    id: "contribution-amount-input"
+- inputText: "10000"
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      id: "contribution-class-inflation-linked"
+    direction: DOWN
+- tapOn:
+    id: "contribution-class-inflation-linked"
+- scrollUntilVisible:
+    element:
+      id: "contribution-submit"
+    direction: DOWN
+- tapOn:
+    id: "contribution-submit"
+- scrollUntilVisible:
+    element:
+      id: "contribution-result"
+    direction: DOWN
+- assertVisible:
+    id: "contribution-result"
+- assertVisible: "CENÁRIO HIPOTÉTICO"
+- assertVisible: "RECEBE O APORTE"

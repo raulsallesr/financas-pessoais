@@ -8,8 +8,8 @@ const {
   createPrivatePortfolio,
   parsePositionAmount,
   validatePrivatePortfolio,
-} = require("../.test-dist/domain/privatePortfolio.js");
-const { decodeUtf8, encodeUtf8 } = require("../.test-dist/domain/utf8.js");
+} = require("../../.test-dist/domain/privatePortfolio.js");
+const { decodeUtf8, encodeUtf8 } = require("../../.test-dist/domain/utf8.js");
 
 const VALID_CLASS = "Renda fixa pós-fixada";
 

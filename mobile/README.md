@@ -88,6 +88,28 @@ histórico público ou em qualquer serviço. A conta não estima retorno, risco,
 imposto, ativo, produto ou ordem. A versão é `0.5.1`, Android `versionCode 10` e
 iOS `buildNumber 10`.
 
+## Cobertura automatizada `v0.5.2`
+
+A suíte móvel está separada por responsabilidade:
+
+- `tests/domain/`: 42 testes de contratos e funções puras em `node:test`;
+- `tests/components/`: 6 testes com `jest-expo` e React Native Testing Library;
+- `tests/e2e/`: 3 contratos que evitam divergência entre app e Maestro;
+- `e2e/maestro/flows/`: duas jornadas nativas para navegação e simulador.
+
+Os fluxos usam somente os seletores registrados em
+`src/testing/testIds.json`. Jest, Testing Library e seus tipos ficam em
+`devDependencies`; não entram como dependência de runtime. A versão é `0.5.2`,
+Android `versionCode 11` e iOS `buildNumber 11`.
+
+```powershell
+npm test
+npm run e2e:maestro # requer Maestro e um binário instalado
+```
+
+Os testes automatizados locais passaram, mas os fluxos Maestro ainda precisam
+ser executados em Android/iOS. Não há preview EAS da `v0.5.2`.
+
 ## Como atualizar a fotografia pública
 
 Na raiz do projeto, usando o `.venv` externo já documentado:
@@ -199,19 +221,22 @@ máquina, as dependências foram mantidas fora do OneDrive e ligadas por um
 
 ```powershell
 npm run typecheck
-npm run test:domain
+npm test
 npm run export:android
 ```
 
-O gate atual cobre contrato demo, público e privado, schema incompatível,
+O gate de domínio cobre contrato demo, público e privado, schema incompatível,
 documento inválido, proibição de carteira no artefato público, valores e campos
 do editor, duplicidade, limite de posições, UTF-8, fallback, cálculo de peso,
 distribuição por classe, maior posição derivada, cobertura honesta dos sinais,
 resumo de cenário por tom e parcela não coberta, filtro por classe, impacto por
 sinal, configuração EAS/SecureStore, snapshot empacotado, limites do cenário,
 parser B3, ZIP/XML malformado, macro, tamanho,
-classes não cobertas e linguagem não imperativa. O bundle Android é
-gerado pelo Metro sem depender do Streamlit.
+classes não cobertas e linguagem não imperativa. A camada de componentes cobre
+navegação, validação, comparação, descarte de resultado obsoleto, modo discreto
+e coexistência entre aporte e sensibilidade. Os contratos E2E conferem app ID,
+seletores e ausência de dado pessoal. O bundle Android é gerado pelo Metro sem
+depender do Streamlit.
 
 ## Estrutura
 
@@ -222,8 +247,12 @@ src/data/               snapshot vivo, validação/provider e fallback demo
 src/domain/             contratos, parser B3, filtros e sensibilidade
 src/screens/            Hoje, Carteira, Cenários e Entenda
 src/storage/            cofre local criptografado para Android/iOS
+src/testing/            mapa canônico de seletores para Jest e Maestro
 assets/                 marca determinística em SVG e PNG
-tests/                  testes do domínio TypeScript
+tests/domain/           contratos e funções puras
+tests/components/       renderização e interação React Native
+tests/e2e/              contratos dos fluxos nativos
+e2e/maestro/flows/      jornadas Android/iOS executáveis
 ```
 
 Na raiz, `mobile_snapshot.py` adapta os quatro contratos Python sem alterar os
@@ -247,8 +276,8 @@ carteira em nuvem. A estratégia aprovada está em
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
 O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
-2026-08-31. Histórico público, favoritos, alertas explicáveis e o simulador
-local de aportes formam a `v0.5.1`; o próximo corte adiciona testes de
-componentes e E2E. O preview `v0.4.4` ainda precisa de avaliação física, e os
+2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador e a
+cobertura automatizada organizada formam a `v0.5.2`; os fluxos E2E nativos ainda
+aguardam execução. O preview `v0.4.4` ainda precisa de avaliação física, e os
 gates de importação, TalkBack, texto ampliado e alvos de toque continuam
 pendentes. A Etapa 6 e a camada institucional não foram antecipadas.

@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
+import testIds from "../testing/testIds.json";
 import { colors, spacing } from "../theme";
 
 export type TabKey = "today" | "portfolio" | "scenarios" | "learn";
@@ -66,6 +67,7 @@ export function BottomNav({
             key={tab.key}
             onPress={() => onChange(tab.key)}
             style={({ pressed }) => [styles.tab, pressed && styles.tabPressed]}
+            testID={testIds.tabs[tab.key]}
           >
             <TabGlyph active={active} type={tab.key} />
             <Text style={[styles.label, active && styles.labelActive]}>

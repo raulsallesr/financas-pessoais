@@ -1,6 +1,7 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 import { Eyebrow, SectionHeading, Surface } from "../components/Primitives";
+import testIds from "../testing/testIds.json";
 import { colors, radius, spacing } from "../theme";
 
 const steps = [
@@ -12,7 +13,11 @@ const steps = [
 
 export function LearnScreen() {
   return (
-    <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+    <ScrollView
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+      testID={testIds.screens.learn}
+    >
       <View style={styles.headerRow}>
         <View style={styles.headerCopy}>
           <Eyebrow>Sem economês</Eyebrow>

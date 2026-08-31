@@ -1078,3 +1078,40 @@ carteira e persistências da `v0.5.0` não mudaram. Não foi gerado preview EAS.
 Adicionar testes de componentes para estados e interações críticas e preparar
 E2E Android/iOS reproduzível. Os gates físicos pendentes continuam preservados;
 Etapa 6/Embedded permanece posterior ao fechamento definido na seção 14.
+
+## 23. Etapa 5C, incremento 3 — cobertura automatizada `v0.5.2`
+
+### Organização fechada
+
+1. `tests/domain/` preserva os 42 testes de contratos e funções puras em
+   `node:test`;
+2. `tests/components/` usa `jest-expo` e React Native Testing Library para
+   estados, semântica e interação reais dos componentes;
+3. `tests/e2e/` valida estaticamente identidade do app, seletores e privacidade
+   dos fluxos;
+4. `e2e/maestro/flows/` contém jornadas executáveis contra Android e iOS;
+5. `src/testing/testIds.json` é a fonte única dos seletores compartilhados.
+
+### Estado da execução
+
+**Implementado localmente em 2026-08-31.** O app foi elevado a `v0.5.2`,
+Android `versionCode 11` e iOS `buildNumber 11`. Passaram 42 testes de domínio,
+6 testes de componentes e 3 contratos E2E; TypeScript e o export Android/Hermes
+com 650 módulos também passaram. As versões oficiais compatíveis com Expo 57
+ficaram em `devDependencies`, e `node_modules` voltou à junção externa prevista
+para esta máquina.
+
+Dois fluxos Maestro cobrem as quatro abas e o caminho do simulador. Eles ainda
+não foram executados em aparelho ou simulador porque o CLI Maestro não está
+instalado e não foi gerado um novo binário `v0.5.2`. Isso mantém E2E Android/iOS
+e todos os gates físicos como pendentes. Não foi gerado preview EAS.
+
+A auditoria inclui zero vulnerabilidade alta/crítica e 11 moderadas transitivas
+no toolchain Expo. `npm audit fix --force` não foi aplicado: a correção sugerida
+troca o projeto para Expo 46 e rompe a compatibilidade do SDK 57.
+
+### Próximo gate da 5C
+
+Executar os fluxos Maestro em Android e iOS, registrar a evidência e retomar
+BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12. Etapa 6/Embedded continua
+bloqueada até esses gates e as demais condições da seção 14 serem fechados.

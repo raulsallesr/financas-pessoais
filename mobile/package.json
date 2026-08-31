@@ -1,6 +1,6 @@
 {
   "name": "focuslens-mobile",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "main": "index.ts",
   "dependencies": {
     "@expo/metro-runtime": "~57.0.14",
@@ -20,7 +20,11 @@
     "react-native-web": "~0.21.0"
   },
   "devDependencies": {
+    "@testing-library/react-native": "^14.0.1",
+    "@types/jest": "29.5.14",
     "@types/react": "~19.2.2",
+    "jest": "~29.7.0",
+    "jest-expo": "~57.0.5",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -30,7 +34,12 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
-    "test:domain": "tsc -p tsconfig.domain.json && node --test --test-isolation=none tests/*.test.cjs",
+    "typecheck:components": "tsc -p tsconfig.components.json --noEmit",
+    "test": "npm run test:domain && npm run test:components && npm run test:e2e:contracts",
+    "test:domain": "tsc -p tsconfig.domain.json && node --test --test-isolation=none tests/domain/*.test.cjs",
+    "test:components": "npm run typecheck:components && jest --config jest.config.cjs --runInBand",
+    "test:e2e:contracts": "node --test --test-isolation=none tests/e2e/*.test.cjs",
+    "e2e:maestro": "maestro test e2e/maestro",
     "export:android": "expo export --platform android --output-dir dist-android"
   },
   "private": true

@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const test = require("node:test");
 
-const mobileRoot = path.resolve(__dirname, "..");
+const mobileRoot = path.resolve(__dirname, "../..");
 
 function readJson(name) {
   return JSON.parse(fs.readFileSync(path.join(mobileRoot, name), "utf8"));
@@ -15,13 +15,13 @@ test("configura um development build Android instalável", () => {
   const packageJson = readJson("package.json");
 
   assert.equal(app.orientation, "default");
-  assert.equal(app.version, "0.5.1");
-  assert.equal(packageJson.version, "0.5.1");
+  assert.equal(app.version, "0.5.2");
+  assert.equal(packageJson.version, "0.5.2");
   assert.equal(app.scheme, "focuslens");
   assert.equal(app.android.package, "com.raulsallesr.focuslens");
-  assert.equal(app.android.versionCode, 10);
+  assert.equal(app.android.versionCode, 11);
   assert.equal(app.ios.bundleIdentifier, "com.raulsallesr.focuslens");
-  assert.equal(app.ios.buildNumber, "10");
+  assert.equal(app.ios.buildNumber, "11");
   assert.equal(app.android.predictiveBackGestureEnabled, true);
   assert.equal(app.splash, undefined);
   assert.deepEqual(app.plugins[0], [

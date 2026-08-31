@@ -6,7 +6,7 @@ const {
   B3ImportError,
   MAX_B3_FILE_BYTES,
   parseB3Workbook,
-} = require("../.test-dist/domain/b3Import.js");
+} = require("../../.test-dist/domain/b3Import.js");
 
 const CONTENT_TYPES = `<?xml version="1.0" encoding="UTF-8"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">

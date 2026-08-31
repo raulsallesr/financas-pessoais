@@ -38,6 +38,7 @@ import {
 } from "../domain/insights";
 import { PublicSnapshotHistoryV1 } from "../domain/snapshotHistory";
 import { MarketSnapshot } from "../domain/types";
+import testIds from "../testing/testIds.json";
 import { colors, radius, spacing } from "../theme";
 
 export function TodayScreen({
@@ -107,6 +108,7 @@ export function TodayScreen({
         isWide && styles.contentWide,
       ]}
       showsVerticalScrollIndicator={false}
+      testID={testIds.screens.today}
     >
       <View style={styles.headerRow}>
         <View>

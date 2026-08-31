@@ -6,20 +6,20 @@ const {
   orderSignalsByFavorites,
   toggleFavoriteSignal,
   validateFavoriteSignals,
-} = require("../.test-dist/domain/favorites.js");
+} = require("../../.test-dist/domain/favorites.js");
 const {
   comparePublicSnapshots,
   createPublicSnapshotHistory,
   recordPublicSnapshot,
-} = require("../.test-dist/domain/snapshotHistory.js");
+} = require("../../.test-dist/domain/snapshotHistory.js");
 const {
   buildExplainableAlert,
-} = require("../.test-dist/domain/explainableAlerts.js");
-const { demoSnapshot } = require("../.test-dist/data/demoSnapshot.js");
+} = require("../../.test-dist/domain/explainableAlerts.js");
+const { demoSnapshot } = require("../../.test-dist/data/demoSnapshot.js");
 const {
   selectMarketSnapshot,
-} = require("../.test-dist/data/snapshotProvider.js");
-const liveSnapshot = require("../src/data/liveSnapshot.json");
+} = require("../../.test-dist/data/snapshotProvider.js");
+const liveSnapshot = require("../../src/data/liveSnapshot.json");
 
 test("favoritos usam contrato pequeno, único e sem dado de carteira", () => {
   const empty = createFavoriteSignals();

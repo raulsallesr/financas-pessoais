@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.5.1`
+## Estado do corte `mobile v0.5.2`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -149,6 +149,26 @@ Ele não usa storage, filesystem, rede ou identificador de posição; alterar va
 ou classe descarta o resultado anterior. A UI exige seleção explícita, aceita
 entrada monetária brasileira e deixa retorno, risco, imposto, produto e ordem
 fora do resultado. Motores Python e snapshot público `v1` permanecem inalterados.
+
+### Arquitetura de testes `v0.5.2`
+
+A pirâmide móvel possui três executores independentes:
+
+- `node:test` recebe somente JavaScript compilado do domínio e não monta React;
+- `jest-expo` + React Native Testing Library montam componentes com os mocks
+  oficiais do Expo e verificam estado, semântica e interação;
+- Maestro opera o binário final pela camada de acessibilidade, sem biblioteca
+  E2E dentro do aplicativo.
+
+`src/testing/testIds.json` é o contrato único entre componentes, testes e
+fluxos. `tests/e2e/maestroFlows.test.cjs` rejeita app ID divergente, seletor não
+registrado ou texto com marcador de dado pessoal. A execução estática não é
+evidência física: os dois fluxos em `e2e/maestro/flows` ainda precisam rodar em
+Android e iOS.
+
+As dependências de teste permanecem em `devDependencies`; Metro confirmou 650
+módulos no bundle Android. Nenhum motor, storage ou contrato público/privado foi
+alterado.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -300,8 +320,10 @@ build atual.
     comparação entre até oito fotografias públicas, sem carteira no histórico;
 11. **implementado localmente em `v0.5.1`:** simulador de aportes por classe,
     sem persistência, retorno previsto, produto ou ordem;
-12. adicionar testes de componentes e E2E Android/iOS;
-13. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+12. **implementado localmente em `v0.5.2`:** testes de componentes e contratos
+    E2E; fluxos Maestro Android/iOS preparados, mas ainda não executados;
+13. executar os fluxos E2E e fechar os gates físicos pendentes;
+14. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 

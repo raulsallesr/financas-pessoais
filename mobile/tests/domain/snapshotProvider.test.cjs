@@ -1,12 +1,12 @@
 const assert = require("node:assert/strict");
 const test = require("node:test");
 
-const { currentSnapshot } = require("../.test-dist/data/currentSnapshot.js");
-const { impactsForSignal } = require("../.test-dist/domain/insights.js");
+const { currentSnapshot } = require("../../.test-dist/data/currentSnapshot.js");
+const { impactsForSignal } = require("../../.test-dist/domain/insights.js");
 const {
   selectMarketSnapshot,
   validateLiveSnapshot,
-} = require("../.test-dist/data/snapshotProvider.js");
+} = require("../../.test-dist/data/snapshotProvider.js");
 
 function validDocument() {
   return {

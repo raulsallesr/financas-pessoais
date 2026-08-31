@@ -24,6 +24,7 @@ import {
   toneLabel,
 } from "../domain/insights";
 import { MarketSnapshot } from "../domain/types";
+import testIds from "../testing/testIds.json";
 import { colors, radius, spacing } from "../theme";
 
 const shocks = [-100, -50, 0, 50, 100] as const;
@@ -73,6 +74,7 @@ export function ScenariosScreen({
     <ScrollView
       contentContainerStyle={styles.content}
       showsVerticalScrollIndicator={false}
+      testID={testIds.screens.scenarios}
     >
       <View style={styles.headerRow}>
         <View style={styles.headerCopy}>
