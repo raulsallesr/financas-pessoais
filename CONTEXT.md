@@ -10,14 +10,14 @@
   O corte móvel `v0.4.0` já implementa editor, cofre local criptografado e
   importação B3 sanitizada com prévia; o APK foi instalado, BI-01 a BI-03 e
   CL-02 a CL-10 foram aprovados no aparelho, mas o restante do ciclo físico
-  continua pendente. O preview `v0.4.4`, build `8`, foi gerado em 2026-08-31 e
-  ainda aguarda instalação e avaliação de utilidade. Por decisão explícita do
+  continua pendente. O preview mais recente `v0.5.2`, build `11`, foi gerado em
+  2026-08-31 e ainda aguarda instalação e avaliação física. Por decisão explícita do
   Raul em 2026-08-31, o desenvolvimento da Etapa 5C chegou ao corte local
   `v0.5.2`: além do simulador, a suíte agora separa domínio, componentes e
   contratos E2E, com dois fluxos Maestro prontos para o binário nativo. O
   toolchain Windows portátil foi instalado e os dois YAMLs passaram no Maestro
-  `2.9.0`; o executor falha fechado porque nenhum Android está conectado e não
-  há binário `v0.5.2/11` instalado. A execução das jornadas e os gates físicos
+  `2.9.0`; o executor falha fechado porque nenhum Android está conectado e o
+  binário `v0.5.2/11` ainda não foi instalado. A execução das jornadas e os gates físicos
   anteriores continuam pendentes, sem serem inferidos como aprovados. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
@@ -251,11 +251,11 @@
 - O próximo gate da 5C é executar os fluxos Maestro em binários Android/iOS e
   retomar as evidências físicas pendentes; preparar o fluxo não equivale a
   aprová-lo.
-- O APK interno `v0.4.4` continua disponível para a evidência física anterior: build
-  [`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566),
-  [download direto](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk),
-  expira em 2026-09-14. O build concluído não aprova nenhum gate físico, e ainda
-  não existe preview EAS da `v0.5.2`.
+- O APK interno mais recente é o `v0.5.2`, build `11`: EAS
+  [`c08e5397-427f-42c2-a163-ab5cd815cb55`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55),
+  [download direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk),
+  commit `1c477f5`, fingerprint `4a0bc79db5a2beeb9b694f3ee8718ff13be38dff` e
+  expiração em 2026-09-14. O build concluído não aprova nenhum gate físico.
 - Evidência já fechada permanece válida: Android 16
   (`BP2A.250605.031.A3`), BI-01 a BI-03 e CL-02 a CL-10 aprovados. BI-04 a
   BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam pendentes, mas pausados até o
@@ -282,8 +282,8 @@
 > `@raulsallesr/focuslens-br` está vinculado. Os APKs Android `development` e
 > `preview` anteriores já foram instalados no POCO X8 Pro com Android
 > 16 (`BP2A.250605.031.A3`). DB-01 a DB-09, BI-01 a BI-03 e CL-02 a CL-10 estão
-> aprovados, com DB-06 automatizado. O preview `v0.4.4`, build `8`, EAS
-> `6199d700-82ca-44df-8ede-6987679c2566`, já está `FINISHED`, mas ainda não foi
+> aprovados, com DB-06 automatizado. O preview `v0.5.2`, build `11`, EAS
+> `c08e5397-427f-42c2-a163-ab5cd815cb55`, está `FINISHED`, mas ainda não foi
 > instalado nem avaliado fisicamente. O Raul autorizou iniciar a Etapa 5C em
 > 2026-08-31; a `v0.5.2` local já implementa histórico de fotografias públicas,
 > favoritos, alertas explicáveis, simulador de aportes e testes de componentes.
@@ -1024,7 +1024,11 @@
     TypeScript e Android/Hermes com 650 módulos aprovados;
   - auditoria npm permanece com zero vulnerabilidade alta/crítica e 11 moderadas
     transitivas no toolchain Expo; `audit fix --force` não foi aplicado porque
-    propõe downgrade incompatível para Expo 46. Preview EAS não gerado.
+    propõe downgrade incompatível para Expo 46;
+  - preview EAS interno `c08e5397-427f-42c2-a163-ab5cd815cb55` concluído no
+    commit `1c477f5`, build `11`, fingerprint
+    `4a0bc79db5a2beeb9b694f3ee8718ff13be38dff`, sem variáveis `Plain text` ou
+    `Sensitive`; o APK expira em 2026-09-14 e ainda aguarda instalação.
 
 ## Fila priorizada
 
@@ -1041,7 +1045,7 @@ integração seguinte.
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
 | P7 | Entregue (`v0.4.4`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
-| P8 | Em andamento (`v0.5.2`) | Harness E2E pronto; falta aparelho com build exato e gates físicos | Muito alto | Alto |
+| P8 | Em andamento (`v0.5.2`) | APK e harness E2E prontos; falta instalação e gates físicos | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
 | Depois | Planejado | Open Finance + Advisor Copilot, após gates | Muito alto | Muito alto |

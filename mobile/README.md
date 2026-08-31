@@ -112,7 +112,10 @@ npm run e2e:maestro:windows # exige Android autorizado e build 0.5.2/11
 Os testes automatizados locais passaram, mas os fluxos Maestro ainda precisam
 ser executados em Android/iOS. Os YAMLs passaram no Maestro `2.9.0`; o runner
 Windows bloqueou corretamente antes das jornadas porque não havia Android
-conectado. Não há preview EAS da `v0.5.2`.
+conectado. O
+[preview EAS `v0.5.2`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55)
+e seu [APK direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk)
+foram gerados no build `11`; a instalação e os gates físicos estão pendentes.
 
 No Windows, `scripts/run-maestro-windows.ps1` procura Java, Maestro e ADB em
 `%LOCALAPPDATA%\focuslens-tools`, sem alterar o `PATH` global. Antes do E2E, ele
@@ -220,6 +223,13 @@ foi concluído em 2026-08-31 e o
 [APK direto](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk)
 expira em 2026-09-14. Ele ainda não foi instalado; os demais gates físicos
 estão pausados, não aprovados.
+
+O corte completo da Etapa 5C está no
+[preview `v0.5.2`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55),
+build `11`, commit `1c477f5`. O
+[APK direto mais recente](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk)
+expira em 2026-09-14 e deve ser instalado por cima do app atual, sem desinstalar.
+Nenhum gate físico foi aprovado apenas pela geração do binário.
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta

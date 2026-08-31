@@ -327,8 +327,9 @@ build atual.
     comparação entre até oito fotografias públicas, sem carteira no histórico;
 11. **implementado localmente em `v0.5.1`:** simulador de aportes por classe,
     sem persistência, retorno previsto, produto ou ordem;
-12. **implementado localmente em `v0.5.2`:** testes de componentes e contratos
-    E2E; fluxos Maestro Android/iOS preparados, mas ainda não executados;
+12. **implementado e empacotado em `v0.5.2`:** testes de componentes e contratos
+    E2E; preview Android build `11` e fluxos Maestro preparados, mas ainda não
+    executados no aparelho;
 13. executar os fluxos E2E e fechar os gates físicos pendentes;
 14. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 

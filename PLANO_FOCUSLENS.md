@@ -1110,9 +1110,14 @@ os dois YAMLs passaram no CLI real.
 `PATH` global: ele serializa instâncias, exige Android autorizado e recusa package
 ou `versionName/versionCode` diferente de `app.json`. O caminho sem aparelho foi
 testado e bloqueou antes de abrir qualquer app. As jornadas ainda não rodaram
-porque nenhum Android estava conectado e não foi gerado um novo binário
-`v0.5.2`. Isso mantém E2E Android/iOS e todos os gates físicos como pendentes.
-Não foi gerado preview EAS.
+porque nenhum Android estava conectado. O preview interno `v0.5.2`, build `11`,
+foi concluído no EAS
+[`c08e5397-427f-42c2-a163-ab5cd815cb55`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55),
+commit `1c477f5`, fingerprint `4a0bc79db5a2beeb9b694f3ee8718ff13be38dff`.
+O [APK direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk)
+expira em 2026-09-14 e ainda não foi instalado. O build não usou variáveis
+`Plain text` ou `Sensitive`. Isso mantém E2E Android/iOS e todos os gates físicos
+como pendentes.
 
 A auditoria inclui zero vulnerabilidade alta/crítica e 11 moderadas transitivas
 no toolchain Expo. `npm audit fix --force` não foi aplicado: a correção sugerida
@@ -1120,7 +1125,7 @@ troca o projeto para Expo 46 e rompe a compatibilidade do SDK 57.
 
 ### Próximo gate da 5C
 
-Conectar um Android autorizado com o build exato `0.5.2/11`, executar
+Instalar o APK `0.5.2/11`, conectar o Android autorizado e executar
 `npm run e2e:maestro:windows`, repetir em iOS, registrar a evidência e retomar
 BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12. Etapa 6/Embedded continua
 bloqueada até esses gates e as demais condições da seção 14 serem fechados.

@@ -10,9 +10,9 @@ ao repositório ou aparecer em captura de tela.
 ## Preparação
 
 - para avaliar a utilidade atual, instalar o
-  [APK `preview` `v0.4.4`](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk),
-  build `8`, EAS
-  [`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566);
+  [APK `preview` `v0.5.2`](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk),
+  build `11`, EAS
+  [`c08e5397-427f-42c2-a163-ab5cd815cb55`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55);
 - manter uma exportação XLSX original da Área do Investidor B3 apenas no
   aparelho ou em armazenamento pessoal controlado;
 - não renomear PDF, CSV ou ZIP para `.xlsx`;
@@ -44,11 +44,11 @@ Build: commit `c6bb875`, fingerprint
 2026-09-11. Nenhuma variável `Plain text` ou `Sensitive` foi configurada no
 ambiente EAS do preview.
 
-**Preview atual para avaliação de utilidade:** app `0.4.4`, build `8`, commit
-`565b071c72fcdd4583fb951f8edd97cbec6dde4b`, fingerprint
-`60a05723598a9a039fc90320bcf2a45eb945acaf`, status `FINISHED`, expiração em
-2026-09-14. Também não possui variável `Plain text` ou `Sensitive`. Ainda não
-foi instalado, portanto não altera os estados da matriz.
+**Preview atual para avaliação de utilidade:** app `0.5.2`, build `11`, commit
+`1c477f5d0c0da3f5980509a2f08f599016ffb1f4`, fingerprint
+`4a0bc79db5a2beeb9b694f3ee8718ff13be38dff`, status `FINISHED`, expiração em
+2026-09-14. Não possui variável `Plain text` ou `Sensitive`. Ainda não foi
+instalado, portanto não altera os estados da matriz.
 
 **Evidência física parcial em 2026-08-28:** no POCO X8 Pro com Android 16
 (`BP2A.250605.031.A3`), o Raul confirmou que o `v0.4.0` abriu as quatro abas,
@@ -62,7 +62,8 @@ item pendente deve ser inferido como aprovado.
 
 **Decisão posterior em 2026-08-31:** o Raul autorizou desenvolver a Etapa 5C
 antes de retomar este checklist. Isso não muda nenhum estado da matriz e não
-elimina este gate para o fechamento físico da Etapa 5B.
+elimina este gate para o fechamento físico da Etapa 5B. O `v0.5.2/11` substitui
+o `v0.4.4/8` apenas como binário recomendado para a próxima execução.
 
 ## O que relatar ao fechar o gate
 

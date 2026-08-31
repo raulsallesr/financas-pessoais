@@ -6,7 +6,7 @@ offline, safe areas em paisagem, rotação e comportamento do botão Voltar fora
 aprovados. O preview `v0.4.0` com cofre/importação B3 também foi gerado e
 instalado no POCO X8 Pro com Android 16 (`BP2A.250605.031.A3`). TalkBack,
 texto ampliado e alvos de toque ainda precisam ser registrados. O preview
-`v0.4.4`, build `8`, foi gerado, mas ainda não foi instalado nem avaliado.
+`v0.5.2`, build `11`, foi gerado, mas ainda não foi instalado nem avaliado.
 
 **Pausa de produto:** DB-10 a DB-12 continuam pendentes, mas o Raul decidiu
 avaliar primeiro o refinamento de utilidade `v0.4.4`. A pausa não transforma
@@ -162,7 +162,7 @@ commit `c6bb875`, fingerprint
 expira em 2026-09-11. Ele foi instalado no Android 16: CL-02 a CL-10 e BI-01 a
 BI-03 foram aprovados; os demais itens estão pendentes.
 
-**Preview mais recente:** app `0.4.4`, build `8`, EAS
+**Preview anterior de utilidade:** app `0.4.4`, build `8`, EAS
 [`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566),
 commit `565b071c72fcdd4583fb951f8edd97cbec6dde4b`, fingerprint
 `60a05723598a9a039fc90320bcf2a45eb945acaf`. O
@@ -172,6 +172,16 @@ antes da carteira fictícia, alternativa manual, modo discreto entre abas e
 resumo de Cenários. O build terminou `FINISHED` sem variáveis `Plain text` ou
 `Sensitive`, mas ainda não foi instalado; portanto não existe evidência física
 específica deste corte e nenhum gate mudou de estado.
+
+**Preview atual da Etapa 5C:** app `0.5.2`, build `11`, EAS
+[`c08e5397-427f-42c2-a163-ab5cd815cb55`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55),
+commit `1c477f5d0c0da3f5980509a2f08f599016ffb1f4`, fingerprint
+`4a0bc79db5a2beeb9b694f3ee8718ff13be38dff`. O
+[APK direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk)
+expira em 2026-09-14. O build terminou `FINISHED`, sem variáveis `Plain text` ou
+`Sensitive`, e inclui histórico público, favoritos, alertas explicáveis,
+simulador de aportes e o harness E2E. Ele ainda não foi instalado; portanto
+nenhum gate físico mudou de estado.
 
 Com o preview instalado:
 
