@@ -7,16 +7,18 @@ import { formatSnapshotDate, ToneBadge } from "./Primitives";
 export function MarketSignalCard({
   signal,
   selected,
+  favorite,
   onPress,
 }: {
   signal: MarketSignal;
   selected: boolean;
+  favorite: boolean;
   onPress: () => void;
 }) {
   return (
     <Pressable
       accessibilityHint="Abre a evidência e as relações disponíveis para este sinal"
-      accessibilityLabel={`${signal.label}: ${signal.value}. ${signal.headline}`}
+      accessibilityLabel={`${signal.label}: ${signal.value}. ${signal.headline}${favorite ? ". Favorito" : ""}`}
       accessibilityRole="button"
       accessibilityState={{ selected }}
       onPress={onPress}
@@ -27,7 +29,9 @@ export function MarketSignalCard({
       ]}
     >
       <View style={styles.topline}>
-        <Text style={styles.label}>{signal.label}</Text>
+        <Text style={styles.label}>
+          {signal.label}{favorite ? " · FAVORITO" : ""}
+        </Text>
         <ToneBadge
           tone={signal.tone}
           label={signal.tone === "attention" ? "atenção" : "leitura"}
@@ -71,8 +75,11 @@ const styles = StyleSheet.create({
   },
   label: {
     color: colors.textMuted,
+    flex: 1,
     fontSize: 12,
     fontWeight: "700",
+    lineHeight: 17,
+    paddingRight: spacing.xs,
   },
   value: {
     color: colors.text,

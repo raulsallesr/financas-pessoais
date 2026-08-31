@@ -60,6 +60,10 @@ BI-13 serão retomados somente depois da avaliação de utilidade do preview
 `v0.4.4`. Os três itens aprovados permanecem como evidência histórica; nenhum
 item pendente deve ser inferido como aprovado.
 
+**Decisão posterior em 2026-08-31:** o Raul autorizou desenvolver a Etapa 5C
+antes de retomar este checklist. Isso não muda nenhum estado da matriz e não
+elimina este gate para o fechamento físico da Etapa 5B.
+
 ## O que relatar ao fechar o gate
 
 Envie apenas:
@@ -78,4 +82,5 @@ A Etapa 5B.2 só muda para concluída quando um APK compatível com a importaç�
 B3 estiver registrado e
 BI-01 a BI-13 estiverem aprovados ou justificados. Falha de leitura, descarte,
 confirmação, persistência offline ou preservação da carteira bloqueia o avanço
-para a Etapa 5C.
+para produção e o fechamento da Etapa 5B.2. O desenvolvimento local da Etapa
+5C foi liberado separadamente pelo Raul em 2026-08-31, sem inferir aprovação.

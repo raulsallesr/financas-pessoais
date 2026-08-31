@@ -24,6 +24,9 @@ Depois de CL-02 a CL-10 passarem, o Raul pausou CL-11 a CL-13 para avaliar
 primeiro a utilidade do corte `v0.4.4`. A evidência aprovada abaixo permanece
 válida; a pausa não fecha acessibilidade.
 
+Em 2026-08-31, o Raul autorizou desenvolver a Etapa 5C antes de retomar CL-11 a
+CL-13. A decisão não aprova estes itens nem elimina o gate físico da carteira.
+
 Este documento é a evidência operacional da seção 15 de
 `PLANO_FOCUSLENS.md`. Não registrar aqui nome de ativo real, valor, conta,
 instituição, print da carteira pessoal ou qualquer outro dado financeiro.

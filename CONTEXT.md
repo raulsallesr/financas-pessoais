@@ -11,7 +11,10 @@
   importação B3 sanitizada com prévia; o APK foi instalado, BI-01 a BI-03 e
   CL-02 a CL-10 foram aprovados no aparelho, mas o restante do ciclo físico
   continua pendente. O preview `v0.4.4`, build `8`, foi gerado em 2026-08-31 e
-  ainda aguarda instalação e avaliação de utilidade. O roadmap
+  ainda aguarda instalação e avaliação de utilidade. Por decisão explícita do
+  Raul em 2026-08-31, o desenvolvimento da Etapa 5C começou no corte local
+  `v0.5.0`; os gates físicos anteriores continuam pendentes, sem serem
+  inferidos como aprovados. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
@@ -224,27 +227,28 @@
 
 ### Próximo incremento, sem ambiguidade
 
-- Entrega: **Etapa 5B — avaliar o refinamento de utilidade `v0.4.4` em APK**.
-- O APK interno já foi gerado no EAS: build
+- Entrega atual: **Etapa 5C — acompanhamento explicável `v0.5.0`**.
+- O primeiro corte 5C guarda no máximo oito fotografias públicas somente no
+  aparelho, compara campos literais do contrato `v1`, permite favoritar IDs de
+  sinais e estrutura o detalhe em `o que mudou`, `o que prova`, `onde afeta` e
+  `o que não prova`.
+- Nenhuma posição entra no histórico público; favoritos guardam apenas IDs. A
+  relação com a carteira reutiliza exclusivamente `effects` já recebidos e
+  declara ausência de elo quando o snapshot vier vazio.
+- O próximo corte funcional da 5C é o simulador de aportes local, seguido por
+  testes de componentes e E2E Android/iOS. Ele não deve calcular retorno,
+  recomendar ativo ou transformar a alocação-alvo em ordem.
+- O APK interno `v0.4.4` continua disponível para a evidência física anterior: build
   [`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566),
   [download direto](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk),
-  expira em 2026-09-14. A pendência agora é instalar e avaliar utilidade; o
-  build concluído não aprova nenhum gate físico.
-- A Home agora começa pela carteira, mostra concentração e declara quando os
-  sinais públicos não fornecem relação direta. A Carteira resume classes antes
-  das posições e mantém a lista longa sob demanda. O próximo ciclo é de uso e
-  crítica de produto, não de execução mecânica do checklist físico.
-- Cenários agora entrega uma resposta imediata por tom e cobertura; o modo
-  discreto permanece ativo entre abas durante a sessão.
-- Na demonstração, Carteira começa pela importação B3 e mantém a entrada manual
-  como alternativa; o patrimônio fictício aparece somente depois desses caminhos.
+  expira em 2026-09-14. O build concluído não aprova nenhum gate físico, e ainda
+  não existe preview EAS da `v0.5.0`.
 - Evidência já fechada permanece válida: Android 16
   (`BP2A.250605.031.A3`), BI-01 a BI-03 e CL-02 a CL-10 aprovados. BI-04 a
   BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam pendentes, mas pausados até o
   Raul considerar a experiência útil o suficiente para retomar os gates.
-- Não alterar os motores, o schema público `1` ou os três stashes. Histórico,
-  favoritos, alertas explicáveis e E2E formam a Etapa 5C; autenticação, nuvem e
-  Open Finance continuam posteriores.
+- Não alterar os motores, o schema público `1` ou os três stashes. Autenticação,
+  nuvem, Open Finance e Embedded continuam posteriores.
 - Não antecipar a Etapa 6/Embedded durante o development build. O roadmap
   institucional aprovado começa somente depois dos gates definidos na seção 14.
 - A definição completa está na seção “13. Próxima execução — Etapa 5” de
@@ -267,17 +271,16 @@
 > 16 (`BP2A.250605.031.A3`). DB-01 a DB-09, BI-01 a BI-03 e CL-02 a CL-10 estão
 > aprovados, com DB-06 automatizado. O preview `v0.4.4`, build `8`, EAS
 > `6199d700-82ca-44df-8ede-6987679c2566`, já está `FINISHED`, mas ainda não foi
-> instalado nem avaliado fisicamente. Continue pela avaliação de utilidade:
-> preserve a Home orientada ao recorte pessoal, a distribuição por
-> classe, a cobertura honesta dos sinais e a distinção entre carteira local e
-> demonstração. Preserve a entrada B3 antes do exemplo fictício na demo, a
-> alternativa manual, o modo discreto entre abas e o resumo de Cenários sem
-> inferir efeito ausente. Os gates BI-04 a BI-13, CL-11 a CL-13 e
-> DB-10 a DB-12 estão pausados até nova decisão do Raul; não os marque como
-> aprovados. Não envie
+> instalado nem avaliado fisicamente. O Raul autorizou iniciar a Etapa 5C em
+> 2026-08-31; a `v0.5.0` local já implementa histórico de fotografias públicas,
+> favoritos e alertas explicáveis. Continue pelo simulador de aportes local sem
+> calcular retorno ou recomendar ativo; depois adicione testes de componentes e
+> E2E. Preserve a Home orientada ao recorte pessoal, a cobertura honesta, a
+> distinção entre carteira local e demonstração, a entrada B3 antes do exemplo
+> fictício e o modo discreto. BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12
+> continuam pausados e pendentes; não os marque como aprovados. Não envie
 > planilha ou valores pelo chat e não antecipe autenticação de cliente, Open
-> Finance, Etapa 5C ou Embedded. Rode os gates e faça commit/push somente no git
-> próprio do projeto.
+> Finance ou Embedded. Rode os gates e faça commit/push somente no git próprio.
 > O roadmap FocusLens Embedded já está aprovado e documentado, mas não antecipe
 > API, SDK, autenticação ou integração bancária durante esse incremento.
 
@@ -306,7 +309,8 @@
   2026-08-28; os primeiros APKs `development` e `preview` foram instalados e o
   fluxo principal/offline foi aprovado. No `v0.4.0`, CL-02 a CL-10 e BI-01 a
   BI-03 também foram aprovados. Acessibilidade e o restante da importação estão
-  pausados enquanto o corte `v0.4.4` prioriza utilidade percebida.
+  pausados e pendentes; o Raul autorizou desenvolver a Etapa 5C em paralelo para
+  aumentar a utilidade, sem inferir aprovação desses gates.
 - A direção institucional foi aprovada em 2026-08-27: o app pessoal será o
   cliente de referência e a futura camada **FocusLens Embedded** oferecerá API,
   receipt auditável, Exposure Adapter privado, SDK, Governance Studio e piloto
@@ -958,6 +962,21 @@
     commit `565b071c72fcdd4583fb951f8edd97cbec6dde4b`, build `8`, fingerprint
     `60a05723598a9a039fc90320bcf2a45eb945acaf`; o APK expira em 2026-09-14 e
     ainda não possui evidência física deste corte.
+- **Etapa 5C · acompanhamento explicável `v0.5.0` (2026-08-31)** — implementação:
+  - a decisão explícita do Raul libera o desenvolvimento da 5C sem transformar
+    BI-04 a BI-13, CL-11 a CL-13 ou DB-10 a DB-12 em aprovados;
+  - linha do tempo local preserva no máximo oito snapshots públicos `v1`, usa
+    gravação temporária e rejeita qualquer documento que contenha carteira;
+  - comparação usa somente valores, textos, tons e IDs literais entre duas
+    fotografias, sem interpretar percentual ou recalcular motor;
+  - favoritos persistem somente IDs de sinais no cofre nativo e degradam para
+    estado de sessão explícito no renderer web ou quando o storage falha;
+  - alerta selecionado mostra o que mudou, o que prova, onde afeta e o que não
+    prova; relação vazia permanece vazia, sem efeito inventado;
+  - app elevado a `v0.5.0`, Android `versionCode 9` e iOS `buildNumber 9`;
+    TypeScript, 37 testes e Android/Hermes com 647 módulos aprovados;
+  - layout e interação aprovados em 375×812, 430×932, 768×1024 e 844×390,
+    sem overflow horizontal ou alvo abaixo de 44 px. Preview EAS não gerado.
 
 ## Fila priorizada
 
@@ -973,14 +992,14 @@ integração seguinte.
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
-| P7 | Em andamento (`v0.4.4`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
-| P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
+| P7 | Entregue (`v0.4.4`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
+| P8 | Em andamento (`v0.5.0`) | Histórico, favoritos e alertas entregues; simulador e E2E na fila | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
 | Depois | Planejado | Open Finance + Advisor Copilot, após gates | Muito alto | Muito alto |
 | Depois | Fila | Backtest por horizonte e regime | Muito alto | Alto |
 | Depois | Fila | Curva real IPCA+, cupom e forwards | Alto | Alto |
-| Depois | Fila | Exportação local e simulador de aportes | Médio | Médio |
+| Depois | Fila | Exportação local | Médio | Médio |
 
 ## Bloqueios
 

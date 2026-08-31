@@ -12,6 +12,10 @@ texto ampliado e alvos de toque ainda precisam ser registrados. O preview
 avaliar primeiro o refinamento de utilidade `v0.4.4`. A pausa não transforma
 nenhum item em aprovado nem invalida as evidências físicas já registradas.
 
+**Decisão posterior em 2026-08-31:** o desenvolvimento local da Etapa 5C foi
+autorizado sem fechar DB-10 a DB-12. TalkBack, texto ampliado e alvos de toque
+continuam obrigatórios antes do gate de produção.
+
 Este documento é a evidência operacional da seção 13 de
 `PLANO_FOCUSLENS.md`. Não marca o incremento como concluído enquanto o APK não
 for gerado, instalado e validado em aparelho real.

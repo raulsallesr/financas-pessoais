@@ -987,3 +987,58 @@ terminou `FINISHED` no commit `565b071`, build `8`, fingerprint
 `Sensitive`. O APK expira em 2026-09-14; instalação e avaliação física deste
 corte ainda estão pendentes. BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12
 permanecem pausados e pendentes.
+
+## 21. Etapa 5C, incremento 1 — acompanhamento explicável `v0.5.0`
+
+### Decisão de produto em 2026-08-31
+
+O Raul autorizou explicitamente iniciar a Etapa 5C para continuar aumentando a
+vontade de uso. Essa decisão libera o desenvolvimento local da 5C, mas não
+aprova nem remove os gates físicos ainda pendentes em BI-04 a BI-13, CL-11 a
+CL-13 e DB-10 a DB-12. A Etapa 6/Embedded continua bloqueada pelos gates da
+seção 14.
+
+### Resultado esperado
+
+Fazer o retorno ao app mostrar continuidade: o que mudou desde a fotografia
+anterior, quais sinais a pessoa escolheu acompanhar e qual é a evidência e o
+limite de cada alerta.
+
+### Escopo fechado
+
+1. guardar localmente até oito fotografias públicas `v1` validadas;
+2. comparar somente campos literais entre a fotografia atual e a anterior;
+3. permitir favoritar sinais por ID e movê-los ao início da lista;
+4. responder em cada alerta `o que mudou`, `o que prova`, `onde afeta` e
+   `o que não prova`;
+5. declarar ausência de relação quando `effects` não trouxer elo com a carteira;
+6. manter estados de carregamento, primeira fotografia, indisponibilidade e
+   falha de persistência compreensíveis.
+
+### Contratos e privacidade
+
+- o histórico aceita somente documentos que passam por `validateLiveSnapshot`;
+- snapshot com `position`, `positions`, `amount` ou outra chave proibida é
+  rejeitado antes da persistência;
+- favoritos guardam somente IDs públicos, sem posição, valor ou identidade;
+- a comparação não interpreta número formatado nem recalcula motor financeiro;
+- a camada de alerta reutiliza sinal, fonte, data, limite e `effects` existentes;
+- nenhuma rede, telemetria, autenticação, nuvem ou dependência foi adicionada.
+
+### Estado da execução
+
+**Implementado localmente em 2026-08-31.** O app foi elevado a `v0.5.0`,
+Android `versionCode 9` e iOS `buildNumber 9`. TypeScript e 37 testes móveis
+passaram; o export Android/Hermes concluiu 647 módulos. O renderer web confirmou
+histórico, quatro blocos de evidência, persistência degradada para sessão e a
+interação de favoritar. Os viewports 375×812, 430×932, 768×1024 e 844×390
+ficaram sem overflow horizontal e sem alvo interativo abaixo de 44 px. Motores,
+snapshot público `v1`, parser B3 e cofre da carteira não mudaram. Não foi
+gerado preview EAS deste corte.
+
+### Próximo incremento da 5C
+
+Implementar o simulador de aportes como ferramenta local de distribuição: a
+pessoa informa um valor hipotético e explora como ele altera pesos por classe,
+sem estimar retorno, sugerir ativo, selecionar produto ou criar ordem. Depois,
+adicionar testes de componentes e E2E Android/iOS antes de qualquer Etapa 6.

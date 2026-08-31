@@ -10,7 +10,9 @@ import {
 } from "react-native";
 
 import { ImpactCard } from "../components/ImpactCard";
+import { ExplainableAlertPanel } from "../components/ExplainableAlertPanel";
 import { MarketSignalCard } from "../components/MarketSignalCard";
+import { SnapshotHistoryPanel } from "../components/SnapshotHistoryPanel";
 import {
   DataModePill,
   Eyebrow,
@@ -21,6 +23,8 @@ import {
   Surface,
 } from "../components/Primitives";
 import { TabKey } from "../components/BottomNav";
+import { buildExplainableAlert } from "../domain/explainableAlerts";
+import { orderSignalsByFavorites } from "../domain/favorites";
 import {
   ALL_CLASSES,
   allocationByClass,
@@ -32,6 +36,7 @@ import {
   signalCoverage,
   signalById,
 } from "../domain/insights";
+import { PublicSnapshotHistoryV1 } from "../domain/snapshotHistory";
 import { MarketSnapshot } from "../domain/types";
 import { colors, radius, spacing } from "../theme";
 
@@ -44,6 +49,13 @@ export function TodayScreen({
   onNavigate,
   portfolioMode,
   hideAmounts,
+  favoriteSignalIds,
+  favoriteMessage,
+  favoriteSaving,
+  onToggleFavorite,
+  snapshotHistory,
+  snapshotHistoryLoading,
+  snapshotHistoryMessage,
 }: {
   snapshot: MarketSnapshot;
   selectedSignalId: string;
@@ -53,6 +65,13 @@ export function TodayScreen({
   onNavigate: (tab: TabKey) => void;
   portfolioMode: PortfolioPresentationMode;
   hideAmounts: boolean;
+  favoriteSignalIds: readonly string[];
+  favoriteMessage?: string;
+  favoriteSaving: boolean;
+  onToggleFavorite: (signalId: string) => void;
+  snapshotHistory: PublicSnapshotHistoryV1 | null;
+  snapshotHistoryLoading: boolean;
+  snapshotHistoryMessage?: string;
 }) {
   const [showAllSignals, setShowAllSignals] = useState(false);
   const { width } = useWindowDimensions();
@@ -63,9 +82,15 @@ export function TodayScreen({
   const classAllocation = allocationByClass(snapshot);
   const largest = largestPosition(snapshot);
   const coverage = signalCoverage(snapshot);
+  const orderedSignals = orderSignalsByFavorites(
+    snapshot.signals,
+    favoriteSignalIds,
+  );
   const visibleSignals = showAllSignals
-    ? snapshot.signals
-    : snapshot.signals.slice(0, 2);
+    ? orderedSignals
+    : orderedSignals.slice(0, 2);
+  const explainableAlert = buildExplainableAlert(snapshot, selectedSignalId);
+  const selectedSignalIsFavorite = favoriteSignalIds.includes(selectedSignalId);
   const isLocalPortfolio = portfolioMode === "local";
   const portfolioKind = isLocalPortfolio ? "carteira local" : "demonstração";
   const selectedSignalHasEffects = Object.keys(selectedSignal.effects).length > 0;
@@ -211,14 +236,21 @@ export function TodayScreen({
         </Text>
       </View>
 
+      <SnapshotHistoryPanel
+        history={snapshotHistory}
+        loading={snapshotHistoryLoading}
+        message={snapshotHistoryMessage}
+      />
+
       <SectionHeading
-        title="O que mudou"
-        support="Comece pelos sinais públicos; abra somente o detalhe que importa."
+        title="Acompanhe o que mudou"
+        support="Favoritos aparecem primeiro; cada sinal abre evidência, relação e limite."
       />
       <View style={[styles.signalGrid, isWide && styles.signalGridWide]}>
         {visibleSignals.map((signal) => (
           <View key={signal.id} style={isWide ? styles.signalGridItemWide : undefined}>
             <MarketSignalCard
+              favorite={favoriteSignalIds.includes(signal.id)}
               onPress={() => onSelectSignal(signal.id)}
               selected={signal.id === selectedSignalId}
               signal={signal}
@@ -240,16 +272,13 @@ export function TodayScreen({
         </Pressable>
       ) : null}
 
-      <Surface style={styles.signalDetail}>
-        <Eyebrow>Leitura selecionada</Eyebrow>
-        <Text style={styles.signalTitle}>{selectedSignal.headline}</Text>
-        <Text style={styles.signalExplanation}>
-          {selectedSignal.explanation}
-        </Text>
-        <Text style={styles.signalSource}>
-          Evidência: {selectedSignal.source} · {formatSnapshotDate(selectedSignal.updatedAt)}
-        </Text>
-      </Surface>
+      <ExplainableAlertPanel
+        alert={explainableAlert}
+        favorite={selectedSignalIsFavorite}
+        favoriteMessage={favoriteMessage}
+        favoriteSaving={favoriteSaving}
+        onToggleFavorite={() => onToggleFavorite(selectedSignalId)}
+      />
 
       <SectionHeading
         title="Como isso toca sua carteira"
@@ -572,26 +601,6 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 13,
     fontWeight: "800",
-  },
-  signalDetail: {
-    gap: spacing.xs,
-  },
-  signalTitle: {
-    color: colors.text,
-    fontSize: 18,
-    fontWeight: "800",
-    lineHeight: 24,
-  },
-  signalExplanation: {
-    color: colors.textMuted,
-    fontSize: 14,
-    lineHeight: 22,
-  },
-  signalSource: {
-    color: colors.primary,
-    fontSize: 11,
-    fontWeight: "700",
-    marginTop: spacing.xxs,
   },
   filterGrid: {
     flexDirection: "row",

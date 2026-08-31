@@ -56,6 +56,26 @@ corretora ou Open Finance, não sincroniza carteira e não produz recomendação
 O corte não usa biometria, nuvem, autenticação ou telemetria financeira. Troca
 de aparelho e restauração de backup não são prometidas nesta versão.
 
+## Acompanhamento explicável `v0.5.0`
+
+A primeira entrega da Etapa 5C adiciona continuidade sem transformar o app em
+plataforma de recomendação:
+
+- até oito fotografias públicas `v1` ficam em um histórico JSON local;
+- a comparação usa somente IDs, valores e textos literais já validados;
+- nenhuma posição ou quantia entra nesse histórico;
+- favoritos guardam somente IDs de sinais no cofre nativo;
+- no renderer web ou em falha do storage, favoritos duram apenas na sessão e
+  essa limitação fica visível;
+- o detalhe selecionado separa o que mudou, o que prova, onde afeta e o que não
+  prova;
+- `effects` vazio continua significando relação não classificada, sem inferência
+  criada no TypeScript.
+
+O histórico é atualizado apenas quando `generatedAt` muda e mantém as oito
+fotografias mais recentes. A versão é `0.5.0`, Android `versionCode 9` e iOS
+`buildNumber 9`.
+
 ## Como atualizar a fotografia pública
 
 Na raiz do projeto, usando o `.venv` externo já documentado:
@@ -214,8 +234,9 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo passo é instalar no POCO X8 Pro o preview `v0.4.4` já gerado e
-avaliar se ele entrega valor
-cotidiano e deixa de parecer uma demonstração. Só depois dessa avaliação os
-gates restantes de importação, TalkBack, texto ampliado e alvos de toque serão
-retomados, sem antecipar a Etapa 5C ou a camada institucional.
+O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
+2026-08-31. Histórico público, favoritos e alertas explicáveis formam a
+`v0.5.0`; o próximo corte é o simulador de aportes local, seguido por testes de
+componentes e E2E. O preview `v0.4.4` ainda precisa de avaliação física, e os
+gates de importação, TalkBack, texto ampliado e alvos de toque continuam
+pendentes. A Etapa 6 e a camada institucional não foram antecipadas.

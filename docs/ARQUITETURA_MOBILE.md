@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.4.4`
+## Estado do corte `mobile v0.5.0`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -114,6 +114,27 @@ O painel recebe o mesmo `onSavePositions` por um adaptador de feedback da tela.
 Prévia, confirmação, parsing, sanitização e gravação continuam no fluxo já
 implementado. Nenhum estado novo é persistido e nenhuma informação da planilha
 é movida para o snapshot público ou para logs.
+
+### Acompanhamento explicável `v0.5.0`
+
+A Etapa 5C começa com duas persistências independentes da carteira privada:
+
+- `focuslens-public-history-v1.json` guarda no diretório privado do app até oito
+  documentos públicos que passaram por `validateLiveSnapshot`;
+- `focuslens.favorite-signals.v1` guarda no SecureStore somente uma lista
+  limitada e sem duplicidade de IDs públicos.
+
+O histórico usa arquivo temporário e substituição do destino. Cada fotografia é
+deduplicada por `generatedAt`; qualquer chave pública proibida pelo contrato,
+inclusive `position`, `positions` ou `amount`, impede a leitura ou gravação. A
+comparação observa somente veredito, ID, valor, mudança, headline e tom literais.
+Ela não converte percentuais, estima direção ou recalcula motor.
+
+`buildExplainableAlert` combina o sinal selecionado com os `effects` já
+recebidos e com `impactsForSignal`. A saída separa mudança, prova, alcance e
+limite. Se o mapa de efeitos vier vazio, a resposta declara ausência de relação
+classificada. Favoritar muda somente a ordem da lista; não altera prioridade,
+tom ou conteúdo do sinal.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -258,10 +279,12 @@ build atual.
    de Cenários por tom/cobertura; preview pendente;
 8. **implementado localmente em `v0.4.3`:** Home centrada no recorte pessoal,
    maior posição derivada e ação principal contextual; preview pendente;
-9. **implementado localmente em `v0.4.4`:** entrada pessoal antes da carteira
-   fictícia, com B3 principal e alternativa manual; preview pendente;
-10. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
-11. adicionar testes de componentes e E2E Android/iOS;
+9. **implementado e empacotado em `v0.4.4`:** entrada pessoal antes da carteira
+   fictícia, com B3 principal e alternativa manual; preview EAS gerado, mas
+   instalação e avaliação física pendentes;
+10. **implementado localmente em `v0.5.0`:** alertas explicáveis, favoritos e
+    comparação entre até oito fotografias públicas, sem carteira no histórico;
+11. adicionar simulador de aportes local, testes de componentes e E2E Android/iOS;
 12. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
