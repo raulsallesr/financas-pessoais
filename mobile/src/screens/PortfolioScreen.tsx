@@ -89,7 +89,6 @@ export function PortfolioScreen({
   const sorted = [...snapshot.positions].sort((a, b) => b.amount - a.amount);
   const classAllocation = allocationByClass(snapshot);
   const visiblePositions = showAllPositions ? sorted : sorted.slice(0, 5);
-  const canEdit = mode === "demo" || mode === "local";
 
   function openNewPosition() {
     setEditingId(null);
@@ -189,6 +188,16 @@ export function PortfolioScreen({
     }
   }
 
+  async function replacePositionsFromB3(positions: readonly Position[]) {
+    const replacingDemo = mode === "demo";
+    await onSavePositions(positions);
+    if (replacingDemo) {
+      setFeedback(
+        `${positions.length} ${positions.length === 1 ? "posição foi importada" : "posições foram importadas"} para o cofre local.`,
+      );
+    }
+  }
+
   async function removePosition(position: Position) {
     if (saving) {
       return;
@@ -278,6 +287,35 @@ export function PortfolioScreen({
           <PortfolioModePill mode={mode} />
         </View>
 
+        {mode === "demo" && !editorOpen ? (
+          <>
+            <SectionHeading
+              title="Sua carteira em 1 minuto"
+              support="Importe a planilha da B3 de uma vez ou adicione a primeira posição manualmente."
+            />
+            <B3ImportPanel
+              existingCount={snapshot.positions.length}
+              mode={mode}
+              onReplacePositions={replacePositionsFromB3}
+            />
+            <Pressable
+              accessibilityHint="Abre o formulário de uma posição"
+              accessibilityRole="button"
+              disabled={saving}
+              onPress={openNewPosition}
+              style={({ pressed }) => [
+                styles.secondaryButton,
+                pressed && styles.pressed,
+                saving && styles.disabled,
+              ]}
+            >
+              <Text style={styles.secondaryButtonText}>
+                Adicionar uma posição manualmente
+              </Text>
+            </Pressable>
+          </>
+        ) : null}
+
         <View style={styles.balanceCard}>
           <View style={styles.balanceTopline}>
             <Text style={styles.balanceLabel}>Patrimônio acompanhado</Text>
@@ -327,7 +365,7 @@ export function PortfolioScreen({
           </View>
         ) : null}
 
-        {canEdit ? (
+        {mode === "local" && !editorOpen ? (
           <Pressable
             accessibilityHint="Abre o formulário de uma posição"
             accessibilityRole="button"
@@ -339,9 +377,7 @@ export function PortfolioScreen({
               saving && styles.disabled,
             ]}
           >
-            <Text style={styles.primaryButtonText}>
-              {mode === "local" ? "Adicionar posição" : "Criar carteira local"}
-            </Text>
+            <Text style={styles.primaryButtonText}>Adicionar posição</Text>
           </Pressable>
         ) : null}
 
@@ -649,11 +685,11 @@ export function PortfolioScreen({
           ) : null}
         </Surface>
 
-        {mode === "demo" || mode === "local" ? (
+        {mode === "local" ? (
           <B3ImportPanel
             existingCount={snapshot.positions.length}
             mode={mode}
-            onReplacePositions={onSavePositions}
+            onReplacePositions={replacePositionsFromB3}
           />
         ) : null}
 

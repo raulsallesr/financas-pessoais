@@ -647,7 +647,7 @@ O aparelho usa Android 16 (`BP2A.250605.031.A3`).
 
 Completar DB-10 a DB-12 em `docs/VALIDACAO_DEVELOPMENT_BUILD.md`: TalkBack,
 texto ampliado e alvos de toque. Esses gates foram pausados por decisão do Raul
-enquanto a utilidade cotidiana do produto é refinada no `v0.4.3`.
+enquanto a utilidade cotidiana do produto é refinada no `v0.4.4`.
 Não marcar esta seção como concluída só porque o fluxo principal e o offline
 passaram; a evidência de acessibilidade continua obrigatória.
 
@@ -946,3 +946,39 @@ Android/Hermes com 640 módulos passaram. A hierarquia, os três fatos, a ação
 principal e `scrollWidth` igual à viewport foram confirmados em 375×812,
 430×932, 768×1024 e 844×390. O preview EAS não foi gerado; BI-04 a BI-13,
 CL-11 a CL-13 e DB-10 a DB-12 continuam pausados e pendentes.
+
+## 20. Sua carteira em 1 minuto — `v0.4.4`
+
+### Resultado esperado
+
+Fazer a transição da demonstração para uma carteira local começar por uma ação
+útil, curta e reversível, antes de pedir que a pessoa percorra toda a carteira
+fictícia.
+
+### Escopo fechado
+
+1. colocar a entrada pessoal antes do patrimônio fictício no modo demonstração;
+2. apresentar a importação B3 como caminho principal para preencher várias
+   posições de uma vez;
+3. manter a criação manual como alternativa visível e secundária;
+4. preservar “Adicionar posição” como ação principal quando a carteira já é
+   local;
+5. manter prévia, confirmação e feedback do importador existentes.
+
+### Fora de escopo
+
+- mudar o parser XLSX, classes suportadas ou limites de arquivo;
+- mudar cofre, contrato privado, persistência ou dependências;
+- alterar motores Python ou snapshot público `v1`;
+- criar onboarding persistido, telemetria, conta ou nuvem;
+- gerar preview EAS, retomar gates físicos ou antecipar Etapa 5C/Embedded.
+
+### Estado da execução
+
+**Implementado localmente em 2026-08-31.** O app foi elevado a `v0.4.4`,
+Android `versionCode 8` e iOS `buildNumber 8`. TypeScript e 30 testes móveis
+passaram; o export Android/Hermes concluiu 640 módulos. A hierarquia da entrada,
+os dois caminhos, os alvos de 52 px e
+`scrollWidth` igual à viewport foram confirmados em 375×812, 430×932,
+768×1024 e 844×390. O preview EAS não foi gerado neste corte. BI-04 a BI-13, CL-11 a
+CL-13 e DB-10 a DB-12 permanecem pausados e pendentes.

@@ -51,7 +51,7 @@ BI-01 a BI-03; os demais itens continuam pendentes.
 
 **Pausa de produto em 2026-08-28:** por decisão explícita do Raul, BI-04 a
 BI-13 serão retomados somente depois da avaliação de utilidade do preview
-`v0.4.3`. Os três itens aprovados permanecem como evidência histórica; nenhum
+`v0.4.4`. Os três itens aprovados permanecem como evidência histórica; nenhum
 item pendente deve ser inferido como aprovado.
 
 ## O que relatar ao fechar o gate

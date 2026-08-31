@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.4.3`
+## Estado do corte `mobile v0.4.4`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -101,6 +101,19 @@ A ação principal é uma decisão de navegação, não financeira: demonstraç�
 cofre indisponível levam à Carteira; carteira local leva a Cenários. O mercado
 permanece inalterado e aparece depois sob “Mercado em uma frase”. Nenhum campo,
 efeito, estado persistido ou chamada de rede foi adicionado.
+
+### Entrada pessoal direta `v0.4.4`
+
+`PortfolioScreen` muda somente a ordem e a ênfase da apresentação conforme o
+modo já existente. Em demonstração, `B3ImportPanel` vem antes do patrimônio
+fictício e sua escolha de XLSX é a ação principal; o editor manual permanece
+como alternativa. Em carteira local, adicionar posição continua sendo a ação
+principal e a importação permanece abaixo das posições como substituição.
+
+O painel recebe o mesmo `onSavePositions` por um adaptador de feedback da tela.
+Prévia, confirmação, parsing, sanitização e gravação continuam no fluxo já
+implementado. Nenhum estado novo é persistido e nenhuma informação da planilha
+é movida para o snapshot público ou para logs.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -245,9 +258,11 @@ build atual.
    de Cenários por tom/cobertura; preview pendente;
 8. **implementado localmente em `v0.4.3`:** Home centrada no recorte pessoal,
    maior posição derivada e ação principal contextual; preview pendente;
-9. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
-10. adicionar testes de componentes e E2E Android/iOS;
-11. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+9. **implementado localmente em `v0.4.4`:** entrada pessoal antes da carteira
+   fictícia, com B3 principal e alternativa manual; preview pendente;
+10. adicionar alertas explicáveis, favoritos e comparação entre fotografias;
+11. adicionar testes de componentes e E2E Android/iOS;
+12. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 

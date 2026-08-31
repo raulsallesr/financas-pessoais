@@ -124,6 +124,11 @@
   cobertura sem expor montante. A ação principal leva à montagem da carteira na
   demonstração e à sensibilidade quando a carteira já é local. É uma mudança de
   apresentação e navegação sobre contratos existentes, sem persistência nova.
+- O corte `v0.4.4` reduz o atrito para sair da demonstração: ao abrir Carteira,
+  a importação B3 aparece como caminho principal antes do patrimônio fictício,
+  enquanto a entrada manual permanece como alternativa. Carteiras locais
+  preservam “Adicionar posição” como ação principal; parser, cofre e contrato
+  privado continuam idênticos.
 - Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
   Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
   piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
@@ -216,13 +221,15 @@
 
 ### Próximo incremento, sem ambiguidade
 
-- Entrega: **Etapa 5B — avaliar o refinamento de utilidade `v0.4.3` em APK**.
+- Entrega: **Etapa 5B — avaliar o refinamento de utilidade `v0.4.4` em APK**.
 - A Home agora começa pela carteira, mostra concentração e declara quando os
   sinais públicos não fornecem relação direta. A Carteira resume classes antes
   das posições e mantém a lista longa sob demanda. O próximo ciclo é de uso e
   crítica de produto, não de execução mecânica do checklist físico.
 - Cenários agora entrega uma resposta imediata por tom e cobertura; o modo
   discreto permanece ativo entre abas durante a sessão.
+- Na demonstração, Carteira começa pela importação B3 e mantém a entrada manual
+  como alternativa; o patrimônio fictício aparece somente depois desses caminhos.
 - Evidência já fechada permanece válida: Android 16
   (`BP2A.250605.031.A3`), BI-01 a BI-03 e CL-02 a CL-10 aprovados. BI-04 a
   BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam pendentes, mas pausados até o
@@ -251,10 +258,11 @@
 > `preview` anteriores já foram gerados e instalados no POCO X8 Pro com Android
 > 16 (`BP2A.250605.031.A3`). DB-01 a DB-09, BI-01 a BI-03 e CL-02 a CL-10 estão
 > aprovados, com DB-06 automatizado. Continue pelo refinamento de utilidade
-> `v0.4.3`: preserve a Home orientada ao recorte pessoal, a distribuição por
+> `v0.4.4`: preserve a Home orientada ao recorte pessoal, a distribuição por
 > classe, a cobertura honesta dos sinais e a distinção entre carteira local e
-> demonstração. Preserve também o modo discreto entre abas e o resumo de
-> Cenários sem inferir efeito ausente. Os gates BI-04 a BI-13, CL-11 a CL-13 e
+> demonstração. Preserve a entrada B3 antes do exemplo fictício na demo, a
+> alternativa manual, o modo discreto entre abas e o resumo de Cenários sem
+> inferir efeito ausente. Os gates BI-04 a BI-13, CL-11 a CL-13 e
 > DB-10 a DB-12 estão pausados até nova decisão do Raul; não os marque como
 > aprovados. Não envie
 > planilha ou valores pelo chat e não antecipe autenticação de cliente, Open
@@ -288,7 +296,7 @@
   2026-08-28; os primeiros APKs `development` e `preview` foram instalados e o
   fluxo principal/offline foi aprovado. No `v0.4.0`, CL-02 a CL-10 e BI-01 a
   BI-03 também foram aprovados. Acessibilidade e o restante da importação estão
-  pausados enquanto o corte `v0.4.3` prioriza utilidade percebida.
+  pausados enquanto o corte `v0.4.4` prioriza utilidade percebida.
 - A direção institucional foi aprovada em 2026-08-27: o app pessoal será o
   cliente de referência e a futura camada **FocusLens Embedded** oferecerá API,
   receipt auditável, Exposure Adapter privado, SDK, Governance Studio e piloto
@@ -923,6 +931,19 @@
   - TypeScript, 30 testes móveis e Android/Hermes com 640 módulos aprovados;
     ordem, conteúdo e ausência de overflow confirmados em 375×812, 430×932,
     768×1024 e 844×390. Preview EAS ainda não gerado.
+- **Etapa 5B · sua carteira em 1 minuto `v0.4.4` (2026-08-31)** — implementação:
+  - no modo demonstração, a jornada pessoal aparece antes do patrimônio
+    fictício e apresenta importação B3 como caminho principal;
+  - entrada manual continua visível como alternativa secundária e abre o mesmo
+    editor/cofre já aprovado;
+  - em carteira local, “Adicionar posição” permanece como ação principal e a
+    importação continua no lugar de substituição consciente;
+  - sucesso da primeira importação mantém feedback mesmo quando o modo muda de
+    demonstração para carteira local;
+  - TypeScript, 30 testes móveis e Android/Hermes com 640 módulos aprovados;
+    ordem, alvos de 52 px e ausência de overflow confirmados em 375×812,
+    430×932, 768×1024 e 844×390. Parser B3, cofre, motores, snapshot público
+    `v1`, Etapa 5C e Embedded não mudaram.
 
 ## Fila priorizada
 
@@ -938,7 +959,7 @@ integração seguinte.
 | P4 | Entregue (`v0.1`) | Fundação FocusLens Mobile | Muito alto | Alto |
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
-| P7 | Em andamento (`v0.4.3`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
+| P7 | Em andamento (`v0.4.4`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
 | P8 | Fila | Histórico, alertas explicáveis e E2E móvel | Muito alto | Alto |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |

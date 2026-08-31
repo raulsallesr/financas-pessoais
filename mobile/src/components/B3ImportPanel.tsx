@@ -65,9 +65,11 @@ export function B3ImportPanel({
     setFeedback(null);
     try {
       await onReplacePositions(selection.result.positions);
-      setFeedback(
-        `${selection.result.positions.length} ${selection.result.positions.length === 1 ? "posição foi importada" : "posições foram importadas"} para o cofre local.`,
-      );
+      if (mode === "local") {
+        setFeedback(
+          `${selection.result.positions.length} ${selection.result.positions.length === 1 ? "posição foi importada" : "posições foram importadas"} para o cofre local.`,
+        );
+      }
       setSelection(null);
       setShowAll(false);
     } catch {
@@ -110,9 +112,13 @@ export function B3ImportPanel({
     <Surface style={styles.panel}>
       <View style={styles.headingRow}>
         <View style={styles.headingCopy}>
-          <Eyebrow>Entrada local</Eyebrow>
+          <Eyebrow>
+            {mode === "demo" ? "Caminho mais rápido" : "Atualização local"}
+          </Eyebrow>
           <Text accessibilityRole="header" style={styles.title}>
-            Importar posição da B3
+            {mode === "demo"
+              ? "Importe sua carteira da B3"
+              : "Substituir carteira pela B3"}
           </Text>
         </View>
         <View accessibilityLabel="Processamento somente no aparelho" style={styles.localPill}>
@@ -122,7 +128,9 @@ export function B3ImportPanel({
       </View>
 
       <Text style={styles.support}>
-        Escolha o XLSX da Área do Investidor. O app lê apenas ativo, classe e valor, apaga a cópia temporária e pede sua confirmação antes de trocar a carteira.
+        {mode === "demo"
+          ? "Escolha o XLSX da Área do Investidor para trocar a carteira fictícia por um recorte local de uma vez."
+          : "Escolha o XLSX da Área do Investidor. A carteira atual só será substituída depois da prévia e da sua confirmação."}
       </Text>
 
       <View style={styles.privacyStrip}>
@@ -140,11 +148,17 @@ export function B3ImportPanel({
         onPress={() => void chooseDocument()}
         style={({ pressed }) => [
           styles.secondaryButton,
+          mode === "demo" && !selection && styles.startButton,
           pressed && styles.pressed,
           busy && styles.disabled,
         ]}
       >
-        <Text style={styles.secondaryButtonText}>
+        <Text
+          style={[
+            styles.secondaryButtonText,
+            mode === "demo" && !selection && styles.startButtonText,
+          ]}
+        >
           {busy === "reading"
             ? "Lendo e sanitizando…"
             : selection
@@ -332,6 +346,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "800",
     textAlign: "center",
+  },
+  startButton: {
+    backgroundColor: colors.primary,
+  },
+  startButtonText: {
+    color: colors.white,
   },
   errorText: {
     backgroundColor: colors.dangerSoft,

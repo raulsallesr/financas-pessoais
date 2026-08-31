@@ -18,6 +18,8 @@ onde isso encosta na minha carteira?**
   classe, lista progressiva, peso por posição e controle para ocultar valores;
 - **cofre privado nativo:** chave no SecureStore e documento `v1` cifrado com
   AES-256-GCM no diretório persistente do app;
+- **entrada pessoal direta:** na demonstração, importar a carteira B3 é o
+  caminho principal e adicionar manualmente permanece como alternativa;
 - **importação B3 local:** seletor XLSX, sanitização, prévia e substituição
   explícita da carteira sem upload do arquivo;
 - **Cenários:** hipótese de −100 a +100 bps, leitura rápida por tom, cobertura
@@ -146,10 +148,11 @@ foi concluído em 2026-08-28. O
 [preview `v0.4.0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c7695638-2f38-42a4-af07-92303f2a5ce0)
 e seu [APK direto](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk)
 foram instalados no POCO X8 Pro com Android 16. BI-01 a BI-03 e CL-02 a CL-10
-foram aprovados. Os cortes `v0.4.1` a `v0.4.3`, agora no build `7`, reorganizam
+foram aprovados. Os cortes `v0.4.1` a `v0.4.4`, agora no build `8`, reorganizam
 a experiência para utilidade cotidiana: a Home começa pela carteira, resume
-concentração e cobertura e oferece uma ação contextual. Eles aguardam um novo
-preview; os demais gates físicos estão pausados, não aprovados.
+concentração e cobertura, enquanto a Carteira oferece importação B3 antes do
+exemplo fictício. Eles aguardam um novo preview; os demais gates físicos estão
+pausados, não aprovados.
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
@@ -207,7 +210,7 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo passo é avaliar no POCO X8 Pro se um preview `v0.4.3` entrega valor
+O próximo passo é avaliar no POCO X8 Pro se um preview `v0.4.4` entrega valor
 cotidiano e deixa de parecer uma demonstração. Só depois dessa avaliação os
 gates restantes de importação, TalkBack, texto ampliado e alvos de toque serão
 retomados, sem antecipar a Etapa 5C ou a camada institucional.
