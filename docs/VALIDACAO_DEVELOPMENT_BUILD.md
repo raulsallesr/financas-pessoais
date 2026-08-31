@@ -1,11 +1,12 @@
 # Validação — FocusLens development build
 
-**Status em 2026-08-28:** projeto EAS vinculado, APKs `development` e `preview`
-gerados e instalados em POCO X8 Pro. Quatro abas, snapshot empacotado e abertura
+**Status em 2026-08-31:** projeto EAS vinculado; os primeiros APKs `development`
+e `preview` foram instalados em POCO X8 Pro. Quatro abas, snapshot e abertura
 offline, safe areas em paisagem, rotação e comportamento do botão Voltar foram
 aprovados. O preview `v0.4.0` com cofre/importação B3 também foi gerado e
 instalado no POCO X8 Pro com Android 16 (`BP2A.250605.031.A3`). TalkBack,
-texto ampliado e alvos de toque ainda precisam ser registrados.
+texto ampliado e alvos de toque ainda precisam ser registrados. O preview
+`v0.4.4`, build `8`, foi gerado, mas ainda não foi instalado nem avaliado.
 
 **Pausa de produto:** DB-10 a DB-12 continuam pendentes, mas o Raul decidiu
 avaliar primeiro o refinamento de utilidade `v0.4.4`. A pausa não transforma
@@ -157,10 +158,16 @@ commit `c6bb875`, fingerprint
 expira em 2026-09-11. Ele foi instalado no Android 16: CL-02 a CL-10 e BI-01 a
 BI-03 foram aprovados; os demais itens estão pendentes.
 
-**Corte local mais recente:** app `0.4.4`, build `8`, com recorte pessoal antes
-do mercado, entrada B3 antes da carteira fictícia, alternativa manual, modo
-discreto entre abas e resumo de Cenários. Os gates locais estão registrados na
-seção 11; ainda não existe build EAS nem evidência física deste corte.
+**Preview mais recente:** app `0.4.4`, build `8`, EAS
+[`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566),
+commit `565b071c72fcdd4583fb951f8edd97cbec6dde4b`, fingerprint
+`60a05723598a9a039fc90320bcf2a45eb945acaf`. O
+[APK direto](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk)
+expira em 2026-09-14. O corte traz recorte pessoal antes do mercado, entrada B3
+antes da carteira fictícia, alternativa manual, modo discreto entre abas e
+resumo de Cenários. O build terminou `FINISHED` sem variáveis `Plain text` ou
+`Sensitive`, mas ainda não foi instalado; portanto não existe evidência física
+específica deste corte e nenhum gate mudou de estado.
 
 Com o preview instalado:
 

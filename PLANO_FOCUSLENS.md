@@ -975,10 +975,15 @@ fictícia.
 
 ### Estado da execução
 
-**Implementado localmente em 2026-08-31.** O app foi elevado a `v0.4.4`,
+**Implementado e empacotado em 2026-08-31.** O app foi elevado a `v0.4.4`,
 Android `versionCode 8` e iOS `buildNumber 8`. TypeScript e 30 testes móveis
 passaram; o export Android/Hermes concluiu 640 módulos. A hierarquia da entrada,
 os dois caminhos, os alvos de 52 px e
 `scrollWidth` igual à viewport foram confirmados em 375×812, 430×932,
-768×1024 e 844×390. O preview EAS não foi gerado neste corte. BI-04 a BI-13, CL-11 a
-CL-13 e DB-10 a DB-12 permanecem pausados e pendentes.
+768×1024 e 844×390. O preview EAS interno
+[`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566)
+terminou `FINISHED` no commit `565b071`, build `8`, fingerprint
+`60a05723598a9a039fc90320bcf2a45eb945acaf`, sem variáveis `Plain text` ou
+`Sensitive`. O APK expira em 2026-09-14; instalação e avaliação física deste
+corte ainda estão pendentes. BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12
+permanecem pausados e pendentes.

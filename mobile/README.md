@@ -115,8 +115,8 @@ Este corte usa Expo SDK 57. Para um projeto de produto, o caminho recomendado é
 um **development build** próprio, não depender do aplicativo genérico Expo Go.
 `eas.json`, `expo-dev-client`, identificadores Android/iOS, safe areas, rotação
 e splash nativo já estão configurados. Em 2026-08-28, o projeto
-`@raulsallesr/focuslens-br` foi vinculado e os APKs `development` e `preview`
-foram gerados e instalados no POCO X8 Pro pela rota de link EAS. O preview
+`@raulsallesr/focuslens-br` foi vinculado e os primeiros APKs `development` e
+`preview` foram gerados e instalados no POCO X8 Pro pela rota de link EAS. O preview
 aprovou as quatro abas, o snapshot empacotado e a reabertura em modo avião. Esta
 máquina continua sem `adb`, Java ou Android SDK.
 
@@ -151,8 +151,12 @@ foram instalados no POCO X8 Pro com Android 16. BI-01 a BI-03 e CL-02 a CL-10
 foram aprovados. Os cortes `v0.4.1` a `v0.4.4`, agora no build `8`, reorganizam
 a experiência para utilidade cotidiana: a Home começa pela carteira, resume
 concentração e cobertura, enquanto a Carteira oferece importação B3 antes do
-exemplo fictício. Eles aguardam um novo preview; os demais gates físicos estão
-pausados, não aprovados.
+exemplo fictício. O
+[preview `v0.4.4`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566)
+foi concluído em 2026-08-31 e o
+[APK direto](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk)
+expira em 2026-09-14. Ele ainda não foi instalado; os demais gates físicos
+estão pausados, não aprovados.
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
@@ -210,7 +214,8 @@ carteira em nuvem. A estratégia aprovada está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
-O próximo passo é avaliar no POCO X8 Pro se um preview `v0.4.4` entrega valor
+O próximo passo é instalar no POCO X8 Pro o preview `v0.4.4` já gerado e
+avaliar se ele entrega valor
 cotidiano e deixa de parecer uma demonstração. Só depois dessa avaliação os
 gates restantes de importação, TalkBack, texto ampliado e alvos de toque serão
 retomados, sem antecipar a Etapa 5C ou a camada institucional.

@@ -3,14 +3,15 @@
 - **Status**: motores FocusLens BR `v2.0` preservados como release candidate.
   A Etapa 5 móvel possui fundação React Native `v0.1` e contrato vivo `v1`
   concluídos em 2026-08-27. A configuração do development build foi concluída
-  em 2026-08-28; os APKs `development` e `preview` foram gerados e instalados no
+  em 2026-08-28; os primeiros APKs `development` e `preview` foram instalados no
   POCO X8 Pro com Android 16 (`BP2A.250605.031.A3`). Quatro abas, snapshot,
   offline, rotação, paisagem e Voltar passaram; TalkBack, texto ampliado e alvos
   de toque ainda aguardam evidência.
   O corte móvel `v0.4.0` já implementa editor, cofre local criptografado e
   importação B3 sanitizada com prévia; o APK foi instalado, BI-01 a BI-03 e
   CL-02 a CL-10 foram aprovados no aparelho, mas o restante do ciclo físico
-  continua pendente. O roadmap
+  continua pendente. O preview `v0.4.4`, build `8`, foi gerado em 2026-08-31 e
+  ainda aguarda instalação e avaliação de utilidade. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
   abertura pública da `v2.0` continuam aguardando licença e decisão sobre
@@ -128,7 +129,9 @@
   a importação B3 aparece como caminho principal antes do patrimônio fictício,
   enquanto a entrada manual permanece como alternativa. Carteiras locais
   preservam “Adicionar posição” como ação principal; parser, cofre e contrato
-  privado continuam idênticos.
+  privado continuam idênticos. O preview EAS `v0.4.4`, build `8`, terminou
+  `FINISHED` em 2026-08-31 no commit `565b071`, sem variáveis `Plain text` ou
+  `Sensitive`; ainda precisa ser instalado e avaliado no aparelho.
 - Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
   Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
   piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
@@ -222,6 +225,11 @@
 ### Próximo incremento, sem ambiguidade
 
 - Entrega: **Etapa 5B — avaliar o refinamento de utilidade `v0.4.4` em APK**.
+- O APK interno já foi gerado no EAS: build
+  [`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566),
+  [download direto](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk),
+  expira em 2026-09-14. A pendência agora é instalar e avaliar utilidade; o
+  build concluído não aprova nenhum gate físico.
 - A Home agora começa pela carteira, mostra concentração e declara quando os
   sinais públicos não fornecem relação direta. A Carteira resume classes antes
   das posições e mantém a lista longa sob demanda. O próximo ciclo é de uso e
@@ -254,11 +262,13 @@
 > e não coloque carteira no snapshot. Continue pelas seções 13, 15 e 16 do plano e
 > `docs/VALIDACAO_DEVELOPMENT_BUILD.md`. A configuração
 > EAS/dev client já está pronta e validada; não a refaça. O projeto
-> `@raulsallesr/focuslens-br` está vinculado, e os APKs Android `development` e
-> `preview` anteriores já foram gerados e instalados no POCO X8 Pro com Android
+> `@raulsallesr/focuslens-br` está vinculado. Os APKs Android `development` e
+> `preview` anteriores já foram instalados no POCO X8 Pro com Android
 > 16 (`BP2A.250605.031.A3`). DB-01 a DB-09, BI-01 a BI-03 e CL-02 a CL-10 estão
-> aprovados, com DB-06 automatizado. Continue pelo refinamento de utilidade
-> `v0.4.4`: preserve a Home orientada ao recorte pessoal, a distribuição por
+> aprovados, com DB-06 automatizado. O preview `v0.4.4`, build `8`, EAS
+> `6199d700-82ca-44df-8ede-6987679c2566`, já está `FINISHED`, mas ainda não foi
+> instalado nem avaliado fisicamente. Continue pela avaliação de utilidade:
+> preserve a Home orientada ao recorte pessoal, a distribuição por
 > classe, a cobertura honesta dos sinais e a distinção entre carteira local e
 > demonstração. Preserve a entrada B3 antes do exemplo fictício na demo, a
 > alternativa manual, o modo discreto entre abas e o resumo de Cenários sem
@@ -944,6 +954,10 @@
     ordem, alvos de 52 px e ausência de overflow confirmados em 375×812,
     430×932, 768×1024 e 844×390. Parser B3, cofre, motores, snapshot público
     `v1`, Etapa 5C e Embedded não mudaram.
+  - preview EAS interno `6199d700-82ca-44df-8ede-6987679c2566` concluído no
+    commit `565b071c72fcdd4583fb951f8edd97cbec6dde4b`, build `8`, fingerprint
+    `60a05723598a9a039fc90320bcf2a45eb945acaf`; o APK expira em 2026-09-14 e
+    ainda não possui evidência física deste corte.
 
 ## Fila priorizada
 

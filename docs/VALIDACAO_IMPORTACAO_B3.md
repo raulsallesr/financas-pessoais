@@ -9,10 +9,10 @@ ao repositório ou aparecer em captura de tela.
 
 ## Preparação
 
-- instalar o
-  [APK `preview` `v0.4.0`](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk),
-  build `4`, EAS
-  [`c7695638-2f38-42a4-af07-92303f2a5ce0`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c7695638-2f38-42a4-af07-92303f2a5ce0);
+- para avaliar a utilidade atual, instalar o
+  [APK `preview` `v0.4.4`](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk),
+  build `8`, EAS
+  [`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566);
 - manter uma exportação XLSX original da Área do Investidor B3 apenas no
   aparelho ou em armazenamento pessoal controlado;
 - não renomear PDF, CSV ou ZIP para `.xlsx`;
@@ -43,6 +43,12 @@ Build: commit `c6bb875`, fingerprint
 `4df3790bd18465bb8a429b23f9814aabf1ac6dc8`, status `FINISHED`, expiração em
 2026-09-11. Nenhuma variável `Plain text` ou `Sensitive` foi configurada no
 ambiente EAS do preview.
+
+**Preview atual para avaliação de utilidade:** app `0.4.4`, build `8`, commit
+`565b071c72fcdd4583fb951f8edd97cbec6dde4b`, fingerprint
+`60a05723598a9a039fc90320bcf2a45eb945acaf`, status `FINISHED`, expiração em
+2026-09-14. Também não possui variável `Plain text` ou `Sensitive`. Ainda não
+foi instalado, portanto não altera os estados da matriz.
 
 **Evidência física parcial em 2026-08-28:** no POCO X8 Pro com Android 16
 (`BP2A.250605.031.A3`), o Raul confirmou que o `v0.4.0` abriu as quatro abas,

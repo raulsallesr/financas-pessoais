@@ -11,10 +11,14 @@ O [APK preview `v0.3.0`](https://expo.dev/artifacts/eas/ym42IqE6aIjdXG81aqx0ZotU
 expira em 2026-09-11. Ele é distribuição interna e não publica em loja.
 
 O ciclo físico atual deve preferir o
-[APK `v0.4.0`](https://expo.dev/artifacts/eas/25BWk8wQe0mppgR7jumlP4VdI99WJctpNg_Nwjf5Cec.apk),
-que inclui integralmente o cofre `v0.3.0`, usa build `4` e acrescenta a
-importação B3. Assim CL-02 a CL-13 e BI-01 a BI-13 podem ser validados na mesma
-instalação, sem manter dois APKs concorrentes.
+[APK `v0.4.4`](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk),
+build `8`, EAS
+[`6199d700-82ca-44df-8ede-6987679c2566`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566).
+Ele inclui integralmente o cofre `v0.3.0` e a importação B3 `v0.4.0`, além do
+refinamento de utilidade. Assim CL-02 a CL-13 e BI-01 a BI-13 podem ser
+validados na mesma instalação, sem manter dois APKs concorrentes. O build
+terminou `FINISHED` em 2026-08-31 e expira em 2026-09-14, mas ainda não foi
+instalado; os estados aprovados abaixo continuam sendo evidência do `v0.4.0`.
 
 Depois de CL-02 a CL-10 passarem, o Raul pausou CL-11 a CL-13 para avaliar
 primeiro a utilidade do corte `v0.4.4`. A evidência aprovada abaixo permanece
