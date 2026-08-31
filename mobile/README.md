@@ -115,12 +115,29 @@ Windows bloqueou corretamente antes das jornadas porque não havia Android
 conectado. O
 [preview EAS `v0.5.2`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55)
 e seu [APK direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk)
-foram gerados no build `11`; a instalação e os gates físicos estão pendentes.
+foram gerados no build `11`. O Raul confirmou a instalação no aparelho em
+2026-08-31; o ADB não encontrou dispositivo conectado para conferir
+package/versão, e os gates físicos continuam pendentes.
 
 No Windows, `scripts/run-maestro-windows.ps1` procura Java, Maestro e ADB em
 `%LOCALAPPDATA%\focuslens-tools`, sem alterar o `PATH` global. Antes do E2E, ele
 confere a autorização USB, o package `com.raulsallesr.focuslens` e a versão
 nativa declarada em `app.json`; um APK antigo é recusado explicitamente.
+Os fluxos atuais iniciam com `clearState: true` e apagam o estado local do app.
+Não os execute em uma carteira que precise ser preservada; use uma instalação
+de demonstração descartável ou uma futura variante não destrutiva.
+
+## Próxima melhoria — revisão guiada da semana `v0.5.3`
+
+O próximo incremento continua dentro da Etapa 5C e transforma a aba Entenda em
+uma trilha contextual. A proposta conecta, em uma sequência curta e opcional,
+mudança, evidência, relação com a carteira, exploração em Cenários e limite da
+leitura. Ela reutiliza os contratos já carregados, mantém o estado somente na
+sessão e não adiciona fórmula, persistência, dependência, rede ou recomendação.
+
+Os checklists físicos continuam preservados, porém pausados por decisão de
+produto enquanto a utilidade melhora. O escopo executável está na seção 24 de
+[`PLANO_FOCUSLENS.md`](../PLANO_FOCUSLENS.md).
 
 ## Como atualizar a fotografia pública
 
@@ -183,8 +200,9 @@ um **development build** próprio, não depender do aplicativo genérico Expo Go
 e splash nativo já estão configurados. Em 2026-08-28, o projeto
 `@raulsallesr/focuslens-br` foi vinculado e os primeiros APKs `development` e
 `preview` foram gerados e instalados no POCO X8 Pro pela rota de link EAS. O preview
-aprovou as quatro abas, o snapshot empacotado e a reabertura em modo avião. Esta
-máquina continua sem `adb`, Java ou Android SDK.
+aprovou as quatro abas, o snapshot empacotado e a reabertura em modo avião.
+Nesta máquina, Temurin `17.0.20.1`, Maestro `2.9.0` e ADB `37.0.1` estão em
+`%LOCALAPPDATA%\focuslens-tools`, sem alteração do `PATH` global.
 
 Para reproduzir os builds depois de autenticar localmente, sem enviar credencial
 pelo chat:
@@ -221,15 +239,17 @@ exemplo fictício. O
 [preview `v0.4.4`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6199d700-82ca-44df-8ede-6987679c2566)
 foi concluído em 2026-08-31 e o
 [APK direto](https://expo.dev/artifacts/eas/u_SIGIlaaIXgDgQYRd_qNcSgVPPUo7bOdm-TD8k1HNk.apk)
-expira em 2026-09-14. Ele ainda não foi instalado; os demais gates físicos
-estão pausados, não aprovados.
+expira em 2026-09-14. Esse corte não foi avaliado separadamente e foi sucedido
+pelo `v0.5.2/11`; os demais gates físicos estão pausados, não aprovados.
 
 O corte completo da Etapa 5C está no
 [preview `v0.5.2`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55),
 build `11`, commit `1c477f5`. O
 [APK direto mais recente](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk)
-expira em 2026-09-14 e deve ser instalado por cima do app atual, sem desinstalar.
-Nenhum gate físico foi aprovado apenas pela geração do binário.
+expira em 2026-09-14 e teve a instalação por cima do app confirmada pelo Raul.
+Como o aparelho não estava conectado ao ADB, a versão instalada e as jornadas
+não foram verificadas; nenhum gate físico foi aprovado apenas pelo relato de
+instalação.
 
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
@@ -297,6 +317,6 @@ arquitetura-alvo em
 O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
 2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador e a
 cobertura automatizada organizada formam a `v0.5.2`; os fluxos E2E nativos ainda
-aguardam execução. O preview `v0.4.4` ainda precisa de avaliação física, e os
-gates de importação, TalkBack, texto ampliado e alvos de toque continuam
-pendentes. A Etapa 6 e a camada institucional não foram antecipadas.
+aguardam execução. O próximo incremento é a revisão guiada da semana `v0.5.3`;
+os gates de importação, TalkBack, texto ampliado e alvos de toque continuam
+pausados e pendentes. A Etapa 6 e a camada institucional não foram antecipadas.

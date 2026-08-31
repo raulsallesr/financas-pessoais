@@ -11,13 +11,14 @@
   importação B3 sanitizada com prévia; o APK foi instalado, BI-01 a BI-03 e
   CL-02 a CL-10 foram aprovados no aparelho, mas o restante do ciclo físico
   continua pendente. O preview mais recente `v0.5.2`, build `11`, foi gerado em
-  2026-08-31 e ainda aguarda instalação e avaliação física. Por decisão explícita do
+  2026-08-31 e o Raul confirmou a instalação no aparelho; a versão instalada não
+  foi conferida por ADB e o corte ainda não recebeu avaliação física. Por decisão explícita do
   Raul em 2026-08-31, o desenvolvimento da Etapa 5C chegou ao corte local
   `v0.5.2`: além do simulador, a suíte agora separa domínio, componentes e
   contratos E2E, com dois fluxos Maestro prontos para o binário nativo. O
   toolchain Windows portátil foi instalado e os dois YAMLs passaram no Maestro
-  `2.9.0`; o executor falha fechado porque nenhum Android está conectado e o
-  binário `v0.5.2/11` ainda não foi instalado. A execução das jornadas e os gates físicos
+  `2.9.0`; a última consulta ADB encontrou zero aparelhos conectados. A execução
+  das jornadas e os gates físicos
   anteriores continuam pendentes, sem serem inferidos como aprovados. O roadmap
   institucional **FocusLens Embedded** foi aprovado e
   documentado, mas permanece posterior aos gates móveis. Tag, release e
@@ -33,13 +34,13 @@
 - **Curva oficial**: Tesouro Transparente, conjunto diário “Taxas dos Títulos
   Ofertados pelo Tesouro Direto”, CSV aberto sob ODbL 1.0.
 
-## Handoff para um novo chat — 2026-08-28
+## Handoff para um novo chat — 2026-08-31
 
 ### Ponto de partida verificado
 
 - O produto está estável e versionado até a `v1.14`; o commit funcional dessa
   entrega é `0f1458c` e recebeu a tag `v1.14`.
-- A branch de trabalho é `main`. `git pull --ff-only` confirmou em 2026-08-28
+- A branch de trabalho é `main`. `git pull --ff-only` confirmou em 2026-08-31
   que ela estava sincronizada com `origin/main` antes deste fechamento. O corte
   funcional anterior a este registro de handoff é `0bd94ee`; o APK `v0.4.0`
   foi construído a partir de `c6bb875`.
@@ -138,7 +139,8 @@
   preservam “Adicionar posição” como ação principal; parser, cofre e contrato
   privado continuam idênticos. O preview EAS `v0.4.4`, build `8`, terminou
   `FINISHED` em 2026-08-31 no commit `565b071`, sem variáveis `Plain text` ou
-  `Sensitive`; ainda precisa ser instalado e avaliado no aparelho.
+  `Sensitive`; não foi avaliado separadamente e foi sucedido pelo `v0.5.2/11`,
+  cuja instalação foi confirmada pelo Raul.
 - Em 2026-08-27, o Raul aprovou seguir o roadmap institucional **FocusLens
   Embedded**. `docs/ESTRATEGIA_INSTITUCIONAL.md` registra a tese, os módulos, o
   piloto e as métricas de compra; `docs/ARQUITETURA_INSTITUCIONAL.md` registra
@@ -232,39 +234,39 @@
 ### Próximo incremento, sem ambiguidade
 
 - Entrega atual: **Etapa 5C — cobertura automatizada organizada `v0.5.2`**.
-- O primeiro corte 5C guarda no máximo oito fotografias públicas somente no
-  aparelho, compara campos literais do contrato `v1`, permite favoritar IDs de
-  sinais e estrutura o detalhe em `o que mudou`, `o que prova`, `onde afeta` e
-  `o que não prova`.
-- Nenhuma posição entra no histórico público; favoritos guardam apenas IDs. A
-  relação com a carteira reutiliza exclusivamente `effects` já recebidos e
-  declara ausência de elo quando o snapshot vier vazio.
-- O simulador recebe valor e classe escolhidos pela pessoa e mostra os pesos
-  antes/depois; ele não persiste o cenário, calcula retorno, recomenda ativo ou
-  transforma a hipótese em ordem.
-- Os testes estão separados em `tests/domain`, `tests/components` e `tests/e2e`;
-  `e2e/maestro` contém os fluxos de navegação e simulador. O mapa único
-  `src/testing/testIds.json` impede divergência entre app, Jest e Maestro.
-- `scripts/run-maestro-windows.ps1` descobre o toolchain portátil sem mudar o
-  `PATH` global, serializa execuções e exige Android autorizado, package correto
-  e build `0.5.2/11` antes de iniciar as jornadas.
-- O próximo gate da 5C é executar os fluxos Maestro em binários Android/iOS e
-  retomar as evidências físicas pendentes; preparar o fluxo não equivale a
-  aprová-lo.
+  Histórico público local, favoritos, alertas explicáveis, simulador de aportes,
+  testes de componentes e contratos E2E estão implementados.
 - O APK interno mais recente é o `v0.5.2`, build `11`: EAS
   [`c08e5397-427f-42c2-a163-ab5cd815cb55`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55),
   [download direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk),
   commit `1c477f5`, fingerprint `4a0bc79db5a2beeb9b694f3ee8718ff13be38dff` e
-  expiração em 2026-09-14. O build concluído não aprova nenhum gate físico.
+  expiração em 2026-09-14. O Raul confirmou a instalação por cima do app em
+  2026-08-31; como o aparelho não estava conectado ao ADB, package/versão e as
+  jornadas ainda não foram verificados. Instalação declarada não aprova gate físico.
+- Decisão de produto do Raul em 2026-08-31: **continuar melhorando o app antes
+  de priorizar os checklists físicos**. A próxima entrega é **Etapa 5C,
+  incremento 4 — revisão guiada da semana `v0.5.3`**, preenchendo a trilha
+  educativa prevista no roadmap sem criar gamificação de giro ou risco.
+- A revisão guiada deve conectar, em uma sequência curta e opcional, os blocos
+  já existentes: `o que mudou` → `o que prova` → `onde toca a carteira` →
+  `o que explorar em Cenários` → `o que não prova`. Ela deve usar somente a
+  fotografia, os favoritos, os `effects` e as posições já compostas em memória.
+- O incremento deve tornar `Entenda` contextual e acionável, preservar as quatro
+  abas e usar revelação progressiva, feedback de toque e alvos mínimos de 44 px.
+  Não adicionar persistência, dependência, motor, fórmula, retorno, recomendação
+  ou campo ao snapshot público `v1`.
 - Evidência já fechada permanece válida: Android 16
   (`BP2A.250605.031.A3`), BI-01 a BI-03 e CL-02 a CL-10 aprovados. BI-04 a
   BI-13, CL-11 a CL-13 e DB-10 a DB-12 continuam pendentes, mas pausados até o
   Raul considerar a experiência útil o suficiente para retomar os gates.
 - Não alterar os motores, o schema público `1` ou os três stashes. Autenticação,
   nuvem, Open Finance e Embedded continuam posteriores.
+- Os dois YAMLs Maestro atuais usam `clearState: true`; não executá-los contra
+  uma carteira local que precise ser preservada. Antes da futura execução física,
+  usar um estado de demonstração descartável ou preparar fluxos não destrutivos.
 - Não antecipar a Etapa 6/Embedded durante o development build. O roadmap
   institucional aprovado começa somente depois dos gates definidos na seção 14.
-- A definição completa está na seção “13. Próxima execução — Etapa 5” de
+- A definição completa do próximo incremento está na seção 24 de
   `PLANO_FOCUSLENS.md`.
 
 ### Prompt pronto para abrir o próximo chat
@@ -276,33 +278,35 @@
 > a fundação móvel `v0.1`, o contrato público `v1` e o editor/cofre privado com
 > importação B3 local `v0.4.0` já estão implementados; não refaça
 > `v1.12`–`v2.0`, não redesenhe o Streamlit, não replique fórmulas em TypeScript
-> e não coloque carteira no snapshot. Continue pelas seções 13, 15 e 16 do plano e
-> `docs/VALIDACAO_DEVELOPMENT_BUILD.md`. A configuração
+> e não coloque carteira no snapshot. A configuração
 > EAS/dev client já está pronta e validada; não a refaça. O projeto
 > `@raulsallesr/focuslens-br` está vinculado. Os APKs Android `development` e
 > `preview` anteriores já foram instalados no POCO X8 Pro com Android
 > 16 (`BP2A.250605.031.A3`). DB-01 a DB-09, BI-01 a BI-03 e CL-02 a CL-10 estão
 > aprovados, com DB-06 automatizado. O preview `v0.5.2`, build `11`, EAS
-> `c08e5397-427f-42c2-a163-ab5cd815cb55`, está `FINISHED`, mas ainda não foi
-> instalado nem avaliado fisicamente. O Raul autorizou iniciar a Etapa 5C em
+> `c08e5397-427f-42c2-a163-ab5cd815cb55`, está `FINISHED` e o Raul confirmou sua
+> instalação, mas o aparelho não estava conectado ao ADB e o corte ainda não foi
+> avaliado fisicamente. O Raul autorizou iniciar a Etapa 5C em
 > 2026-08-31; a `v0.5.2` local já implementa histórico de fotografias públicas,
 > favoritos, alertas explicáveis, simulador de aportes e testes de componentes.
 > Os dois fluxos Maestro e seus seletores canônicos estão preparados, mas ainda
 > não foram executados em binários Android/iOS. No Windows, Temurin `17.0.20.1`,
 > Maestro `2.9.0` e ADB `37.0.1` estão instalados de forma portátil; os YAMLs
 > passaram em `npm run e2e:maestro:check:windows`, e o runner confirmou o bloqueio
-> por ausência de Android conectado. Continue conectando um aparelho autorizado
-> e disponibilizando nele o build exato `0.5.2/11`; então rode
-> `npm run e2e:maestro:windows`. Continue pela execução E2E e
-> pelos gates físicos pendentes, sem calcular retorno, recomendar ativo ou
-> persistir cenários. Preserve a Home orientada ao recorte pessoal, a cobertura honesta, a
+> por ausência de Android conectado. Não rode esses fluxos automaticamente: os
+> YAMLs atuais usam `clearState: true` e podem apagar a carteira local. O Raul
+> prefere continuar nas melhorias antes dos testes. Continue pela seção 24 do
+> plano: implemente a revisão guiada da semana `v0.5.3`, conectando mudança,
+> evidência, impacto, Cenários e limite com a aba Entenda, sem nova persistência,
+> dependência ou fórmula. Preserve a Home orientada ao recorte pessoal, a cobertura honesta, a
 > distinção entre carteira local e demonstração, a entrada B3 antes do exemplo
 > fictício e o modo discreto. BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12
 > continuam pausados e pendentes; não os marque como aprovados. Não envie
 > planilha ou valores pelo chat e não antecipe autenticação de cliente, Open
-> Finance ou Embedded. Rode os gates e faça commit/push somente no git próprio.
+> Finance ou Embedded.
 > O roadmap FocusLens Embedded já está aprovado e documentado, mas não antecipe
-> API, SDK, autenticação ou integração bancária durante esse incremento.
+> API, SDK, autenticação ou integração bancária durante esse incremento. Rode
+> TypeScript, testes móveis e export Android; faça commit/push apenas no git próprio.
 
 ## Direção aprovada — FocusLens BR
 
@@ -1028,7 +1032,13 @@
   - preview EAS interno `c08e5397-427f-42c2-a163-ab5cd815cb55` concluído no
     commit `1c477f5`, build `11`, fingerprint
     `4a0bc79db5a2beeb9b694f3ee8718ff13be38dff`, sem variáveis `Plain text` ou
-    `Sensitive`; o APK expira em 2026-09-14 e ainda aguarda instalação.
+    `Sensitive`; o APK expira em 2026-09-14 e teve a instalação confirmada pelo
+    Raul, sem verificação ADB ou avaliação física nesta sessão;
+  - o fechamento documental de 2026-08-31 revalidou TypeScript, 42 testes de
+    domínio, 6 de componentes, 4 contratos E2E, export Android/Hermes com 650
+    módulos, links locais e `git diff --check`. O primeiro export encontrou o
+    `spawn EPERM` já conhecido dentro do sandbox e passou fora dele sem mudança
+    de código.
 
 ## Fila priorizada
 
@@ -1045,7 +1055,8 @@ integração seguinte.
 | P5 | Entregue | Snapshot vivo Python → app móvel | Muito alto | Alto |
 | P6 | Pausado | Distribuição aprovada; DB-10 a DB-12 aguardam retomada | Alto | Alto |
 | P7 | Entregue (`v0.4.4`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
-| P8 | Em andamento (`v0.5.2`) | APK e harness E2E prontos; falta instalação e gates físicos | Muito alto | Alto |
+| P8 | Entregue (`v0.5.2`) | APK instalado por relato; harness E2E pronto e gates físicos pausados | Muito alto | Alto |
+| P8.1 | Próximo (`v0.5.3`) | Revisão guiada da semana e Entenda contextual | Muito alto | Médio |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
 | Depois | Planejado | Open Finance + Advisor Copilot, após gates | Muito alto | Muito alto |
@@ -1065,8 +1076,10 @@ integração seguinte.
   toolchain Expo, além dos gates de segurança descritos na arquitetura móvel.
 - Os APKs internos anteriores foram instalados no POCO X8 Pro e expiram em
   2026-09-11. O preview `v0.4.0` foi instalado no Android 16 e aprovou BI-01 a
-  BI-03 e CL-02 a CL-10. Os testes restantes estão pausados, não aprovados;
-  `adb`, Java e Android SDK não estão instalados nesta máquina.
+  BI-03 e CL-02 a CL-10. O `v0.5.2/11` também teve instalação confirmada pelo
+  Raul; os testes restantes estão pausados, não aprovados. Temurin `17.0.20.1`,
+  Maestro `2.9.0` e ADB `37.0.1` estão disponíveis em toolchain portátil, mas a
+  última consulta ADB encontrou zero aparelhos conectados.
 
 ## Conceitos relacionados
 

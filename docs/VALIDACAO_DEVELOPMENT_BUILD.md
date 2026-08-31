@@ -6,15 +6,22 @@ offline, safe areas em paisagem, rotação e comportamento do botão Voltar fora
 aprovados. O preview `v0.4.0` com cofre/importação B3 também foi gerado e
 instalado no POCO X8 Pro com Android 16 (`BP2A.250605.031.A3`). TalkBack,
 texto ampliado e alvos de toque ainda precisam ser registrados. O preview
-`v0.5.2`, build `11`, foi gerado, mas ainda não foi instalado nem avaliado.
+`v0.5.2`, build `11`, foi gerado e o Raul confirmou sua instalação; como o
+aparelho não estava conectado ao ADB, a versão instalada e as jornadas ainda
+não foram verificadas ou avaliadas.
 
 **Pausa de produto:** DB-10 a DB-12 continuam pendentes, mas o Raul decidiu
-avaliar primeiro o refinamento de utilidade `v0.4.4`. A pausa não transforma
-nenhum item em aprovado nem invalida as evidências físicas já registradas.
+melhorar primeiro a utilidade do app. A pausa não transforma nenhum item em
+aprovado nem invalida as evidências físicas já registradas.
 
 **Decisão posterior em 2026-08-31:** o desenvolvimento local da Etapa 5C foi
 autorizado sem fechar DB-10 a DB-12. TalkBack, texto ampliado e alvos de toque
 continuam obrigatórios antes do gate de produção.
+
+**Prioridade atual em 2026-08-31:** o Raul prefere continuar nas melhorias de
+produto antes de retomar os checklists. A pausa preserva todos os estados da
+matriz. Os fluxos Maestro usam `clearState: true` e não devem rodar em uma
+instalação cuja carteira local precise ser preservada.
 
 Este documento é a evidência operacional da seção 13 de
 `PLANO_FOCUSLENS.md`. Não marca o incremento como concluído enquanto o APK não
@@ -105,7 +112,8 @@ artefato deve ser registrado aqui, sem versionar o arquivo binário.
 [`1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/1ca28edc-ee9f-4b21-8ec6-6ba8baa9b918),
 commit `60fa378`, fingerprint `519796b16038fd44ff83dee56fd0fcb3d868dffd`.
 O [APK de desenvolvimento](https://expo.dev/artifacts/eas/E6YGMQWwuHyyqCDzAEcW6Uxt6T4MXUoH0Wq7I_5-CDg.apk)
-expira em 2026-09-11. A geração está aprovada; a instalação permanece pendente.
+expira em 2026-09-11. A geração e a instalação posterior pela rota de link EAS
+foram aprovadas.
 
 Depois de instalar o APK, iniciar o Metro no mesmo checkout:
 
@@ -171,7 +179,8 @@ expira em 2026-09-14. O corte traz recorte pessoal antes do mercado, entrada B3
 antes da carteira fictícia, alternativa manual, modo discreto entre abas e
 resumo de Cenários. O build terminou `FINISHED` sem variáveis `Plain text` ou
 `Sensitive`, mas ainda não foi instalado; portanto não existe evidência física
-específica deste corte e nenhum gate mudou de estado.
+específica deste corte. Ele foi sucedido pelo `v0.5.2/11`; nenhum gate mudou de
+estado por causa do build intermediário.
 
 **Preview atual da Etapa 5C:** app `0.5.2`, build `11`, EAS
 [`c08e5397-427f-42c2-a163-ab5cd815cb55`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55),
@@ -180,8 +189,9 @@ commit `1c477f5d0c0da3f5980509a2f08f599016ffb1f4`, fingerprint
 [APK direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk)
 expira em 2026-09-14. O build terminou `FINISHED`, sem variáveis `Plain text` ou
 `Sensitive`, e inclui histórico público, favoritos, alertas explicáveis,
-simulador de aportes e o harness E2E. Ele ainda não foi instalado; portanto
-nenhum gate físico mudou de estado.
+simulador de aportes e o harness E2E. O Raul confirmou a instalação por cima do
+app em 2026-08-31, mas o ADB encontrou zero aparelhos conectados e não confirmou
+package ou versão. Nenhum gate físico mudou de estado apenas por esse relato.
 
 Com o preview instalado:
 
@@ -270,13 +280,12 @@ real.
 - `expo install --check`: dependências compatíveis;
 - Expo Doctor: `21/21` checks aprovados;
 - TypeScript: aprovado;
-- testes móveis: 30 aprovados, incluindo configuração EAS, snapshot empacotado,
-  fallback, proibição de carteira pública, importação B3 sanitizada, distribuição
-  por classe, maior posição derivada, cobertura de sinais sem efeito inventado e
-  resumo de cenário por tom/parcela não coberta;
-- export Android/Hermes: aprovado com 640 módulos;
+- testes móveis: 42 de domínio, 6 de componentes e 4 contratos E2E aprovados,
+  incluindo configuração EAS, snapshot empacotado, carteira/importação,
+  histórico, favoritos, alertas, simulador, seletores e privacidade dos fluxos;
+- export Android/Hermes: aprovado com 650 módulos;
 - testes Python: 191 aprovados e `pip check` sem dependência quebrada;
-- EAS `development`, `preview` público e previews privados `v0.3.0`/`v0.4.0`:
+- EAS `development`, `preview` público e previews privados até `v0.5.2/11`:
   concluídos sem variável `Plain text` ou `Sensitive` no ambiente de build;
 - `npm audit --omit=dev`: zero vulnerabilidade na árvore de produção; a árvore
   completa tem 11 moderadas transitivas e nenhuma alta/crítica;
@@ -295,7 +304,8 @@ A seção 13 só pode mudar para concluída quando:
 - o teste offline estiver aprovado por preview ou evidência equivalente;
 - comandos, limitações e rota iOS estiverem atualizados;
 - gates Python e móvel passarem no fechamento;
-- `CONTEXT.md` registrar o próximo incremento sem antecipar carteira real.
+- `CONTEXT.md` registrar com honestidade o próximo incremento e os gates que
+  continuam pendentes.
 
 Referências oficiais:
 

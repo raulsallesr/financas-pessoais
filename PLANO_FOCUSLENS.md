@@ -273,9 +273,11 @@ sincronização de conta, Open Finance, cloud de carteira ou publicação em loj
   layout passa em celular pequeno, celular grande, tablet e paisagem;
 - TypeScript, testes de domínio e export Android passam.
 
-**Estado:** fundação `v0.1` e contrato vivo `v1` concluídos em 2026-08-27. O
-próximo incremento é um development build instalável; carteira pessoal e
-armazenamento criptografado permanecem depois dele.
+**Estado:** fundação `v0.1`, contrato vivo `v1`, distribuição Android, carteira
+local, importação B3 e os três primeiros incrementos da Etapa 5C chegaram ao
+preview `v0.5.2/11`. O Raul confirmou a instalação desse APK em 2026-08-31;
+gates físicos permanecem parciais e pausados. A próxima melhoria é a revisão
+guiada da semana `v0.5.3`, definida na seção 24.
 
 ## 6. Arquitetura
 
@@ -603,7 +605,7 @@ frentes dentro do incremento 2.
   `scrollWidth == clientWidth`, origem textual, data/fonte e navegação sem
   depender apenas de cor.
 
-## 13. Próxima execução — Etapa 5, build de desenvolvimento
+## 13. Execução da Etapa 5A — build de desenvolvimento
 
 ### Resultado esperado
 
@@ -1115,17 +1117,71 @@ foi concluído no EAS
 [`c08e5397-427f-42c2-a163-ab5cd815cb55`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55),
 commit `1c477f5`, fingerprint `4a0bc79db5a2beeb9b694f3ee8718ff13be38dff`.
 O [APK direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk)
-expira em 2026-09-14 e ainda não foi instalado. O build não usou variáveis
-`Plain text` ou `Sensitive`. Isso mantém E2E Android/iOS e todos os gates físicos
-como pendentes.
+expira em 2026-09-14 e teve a instalação confirmada pelo Raul. O aparelho não
+estava conectado ao ADB, portanto package/versão e as jornadas não foram
+verificados. O build não usou variáveis `Plain text` ou `Sensitive`. Isso mantém
+E2E Android/iOS e os demais gates físicos como pendentes.
 
 A auditoria inclui zero vulnerabilidade alta/crítica e 11 moderadas transitivas
 no toolchain Expo. `npm audit fix --force` não foi aplicado: a correção sugerida
 troca o projeto para Expo 46 e rompe a compatibilidade do SDK 57.
 
-### Próximo gate da 5C
+### Estado dos gates físicos
 
-Instalar o APK `0.5.2/11`, conectar o Android autorizado e executar
-`npm run e2e:maestro:windows`, repetir em iOS, registrar a evidência e retomar
-BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12. Etapa 6/Embedded continua
-bloqueada até esses gates e as demais condições da seção 14 serem fechados.
+O Raul decidiu continuar nas melhorias antes de priorizar os testes físicos.
+BI-04 a BI-13, CL-11 a CL-13, DB-10 a DB-12 e E2E Android/iOS permanecem
+pausados e pendentes. Os dois fluxos Maestro atuais usam `clearState: true`;
+não devem ser executados em uma instalação cuja carteira local precise ser
+preservada. Antes da retomada, usar estado de demonstração descartável ou criar
+variantes não destrutivas. Etapa 6/Embedded continua bloqueada até esses gates e
+as demais condições da seção 14 serem fechados.
+
+## 24. Etapa 5C, incremento 4 — revisão guiada da semana `v0.5.3`
+
+### Decisão de produto em 2026-08-31
+
+Depois de instalar o `v0.5.2/11`, o Raul preferiu continuar aumentando a
+utilidade do app antes de retomar os checklists físicos. A lacuna remanescente
+do item “Acompanhamento divertido e útil” da seção 5 é a trilha educativa:
+`Entenda` ainda é uma explicação estática e não ajuda a percorrer a fotografia,
+o recorte da carteira e um cenário como uma única rotina curta.
+
+### Resultado esperado
+
+Transformar os recursos já entregues em uma revisão semanal opcional que
+responda, em poucos passos: o que mudou, qual é a evidência, onde existe relação
+com a carteira, o que pode ser explorado em Cenários e qual é o limite da
+leitura. O fluxo deve reduzir a sensação de painel longo sem criar urgência,
+recompensa, streak ou incentivo a giro.
+
+### Escopo fechado
+
+1. oferecer uma entrada clara “Revisar a semana” a partir de Hoje;
+2. reutilizar o sinal selecionado, comparação literal, fonte, data, `effects` e
+   impactos já calculados, sem criar nova interpretação financeira;
+3. tornar `Entenda` contextual, com acesso ao tópico relacionado e retorno
+   previsível à exploração;
+4. conduzir para Cenários somente como hipótese educacional, sem preencher valor,
+   classe ou choque em nome da pessoa;
+5. usar revelação progressiva, feedback visual de toque, rótulos acessíveis e
+   alvos mínimos de 44 px, preservando as quatro abas;
+6. manter todo o estado da revisão apenas em memória e descartar a sequência ao
+   reiniciar o app;
+7. cobrir navegação, estados sem histórico/efeito e limites com testes de
+   componentes, além dos gates móveis existentes.
+
+### Fora de escopo
+
+- alterar motores Python, regras financeiras ou o snapshot público `v1`;
+- adicionar persistência, dependência, rede, telemetria ou sincronização;
+- calcular retorno, risco, probabilidade, produto, ordem ou recomendação;
+- transformar educação em checklist obrigatório, gamificação ou notificação;
+- executar automaticamente Maestro, limpar estado do app ou fechar gates
+  físicos por inferência;
+- iniciar Etapa 6, Embedded, autenticação ou Open Finance.
+
+### Gate do incremento
+
+`npm run typecheck`, `npm test`, `npm run export:android` e validação visual nos
+viewports já usados pelo projeto. O handoff deve registrar separadamente o que
+foi comprovado localmente e o que continua dependendo de aparelho real.

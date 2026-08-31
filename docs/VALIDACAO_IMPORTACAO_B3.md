@@ -9,7 +9,7 @@ ao repositório ou aparecer em captura de tela.
 
 ## Preparação
 
-- para avaliar a utilidade atual, instalar o
+- para uma futura retomada, usar o já instalado
   [APK `preview` `v0.5.2`](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk),
   build `11`, EAS
   [`c08e5397-427f-42c2-a163-ab5cd815cb55`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55);
@@ -47,23 +47,26 @@ ambiente EAS do preview.
 **Preview atual para avaliação de utilidade:** app `0.5.2`, build `11`, commit
 `1c477f5d0c0da3f5980509a2f08f599016ffb1f4`, fingerprint
 `4a0bc79db5a2beeb9b694f3ee8718ff13be38dff`, status `FINISHED`, expiração em
-2026-09-14. Não possui variável `Plain text` ou `Sensitive`. Ainda não foi
-instalado, portanto não altera os estados da matriz.
+2026-09-14. Não possui variável `Plain text` ou `Sensitive`. O Raul confirmou a
+instalação em 2026-08-31, sem verificação ADB de package/versão; isso não altera
+os estados da matriz.
 
 **Evidência física parcial em 2026-08-28:** no POCO X8 Pro com Android 16
 (`BP2A.250605.031.A3`), o Raul confirmou que o `v0.4.0` abriu as quatro abas,
 o seletor XLSX foi aberto e o cancelamento preservou a carteira. Isso aprova
 BI-01 a BI-03; os demais itens continuam pendentes.
 
-**Pausa de produto em 2026-08-28:** por decisão explícita do Raul, BI-04 a
-BI-13 serão retomados somente depois da avaliação de utilidade do preview
-`v0.4.4`. Os três itens aprovados permanecem como evidência histórica; nenhum
-item pendente deve ser inferido como aprovado.
+**Pausa de produto em 2026-08-28, mantida em 2026-08-31:** por decisão explícita
+do Raul, BI-04 a BI-13 serão retomados depois de novas melhorias de utilidade.
+Os três itens aprovados permanecem como evidência histórica; nenhum item
+pendente deve ser inferido como aprovado.
 
 **Decisão posterior em 2026-08-31:** o Raul autorizou desenvolver a Etapa 5C
 antes de retomar este checklist. Isso não muda nenhum estado da matriz e não
 elimina este gate para o fechamento físico da Etapa 5B. O `v0.5.2/11` substitui
 o `v0.4.4/8` apenas como binário recomendado para a próxima execução.
+O próximo trabalho de produto é a revisão guiada da semana `v0.5.3`; este gate
+continua preservado e pausado.
 
 ## O que relatar ao fechar o gate
 

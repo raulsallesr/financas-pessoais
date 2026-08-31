@@ -17,16 +17,19 @@ build `11`, EAS
 Ele inclui integralmente o cofre `v0.3.0` e a importação B3 `v0.4.0`, além do
 refinamento de utilidade e da Etapa 5C. Assim CL-02 a CL-13 e BI-01 a BI-13 podem ser
 validados na mesma instalação, sem manter dois APKs concorrentes. O build
-terminou `FINISHED` em 2026-08-31 e expira em 2026-09-14, mas ainda não foi
-instalado; os estados aprovados abaixo continuam sendo evidência do `v0.4.0`.
+terminou `FINISHED` em 2026-08-31 e expira em 2026-09-14. O Raul confirmou a
+instalação, sem verificação ADB de package/versão; os estados aprovados abaixo
+continuam sendo evidência do `v0.4.0` e nenhum item adicional muda de estado.
 
-Depois de CL-02 a CL-10 passarem, o Raul pausou CL-11 a CL-13 para avaliar
-primeiro a utilidade do corte `v0.4.4`. A evidência aprovada abaixo permanece
-válida; a pausa não fecha acessibilidade.
+Depois de CL-02 a CL-10 passarem, o Raul pausou CL-11 a CL-13 para melhorar
+primeiro a utilidade do produto. A evidência aprovada abaixo permanece válida;
+a pausa não fecha acessibilidade.
 
 Em 2026-08-31, o Raul autorizou desenvolver a Etapa 5C antes de retomar CL-11 a
 CL-13. A decisão não aprova estes itens nem elimina o gate físico da carteira;
 o `v0.5.2/11` é somente o binário consolidado recomendado para retomá-los.
+Em seguida, o Raul decidiu continuar no incremento de produto `v0.5.3` antes
+dos testes; isso também não muda a matriz.
 
 Este documento é a evidência operacional da seção 15 de
 `PLANO_FOCUSLENS.md`. Não registrar aqui nome de ativo real, valor, conta,

@@ -173,6 +173,12 @@ jornada se o ADB não tiver um aparelho autorizado selecionado ou se package,
 executada no Maestro `2.9.0`; nenhum dispositivo estava conectado, portanto isso
 não constitui evidência E2E física.
 
+O Raul confirmou depois a instalação do preview `v0.5.2/11`, mas o aparelho
+continuou ausente do ADB; package, versão e jornadas não foram verificados. Os
+YAMLs atuais usam `clearState: true`, portanto a execução futura deve ocorrer em
+estado descartável ou em variantes não destrutivas para não apagar uma carteira
+local que precise ser preservada.
+
 As dependências de teste permanecem em `devDependencies`; Metro confirmou 650
 módulos no bundle Android. Nenhum motor, storage ou contrato público/privado foi
 alterado.
@@ -321,17 +327,19 @@ build atual.
 8. **implementado localmente em `v0.4.3`:** Home centrada no recorte pessoal,
    maior posição derivada e ação principal contextual; preview pendente;
 9. **implementado e empacotado em `v0.4.4`:** entrada pessoal antes da carteira
-   fictícia, com B3 principal e alternativa manual; preview EAS gerado, mas
-   instalação e avaliação física pendentes;
+    fictícia, com B3 principal e alternativa manual; preview EAS sucedido pelo
+    corte consolidado `v0.5.2/11`;
 10. **implementado localmente em `v0.5.0`:** alertas explicáveis, favoritos e
     comparação entre até oito fotografias públicas, sem carteira no histórico;
 11. **implementado localmente em `v0.5.1`:** simulador de aportes por classe,
     sem persistência, retorno previsto, produto ou ordem;
 12. **implementado e empacotado em `v0.5.2`:** testes de componentes e contratos
-    E2E; preview Android build `11` e fluxos Maestro preparados, mas ainda não
-    executados no aparelho;
-13. executar os fluxos E2E e fechar os gates físicos pendentes;
-14. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+    E2E; preview Android build `11` instalado por relato e fluxos Maestro
+    preparados, mas ainda não executados no aparelho;
+13. **próximo — `v0.5.3`:** revisão guiada da semana e Entenda contextual,
+    somente com estado de sessão e contratos existentes;
+14. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
+15. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 
