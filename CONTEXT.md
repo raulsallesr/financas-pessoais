@@ -14,8 +14,9 @@
   2026-08-31 e o Raul confirmou a instalação no aparelho; a versão instalada não
   foi conferida por ADB e o corte ainda não recebeu avaliação física. Por decisão explícita do
   Raul em 2026-08-31, o desenvolvimento da Etapa 5C chegou ao corte local
-  `v0.5.3`: além do simulador e da cobertura automatizada, Hoje e Entenda agora
-  oferecem uma revisão semanal guiada em cinco passos, com todo o progresso
+  `v0.5.6`: além da revisão semanal, Cenários agora começa por um laboratório
+  educacional com crescimento composto, meta ao contrário, custo de esperar,
+  inflação, hábito recorrente e desafio de intuição. Valores e progresso ficam
   somente na sessão. Os dois fluxos Maestro continuam prontos para o binário nativo. O
   toolchain Windows portátil foi instalado e os dois YAMLs passaram no Maestro
   `2.9.0`; a última consulta ADB encontrou zero aparelhos conectados. A execução
@@ -234,9 +235,9 @@
 
 ### Estado atual e próxima decisão, sem ambiguidade
 
-- Entrega atual: **Etapa 5C — revisão guiada da semana `v0.5.3`**. Histórico
-  público local, favoritos, alertas explicáveis, simulador, cobertura
-  automatizada e a trilha contextual de Entenda estão implementados.
+- Entrega atual: **Etapa 5C — laboratório do dinheiro `v0.5.6`**. Histórico
+  público local, favoritos, alertas explicáveis, simulador por classe, revisão
+  contextual e cinco experiências educacionais em Cenários estão implementados.
 - O APK interno mais recente é o `v0.5.2`, build `11`: EAS
   [`c08e5397-427f-42c2-a163-ab5cd815cb55`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/c08e5397-427f-42c2-a163-ab5cd815cb55),
   [download direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk),
@@ -248,9 +249,13 @@
   `o que explorar em Cenários` → `o que não prova`, somente com fotografia,
   favoritos, `effects`, impactos e posições já compostos em memória. A ida a
   Cenários não preenche hipótese e oferece retorno explícito à revisão.
-- TypeScript, 42 testes de domínio, 10 de componentes, 4 contratos E2E e o
-  export Android/Hermes com 651 módulos passaram. A jornada completa foi
-  percorrida em 375×812, 430×932, 768×1024 e 844×390 sem overflow horizontal
+- A `v0.5.4`–`v0.5.6` adiciona “Quanto vira?”, meta ao contrário, preço de
+  esperar, inflação opcional, hábito recorrente e desafio de intuição. A taxa é
+  sempre fornecida pela pessoa e mantida constante apenas para a conta; nenhum
+  número vem da carteira, do snapshot ou de uma instituição.
+- TypeScript, 51 testes de domínio, 16 de componentes, 4 contratos E2E e o
+  export Android/Hermes com 653 módulos passaram. As cinco experiências foram
+  percorridas em 375×812, 430×932, 768×1024 e 844×390 sem overflow horizontal
   ou alvo visível abaixo de 44 px. Essa evidência é local, não física.
 - A próxima melhoria de produto ainda precisa ser escolhida; não há incremento
   técnico posterior autorizado por inferência. A decisão vigente continua sendo
@@ -266,8 +271,8 @@
   usar um estado de demonstração descartável ou preparar fluxos não destrutivos.
 - Não antecipar a Etapa 6/Embedded durante o development build. O roadmap
   institucional aprovado começa somente depois dos gates definidos na seção 14.
-- A definição e a evidência completa da `v0.5.3` estão na seção 24 de
-  `PLANO_FOCUSLENS.md`.
+- A definição e a evidência completa até a `v0.5.6` estão nas seções 24 a 27
+  de `PLANO_FOCUSLENS.md`.
 
 ### Prompt pronto para abrir o próximo chat
 
@@ -277,7 +282,7 @@
 > mas não aplique nem remova os três stashes documentados. A `v2.0` dos motores,
 > a fundação móvel `v0.1`, o contrato público `v1` e o editor/cofre privado com
 > importação B3 local `v0.4.0` já estão implementados; não refaça
-> `v1.12`–`v2.0`, não redesenhe o Streamlit, não replique fórmulas em TypeScript
+> `v1.12`–`v2.0`, não redesenhe o Streamlit, não replique fórmulas dos motores em TypeScript
 > e não coloque carteira no snapshot. A configuração
 > EAS/dev client já está pronta e validada; não a refaça. O projeto
 > `@raulsallesr/focuslens-br` está vinculado. Os APKs Android `development` e
@@ -287,20 +292,24 @@
 > `c08e5397-427f-42c2-a163-ab5cd815cb55`, está `FINISHED` e o Raul confirmou sua
 > instalação, mas o aparelho não estava conectado ao ADB e o corte ainda não foi
 > avaliado fisicamente. O Raul autorizou iniciar a Etapa 5C em
-> 2026-08-31; a `v0.5.3` local já implementa histórico de fotografias públicas,
-> favoritos, alertas explicáveis, simulador de aportes, cobertura automatizada e
-> revisão guiada da semana. Hoje oferece a entrada opcional e Entenda percorre
-> mudança, prova, relação com a carteira, Cenários e limite somente em estado de
-> sessão. A ida a Cenários não preenche hipótese e possui retorno explícito.
+> 2026-08-31; a `v0.5.6` local já implementa histórico de fotografias públicas,
+> favoritos, alertas explicáveis, simulador por classe, revisão guiada e o
+> laboratório do dinheiro. Cenários oferece “Quanto vira?”, meta ao contrário,
+> preço de esperar, inflação opcional, hábito recorrente e desafio de intuição.
+> A taxa e os valores são sempre escolhidos pela pessoa; todo o laboratório vive
+> somente na sessão, não toca carteira/snapshot/storage/rede e respeita o modo
+> discreto. Hoje e Entenda continuam conectando mudança, prova, relação com a
+> carteira, Cenários e limite. A ida a Cenários não preenche hipótese e possui
+> retorno explícito.
 > Os dois fluxos Maestro e seus seletores canônicos estão preparados, mas ainda
 > não foram executados em binários Android/iOS. No Windows, Temurin `17.0.20.1`,
 > Maestro `2.9.0` e ADB `37.0.1` estão instalados de forma portátil; os YAMLs
 > passaram em `npm run e2e:maestro:check:windows`, e o runner confirmou o bloqueio
 > por ausência de Android conectado. Não rode esses fluxos automaticamente: os
 > YAMLs atuais usam `clearState: true` e podem apagar a carteira local. O Raul
-> prefere continuar nas melhorias antes dos testes. A seção 24 do plano está
-> concluída localmente e os gates passaram; o próximo incremento de utilidade
-> ainda deve ser escolhido, sem antecipar escopo. Preserve a Home orientada ao
+> prefere continuar nas melhorias antes dos testes. As seções 24 a 27 do plano
+> estão concluídas localmente e os gates passaram; o próximo incremento de
+> utilidade ainda deve ser escolhido, sem antecipar escopo. Preserve a Home orientada ao
 > recorte pessoal, a cobertura honesta, a
 > distinção entre carteira local e demonstração, a entrada B3 antes do exemplo
 > fictício e o modo discreto. BI-04 a BI-13, CL-11 a CL-13 e DB-10 a DB-12
@@ -1059,6 +1068,26 @@
     overflow horizontal ou alvo visível abaixo de 44 px;
   - nenhum preview EAS, Maestro ou gate físico foi executado. O APK instalado
     permanece `v0.5.2/11`; os gates físicos anteriores continuam pendentes.
+- **Etapa 5C · laboratório do dinheiro `v0.5.4`–`v0.5.6` (2026-08-31)** —
+  implementação:
+  - `moneyLab.ts` usa taxa anual efetiva informada pela pessoa, converte para
+    equivalente mensal e separa capital colocado de juros do cenário;
+  - “Quanto vira?” inclui linha do tempo textual/visual e inflação opcional em
+    dinheiro do início, sem chamar o resultado de retorno esperado;
+  - meta ao contrário resolve aporte mensal sem permitir resultado negativo;
+    preço de esperar compara o mesmo horizonte e explicita aportes pulados;
+  - hábito diário, semanal ou mensal é convertido para média mensal sem
+    julgamento; desafio compara +1 p.p. com +R$ 150/mês depois do palpite;
+  - `MoneyLabSession` vive em `App.tsx`, permanece entre abas e some ao
+    reiniciar; não existe storage, rede, snapshot ou leitura da carteira;
+  - app consolidado em `v0.5.6`, Android `versionCode 15` e iOS
+    `buildNumber 15`;
+  - TypeScript, 51 testes de domínio, 16 de componentes, 4 contratos E2E e
+    export Android/Hermes com 653 módulos passaram;
+  - as cinco ferramentas passaram em 375×812, 430×932, 768×1024 e 844×390, sem
+    overflow horizontal ou alvo visível abaixo de 44 px;
+  - não houve preview EAS, Maestro ou gate físico. O APK instalado permanece
+    `v0.5.2/11` e todos os gates pausados continuam pendentes.
 
 ## Fila priorizada
 
@@ -1077,6 +1106,7 @@ integração seguinte.
 | P7 | Entregue (`v0.4.4`) | Refinar utilidade; evidência física parcial preservada | Muito alto | Alto |
 | P8 | Entregue (`v0.5.2`) | APK instalado por relato; harness E2E pronto e gates físicos pausados | Muito alto | Alto |
 | P8.1 | Entregue (`v0.5.3`) | Revisão guiada da semana e Entenda contextual | Muito alto | Médio |
+| P8.2 | Entregue (`v0.5.6`) | Laboratório educacional para iniciantes | Muito alto | Médio |
 | P9 | Planejado | Embedded: API, receipt, sandbox e SDK | Muito alto | Muito alto |
 | P10 | Planejado | Governance Studio + piloto institucional | Muito alto | Muito alto |
 | Depois | Planejado | Open Finance + Advisor Copilot, após gates | Muito alto | Muito alto |

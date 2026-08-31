@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.5.3`
+## Estado do corte `mobile v0.5.6`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -54,7 +54,9 @@ O domínio TypeScript faz apenas operações locais necessárias à experiência
 - filtro de posições por classe;
 - junção entre o efeito já declarado no snapshot e as posições relacionadas;
 - sensibilidade educacional discreta a choques de juros;
-- simulação aritmética de um aporte escolhido pela pessoa sobre pesos por classe.
+- simulação aritmética de um aporte escolhido pela pessoa sobre pesos por classe;
+- projeções educacionais determinísticas com taxa e prazo digitados pela
+  pessoa, sem ler carteira, snapshot ou fonte externa.
 
 A sensibilidade móvel é uma demonstração própria e está rotulada como tal. Ela
 não substitui `curva_cenarios.py`, não calcula preço ou retorno e não entra nos
@@ -212,6 +214,51 @@ TypeScript, 42 testes de domínio, 10 de componentes, 4 contratos E2E e o bundle
 Android/Hermes com 651 módulos passaram; os quatro viewports canônicos ficaram
 sem overflow ou alvo visível abaixo de 44 px.
 
+### Laboratório do dinheiro `v0.5.4`–`v0.5.6`
+
+`moneyLab.ts` é um domínio puro e independente dos motores Python. Ele recebe
+somente números digitados no laboratório e usa a taxa efetiva anual informada
+para derivar a taxa mensal equivalente:
+
+```text
+i_mensal = (1 + i_anual)^(1/12) - 1
+valor futuro = valor inicial capitalizado + série de aportes no fim do mês
+```
+
+O marco `v0.5.4` entrega a projeção direta e uma linha do tempo curta. Cada
+ponto separa capital colocado e juros do cenário; a visualização usa texto e
+valor além de cor. O app não busca taxa, não sugere taxa padrão como adequada e
+não chama o resultado de retorno esperado.
+
+O marco `v0.5.5` reutiliza os mesmos fatores para duas perguntas:
+
+- `calculateRequiredMonthlyContribution` resolve o aporte mensal de uma meta;
+- `compareDelayedStart` mantém o valor inicial parado durante a espera e
+  compara o mesmo horizonte final, explicitando aportes não realizados.
+
+O marco `v0.5.6` completa a exploração:
+
+- `adjustForInflation` desconta uma inflação também escolhida pela pessoa e
+  mostra poder de compra no início do cenário;
+- `simulateHabitRedirect` converte recorrência diária por 365/12, semanal por
+  52/12 ou mensal diretamente, sem julgamento comportamental;
+- `compareIntuitionChallenge` compara a mesma base contra +1 p.p. de taxa e
+  +R$ 150 por mês, revelando o resultado somente depois do palpite.
+
+`MoneyLabSession` vive em `App.tsx` para sobreviver à troca entre as quatro
+abas, mas não possui adaptador de storage. Reiniciar o processo elimina valores,
+ferramenta selecionada, inflação e palpite. O laboratório não toca SecureStore,
+filesystem, histórico público, favoritos, carteira privada, importador B3,
+snapshot ou rede. O modo discreto usa a mesma preferência efêmera para mascarar
+campos e resultados monetários.
+
+O corte consolidado `v0.5.6/15` passou por TypeScript, 51 testes de domínio,
+16 de componentes, 4 contratos E2E e export Android/Hermes com 653 módulos. As
+cinco ferramentas, a inflação e o desafio foram percorridos em 375×812,
+430×932, 768×1024 e 844×390, sem overflow horizontal ou alvo interativo visível
+abaixo de 44 px. Isso não substitui validação nativa, TalkBack, texto ampliado
+ou os fluxos Maestro pausados.
+
 ### Fronteira implementada do contrato vivo `v1`
 
 O snapshot transporta somente a leitura pública já calculada: versão do
@@ -367,8 +414,14 @@ build atual.
     preparados, mas ainda não executados no aparelho;
 13. **implementado localmente em `v0.5.3`:** revisão guiada da semana e
     Entenda contextual, somente com estado de sessão e contratos existentes;
-14. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
-15. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+14. **implementado localmente em `v0.5.4`:** crescimento composto com valor
+    inicial, aportes, taxa escolhida, prazo e decomposição do resultado;
+15. **implementado localmente em `v0.5.5`:** meta ao contrário e comparação
+    entre começar agora ou depois;
+16. **implementado localmente em `v0.5.6`:** inflação opcional, hábito
+    recorrente e desafio de intuição, todos somente em sessão;
+17. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
+18. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 

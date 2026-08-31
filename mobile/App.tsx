@@ -13,6 +13,10 @@ import {
 } from "react-native-safe-area-context";
 
 import { BottomNav, TabKey } from "./src/components/BottomNav";
+import {
+  createMoneyLabSession,
+  MoneyLabSession,
+} from "./src/components/MoneyLabPanel";
 import { WeeklyReviewStep } from "./src/components/WeeklyReviewPanel";
 import {
   currentPublicSnapshot,
@@ -103,6 +107,9 @@ export default function App() {
     useState<SnapshotHistoryState>({ kind: "loading" });
   const [weeklyReview, setWeeklyReview] =
     useState<WeeklyReviewSession | null>(null);
+  const [moneyLabSession, setMoneyLabSession] = useState<MoneyLabSession>(
+    createMoneyLabSession,
+  );
   const [portfolioState, setPortfolioState] = useState<PortfolioState>({
     kind: "loading",
   });
@@ -390,6 +397,8 @@ export default function App() {
       return (
         <ScenariosScreen
           hideAmounts={valuesHidden}
+          moneyLabSession={moneyLabSession}
+          onMoneyLabSessionChange={setMoneyLabSession}
           onShockChange={setShockBps}
           onToggleAmounts={() => setValuesHidden((hidden) => !hidden)}
           portfolioMode={portfolioState.kind}

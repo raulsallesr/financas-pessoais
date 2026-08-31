@@ -35,5 +35,27 @@
       "brazilEquity": "contribution-class-brazil-equity",
       "international": "contribution-class-international"
     }
+  },
+  "moneyLab": {
+    "panel": "money-lab-panel",
+    "result": "money-lab-result",
+    "challengeResult": "money-lab-challenge-result",
+    "initialInput": "money-lab-initial-input",
+    "monthlyInput": "money-lab-monthly-input",
+    "rateInput": "money-lab-rate-input",
+    "yearsInput": "money-lab-years-input",
+    "inflationInput": "money-lab-inflation-input",
+    "inflationToggle": "money-lab-inflation-toggle",
+    "targetInput": "money-lab-target-input",
+    "habitInput": "money-lab-habit-input",
+    "guessRate": "money-lab-guess-rate",
+    "guessContribution": "money-lab-guess-contribution",
+    "tools": {
+      "growth": "money-lab-tool-growth",
+      "goal": "money-lab-tool-goal",
+      "delay": "money-lab-tool-delay",
+      "habit": "money-lab-tool-habit",
+      "challenge": "money-lab-tool-challenge"
+    }
   }
 }

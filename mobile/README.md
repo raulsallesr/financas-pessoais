@@ -24,6 +24,9 @@ onde isso encosta na minha carteira?**
   explícita da carteira sem upload do arquivo;
 - **Cenários:** hipótese de −100 a +100 bps, leitura rápida por tom, cobertura
   explícita e detalhe progressivo por posição;
+- **laboratório do dinheiro:** crescimento com juros compostos, meta ao
+  contrário, custo de esperar, inflação, hábito recorrente e desafio de
+  intuição, sempre com hipóteses escolhidas pela pessoa;
 - **modo discreto da sessão:** ocultar valores em Carteira também mascara Hoje
   e Cenários até o app ser reiniciado;
 - **Entenda contextual:** revisão semanal opcional em cinco passos, ligada ao
@@ -157,8 +160,47 @@ nem alvo visível abaixo de 44 px. Isso é evidência local; não substitui os
 gates físicos pausados.
 
 Os checklists físicos continuam preservados, porém pausados por decisão de
-produto enquanto a utilidade melhora. O escopo executável está na seção 24 de
+produto enquanto a utilidade melhora. O escopo entregue está nas seções 24 a 27 de
 [`PLANO_FOCUSLENS.md`](../PLANO_FOCUSLENS.md).
+
+## Laboratório do dinheiro `v0.5.4` a `v0.5.6`
+
+O laboratório abre a aba Cenários por perguntas que uma pessoa iniciante
+consegue reconhecer antes de entrar na leitura da carteira:
+
+1. **Quanto vira? (`v0.5.4`)** — combina valor inicial, aporte mensal, taxa
+   efetiva anual e prazo. O resultado separa o que a pessoa colocou do que veio
+   dos juros e mostra marcos ao longo do tempo;
+2. **Quanto guardar? (`v0.5.5`)** — parte de uma meta e calcula o aporte mensal
+   compatível com a taxa fixa informada;
+3. **E se eu esperar? (`v0.5.5`)** — compara começar agora com esperar um, três
+   ou cinco anos, deixando explícitos aportes pulados e tempo menor de
+   capitalização;
+4. **Um hábito no tempo (`v0.5.6`)** — converte uma recorrência diária, semanal
+   ou mensal em equivalente médio por mês, sem classificar o gasto como certo
+   ou errado;
+5. **O que pesa mais? (`v0.5.6`)** — pede um palpite antes de comparar mais
+   1 p.p. de taxa com mais R$ 150 por mês.
+
+Em “Quanto vira?”, a inflação é um detalhe opcional: quando ligada, o app mostra
+também o valor futuro em dinheiro do início do cenário. A taxa anual é
+convertida para uma taxa mensal equivalente e os aportes entram ao final de
+cada mês. Nenhum desses números vem da carteira, do snapshot ou de uma
+instituição; o exemplo inicial é fictício e editável.
+
+O estado completo do laboratório vive em `App.tsx`, permanece ao trocar de aba
+e desaparece ao reiniciar o app. Nada entra no cofre, no histórico, nos
+favoritos, no filesystem ou na rede. O modo discreto mascara entradas e
+resultados monetários. Cada resultado declara que taxa constante não prova
+retorno futuro, adequação, produto ou atingimento de meta.
+
+O corte consolidado é `v0.5.6`, Android `versionCode 15` e iOS `buildNumber 15`.
+Passaram TypeScript, 51 testes de domínio, 16 de componentes, 4 contratos E2E e
+o export Android/Hermes com 653 módulos. As cinco experiências foram percorridas
+em 375×812, 430×932, 768×1024 e 844×390: não houve overflow horizontal nem alvo
+interativo visível abaixo de 44 px. A inspeção é local; não substitui TalkBack,
+texto ampliado ou os demais gates físicos pausados. Nenhum preview EAS ou
+Maestro foi executado para estes três incrementos.
 
 ## Como atualizar a fotografia pública
 
@@ -295,8 +337,10 @@ parser B3, ZIP/XML malformado, macro, tamanho,
 classes não cobertas e linguagem não imperativa. A camada de componentes cobre
 navegação, validação, comparação, descarte de resultado obsoleto, modo discreto,
 coexistência entre aporte e sensibilidade e a revisão guiada com estados sem
-histórico ou sem efeito. Os contratos E2E conferem app ID, seletores e ausência
-de dado pessoal. O bundle Android é gerado pelo Metro sem depender do Streamlit.
+histórico ou sem efeito. Também cobre o laboratório, a inflação opcional, a
+navegação entre as cinco perguntas e o palpite antes do desafio. Os contratos
+E2E conferem app ID, seletores e ausência de dado pessoal. O bundle Android é
+gerado pelo Metro sem depender do Streamlit.
 
 ## Estrutura
 
@@ -336,8 +380,8 @@ carteira em nuvem. A estratégia aprovada está em
 arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
 O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
-2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador,
-cobertura automatizada e revisão guiada formam a `v0.5.3`; os fluxos E2E nativos
-ainda aguardam execução. Os gates de importação, TalkBack, texto ampliado e
-alvos de toque continuam pausados e pendentes. A Etapa 6 e a camada
-institucional não foram antecipadas.
+2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador por
+classe, revisão guiada e o laboratório educacional formam a `v0.5.6`; os
+fluxos E2E nativos ainda aguardam execução. Os gates de importação, TalkBack,
+texto ampliado e alvos de toque continuam pausados e pendentes. A Etapa 6 e a
+camada institucional não foram antecipadas.

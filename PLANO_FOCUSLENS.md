@@ -268,7 +268,8 @@ sincronização de conta, Open Finance, cloud de carteira ou publicação em loj
 - Android e iOS compartilham a mesma base React Native;
 - toque em um sinal filtra somente posições relacionadas;
 - valores pessoais podem ser ocultados e a demo é explicitamente sintética;
-- cenário não calcula preço, retorno ou probabilidade;
+- cenário de mercado não calcula preço, retorno ou probabilidade; o laboratório
+  usa apenas taxa fixa digitada e rotulada como hipótese matemática;
 - alvos interativos têm no mínimo 44 px, navegação funciona com rótulos e o
   layout passa em celular pequeno, celular grande, tablet e paisagem;
 - TypeScript, testes de domínio e export Android passam.
@@ -277,8 +278,9 @@ sincronização de conta, Open Finance, cloud de carteira ou publicação em loj
 local, importação B3 e os três primeiros incrementos da Etapa 5C chegaram ao
 preview `v0.5.2/11`. O Raul confirmou a instalação desse APK em 2026-08-31;
 gates físicos permanecem parciais e pausados. A revisão guiada da semana
-`v0.5.3` foi concluída localmente e está documentada na seção 24; o próximo
-incremento de utilidade ainda precisa ser escolhido.
+`v0.5.3` e o laboratório educacional `v0.5.4`–`v0.5.6` foram concluídos
+localmente e estão documentados nas seções 24 a 27. O próximo incremento de
+utilidade ainda precisa ser escolhido.
 
 ## 6. Arquitetura
 
@@ -1213,3 +1215,92 @@ abaixo de 44 px.
 Nenhum Maestro ou gate físico foi executado. O preview instalado continua sendo
 o `v0.5.2/11`; BI-04 a BI-13, CL-11 a CL-13, DB-10 a DB-12 e E2E Android/iOS
 permanecem pausados e pendentes.
+
+## 25. Etapa 5C, incremento 5 — “Quanto vira?” `v0.5.4`
+
+### Decisão de produto em 2026-08-31
+
+O Raul identificou que o app estava tecnicamente sólido, mas ainda exigia
+conhecimento prévio para saber o que explorar. A próxima utilidade deve começar
+por uma pergunta reconhecível para iniciantes e permitir brincar com números
+sem tocar carteira, produto ou motor de mercado.
+
+### Escopo fechado
+
+1. receber valor inicial, aporte mensal, taxa efetiva anual e prazo;
+2. converter a taxa anual para equivalente mensal e considerar aportes ao fim
+   de cada mês;
+3. separar valor final, capital colocado e juros do cenário;
+4. mostrar marcos de evolução com rótulos e valores, sem depender apenas de cor;
+5. oferecer inflação somente sob ação explícita, sem misturá-la ao resultado
+   nominal;
+6. manter os valores apenas na sessão e respeitar o modo discreto.
+
+### Estado da execução
+
+**Implementado no corte consolidado de 2026-08-31.** `moneyLab.ts` concentra a
+aritmética pura; `MoneyLabPanel.tsx` abre Cenários com um exemplo fictício,
+editável e imediatamente responsivo. Taxa constante é apresentada como
+hipótese mecânica, nunca como retorno esperado, promessa ou taxa indicada. Este
+marco lógico corresponde a `v0.5.4`, Android `versionCode 13` e iOS
+`buildNumber 13`; não houve build EAS intermediário.
+
+## 26. Etapa 5C, incremento 6 — meta e tempo `v0.5.5`
+
+### Escopo fechado
+
+1. inverter a mesma fórmula para responder quanto aportar por mês até uma meta;
+2. impedir aporte negativo quando o valor inicial já alcançaria a meta na
+   hipótese;
+3. comparar começar agora com esperar um, três ou cinco anos;
+4. manter o valor inicial parado e pular aportes durante a espera, deixando essa
+   convenção explícita;
+5. não transformar a meta calculada em plano financeiro ou garantia.
+
+### Estado da execução
+
+**Implementado no mesmo corte consolidado.**
+`calculateRequiredMonthlyContribution` e `compareDelayedStart` reutilizam a
+taxa mensal equivalente do incremento anterior e não acessam carteira,
+snapshot, storage ou rede. Este marco lógico corresponde a `v0.5.5`, Android
+`versionCode 14` e iOS `buildNumber 14`; não houve build EAS intermediário.
+
+## 27. Etapa 5C, incremento 7 — inflação, hábito e intuição `v0.5.6`
+
+### Escopo fechado
+
+1. traduzir o valor final para dinheiro do início usando inflação escolhida
+   pela pessoa;
+2. converter um valor diário, semanal ou mensal para equivalente médio mensal,
+   sem classificar o hábito como certo ou errado;
+3. pedir um palpite antes de comparar +1 p.p. de taxa com +R$ 150 de aporte
+   mensal sobre a mesma base;
+4. explicar que o vencedor depende dos números e não torna mais taxa possível,
+   adequada ou preferível;
+5. manter as cinco perguntas sob revelação progressiva, com feedback de toque,
+   campos controlados e alvos mínimos de 44 px.
+
+### Fora de escopo dos três incrementos
+
+- alterar motores Python, fórmulas já aprovadas, cofre, importador B3,
+  persistências ou snapshot público `v1`;
+- consultar taxa, carteira, produto ou fonte externa para preencher hipóteses;
+- adicionar dependência, rede, telemetria, recomendação, promessa, produto,
+  ordem, autenticação, Open Finance ou Embedded;
+- rodar Maestro automaticamente ou inferir aprovação física.
+
+### Gate consolidado
+
+O app termina em `v0.5.6`, Android `versionCode 15` e iOS `buildNumber 15`.
+Passaram `npm run typecheck`, 51 testes de domínio, 16 de componentes, 4
+contratos E2E e `npm run export:android`; o bundle Android/Hermes possui 653
+módulos. As cinco perguntas, a inflação opcional e a revelação do desafio foram
+percorridas em 375×812, 430×932, 768×1024 e 844×390. Documento, body e painel
+mantiveram a largura do viewport, e nenhum alvo interativo visível ficou abaixo
+de 44 px.
+
+O primeiro export e a primeira abertura do Playwright reproduziram,
+respectivamente, `spawn EPERM` e `WinError 5` dentro do sandbox; ambos passaram
+fora dele sem mudança de código. Nenhum preview EAS, Maestro ou gate físico foi
+executado. O preview instalado continua sendo `v0.5.2/11`; BI-04 a BI-13,
+CL-11 a CL-13, DB-10 a DB-12 e E2E Android/iOS permanecem pausados e pendentes.

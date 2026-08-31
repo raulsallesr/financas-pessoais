@@ -2,7 +2,7 @@
   "expo": {
     "name": "FocusLens BR",
     "slug": "focuslens-br",
-    "version": "0.5.3",
+    "version": "0.5.6",
     "orientation": "default",
     "scheme": "focuslens",
     "icon": "./assets/focuslens-icon.png",
@@ -11,12 +11,12 @@
     "primaryColor": "#0F766E",
     "ios": {
       "bundleIdentifier": "com.raulsallesr.focuslens",
-      "buildNumber": "12",
+      "buildNumber": "15",
       "supportsTablet": true
     },
     "android": {
       "package": "com.raulsallesr.focuslens",
-      "versionCode": 12,
+      "versionCode": 15,
       "adaptiveIcon": {
         "backgroundColor": "#E7F1EE",
         "foregroundImage": "./assets/focuslens-foreground.png",

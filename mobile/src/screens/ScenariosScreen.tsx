@@ -11,6 +11,10 @@ import {
 import { ContributionSimulatorPanel } from "../components/ContributionSimulatorPanel";
 import { ImpactCard } from "../components/ImpactCard";
 import {
+  MoneyLabPanel,
+  MoneyLabSession,
+} from "../components/MoneyLabPanel";
+import {
   AmountVisibilityButton,
   Eyebrow,
   PortfolioModePill,
@@ -54,6 +58,8 @@ export function ScenariosScreen({
   onShockChange,
   portfolioMode,
   hideAmounts,
+  moneyLabSession,
+  onMoneyLabSessionChange,
   onToggleAmounts,
   reviewContext,
 }: {
@@ -62,6 +68,8 @@ export function ScenariosScreen({
   onShockChange: (value: number) => void;
   portfolioMode: PortfolioPresentationMode;
   hideAmounts: boolean;
+  moneyLabSession: MoneyLabSession;
+  onMoneyLabSessionChange: (session: MoneyLabSession) => void;
   onToggleAmounts: () => void;
   reviewContext?: {
     signalLabel: string;
@@ -114,6 +122,17 @@ export function ScenariosScreen({
           </Pressable>
         </Surface>
       ) : null}
+
+      <MoneyLabPanel
+        hideAmounts={hideAmounts}
+        onSessionChange={onMoneyLabSessionChange}
+        session={moneyLabSession}
+      />
+
+      <SectionHeading
+        title="Agora, toque sua carteira"
+        support="Estas duas experiências usam somente posições e efeitos já carregados no aparelho."
+      />
 
       <ContributionSimulatorPanel
         hideAmounts={hideAmounts}

@@ -1,6 +1,7 @@
 import { render, screen, userEvent } from "@testing-library/react-native";
 
 import { demoSnapshot } from "../../src/data/demoSnapshot";
+import { createMoneyLabSession } from "../../src/components/MoneyLabPanel";
 import { ScenariosScreen } from "../../src/screens/ScenariosScreen";
 import testIds from "../../src/testing/testIds.json";
 
@@ -11,6 +12,8 @@ describe("ScenariosScreen", () => {
     await render(
       <ScenariosScreen
         hideAmounts={false}
+        moneyLabSession={createMoneyLabSession()}
+        onMoneyLabSessionChange={jest.fn()}
         onShockChange={onShockChange}
         onToggleAmounts={jest.fn()}
         portfolioMode="demo"
@@ -20,6 +23,7 @@ describe("ScenariosScreen", () => {
     );
 
     expect(screen.getByTestId(testIds.screens.scenarios)).toBeTruthy();
+    expect(screen.getByText("Brinque com números antes de olhar produtos")).toBeTruthy();
     expect(screen.getByText("E se eu aportar nesta classe?")).toBeTruthy();
     expect(screen.getByText("E se os juros mudarem?")).toBeTruthy();
 
@@ -38,6 +42,8 @@ describe("ScenariosScreen", () => {
     await render(
       <ScenariosScreen
         hideAmounts={false}
+        moneyLabSession={createMoneyLabSession()}
+        onMoneyLabSessionChange={jest.fn()}
         onShockChange={onShockChange}
         onToggleAmounts={jest.fn()}
         portfolioMode="demo"
