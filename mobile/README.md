@@ -160,10 +160,10 @@ nem alvo visível abaixo de 44 px. Isso é evidência local; não substitui os
 gates físicos pausados.
 
 Os checklists físicos continuam preservados, porém pausados por decisão de
-produto enquanto a utilidade melhora. O escopo entregue está nas seções 24 a 34 de
+produto enquanto a utilidade melhora. O escopo entregue está nas seções 24 a 35 de
 [`PLANO_FOCUSLENS.md`](../PLANO_FOCUSLENS.md).
 
-## Laboratório do dinheiro `v0.5.4` a `v0.6.3`
+## Laboratório do dinheiro `v0.5.4` a `v0.6.4`
 
 O laboratório abre a aba Cenários por perguntas que uma pessoa iniciante
 consegue reconhecer antes de entrar na leitura da carteira:
@@ -194,7 +194,9 @@ consegue reconhecer antes de entrar na leitura da carteira:
 10. **A vida acontece (`v0.6.2`)** — compara o aporte fixo com aumento anual e
     uma pausa opcional no meio do prazo, separando aportes feitos e pulados;
 11. **Parcelado sem mistério (`v0.6.3`)** — soma as parcelas, compara com o
-    preço à vista e traduz o custo implícito sem escolher a forma de pagamento.
+    preço à vista e traduz o custo implícito sem escolher a forma de pagamento;
+12. **Quanto tempo dura? (`v0.6.4`)** — simula retiradas ao fim de cada mês,
+    mostra até onde o saldo chega e oferece reajuste anual opcional da retirada.
 
 Desde `v0.6.1`, Cenários começa por três intenções e mostra somente uma família
 do laboratório por vez. Isso reduz a tela inicial sem remover ferramentas. A
@@ -233,16 +235,16 @@ interativo visível ficou abaixo de 44 px. A validação continua local; TalkBac
 texto ampliado e os gates físicos seguem pendentes. Nenhum preview EAS ou
 Maestro foi executado para `v0.5.7`–`v0.6.0`.
 
-O corte atual é `v0.6.3`, Android `versionCode 22` e iOS `buildNumber 22`.
-`v0.6.1/20` e `v0.6.2/21` são marcos lógicos sem build EAS intermediário.
-Passaram TypeScript, 66 testes de domínio, 30 de componentes, 4 contratos E2E
-e o export Android/Hermes com 656 módulos. As três famílias, o plano flexível e
-o parcelamento foram percorridos em 375×812, 430×932, 768×1024 e 844×390 com
+O corte atual é `v0.6.4`, Android `versionCode 23` e iOS `buildNumber 23`.
+Passaram TypeScript, 70 testes de domínio, 33 de componentes, 4 contratos E2E
+e o export Android/Hermes com 656 módulos. As três famílias e as três contas de
+vida real foram percorridas em 375×812, 430×932, 768×1024 e 844×390 com
 movimento reduzido, sem overflow horizontal ou alvo interativo visível abaixo
-de 44 px. O primeiro export e o primeiro Playwright reproduziram os bloqueios
-conhecidos `spawn EPERM` e `WinError 5` no sandbox; ambos passaram fora dele,
-sem mudança de código. Nenhum preview EAS, Maestro ou gate físico foi executado
-para `v0.6.1`–`v0.6.3`.
+de 44 px. A inflação opcional e a parte inferior do resultado também foram
+inspecionadas. O primeiro export e o primeiro Playwright reproduziram os
+bloqueios conhecidos `spawn EPERM` e `WinError 5` no sandbox; ambos passaram
+fora dele, sem mudança funcional. Nenhum preview EAS, Maestro ou gate físico
+foi executado para `v0.6.1`–`v0.6.4`.
 
 ## Como atualizar a fotografia pública
 
@@ -424,7 +426,7 @@ arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
 O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
 2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador por
-classe, revisão guiada e o laboratório educacional formam a `v0.6.3`; os
+classe, revisão guiada e o laboratório educacional formam a `v0.6.4`; os
 fluxos E2E nativos ainda aguardam execução. Os gates de importação, TalkBack,
 texto ampliado e alvos de toque continuam pausados e pendentes. A Etapa 6 e a
 camada institucional não foram antecipadas.

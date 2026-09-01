@@ -1,15 +1,15 @@
 # CONTEXT — Finanças Pessoais
 
 > Fonte de verdade operacional curta para retomada. Não é changelog.
-> O histórico detalhado está no Git e nas seções 24–34 de `PLANO_FOCUSLENS.md`.
+> O histórico detalhado está no Git e nas seções 24–35 de `PLANO_FOCUSLENS.md`.
 > O último handoff extenso, anterior a esta condensação, está no commit `54382df`.
 
 ## Estado em uma tela
 
 - Produto: **FocusLens BR**, educacional e privado. `mobile/` é a interface
   principal; o app Streamlit permanece como referência funcional.
-- Branch: `main`. Corte funcional: commit `ba5854d`, mobile `v0.6.3`, Android
-  `versionCode 22`, iOS `buildNumber 22`.
+- Branch: `main`. Corte funcional: mobile `v0.6.4`, Android `versionCode 23`,
+  iOS `buildNumber 23`.
 - Entrega atual: revisão semanal opcional e laboratório do dinheiro organizados
   por intenção, com estado somente na sessão.
 - Preview realmente instalado: `v0.5.2`, build `11`, EAS
@@ -107,7 +107,7 @@ Git da raiz do hub.
 - A ida a Cenários preserva o que já estava digitado, não preenche hipótese e
   permite voltar ao encerramento da revisão.
 
-### Laboratório do dinheiro `v0.5.4`–`v0.6.3`
+### Laboratório do dinheiro `v0.5.4`–`v0.6.4`
 
 As experiências estão agrupadas por três intenções — começar do zero, enxergar
 o caminho e testar situações da vida real — com uma família visível por vez:
@@ -121,17 +121,18 @@ o caminho e testar situações da vida real — com uma família visível por ve
 - comparação completa entre capital, aportes, juros, inflação e custo hipotético;
 - plano flexível com aumento anual e pausa de aportes;
 - à vista × parcelado, incluindo taxa implícita somente quando ela existe.
+- duração de um saldo sob retiradas mensais, com reajuste anual opcional.
 
 Convenções completas, fórmulas, limites e evidências de cada incremento estão
-nas seções 24–34 de `PLANO_FOCUSLENS.md` e em
+nas seções 24–35 de `PLANO_FOCUSLENS.md` e em
 `docs/ARQUITETURA_MOBILE.md`.
 
-## Evidência automatizada do corte `ba5854d`
+## Evidência automatizada do corte `v0.6.4/23`
 
 Executado em 2026-09-01:
 
 - `npm run typecheck`: aprovado;
-- `npm test`: 66 testes de domínio, 30 de componentes e 4 contratos E2E;
+- `npm test`: 70 testes de domínio, 33 de componentes e 4 contratos E2E;
 - `npm run export:android`: aprovado, bundle Android/Hermes com 656 módulos;
 - viewports 375×812, 430×932, 768×1024 e 844×390: sem overflow horizontal e
   sem alvo interativo visível abaixo de 44 px, inclusive com movimento reduzido.
@@ -141,7 +142,7 @@ dentro do sandbox e passaram em execução isolada/fora dele sem mudança de
 código. Trate-os primeiro como ruído do Windows/OneDrive, não como motivo para
 afrouxar gates.
 
-Não houve preview EAS, Maestro, ADB nem avaliação física para `v0.5.3`–`v0.6.3`.
+Não houve preview EAS, Maestro, ADB nem avaliação física para `v0.5.3`–`v0.6.4`.
 
 ## Estado físico e toolchain
 
@@ -195,7 +196,7 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 ## Próxima decisão
 
 - O usuário quer **mais melhorias de produto antes da bateria física**.
-- Nenhum incremento posterior a `v0.6.3` está escolhido. Não inventar uma etapa
+- Nenhum incremento posterior a `v0.6.4` está escolhido. Não inventar uma etapa
   como se estivesse aprovada; propor ou selecionar a próxima utilidade com base
   em clareza para iniciantes e motivo recorrente para voltar.
 - Priorizar perguntas reconhecíveis, resposta em poucos segundos e profundidade
@@ -219,7 +220,7 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 > `git status --short --branch` e `git stash list`, e leia `CLAUDE.md`,
 > `CONTEXT.md`, `PLANO_FOCUSLENS.md`, `mobile/README.md` e
 > `docs/ARQUITETURA_MOBILE.md`. Preserve os três stashes documentados. O corte
-> funcional é `ba5854d`, mobile `v0.6.3/22`; o preview instalado continua
+> funcional é mobile `v0.6.4/23`; o preview instalado continua
 > `v0.5.2/11`, sem verificação ADB nem avaliação física. Continue melhorias de
 > produto para iniciantes antes da bateria física, sem escolher silenciosamente
 > uma etapa não aprovada. Preserve quatro abas, Home pessoal, distinção demo ×

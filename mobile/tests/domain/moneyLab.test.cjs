@@ -19,6 +19,7 @@ const {
   simulateExtraContribution,
   simulateFlexibleContributionPlan,
   simulateHabitRedirect,
+  simulateWithdrawalLongevity,
 } = require("../../.test-dist/domain/moneyLab.js");
 
 test("converte taxa anual efetiva e separa aportes de juros compostos", () => {
@@ -432,5 +433,83 @@ test("parcelamento que não supera o à vista não inventa taxa positiva", () =>
         installmentCount: 1,
       }),
     /entre 2 e 60 parcelas/,
+  );
+});
+
+test("retirada sem rendimento esgota o saldo no mês exato", () => {
+  const result = simulateWithdrawalLongevity({
+    initialAmount: 12_000,
+    monthlyWithdrawal: 1_000,
+    annualRatePercent: 0,
+    annualWithdrawalIncreasePercent: 0,
+    years: 2,
+  });
+
+  assert.equal(result.exhaustedAtMonth, 12);
+  assert.equal(result.monthsCovered, 12);
+  assert.equal(result.finalBalance, 0);
+  assert.equal(result.totalWithdrawn, 12_000);
+  assert.equal(result.growthEarned, 0);
+  assert.equal(result.timeline.at(-1).month, 12);
+});
+
+test("rendimento hipotético estende a duração sem virar promessa", () => {
+  const result = simulateWithdrawalLongevity({
+    initialAmount: 12_000,
+    monthlyWithdrawal: 1_000,
+    annualRatePercent: 12,
+    annualWithdrawalIncreasePercent: 0,
+    years: 3,
+  });
+
+  assert.ok(result.exhaustedAtMonth > 12);
+  assert.ok(result.growthEarned > 0);
+  assert.equal(result.finalBalance, 0);
+});
+
+test("reajuste anual aumenta a retirada somente após doze meses", () => {
+  const fixed = simulateWithdrawalLongevity({
+    initialAmount: 24_000,
+    monthlyWithdrawal: 1_000,
+    annualRatePercent: 0,
+    annualWithdrawalIncreasePercent: 0,
+    years: 2,
+  });
+  const adjusted = simulateWithdrawalLongevity({
+    initialAmount: 24_000,
+    monthlyWithdrawal: 1_000,
+    annualRatePercent: 0,
+    annualWithdrawalIncreasePercent: 100,
+    years: 2,
+  });
+
+  assert.equal(fixed.exhaustedAtMonth, 24);
+  assert.equal(adjusted.exhaustedAtMonth, 18);
+  assert.equal(adjusted.finalScheduledMonthlyWithdrawal, 2_000);
+});
+
+test("saldo que não zera permanece limitado ao horizonte escolhido", () => {
+  const result = simulateWithdrawalLongevity({
+    initialAmount: 100_000,
+    monthlyWithdrawal: 100,
+    annualRatePercent: 10,
+    annualWithdrawalIncreasePercent: 0,
+    years: 5,
+  });
+
+  assert.equal(result.exhaustedAtMonth, null);
+  assert.equal(result.monthsCovered, 60);
+  assert.equal(result.timeline.at(-1).month, 60);
+  assert.ok(result.finalBalance > result.initialAmount);
+  assert.throws(
+    () =>
+      simulateWithdrawalLongevity({
+        initialAmount: 100_000,
+        monthlyWithdrawal: 100,
+        annualRatePercent: 10,
+        annualWithdrawalIncreasePercent: 201,
+        years: 5,
+      }),
+    /entre 0% e 200%/,
   );
 });

@@ -123,7 +123,7 @@ describe("MoneyLifePanel", () => {
     expect(screen.queryByText("Sem taxa positiva")).toBeNull();
   });
 
-  test("modo discreto mascara valores nas duas experiências", async () => {
+  test("modo discreto mascara valores em todas as experiências", async () => {
     const user = userEvent.setup();
     await render(<Harness hideAmounts />);
 
@@ -143,5 +143,81 @@ describe("MoneyLifePanel", () => {
       screen.getByTestId(testIds.moneyLab.life.installmentInput).props
         .secureTextEntry,
     ).toBe(true);
+
+    await user.press(screen.getByTestId(testIds.moneyLab.life.tools.longevity));
+    expect(
+      screen.getByTestId(testIds.moneyLab.life.withdrawalInitialInput).props
+        .secureTextEntry,
+    ).toBe(true);
+    expect(
+      screen.getByTestId(testIds.moneyLab.life.withdrawalMonthlyInput).props
+        .secureTextEntry,
+    ).toBe(true);
+  });
+
+  test("mostra por quanto tempo o saldo atravessa as retiradas", async () => {
+    const user = userEvent.setup();
+    await render(<Harness />);
+
+    await user.press(screen.getByTestId(testIds.moneyLab.life.tools.longevity));
+
+    expect(screen.getByText("FÔLEGO DO CENÁRIO")).toBeTruthy();
+    expect(screen.getByText("Como o saldo atravessa o tempo")).toBeTruthy();
+    expect(screen.getByText("Total retirado")).toBeTruthy();
+    expect(screen.getByText("Crescimento creditado")).toBeTruthy();
+    expect(
+      screen.getByText(
+        "A retirada fica nominalmente igual durante todo o horizonte.",
+      ),
+    ).toBeTruthy();
+  });
+
+  test("revela o reajuste anual somente quando solicitado", async () => {
+    const user = userEvent.setup();
+    await render(<Harness />);
+
+    await user.press(screen.getByTestId(testIds.moneyLab.life.tools.longevity));
+    const toggle = screen.getByTestId(
+      testIds.moneyLab.life.withdrawalInflationToggle,
+    );
+    expect(toggle.props.accessibilityState).toEqual({ checked: false });
+    expect(
+      screen.queryByTestId(testIds.moneyLab.life.withdrawalInflationInput),
+    ).toBeNull();
+
+    await user.press(toggle);
+
+    expect(
+      screen.getByTestId(testIds.moneyLab.life.withdrawalInflationToggle).props
+        .accessibilityState,
+    ).toEqual({ checked: true });
+    expect(
+      screen.getByTestId(testIds.moneyLab.life.withdrawalInflationInput),
+    ).toBeTruthy();
+    expect(screen.getByText(/A retirada aumenta 4,5%/)).toBeTruthy();
+  });
+
+  test("valida retirada inválida somente depois de concluir o campo", async () => {
+    const invalidSession = {
+      ...createMoneyLabSession(),
+      lifeTool: "longevity" as const,
+      withdrawalMonthlyText: "0",
+    };
+    await render(<Harness initialSession={invalidSession} />);
+
+    expect(screen.queryByTestId(testIds.moneyLab.life.result)).toBeNull();
+    expect(
+      screen.queryByText("Informe uma retirada mensal positiva."),
+    ).toBeNull();
+
+    await fireEvent(
+      screen.getByTestId(testIds.moneyLab.life.withdrawalMonthlyInput),
+      "blur",
+    );
+    await waitFor(() =>
+      expect(
+        screen.getByText("Informe uma retirada mensal positiva."),
+      ).toBeTruthy(),
+    );
   });
 });

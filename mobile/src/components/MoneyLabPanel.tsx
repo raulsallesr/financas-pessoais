@@ -43,7 +43,7 @@ export type MoneyLabExpansionTool =
 
 export type MoneyLabSection = "basics" | "explore" | "life";
 
-export type MoneyLifeTool = "flexible" | "installments";
+export type MoneyLifeTool = "flexible" | "installments" | "longevity";
 
 export type MoneyLabSession = {
   section: MoneyLabSection;
@@ -74,6 +74,12 @@ export type MoneyLabSession = {
   cashPriceText: string;
   installmentAmountText: string;
   installmentCount: number;
+  withdrawalInitialAmountText: string;
+  withdrawalMonthlyText: string;
+  withdrawalAnnualRateText: string;
+  withdrawalYearsText: string;
+  withdrawalInflationText: string;
+  adjustWithdrawalForInflation: boolean;
 };
 
 export function createMoneyLabSession(): MoneyLabSession {
@@ -106,6 +112,12 @@ export function createMoneyLabSession(): MoneyLabSession {
     cashPriceText: "2400",
     installmentAmountText: "240",
     installmentCount: 12,
+    withdrawalInitialAmountText: "100000",
+    withdrawalMonthlyText: "2000",
+    withdrawalAnnualRateText: "8",
+    withdrawalYearsText: "20",
+    withdrawalInflationText: "4,5",
+    adjustWithdrawalForInflation: false,
   };
 }
 

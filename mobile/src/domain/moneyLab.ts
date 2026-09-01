@@ -136,6 +136,30 @@ export type InstallmentComparison = {
   impliedAnnualRatePercent: number | null;
 };
 
+export type WithdrawalCheckpoint = {
+  month: number;
+  balance: number;
+  totalWithdrawn: number;
+  growthEarned: number;
+  scheduledMonthlyWithdrawal: number;
+};
+
+export type WithdrawalLongevityProjection = {
+  initialAmount: number;
+  monthlyWithdrawal: number;
+  annualRatePercent: number;
+  annualWithdrawalIncreasePercent: number;
+  years: number;
+  horizonMonths: number;
+  exhaustedAtMonth: number | null;
+  monthsCovered: number;
+  finalBalance: number;
+  totalWithdrawn: number;
+  growthEarned: number;
+  finalScheduledMonthlyWithdrawal: number;
+  timeline: readonly WithdrawalCheckpoint[];
+};
+
 function assertAmount(value: number, label: string, allowZero: boolean): void {
   const validMinimum = allowZero ? value >= 0 : value > 0;
   if (
@@ -820,5 +844,98 @@ export function compareCashAndInstallments({
     impliedMonthlyRatePercent: impliedMonthlyRate * 100,
     impliedAnnualRatePercent:
       (Math.pow(1 + impliedMonthlyRate, MONTHS_PER_YEAR) - 1) * 100,
+  };
+}
+
+export function simulateWithdrawalLongevity({
+  initialAmount,
+  monthlyWithdrawal,
+  annualRatePercent,
+  annualWithdrawalIncreasePercent,
+  years,
+}: {
+  initialAmount: number;
+  monthlyWithdrawal: number;
+  annualRatePercent: number;
+  annualWithdrawalIncreasePercent: number;
+  years: number;
+}): WithdrawalLongevityProjection {
+  assertAmount(initialAmount, "O saldo inicial", false);
+  assertAmount(monthlyWithdrawal, "A retirada mensal", false);
+  assertRate(annualRatePercent);
+  assertRate(
+    annualWithdrawalIncreasePercent,
+    "O reajuste anual da retirada",
+  );
+  assertYears(years);
+
+  const horizonMonths = years * MONTHS_PER_YEAR;
+  const monthlyRate = effectiveMonthlyRate(annualRatePercent);
+  const annualWithdrawalFactor = 1 + annualWithdrawalIncreasePercent / 100;
+  const checkpointMonths = new Set(
+    timelineYears(years).map((year) => year * MONTHS_PER_YEAR),
+  );
+  const timeline: WithdrawalCheckpoint[] = [];
+  let balance = initialAmount;
+  let totalWithdrawn = 0;
+  let growthEarned = 0;
+  let scheduledMonthlyWithdrawal = monthlyWithdrawal;
+  let exhaustedAtMonth: number | null = null;
+
+  for (let month = 1; month <= horizonMonths; month += 1) {
+    if (month > 1 && (month - 1) % MONTHS_PER_YEAR === 0) {
+      scheduledMonthlyWithdrawal *= annualWithdrawalFactor;
+    }
+
+    const monthlyGrowth = balance * monthlyRate;
+    balance += monthlyGrowth;
+    growthEarned += monthlyGrowth;
+    const actualWithdrawal = Math.min(balance, scheduledMonthlyWithdrawal);
+    balance -= actualWithdrawal;
+    totalWithdrawn += actualWithdrawal;
+
+    if (
+      !Number.isFinite(balance) ||
+      !Number.isFinite(totalWithdrawn) ||
+      !Number.isFinite(growthEarned) ||
+      !Number.isFinite(scheduledMonthlyWithdrawal)
+    ) {
+      throw new Error("A combinação informada ultrapassa o limite da simulação.");
+    }
+
+    if (balance <= 0.005) {
+      balance = 0;
+      exhaustedAtMonth = month;
+    }
+
+    if (checkpointMonths.has(month) || exhaustedAtMonth !== null) {
+      timeline.push({
+        month,
+        balance,
+        totalWithdrawn,
+        growthEarned,
+        scheduledMonthlyWithdrawal,
+      });
+    }
+
+    if (exhaustedAtMonth !== null) {
+      break;
+    }
+  }
+
+  return {
+    initialAmount,
+    monthlyWithdrawal,
+    annualRatePercent,
+    annualWithdrawalIncreasePercent,
+    years,
+    horizonMonths,
+    exhaustedAtMonth,
+    monthsCovered: exhaustedAtMonth ?? horizonMonths,
+    finalBalance: balance,
+    totalWithdrawn,
+    growthEarned,
+    finalScheduledMonthlyWithdrawal: scheduledMonthlyWithdrawal,
+    timeline,
   };
 }

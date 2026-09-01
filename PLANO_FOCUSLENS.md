@@ -278,9 +278,10 @@ sincronização de conta, Open Finance, cloud de carteira ou publicação em loj
 local, importação B3 e os três primeiros incrementos da Etapa 5C chegaram ao
 preview `v0.5.2/11`. O Raul confirmou a instalação desse APK em 2026-08-31;
 gates físicos permanecem parciais e pausados. A revisão guiada da semana
-`v0.5.3` e o laboratório educacional `v0.5.4`–`v0.6.3` foram concluídos
-localmente e estão documentados nas seções 24 a 34. O corte atual organiza
-Cenários por intenção e inclui aportes variáveis e parcelamento educacional.
+`v0.5.3` e o laboratório educacional `v0.5.4`–`v0.6.4` foram concluídos
+localmente e estão documentados nas seções 24 a 35. O corte atual organiza
+Cenários por intenção e inclui aportes variáveis, parcelamento e duração de um
+saldo sob retiradas mensais.
 
 ## 6. Arquitetura
 
@@ -1492,3 +1493,59 @@ respectivamente, `spawn EPERM` e `WinError 5` dentro do sandbox; ambos passaram
 fora dele sem mudança de código. Nenhum preview EAS, Maestro ou gate físico foi
 executado. O preview instalado continua sendo `v0.5.2/11`; BI-04 a BI-13,
 CL-11 a CL-13, DB-10 a DB-12 e E2E Android/iOS permanecem pausados e pendentes.
+
+## 35. Etapa 5C, incremento 15 — dinheiro que dura `v0.6.4`
+
+### Decisão de produto em 2026-09-01
+
+As doze experiências originalmente propostas ao Raul já estavam cobertas até
+`v0.6.3`. A continuação deve acrescentar uma pergunta nova e reconhecível, não
+reembalar acumulação: quanto tempo um saldo atravessa retiradas mensais dentro
+de um horizonte escolhido.
+
+### Escopo fechado
+
+1. receber saldo inicial, retirada mensal, taxa efetiva anual e horizonte;
+2. converter a taxa anual para equivalente mensal, creditar o crescimento e
+   realizar a retirada ao fim de cada mês;
+3. mostrar mês de esgotamento ou saldo remanescente, total retirado, crescimento
+   creditado e marcos dentro do horizonte;
+4. oferecer reajuste anual da retirada somente sob ação explícita, usando uma
+   inflação escolhida pela pessoa;
+5. declarar que a faixa de fôlego representa duração mecânica dentro do
+   horizonte, não probabilidade ou retirada segura;
+6. manter ferramenta, valores e opção avançada somente na `MoneyLabSession`.
+
+### Fora de escopo
+
+- ler carteira, snapshot, produto, instituição, renda ou expectativa de vida;
+- prever retorno, inflação, imposto, volatilidade ou mudança futura de gastos;
+- recomendar retirada, produto ou estratégia;
+- alterar motores Python, snapshot público `v1`, cofre, importador B3 ou
+  persistências existentes;
+- adicionar dependência, rede, telemetria, autenticação, Open Finance ou
+  Embedded;
+- executar Maestro ou inferir aprovação física.
+
+### Estado da execução e gate
+
+**Implementado localmente em 2026-09-01.** `simulateWithdrawalLongevity` é um
+laço mensal puro: aplica a taxa mensal equivalente, retira no fim do mês e,
+quando solicitado, reajusta a retirada depois de cada doze meses completos. A
+linha do tempo reutiliza somente entradas da sessão e não acessa provider,
+carteira ou storage.
+
+O app termina em `v0.6.4`, Android `versionCode 23` e iOS `buildNumber 23`.
+Passaram `npm run typecheck`, 70 testes de domínio, 33 de componentes, 4
+contratos E2E e `npm run export:android`; o bundle Android/Hermes possui 656
+módulos. A jornada, inclusive inflação opcional, foi percorrida em 375×812,
+430×932, 768×1024 e 844×390 com movimento reduzido. Documento, body e painel
+mantiveram a largura do viewport, e nenhum controle visível ficou abaixo de
+44 px. A inspeção visual corrigiu uma folga excessiva do campo opcional antes
+do gate final.
+
+O export e o Playwright reproduziram, respectivamente, `spawn EPERM` e
+`WinError 5` dentro do sandbox e passaram fora dele sem mudança funcional.
+Nenhum preview EAS, Maestro ou gate físico foi executado. O preview instalado
+continua `v0.5.2/11`; BI-04 a BI-13, CL-11 a CL-13, DB-10 a DB-12 e E2E
+Android/iOS permanecem pausados e pendentes.

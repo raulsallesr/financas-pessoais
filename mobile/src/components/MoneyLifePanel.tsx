@@ -14,6 +14,7 @@ import {
   CompoundGrowthInput,
   MONEY_LAB_LIMITS,
   simulateFlexibleContributionPlan,
+  simulateWithdrawalLongevity,
 } from "../domain/moneyLab";
 import { parsePositionAmount } from "../domain/privatePortfolio";
 import testIds from "../testing/testIds.json";
@@ -28,7 +29,12 @@ type FieldKey =
   | "years"
   | "increase"
   | "cash"
-  | "installment";
+  | "installment"
+  | "withdrawalInitial"
+  | "withdrawalMonthly"
+  | "withdrawalRate"
+  | "withdrawalYears"
+  | "withdrawalInflation";
 
 type FieldErrors = Partial<Record<FieldKey, string>>;
 
@@ -52,6 +58,13 @@ const tools: readonly {
     title: "Parcelado sem mistério",
     support: "Preço à vista, total e custo implícito.",
     testID: testIds.moneyLab.life.tools.installments,
+  },
+  {
+    key: "longevity",
+    index: "12",
+    title: "Quanto tempo dura?",
+    support: "Retiradas, rendimento e inflação.",
+    testID: testIds.moneyLab.life.tools.longevity,
   },
 ];
 
@@ -139,6 +152,21 @@ function formatSignedCurrency(value: number, hidden: boolean): string {
     return formatCurrency(Math.abs(value), hidden);
   }
   return `${value > 0 ? "+" : "−"}${formatCurrency(Math.abs(value), false)}`;
+}
+
+function formatDuration(months: number): string {
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+  const parts: string[] = [];
+  if (years > 0) {
+    parts.push(`${years} ${years === 1 ? "ano" : "anos"}`);
+  }
+  if (remainingMonths > 0) {
+    parts.push(
+      `${remainingMonths} ${remainingMonths === 1 ? "mês" : "meses"}`,
+    );
+  }
+  return parts.join(" e ") || "menos de um mês";
 }
 
 function NumericField({
@@ -573,6 +601,286 @@ export function MoneyLifePanel({
     );
   }
 
+  function renderLongevity() {
+    const initialAmount = parseMoney(
+      session.withdrawalInitialAmountText,
+      false,
+    );
+    const monthlyWithdrawal = parseMoney(session.withdrawalMonthlyText, false);
+    const annualRatePercent = parseLocalizedNumber(
+      session.withdrawalAnnualRateText,
+    );
+    const years = parseYears(session.withdrawalYearsText);
+    const inflationRate = parseLocalizedNumber(
+      session.withdrawalInflationText,
+    );
+    const errors: FieldErrors = {};
+
+    if (initialAmount === null) {
+      errors.withdrawalInitial = "Informe um saldo inicial positivo.";
+    }
+    if (monthlyWithdrawal === null) {
+      errors.withdrawalMonthly = "Informe uma retirada mensal positiva.";
+    }
+    if (
+      annualRatePercent === null ||
+      annualRatePercent < 0 ||
+      annualRatePercent > MONEY_LAB_LIMITS.maxAnnualRatePercent
+    ) {
+      errors.withdrawalRate = "Use uma taxa entre 0% e 200% ao ano.";
+    }
+    if (years === null || years < 1 || years > MONEY_LAB_LIMITS.maxYears) {
+      errors.withdrawalYears = "Use um horizonte entre 1 e 50 anos inteiros.";
+    }
+    if (
+      session.adjustWithdrawalForInflation &&
+      (inflationRate === null ||
+        inflationRate < 0 ||
+        inflationRate > MONEY_LAB_LIMITS.maxAnnualRatePercent)
+    ) {
+      errors.withdrawalInflation = "Use um reajuste entre 0% e 200% ao ano.";
+    }
+
+    const result =
+      Object.keys(errors).length === 0
+        ? simulateWithdrawalLongevity({
+            initialAmount: initialAmount!,
+            monthlyWithdrawal: monthlyWithdrawal!,
+            annualRatePercent: annualRatePercent!,
+            annualWithdrawalIncreasePercent:
+              session.adjustWithdrawalForInflation ? inflationRate! : 0,
+            years: years!,
+          })
+        : null;
+    const coveragePercent = result
+      ? Math.min(100, (result.monthsCovered / result.horizonMonths) * 100)
+      : 0;
+
+    return (
+      <View style={styles.toolBody}>
+        <View style={styles.toolHeading}>
+          <Eyebrow>v0.6.4 · Dinheiro que dura</Eyebrow>
+          <Text accessibilityRole="header" style={styles.toolTitle}>
+            Se eu retirar todo mês, até quando o dinheiro aguenta?
+          </Text>
+          <Text style={styles.toolSupport}>
+            Escolha saldo, retirada, taxa e horizonte. A conta credita o
+            rendimento primeiro e faz a retirada no fim de cada mês.
+          </Text>
+        </View>
+
+        <View style={styles.fieldGrid}>
+          <NumericField
+            error={visibleError(
+              "withdrawalInitial",
+              errors.withdrawalInitial,
+            )}
+            hiddenAmount={hideAmounts}
+            label="Saldo inicial"
+            onBlur={() => touch("withdrawalInitial")}
+            onChangeText={(value) =>
+              patch({ withdrawalInitialAmountText: value })
+            }
+            suffix="R$"
+            testID={testIds.moneyLab.life.withdrawalInitialInput}
+            value={session.withdrawalInitialAmountText}
+          />
+          <NumericField
+            error={visibleError(
+              "withdrawalMonthly",
+              errors.withdrawalMonthly,
+            )}
+            hiddenAmount={hideAmounts}
+            label="Retirada por mês"
+            onBlur={() => touch("withdrawalMonthly")}
+            onChangeText={(value) => patch({ withdrawalMonthlyText: value })}
+            suffix="R$"
+            testID={testIds.moneyLab.life.withdrawalMonthlyInput}
+            value={session.withdrawalMonthlyText}
+          />
+          <NumericField
+            error={visibleError("withdrawalRate", errors.withdrawalRate)}
+            label="Taxa efetiva anual"
+            onBlur={() => touch("withdrawalRate")}
+            onChangeText={(value) => patch({ withdrawalAnnualRateText: value })}
+            suffix="% a.a."
+            testID={testIds.moneyLab.life.withdrawalRateInput}
+            value={session.withdrawalAnnualRateText}
+          />
+          <NumericField
+            error={visibleError("withdrawalYears", errors.withdrawalYears)}
+            label="Horizonte da conta"
+            onBlur={() => touch("withdrawalYears")}
+            onChangeText={(value) => patch({ withdrawalYearsText: value })}
+            suffix="anos"
+            testID={testIds.moneyLab.life.withdrawalYearsInput}
+            value={session.withdrawalYearsText}
+          />
+        </View>
+
+        <Pressable
+          accessibilityHint="Aumenta a retirada uma vez por ano pela taxa informada"
+          accessibilityRole="switch"
+          accessibilityState={{
+            checked: session.adjustWithdrawalForInflation,
+          }}
+          onPress={() =>
+            patch({
+              adjustWithdrawalForInflation:
+                !session.adjustWithdrawalForInflation,
+            })
+          }
+          style={({ pressed }) => [
+            styles.toggleCard,
+            session.adjustWithdrawalForInflation && styles.toggleCardSelected,
+            pressed && styles.pressed,
+          ]}
+          testID={testIds.moneyLab.life.withdrawalInflationToggle}
+        >
+          <View style={styles.toggleCopy}>
+            <Text style={styles.toggleTitle}>Reajustar a retirada todo ano</Text>
+            <Text style={styles.toggleSupport}>
+              Opcional: simula a retirada acompanhando uma inflação escolhida.
+            </Text>
+          </View>
+          <View
+            accessibilityElementsHidden
+            style={[
+              styles.switchTrack,
+              session.adjustWithdrawalForInflation && styles.switchTrackSelected,
+            ]}
+          >
+            <View
+              style={[
+                styles.switchThumb,
+                session.adjustWithdrawalForInflation && styles.switchThumbSelected,
+              ]}
+            />
+          </View>
+        </Pressable>
+
+        {session.adjustWithdrawalForInflation ? (
+          <View style={styles.fieldGrid}>
+            <NumericField
+              error={visibleError(
+                "withdrawalInflation",
+                errors.withdrawalInflation,
+              )}
+              label="Reajuste anual da retirada"
+              onBlur={() => touch("withdrawalInflation")}
+              onChangeText={(value) => patch({ withdrawalInflationText: value })}
+              suffix="% a.a."
+              testID={testIds.moneyLab.life.withdrawalInflationInput}
+              value={session.withdrawalInflationText}
+            />
+          </View>
+        ) : null}
+
+        {result ? (
+          <View
+            accessibilityLiveRegion="polite"
+            style={styles.result}
+            testID={testIds.moneyLab.life.result}
+          >
+            <View style={styles.resultHero}>
+              <Text style={styles.resultEyebrow}>FÔLEGO DO CENÁRIO</Text>
+              <Text style={styles.resultHeroValue}>
+                {result.exhaustedAtMonth === null
+                  ? `${result.years} anos sem zerar`
+                  : formatDuration(result.exhaustedAtMonth)}
+              </Text>
+              <Text style={styles.resultHeroSupport}>
+                {result.exhaustedAtMonth === null
+                  ? `${formatCurrency(result.finalBalance, hideAmounts)} permanece no fim do horizonte escolhido.`
+                  : `O saldo chega a zero durante a retirada do mês ${result.exhaustedAtMonth}.`}
+              </Text>
+            </View>
+
+            <View
+              accessibilityLabel={`Cobertura simulada: ${formatDuration(result.monthsCovered)} de ${formatDuration(result.horizonMonths)}.`}
+              style={styles.breathBlock}
+            >
+              <View style={styles.breathLabels}>
+                <Text style={styles.breathLabel}>Hoje</Text>
+                <Text style={styles.breathLabel}>
+                  {formatDuration(result.horizonMonths)}
+                </Text>
+              </View>
+              <View style={styles.breathTrack}>
+                <View
+                  style={[
+                    styles.breathFill,
+                    { width: `${coveragePercent}%` },
+                  ]}
+                />
+              </View>
+              <Text style={styles.breathSupport}>
+                A faixa mostra até onde o saldo chegou dentro do horizonte, não
+                uma probabilidade de duração.
+              </Text>
+            </View>
+
+            <View style={styles.metrics}>
+              <Metric
+                emphasis
+                label="Total retirado"
+                value={formatCurrency(result.totalWithdrawn, hideAmounts)}
+              />
+              <Metric
+                label="Crescimento creditado"
+                value={formatCurrency(result.growthEarned, hideAmounts)}
+              />
+              <Metric
+                label="Saldo no último marco"
+                value={formatCurrency(result.finalBalance, hideAmounts)}
+              />
+              <Metric
+                label="Retirada mensal no último ano"
+                value={formatCurrency(
+                  result.finalScheduledMonthlyWithdrawal,
+                  hideAmounts,
+                )}
+              />
+            </View>
+
+            <View style={styles.timelineBlock}>
+              <Text style={styles.timelineTitle}>Como o saldo atravessa o tempo</Text>
+              {result.timeline.map((point) => (
+                <View key={point.month} style={styles.timelineRow}>
+                  <View style={styles.timelineCopy}>
+                    <Text style={styles.timelinePeriod}>
+                      {point.month % 12 === 0
+                        ? `Ano ${point.month / 12}`
+                        : `Mês ${point.month}`}
+                    </Text>
+                    <Text style={styles.timelineMeta}>
+                      {formatCurrency(point.totalWithdrawn, hideAmounts)} retirado
+                    </Text>
+                  </View>
+                  <Text style={styles.timelineBalance}>
+                    {formatCurrency(point.balance, hideAmounts)}
+                  </Text>
+                </View>
+              ))}
+            </View>
+
+            <Text style={styles.inlineNote}>
+              {result.annualWithdrawalIncreasePercent > 0
+                ? `A retirada aumenta ${formatPercent(result.annualWithdrawalIncreasePercent)} a cada 12 meses completos.`
+                : "A retirada fica nominalmente igual durante todo o horizonte."}
+            </Text>
+            <ResultGuardrail>
+              Taxa e inflação constantes são hipóteses. Imposto, volatilidade,
+              produto, mudança de gastos, novas entradas e o tempo real que o
+              dinheiro precisa cobrir ficam fora; este resultado não define uma
+              retirada segura.
+            </ResultGuardrail>
+          </View>
+        ) : null}
+      </View>
+    );
+  }
+
   return (
     <Surface style={styles.panel} testID={testIds.moneyLab.life.panel}>
       <View style={styles.heading}>
@@ -581,7 +889,7 @@ export function MoneyLifePanel({
           Traga a vida real para a brincadeira
         </Text>
         <Text style={styles.support}>
-          Duas contas curtas, locais e editáveis. Nenhuma delas lê ou altera sua
+          Três contas curtas, locais e editáveis. Nenhuma delas lê ou altera sua
           carteira.
         </Text>
         {hideAmounts ? (
@@ -626,6 +934,7 @@ export function MoneyLifePanel({
       </View>
       {session.lifeTool === "flexible" ? renderFlexible() : null}
       {session.lifeTool === "installments" ? renderInstallments() : null}
+      {session.lifeTool === "longevity" ? renderLongevity() : null}
     </Surface>
   );
 }
@@ -744,6 +1053,41 @@ const styles = StyleSheet.create({
   },
   chipText: { color: colors.textMuted, fontSize: 12, fontWeight: "800" },
   chipTextSelected: { color: colors.primaryDark },
+  toggleCard: {
+    alignItems: "center",
+    backgroundColor: colors.surfaceMuted,
+    borderColor: colors.border,
+    borderRadius: radius.sm,
+    borderWidth: 1,
+    flexDirection: "row",
+    gap: spacing.md,
+    justifyContent: "space-between",
+    minHeight: 64,
+    padding: spacing.sm,
+  },
+  toggleCardSelected: {
+    backgroundColor: colors.primarySoft,
+    borderColor: colors.primary,
+  },
+  toggleCopy: { flex: 1, gap: 3 },
+  toggleTitle: { color: colors.text, fontSize: 13, fontWeight: "900" },
+  toggleSupport: { color: colors.textMuted, fontSize: 11, lineHeight: 16 },
+  switchTrack: {
+    backgroundColor: colors.border,
+    borderRadius: radius.pill,
+    height: 28,
+    justifyContent: "center",
+    paddingHorizontal: 3,
+    width: 50,
+  },
+  switchTrackSelected: { backgroundColor: colors.primary },
+  switchThumb: {
+    backgroundColor: colors.surface,
+    borderRadius: radius.pill,
+    height: 22,
+    width: 22,
+  },
+  switchThumbSelected: { alignSelf: "flex-end" },
   result: { gap: spacing.md },
   resultHero: {
     backgroundColor: colors.primaryDark,
@@ -806,6 +1150,50 @@ const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 18,
     padding: spacing.sm,
+  },
+  breathBlock: {
+    backgroundColor: colors.surfaceMuted,
+    borderRadius: radius.sm,
+    gap: spacing.xs,
+    padding: spacing.sm,
+  },
+  breathLabels: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  breathLabel: { color: colors.text, fontSize: 11, fontWeight: "800" },
+  breathTrack: {
+    backgroundColor: colors.border,
+    borderRadius: radius.pill,
+    height: 12,
+    overflow: "hidden",
+  },
+  breathFill: {
+    backgroundColor: colors.primary,
+    borderRadius: radius.pill,
+    height: "100%",
+  },
+  breathSupport: { color: colors.textMuted, fontSize: 10, lineHeight: 15 },
+  timelineBlock: { gap: spacing.xs },
+  timelineTitle: { color: colors.text, fontSize: 13, fontWeight: "900" },
+  timelineRow: {
+    alignItems: "center",
+    borderBottomColor: colors.border,
+    borderBottomWidth: 1,
+    flexDirection: "row",
+    gap: spacing.sm,
+    justifyContent: "space-between",
+    minHeight: 54,
+    paddingVertical: spacing.xs,
+  },
+  timelineCopy: { flex: 1, gap: 2 },
+  timelinePeriod: { color: colors.text, fontSize: 12, fontWeight: "800" },
+  timelineMeta: { color: colors.textMuted, fontSize: 10 },
+  timelineBalance: {
+    color: colors.primaryDark,
+    fontSize: 14,
+    fontVariant: ["tabular-nums"],
+    fontWeight: "900",
   },
   guardrail: {
     backgroundColor: colors.goldSoft,

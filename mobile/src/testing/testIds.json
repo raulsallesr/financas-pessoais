@@ -73,9 +73,16 @@
       "yearsInput": "money-life-years-input",
       "cashInput": "money-life-cash-input",
       "installmentInput": "money-life-installment-input",
+      "withdrawalInitialInput": "money-life-withdrawal-initial-input",
+      "withdrawalMonthlyInput": "money-life-withdrawal-monthly-input",
+      "withdrawalRateInput": "money-life-withdrawal-rate-input",
+      "withdrawalYearsInput": "money-life-withdrawal-years-input",
+      "withdrawalInflationToggle": "money-life-withdrawal-inflation-toggle",
+      "withdrawalInflationInput": "money-life-withdrawal-inflation-input",
       "tools": {
         "flexible": "money-life-tool-flexible",
-        "installments": "money-life-tool-installments"
+        "installments": "money-life-tool-installments",
+        "longevity": "money-life-tool-longevity"
       }
     },
     "expansion": {

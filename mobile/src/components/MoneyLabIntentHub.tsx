@@ -30,7 +30,7 @@ const intentions: readonly {
     key: "life",
     index: "03",
     title: "Quero testar a vida real",
-    support: "Aportes que mudam, pausas e compras parceladas.",
+    support: "Aportes que mudam, compras parceladas e retiradas.",
     testID: testIds.moneyLab.sections.life,
   },
 ];

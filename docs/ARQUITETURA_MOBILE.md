@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.6.3`
+## Estado do corte `mobile v0.6.4`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -214,7 +214,7 @@ TypeScript, 42 testes de domínio, 10 de componentes, 4 contratos E2E e o bundle
 Android/Hermes com 651 módulos passaram; os quatro viewports canônicos ficaram
 sem overflow ou alvo visível abaixo de 44 px.
 
-### Laboratório do dinheiro `v0.5.4`–`v0.6.3`
+### Laboratório do dinheiro `v0.5.4`–`v0.6.4`
 
 `moneyLab.ts` é um domínio puro e independente dos motores Python. Ele recebe
 somente números digitados no laboratório e usa a taxa efetiva anual informada
@@ -314,10 +314,17 @@ mensal que iguala o valor presente de parcelas ao fim de cada mês ao preço à
 vista. O equivalente anual é efetivo. Quando o total parcelado não é maior, as
 taxas retornam `null` em vez de inventar custo positivo.
 
-`MoneyLifePanel` apresenta essas duas contas sem acessar carteira, snapshot ou
-provider. Entradas, família, pausa e quantidade de parcelas vivem na mesma
-sessão efêmera. O cálculo de parcelamento não recomenda pagamento nem modela
-tarifas, atraso, limite, inflação ou uso alternativo do dinheiro.
+O marco `v0.6.4` adiciona `simulateWithdrawalLongevity`. O laço converte a taxa
+efetiva anual para equivalente mensal, credita o crescimento e realiza a
+retirada no fim de cada mês. Quando a opção avançada está ligada, a retirada é
+reajustada depois de cada doze meses completos. A função para no esgotamento ou
+no horizonte de 1 a 50 anos e devolve no máximo cinco marcos de saldo.
+
+`MoneyLifePanel` apresenta essas três contas sem acessar carteira, snapshot ou
+provider. Entradas, família, pausa, parcelas, retiradas e inflação opcional
+vivem na mesma sessão efêmera. Parcelamento não recomenda pagamento; duração do
+saldo não define retirada segura. Tarifas, atraso, limite, imposto, volatilidade
+e mudanças futuras de renda ou gastos ficam fora.
 
 O corte consolidado `v0.6.3/22` passou por TypeScript, 66 testes de domínio, 30
 de componentes, 4 contratos E2E e export Android/Hermes com 656 módulos. As
@@ -325,6 +332,13 @@ três famílias e as duas ferramentas cotidianas foram percorridas em 375×812,
 430×932, 768×1024 e 844×390 com movimento reduzido, sem overflow horizontal ou
 alvo interativo visível abaixo de 44 px. `v0.6.1/20` e `v0.6.2/21` não receberam
 build EAS intermediário. Nenhum Maestro ou gate físico foi executado.
+
+O corte `v0.6.4/23` passou por TypeScript, 70 testes de domínio, 33 de
+componentes, 4 contratos E2E e export Android/Hermes com 656 módulos. A terceira
+ferramenta cotidiana, inclusive inflação opcional, foi percorrida em 375×812,
+430×932, 768×1024 e 844×390 com movimento reduzido. Documento, body e painel
+mantiveram a largura do viewport; nenhum controle visível ficou abaixo de 44 px.
+Nenhum preview EAS, Maestro ou gate físico foi executado.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -498,8 +512,10 @@ build atual.
     opcional, sem dívida ou reposição automática;
 23. **implementado localmente em `v0.6.3`:** comparação à vista/parcelado e taxa
     implícita sob convenção explícita;
-24. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
-25. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+24. **implementado localmente em `v0.6.4`:** duração de saldo sob retiradas
+    mensais e reajuste anual opcional, somente na sessão;
+25. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
+26. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 
