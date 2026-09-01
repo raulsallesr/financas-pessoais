@@ -15,6 +15,8 @@ import {
   MoneyLabSession,
 } from "../components/MoneyLabPanel";
 import { MoneyLabExpansionPanel } from "../components/MoneyLabExpansionPanel";
+import { MoneyLabIntentHub } from "../components/MoneyLabIntentHub";
+import { MoneyLifePanel } from "../components/MoneyLifePanel";
 import {
   AmountVisibilityButton,
   Eyebrow,
@@ -124,17 +126,34 @@ export function ScenariosScreen({
         </Surface>
       ) : null}
 
-      <MoneyLabPanel
-        hideAmounts={hideAmounts}
+      <MoneyLabIntentHub
         onSessionChange={onMoneyLabSessionChange}
         session={moneyLabSession}
       />
 
-      <MoneyLabExpansionPanel
-        hideAmounts={hideAmounts}
-        onSessionChange={onMoneyLabSessionChange}
-        session={moneyLabSession}
-      />
+      {moneyLabSession.section === "basics" ? (
+        <MoneyLabPanel
+          hideAmounts={hideAmounts}
+          onSessionChange={onMoneyLabSessionChange}
+          session={moneyLabSession}
+        />
+      ) : null}
+
+      {moneyLabSession.section === "explore" ? (
+        <MoneyLabExpansionPanel
+          hideAmounts={hideAmounts}
+          onSessionChange={onMoneyLabSessionChange}
+          session={moneyLabSession}
+        />
+      ) : null}
+
+      {moneyLabSession.section === "life" ? (
+        <MoneyLifePanel
+          hideAmounts={hideAmounts}
+          onSessionChange={onMoneyLabSessionChange}
+          session={moneyLabSession}
+        />
+      ) : null}
 
       <SectionHeading
         title="Agora, toque sua carteira"

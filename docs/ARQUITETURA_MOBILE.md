@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.6.0`
+## Estado do corte `mobile v0.6.3`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -214,7 +214,7 @@ TypeScript, 42 testes de domínio, 10 de componentes, 4 contratos E2E e o bundle
 Android/Hermes com 651 módulos passaram; os quatro viewports canônicos ficaram
 sem overflow ou alvo visível abaixo de 44 px.
 
-### Laboratório do dinheiro `v0.5.4`–`v0.6.0`
+### Laboratório do dinheiro `v0.5.4`–`v0.6.3`
 
 `moneyLab.ts` é um domínio puro e independente dos motores Python. Ele recebe
 somente números digitados no laboratório e usa a taxa efetiva anual informada
@@ -297,6 +297,34 @@ quatro trilhas novas foram percorridas em 375×812, 430×932, 768×1024 e 844×3
 sem overflow horizontal ou alvo interativo visível abaixo de 44 px. Os marcos
 `v0.5.7/16`, `v0.5.8/17` e `v0.5.9/18` não receberam builds EAS intermediários.
 Nenhum Maestro ou gate físico foi executado.
+
+O marco `v0.6.1` reduz a densidade sem criar navegação nova.
+`MoneyLabIntentHub` grava em `MoneyLabSession` uma das famílias `basics`,
+`explore` ou `life`; `ScenariosScreen` renderiza somente o painel escolhido.
+As ferramentas preservadas continuam sendo os mesmos componentes e contratos.
+
+O marco `v0.6.2` adiciona `simulateFlexibleContributionPlan`. A função recebe a
+mesma `CompoundGrowthInput`, aplica o aumento escolhido ao aporte no início de
+cada ano e zera apenas os meses da pausa. A comparação base continua vindo de
+`simulateCompoundGrowth`; aporte pulado não é acumulado como dívida nem reposto.
+
+O marco `v0.6.3` adiciona `compareCashAndInstallments`. A função soma parcelas e,
+somente quando o total supera o preço à vista, resolve por busca binária a taxa
+mensal que iguala o valor presente de parcelas ao fim de cada mês ao preço à
+vista. O equivalente anual é efetivo. Quando o total parcelado não é maior, as
+taxas retornam `null` em vez de inventar custo positivo.
+
+`MoneyLifePanel` apresenta essas duas contas sem acessar carteira, snapshot ou
+provider. Entradas, família, pausa e quantidade de parcelas vivem na mesma
+sessão efêmera. O cálculo de parcelamento não recomenda pagamento nem modela
+tarifas, atraso, limite, inflação ou uso alternativo do dinheiro.
+
+O corte consolidado `v0.6.3/22` passou por TypeScript, 66 testes de domínio, 30
+de componentes, 4 contratos E2E e export Android/Hermes com 656 módulos. As
+três famílias e as duas ferramentas cotidianas foram percorridas em 375×812,
+430×932, 768×1024 e 844×390 com movimento reduzido, sem overflow horizontal ou
+alvo interativo visível abaixo de 44 px. `v0.6.1/20` e `v0.6.2/21` não receberam
+build EAS intermediário. Nenhum Maestro ou gate físico foi executado.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -464,8 +492,14 @@ build atual.
 19. **implementado localmente em `v0.5.9`:** caminho da reserva sem rendimento;
 20. **implementado localmente em `v0.6.0`:** comparação de aporte, inflação e
     custo anual hipotético sob revelação progressiva;
-21. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
-22. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+21. **implementado localmente em `v0.6.1`:** seletor por intenção e uma família
+    do laboratório por vez;
+22. **implementado localmente em `v0.6.2`:** aporte com aumento anual e pausa
+    opcional, sem dívida ou reposição automática;
+23. **implementado localmente em `v0.6.3`:** comparação à vista/parcelado e taxa
+    implícita sob convenção explícita;
+24. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
+25. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 

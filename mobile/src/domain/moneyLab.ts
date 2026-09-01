@@ -115,6 +115,27 @@ export type AnnualCostComparison = {
   difference: number;
 };
 
+export type FlexibleContributionPlan = {
+  annualIncreasePercent: number;
+  pauseStartMonth: number;
+  pauseMonths: number;
+  base: CompoundGrowthProjection;
+  flexible: ProjectionPoint;
+  finalScheduledMonthlyContribution: number;
+  skippedContributions: number;
+  difference: number;
+};
+
+export type InstallmentComparison = {
+  cashPrice: number;
+  installmentAmount: number;
+  installmentCount: number;
+  installmentTotal: number;
+  difference: number;
+  impliedMonthlyRatePercent: number | null;
+  impliedAnnualRatePercent: number | null;
+};
+
 function assertAmount(value: number, label: string, allowZero: boolean): void {
   const validMinimum = allowZero ? value >= 0 : value > 0;
   if (
@@ -626,5 +647,178 @@ export function compareAnnualCostDrag(
     beforeCost,
     afterCost,
     difference: Math.max(0, beforeCost.futureValue - afterCost.futureValue),
+  };
+}
+
+export function simulateFlexibleContributionPlan({
+  input,
+  annualIncreasePercent,
+  pauseStartMonth,
+  pauseMonths,
+}: {
+  input: CompoundGrowthInput;
+  annualIncreasePercent: number;
+  pauseStartMonth: number;
+  pauseMonths: number;
+}): FlexibleContributionPlan {
+  validateGrowthInput(input);
+  assertRate(annualIncreasePercent, "O reajuste anual do aporte");
+  const totalMonths = input.years * MONTHS_PER_YEAR;
+  if (
+    !Number.isInteger(pauseStartMonth) ||
+    pauseStartMonth < 1 ||
+    pauseStartMonth > totalMonths
+  ) {
+    throw new Error("O início da pausa deve ficar dentro do prazo do cenário.");
+  }
+  if (!Number.isInteger(pauseMonths) || pauseMonths < 0 || pauseMonths > 12) {
+    throw new Error("A pausa deve ficar entre zero e doze meses inteiros.");
+  }
+
+  const base = simulateCompoundGrowth(input);
+  const monthlyRate = effectiveMonthlyRate(input.annualRatePercent);
+  const annualIncreaseFactor = 1 + annualIncreasePercent / 100;
+  let futureValue = input.initialAmount;
+  let totalContributed = input.initialAmount;
+  let skippedContributions = 0;
+  let finalScheduledMonthlyContribution = input.monthlyContribution;
+
+  for (let month = 1; month <= totalMonths; month += 1) {
+    futureValue *= 1 + monthlyRate;
+    const contributionYear = Math.floor((month - 1) / MONTHS_PER_YEAR);
+    const scheduledContribution =
+      input.monthlyContribution *
+      Math.pow(annualIncreaseFactor, contributionYear);
+    finalScheduledMonthlyContribution = scheduledContribution;
+    const paused =
+      pauseMonths > 0 &&
+      month >= pauseStartMonth &&
+      month < pauseStartMonth + pauseMonths;
+    if (paused) {
+      skippedContributions += scheduledContribution;
+    } else {
+      futureValue += scheduledContribution;
+      totalContributed += scheduledContribution;
+    }
+  }
+
+  if (
+    !Number.isFinite(futureValue) ||
+    !Number.isFinite(totalContributed) ||
+    !Number.isFinite(finalScheduledMonthlyContribution)
+  ) {
+    throw new Error("A combinação informada ultrapassa o limite da simulação.");
+  }
+
+  const flexible: ProjectionPoint = {
+    year: input.years,
+    futureValue,
+    totalContributed,
+    interestEarned: Math.max(0, futureValue - totalContributed),
+  };
+  return {
+    annualIncreasePercent,
+    pauseStartMonth,
+    pauseMonths,
+    base,
+    flexible,
+    finalScheduledMonthlyContribution,
+    skippedContributions,
+    difference: flexible.futureValue - base.futureValue,
+  };
+}
+
+function installmentPresentValue(
+  installmentAmount: number,
+  installmentCount: number,
+  monthlyRate: number,
+): number {
+  if (monthlyRate === 0) {
+    return installmentAmount * installmentCount;
+  }
+  return (
+    installmentAmount *
+    ((1 - Math.pow(1 + monthlyRate, -installmentCount)) / monthlyRate)
+  );
+}
+
+export function compareCashAndInstallments({
+  cashPrice,
+  installmentAmount,
+  installmentCount,
+}: {
+  cashPrice: number;
+  installmentAmount: number;
+  installmentCount: number;
+}): InstallmentComparison {
+  assertAmount(cashPrice, "O preço à vista", false);
+  assertAmount(installmentAmount, "O valor da parcela", false);
+  if (
+    !Number.isInteger(installmentCount) ||
+    installmentCount < 2 ||
+    installmentCount > 60
+  ) {
+    throw new Error("A quantidade deve ficar entre 2 e 60 parcelas.");
+  }
+
+  const installmentTotal = installmentAmount * installmentCount;
+  if (!Number.isFinite(installmentTotal)) {
+    throw new Error("A combinação informada ultrapassa o limite da simulação.");
+  }
+  const difference = installmentTotal - cashPrice;
+  if (difference <= 0) {
+    return {
+      cashPrice,
+      installmentAmount,
+      installmentCount,
+      installmentTotal,
+      difference,
+      impliedMonthlyRatePercent: null,
+      impliedAnnualRatePercent: null,
+    };
+  }
+
+  let low = 0;
+  let high = 1;
+  let expansion = 0;
+  while (
+    installmentPresentValue(installmentAmount, installmentCount, high) >
+      cashPrice &&
+    expansion < 128
+  ) {
+    high *= 2;
+    expansion += 1;
+  }
+  if (
+    installmentPresentValue(installmentAmount, installmentCount, high) >
+    cashPrice
+  ) {
+    throw new Error("A combinação informada ultrapassa o limite da simulação.");
+  }
+  for (let iteration = 0; iteration < 120; iteration += 1) {
+    const midpoint = (low + high) / 2;
+    if (
+      installmentPresentValue(
+        installmentAmount,
+        installmentCount,
+        midpoint,
+      ) > cashPrice
+    ) {
+      low = midpoint;
+    } else {
+      high = midpoint;
+    }
+  }
+  const impliedMonthlyRate = (low + high) / 2;
+
+  return {
+    cashPrice,
+    installmentAmount,
+    installmentCount,
+    installmentTotal,
+    difference,
+    impliedMonthlyRatePercent: impliedMonthlyRate * 100,
+    impliedAnnualRatePercent:
+      (Math.pow(1 + impliedMonthlyRate, MONTHS_PER_YEAR) - 1) * 100,
   };
 }

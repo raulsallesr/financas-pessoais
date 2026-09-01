@@ -41,7 +41,12 @@ export type MoneyLabExpansionTool =
   | "reserve"
   | "complete";
 
+export type MoneyLabSection = "basics" | "explore" | "life";
+
+export type MoneyLifeTool = "flexible" | "installments";
+
 export type MoneyLabSession = {
+  section: MoneyLabSection;
   tool: MoneyLabTool;
   initialAmountText: string;
   monthlyContributionText: string;
@@ -63,10 +68,17 @@ export type MoneyLabSession = {
   reserveTargetMonths: number;
   showAnnualCost: boolean;
   annualCostText: string;
+  lifeTool: MoneyLifeTool;
+  annualContributionIncreaseText: string;
+  pauseMonths: number;
+  cashPriceText: string;
+  installmentAmountText: string;
+  installmentCount: number;
 };
 
 export function createMoneyLabSession(): MoneyLabSession {
   return {
+    section: "basics",
     tool: "growth",
     initialAmountText: "1000",
     monthlyContributionText: "300",
@@ -88,6 +100,12 @@ export function createMoneyLabSession(): MoneyLabSession {
     reserveTargetMonths: 6,
     showAnnualCost: false,
     annualCostText: "1",
+    lifeTool: "flexible",
+    annualContributionIncreaseText: "5",
+    pauseMonths: 6,
+    cashPriceText: "2400",
+    installmentAmountText: "240",
+    installmentCount: 12,
   };
 }
 

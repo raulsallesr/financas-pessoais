@@ -9,6 +9,7 @@ const {
   calculateRequiredMonthlyContribution,
   calculateReserveJourney,
   compareAnnualCostDrag,
+  compareCashAndInstallments,
   compareContributionImpact,
   compareDelayedStart,
   compareIntuitionChallenge,
@@ -16,6 +17,7 @@ const {
   monthlyEquivalentForHabit,
   simulateCompoundGrowth,
   simulateExtraContribution,
+  simulateFlexibleContributionPlan,
   simulateHabitRedirect,
 } = require("../../.test-dist/domain/moneyLab.js");
 
@@ -324,5 +326,111 @@ test("custo anual hipotético reduz a taxa efetiva sem virar tributo", () => {
         3,
       ),
     /menor ou igual/,
+  );
+});
+
+test("aporte crescente muda o valor agendado a cada ano", () => {
+  const result = simulateFlexibleContributionPlan({
+    input: {
+      initialAmount: 0,
+      monthlyContribution: 100,
+      annualRatePercent: 0,
+      years: 2,
+    },
+    annualIncreasePercent: 100,
+    pauseStartMonth: 12,
+    pauseMonths: 0,
+  });
+
+  assert.equal(result.base.futureValue, 2_400);
+  assert.equal(result.flexible.futureValue, 3_600);
+  assert.equal(result.flexible.totalContributed, 3_600);
+  assert.equal(result.finalScheduledMonthlyContribution, 200);
+  assert.equal(result.skippedContributions, 0);
+  assert.equal(result.difference, 1_200);
+});
+
+test("pausa pula aportes sem criar dívida ou reposição automática", () => {
+  const result = simulateFlexibleContributionPlan({
+    input: {
+      initialAmount: 0,
+      monthlyContribution: 100,
+      annualRatePercent: 0,
+      years: 2,
+    },
+    annualIncreasePercent: 0,
+    pauseStartMonth: 7,
+    pauseMonths: 3,
+  });
+
+  assert.equal(result.skippedContributions, 300);
+  assert.equal(result.flexible.totalContributed, 2_100);
+  assert.equal(result.flexible.futureValue, 2_100);
+  assert.equal(result.difference, -300);
+});
+
+test("plano flexível rejeita reajuste e pausa fora do contrato", () => {
+  const input = {
+    initialAmount: 1_000,
+    monthlyContribution: 100,
+    annualRatePercent: 10,
+    years: 2,
+  };
+
+  assert.throws(
+    () =>
+      simulateFlexibleContributionPlan({
+        input,
+        annualIncreasePercent: 201,
+        pauseStartMonth: 12,
+        pauseMonths: 3,
+      }),
+    /entre 0% e 200%/,
+  );
+  assert.throws(
+    () =>
+      simulateFlexibleContributionPlan({
+        input,
+        annualIncreasePercent: 5,
+        pauseStartMonth: 12,
+        pauseMonths: 13,
+      }),
+    /zero e doze meses/,
+  );
+});
+
+test("parcelamento soma o total e encontra a taxa implícita", () => {
+  const result = compareCashAndInstallments({
+    cashPrice: 2_400,
+    installmentAmount: 240,
+    installmentCount: 12,
+  });
+
+  assert.equal(result.installmentTotal, 2_880);
+  assert.equal(result.difference, 480);
+  assert.ok(result.impliedMonthlyRatePercent > 2);
+  assert.ok(result.impliedMonthlyRatePercent < 4);
+  assert.ok(result.impliedAnnualRatePercent > 30);
+});
+
+test("parcelamento que não supera o à vista não inventa taxa positiva", () => {
+  const result = compareCashAndInstallments({
+    cashPrice: 3_000,
+    installmentAmount: 240,
+    installmentCount: 12,
+  });
+
+  assert.equal(result.installmentTotal, 2_880);
+  assert.equal(result.difference, -120);
+  assert.equal(result.impliedMonthlyRatePercent, null);
+  assert.equal(result.impliedAnnualRatePercent, null);
+  assert.throws(
+    () =>
+      compareCashAndInstallments({
+        cashPrice: 2_400,
+        installmentAmount: 240,
+        installmentCount: 1,
+      }),
+    /entre 2 e 60 parcelas/,
   );
 });

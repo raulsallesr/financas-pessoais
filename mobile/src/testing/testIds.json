@@ -38,6 +38,7 @@
   },
   "moneyLab": {
     "panel": "money-lab-panel",
+    "intentHub": "money-lab-intent-hub",
     "result": "money-lab-result",
     "challengeResult": "money-lab-challenge-result",
     "initialInput": "money-lab-initial-input",
@@ -56,6 +57,26 @@
       "delay": "money-lab-tool-delay",
       "habit": "money-lab-tool-habit",
       "challenge": "money-lab-tool-challenge"
+    },
+    "sections": {
+      "basics": "money-lab-section-basics",
+      "explore": "money-lab-section-explore",
+      "life": "money-lab-section-life"
+    },
+    "life": {
+      "panel": "money-life-panel",
+      "result": "money-life-result",
+      "increaseInput": "money-life-increase-input",
+      "initialInput": "money-life-initial-input",
+      "monthlyInput": "money-life-monthly-input",
+      "rateInput": "money-life-rate-input",
+      "yearsInput": "money-life-years-input",
+      "cashInput": "money-life-cash-input",
+      "installmentInput": "money-life-installment-input",
+      "tools": {
+        "flexible": "money-life-tool-flexible",
+        "installments": "money-life-tool-installments"
+      }
     },
     "expansion": {
       "panel": "money-lab-expansion-panel",

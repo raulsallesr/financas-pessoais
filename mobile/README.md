@@ -160,10 +160,10 @@ nem alvo visível abaixo de 44 px. Isso é evidência local; não substitui os
 gates físicos pausados.
 
 Os checklists físicos continuam preservados, porém pausados por decisão de
-produto enquanto a utilidade melhora. O escopo entregue está nas seções 24 a 31 de
+produto enquanto a utilidade melhora. O escopo entregue está nas seções 24 a 34 de
 [`PLANO_FOCUSLENS.md`](../PLANO_FOCUSLENS.md).
 
-## Laboratório do dinheiro `v0.5.4` a `v0.6.0`
+## Laboratório do dinheiro `v0.5.4` a `v0.6.3`
 
 O laboratório abre a aba Cenários por perguntas que uma pessoa iniciante
 consegue reconhecer antes de entrar na leitura da carteira:
@@ -190,7 +190,15 @@ consegue reconhecer antes de entrar na leitura da carteira:
    essencial e calcula o caminho mecânico para uma meta de três, seis ou doze
    meses, sem atribuir rendimento;
 9. **Compare completo (`v0.6.0`)** — põe sem aporte/com aporte lado a lado e
-   revela inflação e custo anual hipotético somente sob ação explícita.
+   revela inflação e custo anual hipotético somente sob ação explícita;
+10. **A vida acontece (`v0.6.2`)** — compara o aporte fixo com aumento anual e
+    uma pausa opcional no meio do prazo, separando aportes feitos e pulados;
+11. **Parcelado sem mistério (`v0.6.3`)** — soma as parcelas, compara com o
+    preço à vista e traduz o custo implícito sem escolher a forma de pagamento.
+
+Desde `v0.6.1`, Cenários começa por três intenções e mostra somente uma família
+do laboratório por vez. Isso reduz a tela inicial sem remover ferramentas. A
+intenção escolhida também pertence à `MoneyLabSession` e desaparece ao reiniciar.
 
 Em “Quanto vira?”, a inflação é um detalhe opcional: quando ligada, o app mostra
 também o valor futuro em dinheiro do início do cenário. A taxa anual é
@@ -214,7 +222,8 @@ interativo visível abaixo de 44 px. A inspeção é local; não substitui TalkB
 texto ampliado ou os demais gates físicos pausados. Nenhum preview EAS ou
 Maestro foi executado para estes três incrementos.
 
-O corte atual é `v0.6.0`, Android `versionCode 19` e iOS `buildNumber 19`.
+O segundo corte consolidado foi `v0.6.0`, Android `versionCode 19` e iOS
+`buildNumber 19`.
 `v0.5.7/16`, `v0.5.8/17` e `v0.5.9/18` são marcos lógicos do mesmo corte, sem
 build EAS intermediário. Passaram TypeScript, 61 testes de domínio, 22 de
 componentes, 4 contratos E2E e o export Android/Hermes com 654 módulos. As
@@ -223,6 +232,17 @@ documento, body e painel mantiveram a largura do viewport e nenhum alvo
 interativo visível ficou abaixo de 44 px. A validação continua local; TalkBack,
 texto ampliado e os gates físicos seguem pendentes. Nenhum preview EAS ou
 Maestro foi executado para `v0.5.7`–`v0.6.0`.
+
+O corte atual é `v0.6.3`, Android `versionCode 22` e iOS `buildNumber 22`.
+`v0.6.1/20` e `v0.6.2/21` são marcos lógicos sem build EAS intermediário.
+Passaram TypeScript, 66 testes de domínio, 30 de componentes, 4 contratos E2E
+e o export Android/Hermes com 656 módulos. As três famílias, o plano flexível e
+o parcelamento foram percorridos em 375×812, 430×932, 768×1024 e 844×390 com
+movimento reduzido, sem overflow horizontal ou alvo interativo visível abaixo
+de 44 px. O primeiro export e o primeiro Playwright reproduziram os bloqueios
+conhecidos `spawn EPERM` e `WinError 5` no sandbox; ambos passaram fora dele,
+sem mudança de código. Nenhum preview EAS, Maestro ou gate físico foi executado
+para `v0.6.1`–`v0.6.3`.
 
 ## Como atualizar a fotografia pública
 
@@ -360,9 +380,10 @@ classes não cobertas e linguagem não imperativa. A camada de componentes cobre
 navegação, validação, comparação, descarte de resultado obsoleto, modo discreto,
 coexistência entre aporte e sensibilidade e a revisão guiada com estados sem
 histórico ou sem efeito. Também cobre o laboratório, a inflação opcional, a
-navegação entre as cinco perguntas e o palpite antes do desafio. Os contratos
-E2E conferem app ID, seletores e ausência de dado pessoal. O bundle Android é
-gerado pelo Metro sem depender do Streamlit.
+navegação entre as famílias, o palpite antes do desafio, aportes crescentes,
+pausa sem reposição e parcelamento com ou sem taxa positiva implícita. Os
+contratos E2E conferem app ID, seletores e ausência de dado pessoal. O bundle
+Android é gerado pelo Metro sem depender do Streamlit.
 
 ## Estrutura
 
@@ -403,7 +424,7 @@ arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
 O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
 2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador por
-classe, revisão guiada e o laboratório educacional formam a `v0.6.0`; os
+classe, revisão guiada e o laboratório educacional formam a `v0.6.3`; os
 fluxos E2E nativos ainda aguardam execução. Os gates de importação, TalkBack,
 texto ampliado e alvos de toque continuam pausados e pendentes. A Etapa 6 e a
 camada institucional não foram antecipadas.

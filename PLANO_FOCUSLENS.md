@@ -278,9 +278,9 @@ sincronização de conta, Open Finance, cloud de carteira ou publicação em loj
 local, importação B3 e os três primeiros incrementos da Etapa 5C chegaram ao
 preview `v0.5.2/11`. O Raul confirmou a instalação desse APK em 2026-08-31;
 gates físicos permanecem parciais e pausados. A revisão guiada da semana
-`v0.5.3` e o laboratório educacional `v0.5.4`–`v0.6.0` foram concluídos
-localmente e estão documentados nas seções 24 a 31. O próximo incremento de
-utilidade ainda precisa ser escolhido depois deste corte.
+`v0.5.3` e o laboratório educacional `v0.5.4`–`v0.6.3` foram concluídos
+localmente e estão documentados nas seções 24 a 34. O corte atual organiza
+Cenários por intenção e inclui aportes variáveis e parcelamento educacional.
 
 ## 6. Arquitetura
 
@@ -1398,6 +1398,94 @@ contratos E2E e `npm run export:android`; o bundle Android/Hermes possui 654
 módulos. As quatro trilhas novas foram percorridas em 375×812, 430×932,
 768×1024 e 844×390. Documento, body e painel mantiveram a largura do viewport,
 e nenhum alvo interativo visível ficou abaixo de 44 px.
+
+O primeiro export e a primeira abertura do Playwright reproduziram,
+respectivamente, `spawn EPERM` e `WinError 5` dentro do sandbox; ambos passaram
+fora dele sem mudança de código. Nenhum preview EAS, Maestro ou gate físico foi
+executado. O preview instalado continua sendo `v0.5.2/11`; BI-04 a BI-13,
+CL-11 a CL-13, DB-10 a DB-12 e E2E Android/iOS permanecem pausados e pendentes.
+
+## 32. Etapa 5C, incremento 12 — Cenários por intenção `v0.6.1`
+
+### Decisão de produto em 2026-09-01
+
+Depois de nove caminhos educacionais, o problema deixou de ser falta de
+conteúdo e passou a ser orientação. Empilhar mais painéis faria uma pessoa
+iniciante escolher pela posição na tela, não pela pergunta que deseja responder.
+
+### Escopo fechado
+
+1. abrir Cenários com três intenções reconhecíveis: começar do zero, enxergar o
+   caminho e testar situações da vida real;
+2. mostrar somente uma família do laboratório por vez, sem remover nenhuma das
+   experiências existentes;
+3. preservar a família e todos os valores ao trocar de aba, somente na sessão;
+4. manter aporte por classe e sensibilidade da carteira como blocos separados;
+5. manter as quatro abas, feedback de toque, rótulos e alvos mínimos de 44 px.
+
+### Estado da execução
+
+**Implementado localmente em 2026-09-01.** `MoneyLabIntentHub` controla apenas
+qual família é apresentada. `MoneyLabPanel`, `MoneyLabExpansionPanel` e a nova
+família cotidiana continuam recebendo a mesma `MoneyLabSession` de `App.tsx`.
+Nenhuma rota, persistência ou navegação de primeiro nível foi criada. Este marco
+lógico corresponde a `v0.6.1`, Android `versionCode 20` e iOS `buildNumber 20`;
+não houve build EAS intermediário.
+
+## 33. Etapa 5C, incremento 13 — plano que respira `v0.6.2`
+
+### Escopo fechado
+
+1. comparar o aporte mensal fixo com um aporte que aumenta uma porcentagem a
+   cada ano;
+2. permitir uma pausa opcional de zero, três, seis ou doze meses no meio do
+   prazo, sem transformar aportes pulados em dívida ou reposição automática;
+3. separar valor final, total colocado, juros, aportes pulados e aporte mensal
+   previsto no último ano;
+4. manter a mesma taxa efetiva anual informada pela pessoa e a convenção de
+   aporte ao fim do mês;
+5. declarar renda, capacidade futura e continuidade como limites da conta.
+
+### Estado da execução
+
+**Implementado no mesmo corte consolidado.**
+`simulateFlexibleContributionPlan` executa um laço mensal puro, aplica o aumento
+no início de cada ano e zera apenas os aportes dentro da pausa. O resultado é
+comparado com `simulateCompoundGrowth` sobre a mesma base. Este marco lógico
+corresponde a `v0.6.2`, Android `versionCode 21` e iOS `buildNumber 21`; não
+houve build EAS intermediário.
+
+## 34. Etapa 5C, incremento 14 — parcelado sem mistério `v0.6.3`
+
+### Escopo fechado
+
+1. receber preço à vista, valor de cada parcela e quantidade de parcelas;
+2. mostrar total parcelado e diferença literal contra o preço à vista;
+3. quando o parcelado custa mais, calcular a taxa mensal que iguala o valor
+   presente das parcelas ao preço à vista e seu equivalente anual efetivo;
+4. quando o parcelado não custa mais, não inventar uma taxa positiva;
+5. explicitar a convenção da primeira parcela em um mês e excluir tarifas,
+   atraso, limite, inflação e uso alternativo do dinheiro;
+6. não recomendar forma de pagamento, produto ou crédito.
+
+### Fora de escopo dos três incrementos
+
+- alterar motores Python, fórmulas financeiras existentes, snapshot público
+  `v1`, cofre, importador B3, carteira, histórico, favoritos ou persistências;
+- preencher valores com carteira, produto, instituição ou fonte externa;
+- adicionar dependência, rede, telemetria, retorno previsto, recomendação,
+  ordem, autenticação, Open Finance ou Embedded;
+- rodar Maestro automaticamente ou inferir aprovação física.
+
+### Gate consolidado
+
+O app termina em `v0.6.3`, Android `versionCode 22` e iOS `buildNumber 22`.
+Passaram `npm run typecheck`, 66 testes de domínio, 30 de componentes, 4
+contratos E2E e `npm run export:android`; o bundle Android/Hermes possui 656
+módulos. As três famílias, o plano flexível e o parcelamento foram percorridos
+em 375×812, 430×932, 768×1024 e 844×390 com movimento reduzido: documento,
+body e painel mantiveram a largura do viewport e nenhum alvo interativo visível
+ficou abaixo de 44 px.
 
 O primeiro export e a primeira abertura do Playwright reproduziram,
 respectivamente, `spawn EPERM` e `WinError 5` dentro do sandbox; ambos passaram
