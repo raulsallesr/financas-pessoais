@@ -15,13 +15,13 @@ test("configura um development build Android instalável", () => {
   const packageJson = readJson("package.json");
 
   assert.equal(app.orientation, "default");
-  assert.equal(app.version, "0.5.6");
-  assert.equal(packageJson.version, "0.5.6");
+  assert.equal(app.version, "0.6.0");
+  assert.equal(packageJson.version, "0.6.0");
   assert.equal(app.scheme, "focuslens");
   assert.equal(app.android.package, "com.raulsallesr.focuslens");
-  assert.equal(app.android.versionCode, 15);
+  assert.equal(app.android.versionCode, 19);
   assert.equal(app.ios.bundleIdentifier, "com.raulsallesr.focuslens");
-  assert.equal(app.ios.buildNumber, "15");
+  assert.equal(app.ios.buildNumber, "19");
   assert.equal(app.android.predictiveBackGestureEnabled, true);
   assert.equal(app.splash, undefined);
   assert.deepEqual(app.plugins[0], [

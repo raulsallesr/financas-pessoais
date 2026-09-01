@@ -160,10 +160,10 @@ nem alvo visível abaixo de 44 px. Isso é evidência local; não substitui os
 gates físicos pausados.
 
 Os checklists físicos continuam preservados, porém pausados por decisão de
-produto enquanto a utilidade melhora. O escopo entregue está nas seções 24 a 27 de
+produto enquanto a utilidade melhora. O escopo entregue está nas seções 24 a 31 de
 [`PLANO_FOCUSLENS.md`](../PLANO_FOCUSLENS.md).
 
-## Laboratório do dinheiro `v0.5.4` a `v0.5.6`
+## Laboratório do dinheiro `v0.5.4` a `v0.6.0`
 
 O laboratório abre a aba Cenários por perguntas que uma pessoa iniciante
 consegue reconhecer antes de entrar na leitura da carteira:
@@ -180,7 +180,17 @@ consegue reconhecer antes de entrar na leitura da carteira:
    ou mensal em equivalente médio por mês, sem classificar o gasto como certo
    ou errado;
 5. **O que pesa mais? (`v0.5.6`)** — pede um palpite antes de comparar mais
-   1 p.p. de taxa com mais R$ 150 por mês.
+   1 p.p. de taxa com mais R$ 150 por mês;
+6. **O poder do tempo (`v0.5.7`)** — calcula quando o valor inicial dobra com e
+   sem aportes, localiza R$ 10 mil, R$ 50 mil e R$ 100 mil e oferece uma régua
+   tocável de 1 a 50 anos com controles menos/mais;
+7. **Dinheiro que entra (`v0.5.8`)** — mostra a taxa mensal equivalente e o
+   efeito de um aporte extra hoje ou repetido ao fim de cada ano;
+8. **Minha segurança (`v0.5.9`)** — traduz reserva atual em meses de gasto
+   essencial e calcula o caminho mecânico para uma meta de três, seis ou doze
+   meses, sem atribuir rendimento;
+9. **Compare completo (`v0.6.0`)** — põe sem aporte/com aporte lado a lado e
+   revela inflação e custo anual hipotético somente sob ação explícita.
 
 Em “Quanto vira?”, a inflação é um detalhe opcional: quando ligada, o app mostra
 também o valor futuro em dinheiro do início do cenário. A taxa anual é
@@ -192,15 +202,27 @@ O estado completo do laboratório vive em `App.tsx`, permanece ao trocar de aba
 e desaparece ao reiniciar o app. Nada entra no cofre, no histórico, nos
 favoritos, no filesystem ou na rede. O modo discreto mascara entradas e
 resultados monetários. Cada resultado declara que taxa constante não prova
-retorno futuro, adequação, produto ou atingimento de meta.
+retorno futuro, adequação, produto ou atingimento de meta. Custo é apenas uma
+redução matemática de taxa; não representa tributo ou taxa real de produto.
 
-O corte consolidado é `v0.5.6`, Android `versionCode 15` e iOS `buildNumber 15`.
+O primeiro corte consolidado do laboratório foi `v0.5.6`, Android
+`versionCode 15` e iOS `buildNumber 15`.
 Passaram TypeScript, 51 testes de domínio, 16 de componentes, 4 contratos E2E e
 o export Android/Hermes com 653 módulos. As cinco experiências foram percorridas
 em 375×812, 430×932, 768×1024 e 844×390: não houve overflow horizontal nem alvo
 interativo visível abaixo de 44 px. A inspeção é local; não substitui TalkBack,
 texto ampliado ou os demais gates físicos pausados. Nenhum preview EAS ou
 Maestro foi executado para estes três incrementos.
+
+O corte atual é `v0.6.0`, Android `versionCode 19` e iOS `buildNumber 19`.
+`v0.5.7/16`, `v0.5.8/17` e `v0.5.9/18` são marcos lógicos do mesmo corte, sem
+build EAS intermediário. Passaram TypeScript, 61 testes de domínio, 22 de
+componentes, 4 contratos E2E e o export Android/Hermes com 654 módulos. As
+quatro trilhas novas foram percorridas em 375×812, 430×932, 768×1024 e 844×390:
+documento, body e painel mantiveram a largura do viewport e nenhum alvo
+interativo visível ficou abaixo de 44 px. A validação continua local; TalkBack,
+texto ampliado e os gates físicos seguem pendentes. Nenhum preview EAS ou
+Maestro foi executado para `v0.5.7`–`v0.6.0`.
 
 ## Como atualizar a fotografia pública
 
@@ -381,7 +403,7 @@ arquitetura-alvo em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
 O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
 2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador por
-classe, revisão guiada e o laboratório educacional formam a `v0.5.6`; os
+classe, revisão guiada e o laboratório educacional formam a `v0.6.0`; os
 fluxos E2E nativos ainda aguardam execução. Os gates de importação, TalkBack,
 texto ampliado e alvos de toque continuam pausados e pendentes. A Etapa 6 e a
 camada institucional não foram antecipadas.

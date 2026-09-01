@@ -14,6 +14,7 @@ import {
   MoneyLabPanel,
   MoneyLabSession,
 } from "../components/MoneyLabPanel";
+import { MoneyLabExpansionPanel } from "../components/MoneyLabExpansionPanel";
 import {
   AmountVisibilityButton,
   Eyebrow,
@@ -124,6 +125,12 @@ export function ScenariosScreen({
       ) : null}
 
       <MoneyLabPanel
+        hideAmounts={hideAmounts}
+        onSessionChange={onMoneyLabSessionChange}
+        session={moneyLabSession}
+      />
+
+      <MoneyLabExpansionPanel
         hideAmounts={hideAmounts}
         onSessionChange={onMoneyLabSessionChange}
         session={moneyLabSession}

@@ -56,6 +56,30 @@
       "delay": "money-lab-tool-delay",
       "habit": "money-lab-tool-habit",
       "challenge": "money-lab-tool-challenge"
+    },
+    "expansion": {
+      "panel": "money-lab-expansion-panel",
+      "result": "money-lab-expansion-result",
+      "yearMinus": "money-lab-year-minus",
+      "yearPlus": "money-lab-year-plus",
+      "initialInput": "money-lab-expansion-initial-input",
+      "monthlyInput": "money-lab-expansion-monthly-input",
+      "rateInput": "money-lab-expansion-rate-input",
+      "yearsInput": "money-lab-expansion-years-input",
+      "bonusInput": "money-lab-bonus-input",
+      "reserveCurrentInput": "money-lab-reserve-current-input",
+      "reserveExpenseInput": "money-lab-reserve-expense-input",
+      "reserveContributionInput": "money-lab-reserve-contribution-input",
+      "costToggle": "money-lab-cost-toggle",
+      "costInput": "money-lab-cost-input",
+      "inflationToggle": "money-lab-expansion-inflation-toggle",
+      "inflationInput": "money-lab-expansion-inflation-input",
+      "tools": {
+        "time": "money-lab-expansion-time",
+        "income": "money-lab-expansion-income",
+        "reserve": "money-lab-expansion-reserve",
+        "complete": "money-lab-expansion-complete"
+      }
     }
   }
 }

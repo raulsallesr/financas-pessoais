@@ -278,9 +278,9 @@ sincronização de conta, Open Finance, cloud de carteira ou publicação em loj
 local, importação B3 e os três primeiros incrementos da Etapa 5C chegaram ao
 preview `v0.5.2/11`. O Raul confirmou a instalação desse APK em 2026-08-31;
 gates físicos permanecem parciais e pausados. A revisão guiada da semana
-`v0.5.3` e o laboratório educacional `v0.5.4`–`v0.5.6` foram concluídos
-localmente e estão documentados nas seções 24 a 27. O próximo incremento de
-utilidade ainda precisa ser escolhido.
+`v0.5.3` e o laboratório educacional `v0.5.4`–`v0.6.0` foram concluídos
+localmente e estão documentados nas seções 24 a 31. O próximo incremento de
+utilidade ainda precisa ser escolhido depois deste corte.
 
 ## 6. Arquitetura
 
@@ -1298,6 +1298,106 @@ módulos. As cinco perguntas, a inflação opcional e a revelação do desafio f
 percorridas em 375×812, 430×932, 768×1024 e 844×390. Documento, body e painel
 mantiveram a largura do viewport, e nenhum alvo interativo visível ficou abaixo
 de 44 px.
+
+O primeiro export e a primeira abertura do Playwright reproduziram,
+respectivamente, `spawn EPERM` e `WinError 5` dentro do sandbox; ambos passaram
+fora dele sem mudança de código. Nenhum preview EAS, Maestro ou gate físico foi
+executado. O preview instalado continua sendo `v0.5.2/11`; BI-04 a BI-13,
+CL-11 a CL-13, DB-10 a DB-12 e E2E Android/iOS permanecem pausados e pendentes.
+
+## 28. Etapa 5C, incremento 8 — o poder do tempo `v0.5.7`
+
+### Resultado esperado
+
+Transformar prazo em uma variável que a pessoa consegue tocar e compreender:
+quando o valor inicial dobra, quais marcos aparecem e como a projeção muda ao
+avançar ou recuar o horizonte.
+
+### Escopo fechado
+
+1. comparar a dobra do valor inicial com e sem novos aportes;
+2. localizar R$ 10 mil, R$ 50 mil e R$ 100 mil somente dentro do horizonte;
+3. mostrar capital e juros no marco alcançado, além do tempo aproximado;
+4. oferecer régua de 1 a 50 anos com pontos tocáveis e botões menos/mais;
+5. manter alternativa acessível ao toque direto, sem gesto obrigatório;
+6. declarar que taxa constante e aportes sem interrupção não garantem data.
+
+### Estado da execução
+
+**Implementado no corte consolidado de 2026-09-01.**
+`calculateDoublingTime` e `calculateMilestoneTimeline` operam apenas sobre os
+números digitados. A régua altera o prazo inteiro da sessão e atualiza o
+resultado imediatamente, sem dependência nova ou gesto horizontal conflitante
+com a rolagem principal. Este marco lógico corresponde a `v0.5.7`, Android
+`versionCode 16` e iOS `buildNumber 16`; não houve build EAS intermediário.
+
+## 29. Etapa 5C, incremento 9 — dinheiro que entra `v0.5.8`
+
+### Escopo fechado
+
+1. converter taxa anual efetiva para mensal sem dividir por 12;
+2. mostrar o equivalente de um mês somente sobre o valor inicial informado;
+3. comparar o mesmo cenário sem/com um aporte extra;
+4. permitir extra único no início ou repetido ao fim de cada ano;
+5. explicar que equivalente mensal não significa pagamento, renda ou liquidez;
+6. não associar o valor a instituição, produto ou 13º real da pessoa.
+
+### Estado da execução
+
+**Implementado no mesmo corte consolidado.**
+`calculateMonthlyYieldEquivalent` reutiliza `effectiveMonthlyRate` e
+`simulateExtraContribution` aplica o extra na convenção explicitada, mantendo
+uma base comparável. Este marco lógico corresponde a `v0.5.8`, Android
+`versionCode 17` e iOS `buildNumber 17`; não houve build EAS intermediário.
+
+## 30. Etapa 5C, incremento 10 — caminho da reserva `v0.5.9`
+
+### Escopo fechado
+
+1. receber reserva atual, gasto essencial mensal e aporte mensal;
+2. mostrar quantos meses o valor atual cobre por divisão direta;
+3. permitir que a própria pessoa escolha três, seis ou doze meses como meta;
+4. calcular valor faltante e meses inteiros até a meta, sem rendimento;
+5. declarar ausência de prazo quando o aporte é zero e a meta não foi atingida;
+6. não recomendar tamanho de reserva nem ler automaticamente a carteira local.
+
+### Estado da execução
+
+**Implementado no mesmo corte consolidado.** `calculateReserveJourney` não usa
+taxa, produto ou carteira. Valores e meta ficam no `MoneyLabSession` e somem ao
+reiniciar. Este marco lógico corresponde a `v0.5.9`, Android `versionCode 18` e
+iOS `buildNumber 18`; não houve build EAS intermediário.
+
+## 31. Etapa 5C, incremento 11 — laboratório completo `v0.6.0`
+
+### Escopo fechado
+
+1. comparar manter só o valor inicial com fazer os aportes informados;
+2. revelar inflação apenas quando solicitada;
+3. revelar custo anual hipotético apenas quando solicitado e limitá-lo à taxa;
+4. tratar custo como redução mecânica de taxa, nunca tributo ou taxa de produto;
+5. explicar por que aporte e custo se acumulam ao longo do tempo;
+6. preservar as nove perguntas em duas camadas progressivas dentro de Cenários;
+7. manter as quatro abas, modo discreto e todo o estado apenas na sessão.
+
+### Fora de escopo dos quatro incrementos
+
+- alterar motores Python, snapshot público `v1`, cofre, importador B3,
+  persistências, histórico ou favoritos;
+- consultar taxa externa, carteira ou produto para preencher hipótese;
+- adicionar dependência, rede, telemetria, retorno previsto, recomendação,
+  ordem, autenticação, Open Finance ou Embedded;
+- modelar imposto sem produto/regime ou chamar custo hipotético de taxa real;
+- rodar Maestro automaticamente ou inferir aprovação física.
+
+### Gate consolidado
+
+O app termina em `v0.6.0`, Android `versionCode 19` e iOS `buildNumber 19`.
+Passaram `npm run typecheck`, 61 testes de domínio, 22 de componentes, 4
+contratos E2E e `npm run export:android`; o bundle Android/Hermes possui 654
+módulos. As quatro trilhas novas foram percorridas em 375×812, 430×932,
+768×1024 e 844×390. Documento, body e painel mantiveram a largura do viewport,
+e nenhum alvo interativo visível ficou abaixo de 44 px.
 
 O primeiro export e a primeira abertura do Playwright reproduziram,
 respectivamente, `spawn EPERM` e `WinError 5` dentro do sandbox; ambos passaram

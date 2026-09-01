@@ -34,7 +34,7 @@ reimplementar mediana, relevância do Focus, comparação D-5/D-21 ou estados de
 convergência. `mobile_snapshot.py` entrega somente contratos já calculados em
 `mobile/src/data/liveSnapshot.json`.
 
-## Estado do corte `mobile v0.5.6`
+## Estado do corte `mobile v0.6.0`
 
 O diretório `mobile/` contém a experiência completa de navegação e consome o
 snapshot público `v1`. A fotografia sintética em `src/data/demoSnapshot.ts`
@@ -214,7 +214,7 @@ TypeScript, 42 testes de domínio, 10 de componentes, 4 contratos E2E e o bundle
 Android/Hermes com 651 módulos passaram; os quatro viewports canônicos ficaram
 sem overflow ou alvo visível abaixo de 44 px.
 
-### Laboratório do dinheiro `v0.5.4`–`v0.5.6`
+### Laboratório do dinheiro `v0.5.4`–`v0.6.0`
 
 `moneyLab.ts` é um domínio puro e independente dos motores Python. Ele recebe
 somente números digitados no laboratório e usa a taxa efetiva anual informada
@@ -258,6 +258,45 @@ cinco ferramentas, a inflação e o desafio foram percorridos em 375×812,
 430×932, 768×1024 e 844×390, sem overflow horizontal ou alvo interativo visível
 abaixo de 44 px. Isso não substitui validação nativa, TalkBack, texto ampliado
 ou os fluxos Maestro pausados.
+
+O marco `v0.5.7` estende o mesmo domínio sem trocar a fórmula-base:
+
+- `calculateDoublingTime` procura o primeiro mês em que o valor inicial dobra,
+  separando o cenário com aportes daquele sem novos aportes;
+- `calculateMilestoneTimeline` procura os marcos de R$ 10 mil, R$ 50 mil e
+  R$ 100 mil somente dentro do horizonte escolhido;
+- a régua usa anos inteiros de 1 a 50, com pontos tocáveis e botões menos/mais,
+  sem biblioteca de gesto ou slider adicional.
+
+O marco `v0.5.8` adiciona duas traduções locais. `calculateMonthlyYieldEquivalent`
+usa a taxa mensal efetiva, nunca a divisão simples por 12. `simulateExtraContribution`
+mantém o cenário-base e acrescenta um valor no início ou ao fim de cada ano;
+isso não representa calendário de 13º, renda garantida ou produto.
+
+O marco `v0.5.9` mantém a reserva fora da projeção de rendimento.
+`calculateReserveJourney` divide o valor atual pelo gasto essencial digitado e,
+quando existe aporte, calcula quantos meses inteiros faltam até a meta escolhida
+de três, seis ou doze meses. A função não lê carteira nem define meta adequada.
+
+O marco `v0.6.0` consolida a leitura:
+
+- `compareContributionImpact` põe o mesmo valor inicial com e sem aportes;
+- `compareAnnualCostDrag` trata custo como uma redução anual hipotética da taxa,
+  limitada à própria taxa do cenário; não modela imposto ou produto;
+- inflação e custo continuam fechados até ação explícita;
+- `MoneyLabExpansionPanel` organiza os quatro caminhos adicionais sem criar aba.
+
+Os campos novos pertencem ao mesmo `MoneyLabSession` de `App.tsx`. Trocar de
+aba preserva a brincadeira; reiniciar o processo elimina ferramenta, valores,
+meta, frequência e opções avançadas. Nenhum adaptador de storage, provider,
+snapshot, carteira, rede ou telemetria participa dessa sequência.
+
+O corte consolidado `v0.6.0/19` passou por TypeScript, 61 testes de domínio, 22
+de componentes, 4 contratos E2E e export Android/Hermes com 654 módulos. As
+quatro trilhas novas foram percorridas em 375×812, 430×932, 768×1024 e 844×390,
+sem overflow horizontal ou alvo interativo visível abaixo de 44 px. Os marcos
+`v0.5.7/16`, `v0.5.8/17` e `v0.5.9/18` não receberam builds EAS intermediários.
+Nenhum Maestro ou gate físico foi executado.
 
 ### Fronteira implementada do contrato vivo `v1`
 
@@ -420,8 +459,13 @@ build atual.
     entre começar agora ou depois;
 16. **implementado localmente em `v0.5.6`:** inflação opcional, hábito
     recorrente e desafio de intuição, todos somente em sessão;
-17. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
-18. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+17. **implementado localmente em `v0.5.7`:** dobra, marcos e régua temporal;
+18. **implementado localmente em `v0.5.8`:** equivalente mensal e aporte extra;
+19. **implementado localmente em `v0.5.9`:** caminho da reserva sem rendimento;
+20. **implementado localmente em `v0.6.0`:** comparação de aporte, inflação e
+    custo anual hipotético sob revelação progressiva;
+21. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
+22. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
 
 ## Gate de produção
 

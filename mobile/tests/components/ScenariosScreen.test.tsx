@@ -24,6 +24,9 @@ describe("ScenariosScreen", () => {
 
     expect(screen.getByTestId(testIds.screens.scenarios)).toBeTruthy();
     expect(screen.getByText("Brinque com números antes de olhar produtos")).toBeTruthy();
+    expect(
+      screen.getByText("Tempo, entradas e segurança em perguntas simples"),
+    ).toBeTruthy();
     expect(screen.getByText("E se eu aportar nesta classe?")).toBeTruthy();
     expect(screen.getByText("E se os juros mudarem?")).toBeTruthy();
 

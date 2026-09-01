@@ -64,6 +64,57 @@ export type IntuitionChallenge = {
   winner: ChallengeChoice | "tie";
 };
 
+export type DoublingTimeProjection = {
+  targetAmount: number;
+  withContributionsMonths: number | null;
+  withoutContributionsMonths: number | null;
+};
+
+export type MilestoneProjection = {
+  amount: number;
+  reachedAtMonths: number | null;
+  point: ProjectionPoint | null;
+};
+
+export type MonthlyYieldEquivalent = {
+  monthlyRate: number;
+  monthlyRatePercent: number;
+  oneMonthInterest: number;
+};
+
+export type ExtraContributionCadence = "today" | "yearly";
+
+export type ExtraContributionComparison = {
+  cadence: ExtraContributionCadence;
+  base: CompoundGrowthProjection;
+  withExtra: ProjectionPoint;
+  extraContributed: number;
+  difference: number;
+};
+
+export type ReserveJourney = {
+  targetMonths: number;
+  currentMonthsCovered: number;
+  targetAmount: number;
+  missingAmount: number;
+  monthsToTarget: number | null;
+  alreadyReached: boolean;
+};
+
+export type ContributionImpactComparison = {
+  withoutContributions: ProjectionPoint;
+  withContributions: CompoundGrowthProjection;
+  difference: number;
+};
+
+export type AnnualCostComparison = {
+  annualCostPercent: number;
+  netAnnualRatePercent: number;
+  beforeCost: CompoundGrowthProjection;
+  afterCost: CompoundGrowthProjection;
+  difference: number;
+};
+
 function assertAmount(value: number, label: string, allowZero: boolean): void {
   const validMinimum = allowZero ? value >= 0 : value > 0;
   if (
@@ -103,6 +154,22 @@ function validateGrowthInput(input: CompoundGrowthInput): void {
   }
   assertRate(input.annualRatePercent);
   assertYears(input.years);
+}
+
+function firstMonthAtTarget(
+  input: CompoundGrowthInput,
+  targetAmount: number,
+): number | null {
+  if (input.initialAmount >= targetAmount) {
+    return 0;
+  }
+  const totalMonths = input.years * MONTHS_PER_YEAR;
+  for (let month = 1; month <= totalMonths; month += 1) {
+    if (projectionAtMonths(input, month).futureValue >= targetAmount) {
+      return month;
+    }
+  }
+  return null;
 }
 
 export function effectiveMonthlyRate(annualRatePercent: number): number {
@@ -328,5 +395,236 @@ export function compareIntuitionChallenge(
         : difference > 0
           ? "rate"
           : "contribution",
+  };
+}
+
+export function calculateDoublingTime({
+  initialAmount,
+  monthlyContribution,
+  annualRatePercent,
+  maxYears = MONEY_LAB_LIMITS.maxYears,
+}: {
+  initialAmount: number;
+  monthlyContribution: number;
+  annualRatePercent: number;
+  maxYears?: number;
+}): DoublingTimeProjection {
+  assertAmount(initialAmount, "O valor inicial", false);
+  assertAmount(monthlyContribution, "O aporte mensal", true);
+  assertRate(annualRatePercent);
+  assertYears(maxYears);
+
+  const targetAmount = initialAmount * 2;
+  const input = {
+    initialAmount,
+    monthlyContribution,
+    annualRatePercent,
+    years: maxYears,
+  };
+  const withoutContributions = { ...input, monthlyContribution: 0 };
+
+  return {
+    targetAmount,
+    withContributionsMonths: firstMonthAtTarget(input, targetAmount),
+    withoutContributionsMonths: firstMonthAtTarget(
+      withoutContributions,
+      targetAmount,
+    ),
+  };
+}
+
+export function calculateMilestoneTimeline(
+  input: CompoundGrowthInput,
+  milestones: readonly number[] = [10_000, 50_000, 100_000],
+): readonly MilestoneProjection[] {
+  validateGrowthInput(input);
+  const uniqueMilestones = [...new Set(milestones)].sort(
+    (left, right) => left - right,
+  );
+  uniqueMilestones.forEach((amount) =>
+    assertAmount(amount, "O marco", false),
+  );
+
+  return uniqueMilestones.map((amount) => {
+    const reachedAtMonths = firstMonthAtTarget(input, amount);
+    return {
+      amount,
+      reachedAtMonths,
+      point:
+        reachedAtMonths === null
+          ? null
+          : projectionAtMonths(input, reachedAtMonths),
+    };
+  });
+}
+
+export function calculateMonthlyYieldEquivalent(
+  amount: number,
+  annualRatePercent: number,
+): MonthlyYieldEquivalent {
+  assertAmount(amount, "O valor aplicado", false);
+  const monthlyRate = effectiveMonthlyRate(annualRatePercent);
+  return {
+    monthlyRate,
+    monthlyRatePercent: monthlyRate * 100,
+    oneMonthInterest: amount * monthlyRate,
+  };
+}
+
+export function simulateExtraContribution({
+  input,
+  extraAmount,
+  cadence,
+}: {
+  input: CompoundGrowthInput;
+  extraAmount: number;
+  cadence: ExtraContributionCadence;
+}): ExtraContributionComparison {
+  validateGrowthInput(input);
+  assertAmount(extraAmount, "O aporte extra", false);
+  if (cadence !== "today" && cadence !== "yearly") {
+    throw new Error("A frequência do aporte extra não é suportada.");
+  }
+
+  const base = simulateCompoundGrowth(input);
+  let withExtra: ProjectionPoint;
+  let extraContributed: number;
+
+  if (cadence === "today") {
+    assertAmount(
+      input.initialAmount + extraAmount,
+      "O valor inicial com o aporte extra",
+      false,
+    );
+    const projection = simulateCompoundGrowth({
+      ...input,
+      initialAmount: input.initialAmount + extraAmount,
+    });
+    withExtra = projection;
+    extraContributed = extraAmount;
+  } else {
+    const monthlyRate = effectiveMonthlyRate(input.annualRatePercent);
+    const totalMonths = input.years * MONTHS_PER_YEAR;
+    let futureValue = input.initialAmount;
+    let totalContributed = input.initialAmount;
+    for (let month = 1; month <= totalMonths; month += 1) {
+      futureValue = futureValue * (1 + monthlyRate) + input.monthlyContribution;
+      totalContributed += input.monthlyContribution;
+      if (month % MONTHS_PER_YEAR === 0) {
+        futureValue += extraAmount;
+        totalContributed += extraAmount;
+      }
+    }
+    if (!Number.isFinite(futureValue)) {
+      throw new Error("A combinação informada ultrapassa o limite da simulação.");
+    }
+    withExtra = {
+      year: input.years,
+      futureValue,
+      totalContributed,
+      interestEarned: Math.max(0, futureValue - totalContributed),
+    };
+    extraContributed = extraAmount * input.years;
+  }
+
+  return {
+    cadence,
+    base,
+    withExtra,
+    extraContributed,
+    difference: Math.max(0, withExtra.futureValue - base.futureValue),
+  };
+}
+
+export function calculateReserveJourney({
+  currentReserve,
+  monthlyEssentialExpenses,
+  monthlyContribution,
+  targetMonths,
+}: {
+  currentReserve: number;
+  monthlyEssentialExpenses: number;
+  monthlyContribution: number;
+  targetMonths: number;
+}): ReserveJourney {
+  assertAmount(currentReserve, "A reserva atual", true);
+  assertAmount(
+    monthlyEssentialExpenses,
+    "O gasto essencial mensal",
+    false,
+  );
+  assertAmount(monthlyContribution, "O aporte mensal", true);
+  if (!Number.isInteger(targetMonths) || targetMonths < 1 || targetMonths > 24) {
+    throw new Error("A meta da reserva deve ficar entre 1 e 24 meses.");
+  }
+
+  const targetAmount = monthlyEssentialExpenses * targetMonths;
+  const missingAmount = Math.max(0, targetAmount - currentReserve);
+  const alreadyReached = missingAmount === 0;
+  return {
+    targetMonths,
+    currentMonthsCovered: currentReserve / monthlyEssentialExpenses,
+    targetAmount,
+    missingAmount,
+    monthsToTarget: alreadyReached
+      ? 0
+      : monthlyContribution === 0
+        ? null
+        : Math.ceil(missingAmount / monthlyContribution),
+    alreadyReached,
+  };
+}
+
+export function compareContributionImpact(
+  input: CompoundGrowthInput,
+): ContributionImpactComparison {
+  validateGrowthInput(input);
+  const withContributions = simulateCompoundGrowth(input);
+  const withoutContributions =
+    input.initialAmount === 0
+      ? {
+          year: input.years,
+          futureValue: 0,
+          totalContributed: 0,
+          interestEarned: 0,
+        }
+      : projectionAtMonths(
+          { ...input, monthlyContribution: 0 },
+          input.years * MONTHS_PER_YEAR,
+        );
+  return {
+    withoutContributions,
+    withContributions,
+    difference:
+      withContributions.futureValue - withoutContributions.futureValue,
+  };
+}
+
+export function compareAnnualCostDrag(
+  input: CompoundGrowthInput,
+  annualCostPercent: number,
+): AnnualCostComparison {
+  validateGrowthInput(input);
+  assertRate(annualCostPercent, "O custo anual");
+  if (annualCostPercent > input.annualRatePercent) {
+    throw new Error("O custo anual deve ser menor ou igual à taxa do cenário.");
+  }
+
+  const netAnnualRatePercent =
+    ((1 + input.annualRatePercent / 100) /
+      (1 + annualCostPercent / 100) -
+      1) *
+    100;
+  const beforeCost = simulateCompoundGrowth(input);
+  const afterCost = simulateCompoundGrowth({
+    ...input,
+    annualRatePercent: netAnnualRatePercent,
+  });
+  return {
+    annualCostPercent,
+    netAnnualRatePercent,
+    beforeCost,
+    afterCost,
+    difference: Math.max(0, beforeCost.futureValue - afterCost.futureValue),
   };
 }

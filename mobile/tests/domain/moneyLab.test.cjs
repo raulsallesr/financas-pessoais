@@ -3,12 +3,19 @@ const test = require("node:test");
 
 const {
   adjustForInflation,
+  calculateDoublingTime,
+  calculateMilestoneTimeline,
+  calculateMonthlyYieldEquivalent,
   calculateRequiredMonthlyContribution,
+  calculateReserveJourney,
+  compareAnnualCostDrag,
+  compareContributionImpact,
   compareDelayedStart,
   compareIntuitionChallenge,
   effectiveMonthlyRate,
   monthlyEquivalentForHabit,
   simulateCompoundGrowth,
+  simulateExtraContribution,
   simulateHabitRedirect,
 } = require("../../.test-dist/domain/moneyLab.js");
 
@@ -156,5 +163,166 @@ test("rejeita valores fora dos limites didáticos", () => {
         5,
       ),
     /menor que o prazo total/,
+  );
+});
+
+test("encontra quando o valor dobra e separa o efeito dos aportes", () => {
+  const result = calculateDoublingTime({
+    initialAmount: 10_000,
+    monthlyContribution: 500,
+    annualRatePercent: 10,
+  });
+
+  assert.equal(result.targetAmount, 20_000);
+  assert.ok(result.withContributionsMonths < result.withoutContributionsMonths);
+  assert.ok(result.withoutContributionsMonths >= 87);
+  assert.ok(result.withoutContributionsMonths <= 88);
+});
+
+test("mantém dobra sem juros inalcançável quando também não há aportes", () => {
+  const result = calculateDoublingTime({
+    initialAmount: 10_000,
+    monthlyContribution: 0,
+    annualRatePercent: 0,
+    maxYears: 10,
+  });
+
+  assert.equal(result.withContributionsMonths, null);
+  assert.equal(result.withoutContributionsMonths, null);
+});
+
+test("localiza marcos dentro do horizonte e preserva os não alcançados", () => {
+  const milestones = calculateMilestoneTimeline(
+    {
+      initialAmount: 5_000,
+      monthlyContribution: 500,
+      annualRatePercent: 8,
+      years: 10,
+    },
+    [10_000, 50_000, 150_000],
+  );
+
+  assert.equal(milestones[0].amount, 10_000);
+  assert.ok(milestones[0].reachedAtMonths > 0);
+  assert.ok(milestones[1].reachedAtMonths > milestones[0].reachedAtMonths);
+  assert.equal(milestones[2].reachedAtMonths, null);
+});
+
+test("traduz taxa anual para equivalente mensal sem dividir por doze", () => {
+  const result = calculateMonthlyYieldEquivalent(20_000, 10);
+
+  assert.ok(Math.abs(result.monthlyRatePercent - 0.797414) < 0.000001);
+  assert.ok(result.oneMonthInterest > 159);
+  assert.ok(result.oneMonthInterest < 160);
+});
+
+test("compara aporte extra hoje com a mesma base", () => {
+  const result = simulateExtraContribution({
+    input: {
+      initialAmount: 1_000,
+      monthlyContribution: 300,
+      annualRatePercent: 10,
+      years: 10,
+    },
+    extraAmount: 2_000,
+    cadence: "today",
+  });
+
+  assert.equal(result.extraContributed, 2_000);
+  assert.ok(result.difference > 5_000);
+  assert.equal(
+    result.withExtra.totalContributed - result.base.totalContributed,
+    2_000,
+  );
+});
+
+test("aporte extra anual entra ao fim de cada ano", () => {
+  const result = simulateExtraContribution({
+    input: {
+      initialAmount: 1_000,
+      monthlyContribution: 300,
+      annualRatePercent: 10,
+      years: 5,
+    },
+    extraAmount: 1_000,
+    cadence: "yearly",
+  });
+
+  assert.equal(result.extraContributed, 5_000);
+  assert.equal(
+    result.withExtra.totalContributed - result.base.totalContributed,
+    5_000,
+  );
+  assert.ok(result.difference > result.extraContributed);
+});
+
+test("calcula cobertura e caminho da reserva sem atribuir rendimento", () => {
+  const result = calculateReserveJourney({
+    currentReserve: 6_000,
+    monthlyEssentialExpenses: 3_000,
+    monthlyContribution: 750,
+    targetMonths: 6,
+  });
+
+  assert.equal(result.currentMonthsCovered, 2);
+  assert.equal(result.targetAmount, 18_000);
+  assert.equal(result.missingAmount, 12_000);
+  assert.equal(result.monthsToTarget, 16);
+});
+
+test("reserva sem aporte declara prazo indisponível", () => {
+  const result = calculateReserveJourney({
+    currentReserve: 1_000,
+    monthlyEssentialExpenses: 2_000,
+    monthlyContribution: 0,
+    targetMonths: 6,
+  });
+
+  assert.equal(result.monthsToTarget, null);
+  assert.equal(result.alreadyReached, false);
+});
+
+test("compara com e sem aporte sobre a mesma taxa e prazo", () => {
+  const result = compareContributionImpact({
+    initialAmount: 1_000,
+    monthlyContribution: 300,
+    annualRatePercent: 10,
+    years: 10,
+  });
+
+  assert.ok(
+    result.withContributions.futureValue >
+      result.withoutContributions.futureValue,
+  );
+  assert.ok(result.difference > 50_000);
+});
+
+test("custo anual hipotético reduz a taxa efetiva sem virar tributo", () => {
+  const result = compareAnnualCostDrag(
+    {
+      initialAmount: 10_000,
+      monthlyContribution: 500,
+      annualRatePercent: 10,
+      years: 10,
+    },
+    1,
+  );
+
+  assert.ok(result.netAnnualRatePercent > 8.9);
+  assert.ok(result.netAnnualRatePercent < 9);
+  assert.ok(result.afterCost.futureValue < result.beforeCost.futureValue);
+  assert.ok(result.difference > 0);
+  assert.throws(
+    () =>
+      compareAnnualCostDrag(
+        {
+          initialAmount: 10_000,
+          monthlyContribution: 500,
+          annualRatePercent: 2,
+          years: 10,
+        },
+        3,
+      ),
+    /menor ou igual/,
   );
 });

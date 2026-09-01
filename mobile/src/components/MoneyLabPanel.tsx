@@ -17,6 +17,7 @@ import {
   compareIntuitionChallenge,
   CompoundGrowthInput,
   CompoundGrowthProjection,
+  ExtraContributionCadence,
   HabitFrequency,
   MONEY_LAB_LIMITS,
   simulateCompoundGrowth,
@@ -34,6 +35,12 @@ export type MoneyLabTool =
   | "habit"
   | "challenge";
 
+export type MoneyLabExpansionTool =
+  | "time"
+  | "income"
+  | "reserve"
+  | "complete";
+
 export type MoneyLabSession = {
   tool: MoneyLabTool;
   initialAmountText: string;
@@ -47,6 +54,15 @@ export type MoneyLabSession = {
   habitAmountText: string;
   habitFrequency: HabitFrequency;
   challengeGuess: ChallengeChoice | null;
+  expansionTool: MoneyLabExpansionTool;
+  bonusAmountText: string;
+  bonusCadence: ExtraContributionCadence;
+  reserveCurrentText: string;
+  reserveExpenseText: string;
+  reserveContributionText: string;
+  reserveTargetMonths: number;
+  showAnnualCost: boolean;
+  annualCostText: string;
 };
 
 export function createMoneyLabSession(): MoneyLabSession {
@@ -63,6 +79,15 @@ export function createMoneyLabSession(): MoneyLabSession {
     habitAmountText: "15",
     habitFrequency: "daily",
     challengeGuess: null,
+    expansionTool: "time",
+    bonusAmountText: "2000",
+    bonusCadence: "today",
+    reserveCurrentText: "6000",
+    reserveExpenseText: "3000",
+    reserveContributionText: "750",
+    reserveTargetMonths: 6,
+    showAnnualCost: false,
+    annualCostText: "1",
   };
 }
 
