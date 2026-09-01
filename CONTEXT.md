@@ -42,10 +42,12 @@
 
 - O produto está estável e versionado até a `v1.14`; o commit funcional dessa
   entrega é `0f1458c` e recebeu a tag `v1.14`.
-- A branch de trabalho é `main`. `git pull --ff-only` avançou em 2026-09-01 até
-  `85a2b48`, trazendo somente os dois caches públicos antes deste trabalho. O corte
-  funcional anterior a este registro de handoff é `0bd94ee`; o APK `v0.4.0`
-  foi construído a partir de `c6bb875`.
+- A branch de trabalho é `main`. `git pull --ff-only` confirmou em 2026-09-01
+  que ela estava sincronizada com `origin/main`; o corte funcional atual é `ba5854d`,
+  `v0.6.3`, Android `versionCode 22` e iOS `buildNumber 22`. O comando
+  `git status --short --branch` ficou limpo depois do push. O APK `v0.4.0` foi construído a
+  partir de `c6bb875`; o preview instalado mais recente continua sendo
+  `v0.5.2/11`, não o corte local atual.
 - A **Etapa 4 — FocusLens BR integrado (`v2.0`)** está concluída tecnicamente
   como release candidate. Não refazer as Etapas 1–3 nem os cinco incrementos
   da Etapa 4.
@@ -302,7 +304,9 @@
 > `c08e5397-427f-42c2-a163-ab5cd815cb55`, está `FINISHED` e o Raul confirmou sua
 > instalação, mas o aparelho não estava conectado ao ADB e o corte ainda não foi
 > avaliado fisicamente. O Raul autorizou iniciar a Etapa 5C em
-> 2026-08-31; a `v0.6.3` local já implementa histórico de fotografias públicas,
+> 2026-08-31; o corte funcional publicado é `ba5854d`, `v0.6.3`, Android
+> `versionCode 22` e iOS `buildNumber 22`. Ele já implementa histórico de
+> fotografias públicas,
 > favoritos, alertas explicáveis, simulador por classe, revisão guiada e o
 > laboratório do dinheiro. Cenários oferece “Quanto vira?”, meta ao contrário,
 > preço de esperar, inflação opcional, hábito recorrente, desafio de intuição,
@@ -312,6 +316,11 @@
 > laboratório por vez. `v0.6.2` acrescenta aumento anual e pausa opcional dos
 > aportes; `v0.6.3` soma compras parceladas e mostra taxa implícita quando o
 > total supera o preço à vista, sem recomendar forma de pagamento.
+> Passaram `npm run typecheck`, 66 testes de domínio, 30 de componentes, 4
+> contratos E2E e o export Android/Hermes com 656 módulos. As três famílias e
+> as duas experiências cotidianas passaram em 375×812, 430×932, 768×1024 e
+> 844×390 sem overflow horizontal ou alvo visível abaixo de 44 px. Os artefatos
+> temporários foram removidos antes do commit.
 > A taxa e os valores são sempre escolhidos pela pessoa; todo o laboratório vive
 > somente na sessão, não toca carteira/snapshot/storage/rede e respeita o modo
 > discreto. Hoje e Entenda continuam conectando mudança, prova, relação com a
