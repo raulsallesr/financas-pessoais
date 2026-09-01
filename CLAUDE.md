@@ -16,8 +16,8 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
 1. `git pull` — pegue o que a outra máquina fez, incluindo o cache de dados
    (`dados/focus_cache.json` é versionado de propósito, para o histórico do
    Focus ficar igual nas duas máquinas).
-2. Leia `CONTEXT.md` — estado vivo do projeto (arquitetura, decisões,
-   bloqueios, próximos passos), com histórico versão a versão.
+2. Leia `CONTEXT.md` — estado operacional curto do projeto (decisões,
+   bloqueios e próximos passos). O histórico detalhado fica no Git e no plano.
 
 ## Convenções do projeto
 
