@@ -1,23 +1,33 @@
-# FocusLens BR — inteligência de mercado para sua carteira
+# FocusLens BR — o mercado explicado pelo seu recorte
 
-Produto pessoal de inteligência financeira. Os motores Python reúnem
-**Boletim Focus**, Curva Tesouro, Focus × Curva, Radar Macro e carteira; o novo
-app móvel transforma esses contratos na pergunta central: **o que o mercado
-está dizendo e como isso afeta os investimentos que eu já tenho?**
+[![quality](https://github.com/raulsallesr/financas-pessoais/actions/workflows/tests.yml/badge.svg)](https://github.com/raulsallesr/financas-pessoais/actions/workflows/tests.yml)
+[![mobile beta](https://img.shields.io/badge/mobile-v0.6.4_beta-0f766e)](mobile/README.md)
+[![tests](https://img.shields.io/badge/testes-298-173f3a)](#qualidade-verificável)
+[![license MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-b7791f)](LICENSE)
+
+Produto pessoal e educacional que transforma dados públicos do mercado
+brasileiro em uma sequência verificável: **o que mudou, o que prova a leitura,
+onde isso toca a carteira e o que ainda não dá para concluir**.
+
+Os motores Python reúnem Boletim Focus, Curva Tesouro, Focus × Curva e Radar
+Macro. O app React Native usa os contratos calculados por esses motores, mantém
+a carteira separada do snapshot público e oferece experiências simples para
+brincar com aportes, juros compostos, inflação, metas, parcelamento e retiradas.
+Não conecta conta, não recomenda produto e não envia a carteira para a rede.
 
 O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
-## FocusLens Mobile — contrato vivo
+## FocusLens Mobile `v0.6.4` — beta funcional
 
 Em 2026-08-27, o Raul redirecionou o destino do produto para um app Android/iOS.
 O diretório [`mobile/`](mobile/) contém o app React Native, Expo e TypeScript,
-com quatro áreas:
+com quatro abas permanentes:
 
-- **Hoje:** sinais de Focus, curva, inflação e dólar, todos com data e fonte;
-- **Carteira:** exposição, pesos e privacidade de valores;
-- **Cenários:** sensibilidade de −100 a +100 bps;
-- **Entenda:** Sinal → Evidência → Exposição → Limite.
+- **Hoje:** começa pelo recorte pessoal e conecta sinais, evidência e impactos;
+- **Carteira:** importa a posição B3 ou cria posições locais em cofre cifrado;
+- **Cenários:** reúne sensibilidade da carteira e 12 experiências educacionais;
+- **Entenda:** conduz uma revisão opcional da semana em cinco passos curtos.
 
 Ao tocar em um sinal, o app filtra as posições relacionadas e explica somente
 os efeitos que o motor Python já calculou. O contrato `v1` agora gera um JSON
@@ -26,10 +36,17 @@ sem carteira. Um provider TypeScript valida esse documento antes do uso;
 schema ausente, incompatível ou inválido ativa a fotografia sintética local e
 identifica o fallback na tela.
 
-A carteira continua deliberadamente sintética e separada do artefato público.
-O provider combina mercado e posições apenas em memória, na borda da interface.
+A carteira de demonstração continua deliberadamente sintética e separada do
+artefato público. No Android/iOS, a carteira criada pela pessoa é cifrada com
+AES-256-GCM e permanece somente no aparelho; o provider combina mercado e
+posições apenas em memória, na borda da interface.
 
-![FocusLens Mobile com dados públicos](docs/assets/focuslens-mobile-v0.2-live.png)
+| Hoje | Cenários | Entenda |
+|---|---|---|
+| <img src="docs/assets/focuslens-mobile-v0.6.4-hoje.png" width="260" alt="Tela Hoje do FocusLens com recorte da carteira e leitura pública do mercado"> | <img src="docs/assets/focuslens-mobile-v0.6.4-cenarios.png" width="260" alt="Tela Cenários do FocusLens organizada por intenção de uso"> | <img src="docs/assets/focuslens-mobile-v0.6.4-entenda.png" width="260" alt="Tela Entenda do FocusLens com revisão opcional da semana"> |
+
+As imagens vêm do renderer web da mesma árvore React Native, em `430×932`, com
+fotografia pública e carteira fictícia. Não mostram posição pessoal.
 
 Detalhes de execução em [`mobile/README.md`](mobile/README.md) e da fronteira
 técnica em [`docs/ARQUITETURA_MOBILE.md`](docs/ARQUITETURA_MOBILE.md).
@@ -56,10 +73,11 @@ A estratégia completa está em
 [`docs/ESTRATEGIA_INSTITUCIONAL.md`](docs/ESTRATEGIA_INSTITUCIONAL.md). A
 arquitetura-alvo, os contratos e os gates estão em
 [`docs/ARQUITETURA_INSTITUCIONAL.md`](docs/ARQUITETURA_INSTITUCIONAL.md).
-Nenhum desses componentes institucionais está implementado neste corte; o
-próximo incremento continua sendo o development build da Etapa 5.
+Nenhum desses componentes institucionais está implementado neste corte. A
+Etapa 6 continua bloqueada pelos gates físicos Android/iOS documentados; esta
+preparação pública não antecipa API, autenticação, telemetria ou Open Finance.
 
-## v2.0 — release candidate
+## Referência Streamlit `v2.0`
 
 Os cinco incrementos do FocusLens BR `v2.0` estão concluídos tecnicamente. O
 Resumo escolhe a prioridade já calculada pelos motores, mostra duas a quatro
@@ -75,10 +93,10 @@ compara a fotografia observada com uma hipótese de deslocamento uniforme, sem
 calcular probabilidade, preço ou retorno. A primeira dobra também explica, sob
 demanda, por que a leitura atual lidera e o que fica fora do veredito.
 
-O pacote final inclui captura, arquitetura, release notes, texto de LinkedIn e
-auditoria de publicação. O repositório permanece privado: a tag/release `v2.0`
-e a abertura pública aguardam a escolha da licença do código e a decisão sobre
-o e-mail não mascarado presente no histórico Git.
+O pacote inclui captura, arquitetura, release notes, texto de LinkedIn e
+auditoria de publicação. A referência continua útil para inspecionar os motores
+fora do app móvel; o histórico Git foi preservado e os novos commits usam o
+endereço `noreply` do GitHub.
 
 ![FocusLens BR v2.0](docs/assets/focuslens-br-v2.0.png)
 
@@ -172,6 +190,10 @@ Pacote da `v2.0`:
 - [`docs/AUDITORIA_PUBLICACAO_V2.0.md`](docs/AUDITORIA_PUBLICACAO_V2.0.md);
 - [`docs/POST_LINKEDIN_FOCUSLENS_V2.0.md`](docs/POST_LINKEDIN_FOCUSLENS_V2.0.md).
 
+Publicação móvel atual:
+
+- [`docs/POST_LINKEDIN_FOCUSLENS_MOBILE_V0.6.4.md`](docs/POST_LINKEDIN_FOCUSLENS_MOBILE_V0.6.4.md).
+
 Publicação anterior:
 [`docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md`](docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md).
 
@@ -183,14 +205,14 @@ npm ci
 npm run web
 ```
 
-A prévia imediata usa o renderer web da mesma base React Native. A configuração
-do development build para SDK 57 está pronta e validada pelo Expo Doctor; a
-geração/instalação do APK aguarda login EAS e aparelho Android. O bundle Android
-continua no gate local:
+A prévia imediata usa o renderer web da mesma base React Native. O preview
+instalado e os builds posteriores estão registrados em
+[`mobile/README.md`](mobile/README.md); instalação, ADB e avaliação física não
+são inferidos a partir dos gates locais. O gate completo é:
 
 ```powershell
 npm run typecheck
-npm run test:domain
+npm test
 npm run export:android
 ```
 
@@ -254,6 +276,27 @@ chat”** no início de [`CONTEXT.md`](CONTEXT.md). Ele registra o ponto exato d
 entrega, as decisões preservadas e um prompt pronto; a ordem técnica da próxima
 etapa permanece em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
 
+## Qualidade verificável
+
+O repositório mantém dois gates independentes no GitHub Actions:
+
+- **Python:** Ruff, 191 testes e cobertura de branches com piso de 85%; a
+  medição local deste corte foi **86,1%**;
+- **Mobile:** TypeScript, 70 testes de domínio, 33 de componentes, 4 contratos
+  E2E não destrutivos e export Android/Hermes.
+
+São **298 testes automatizados** no total. Os fluxos Maestro e os checklists
+físicos continuam separados: teste automatizado verde não equivale a aparelho,
+TalkBack, texto ampliado ou iOS aprovados.
+
+Para reproduzir os gates Python:
+
+```powershell
+pip install -r requirements-dev.txt
+ruff check .
+pytest tests/ -q --cov=.
+```
+
 ## Roadmap
 
 O produto mantém os quatro marcos dos motores e abre uma quinta etapa móvel no
@@ -262,11 +305,11 @@ mesmo repositório:
 1. **Focus Semanal (`v1.12`, entregue)** — o que mudou nas expectativas;
 2. **Curva Tesouro (`v1.13`, entregue)** — o que mudou nas taxas prefixadas;
 3. **Focus × Curva (`v1.14`, entregue)** — expectativa versus precificação;
-4. **FocusLens BR (`v2.0`, release candidate)** — experiência integrada,
+4. **FocusLens BR (`v2.0`, referência Streamlit)** — experiência integrada,
    método e pacote de publicação;
-5. **FocusLens Mobile (`v0.1` + contrato vivo `v1`, entregues)** — interface
-   Android/iOS, fotografia pública, personalização por carteira sintética e
-   cenários interativos;
+5. **FocusLens Mobile (`v0.6.4` beta + contrato público `v1`)** — interface
+   Android/iOS, fotografia pública, carteira local cifrada, revisão guiada e
+   laboratório educacional;
 6. **FocusLens Embedded (direção aprovada, não implementada)** — API, receipt,
    SDK, governança e piloto institucional depois da maturidade móvel.
 
@@ -277,12 +320,12 @@ seção 14 sem substituir a próxima execução da seção 13.
 
 ## Publicação e licença
 
-A auditoria técnica da `v2.0` está em
+A auditoria técnica atual está em
 [`docs/AUDITORIA_PUBLICACAO_V2.0.md`](docs/AUDITORIA_PUBLICACAO_V2.0.md). O
-código ainda não possui uma licença explícita de reutilização; até o titular
-escolher uma, todos os direitos permanecem reservados por padrão. A ausência de
-um arquivo `LICENSE` é deliberadamente tratada como decisão pendente, não como
-uma licença aberta implícita.
+projeto de referência deste repositório é distribuído sob a
+[`MIT License`](LICENSE). Isso não publica nem licencia automaticamente uma
+futura implementação institucional: API, adaptadores privados, SDK e operação
+Embedded serão decididos e versionados em escopo próprio.
 
 ## Fonte oficial dos dados
 

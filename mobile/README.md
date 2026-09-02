@@ -4,7 +4,12 @@ App móvel do FocusLens BR em React Native, Expo e TypeScript. A
 experiência responde a uma pergunta simples: **o que o mercado está dizendo e
 onde isso encosta na minha carteira?**
 
-![FocusLens Mobile com dados públicos](../docs/assets/focuslens-mobile-v0.2-live.png)
+| Hoje | Cenários | Entenda |
+|---|---|---|
+| <img src="../docs/assets/focuslens-mobile-v0.6.4-hoje.png" width="240" alt="Tela Hoje do FocusLens com recorte da carteira e leitura pública"> | <img src="../docs/assets/focuslens-mobile-v0.6.4-cenarios.png" width="240" alt="Tela Cenários do FocusLens organizada por intenção"> | <img src="../docs/assets/focuslens-mobile-v0.6.4-entenda.png" width="240" alt="Tela Entenda do FocusLens com revisão semanal opcional"> |
+
+Capturas reais do renderer web da `v0.6.4`, em `430×932`, usando somente a
+fotografia pública e posições fictícias.
 
 ## O que já funciona
 
@@ -246,8 +251,12 @@ de 44 px. A inflação opcional e a parte inferior do resultado também foram
 inspecionadas. O primeiro export e o primeiro Playwright reproduziram os
 bloqueios conhecidos `spawn EPERM` e `WinError 5` no sandbox; ambos passaram
 fora dele, sem mudança funcional. O preview `v0.6.4/23`, commit `a2bb4b5`, foi
-submetido no EAS `6ac1268d-5902-46b4-8108-457977bb7e1f` e ainda estava
-`IN_QUEUE` na última consulta. Nenhum Maestro ou gate físico novo foi executado.
+concluído como `FINISHED` no EAS
+[`6ac1268d-5902-46b4-8108-457977bb7e1f`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6ac1268d-5902-46b4-8108-457977bb7e1f)
+em 2026-09-02. O
+[APK direto](https://expo.dev/artifacts/eas/p-3qRdd8j_d0vP5ZBVMeHqXZ2_zMJ5r-9YlSO2IhhSo.apk)
+expira em 2026-09-16. Ele ainda não foi instalado; nenhum Maestro ou gate
+físico novo foi executado.
 
 ## Como atualizar a fotografia pública
 
@@ -374,6 +383,10 @@ npm test
 npm run export:android
 ```
 
+Na raiz do repositório, o gate Python complementar usa `requirements-dev.txt`,
+Ruff e cobertura com piso de 85%. O corte atual soma 191 testes Python aos 107
+testes mobile, totalizando 298 testes automatizados.
+
 O gate de domínio cobre contrato demo, público e privado, schema incompatível,
 documento inválido, proibição de carteira no artefato público, valores e campos
 do editor, duplicidade, limite de posições, UTF-8, fallback, cálculo de peso,
@@ -433,3 +446,8 @@ classe, revisão guiada e o laboratório educacional formam a `v0.6.4`; os
 fluxos E2E nativos ainda aguardam execução. Os gates de importação, TalkBack,
 texto ampliado e alvos de toque continuam pausados e pendentes. A Etapa 6 e a
 camada institucional não foram antecipadas.
+
+O código de referência deste repositório usa a licença MIT. Uma futura
+implementação institucional — API, adaptador privado, SDK e operação — terá
+escopo, distribuição e licença próprios; ela não se torna pública por herdar a
+arquitetura conceitual deste cliente.

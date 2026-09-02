@@ -339,7 +339,8 @@ componentes, 4 contratos E2E e export Android/Hermes com 656 módulos. A terceir
 ferramenta cotidiana, inclusive inflação opcional, foi percorrida em 375×812,
 430×932, 768×1024 e 844×390 com movimento reduzido. Documento, body e painel
 mantiveram a largura do viewport; nenhum controle visível ficou abaixo de 44 px.
-Nenhum preview EAS, Maestro ou gate físico foi executado.
+O preview EAS `v0.6.4/23` terminou `FINISHED` em 2026-09-02, mas não foi
+instalado. Nenhum Maestro ou gate físico novo foi executado.
 
 ### Fronteira implementada do contrato vivo `v1`
 

@@ -198,9 +198,10 @@ package ou versão. Nenhum gate físico mudou de estado apenas por esse relato.
 [`6ac1268d-5902-46b4-8108-457977bb7e1f`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6ac1268d-5902-46b4-8108-457977bb7e1f),
 commit `a2bb4b5`, fingerprint
 `057c832c7452945400ff2d5f2c34b90bf9f3b275`. O build foi submetido em
-2026-09-02 e permanecia `IN_QUEUE` na última consulta. Não registrar instalação,
-package, versão ou gate físico até o artefato terminar e ser observado no
-aparelho.
+2026-09-02 e terminou `FINISHED` no mesmo dia. O
+[APK direto](https://expo.dev/artifacts/eas/p-3qRdd8j_d0vP5ZBVMeHqXZ2_zMJ5r-9YlSO2IhhSo.apk)
+expira em 2026-09-16. O artefato ainda não foi instalado: não registrar package,
+versão ou gate físico até ele ser observado no aparelho.
 
 Com o preview instalado:
 

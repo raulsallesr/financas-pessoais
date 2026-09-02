@@ -3,8 +3,8 @@
 **Status:** direção aprovada em 2026-08-27; produto institucional ainda não
 implementado.
 
-**Próximo passo técnico do repositório:** concluir o development build descrito
-na seção 13 de `PLANO_FOCUSLENS.md`.
+**Próximo passo técnico do repositório:** concluir os gates físicos da Etapa 5
+antes de iniciar qualquer implementação da Etapa 6.
 
 **Documento complementar:** `docs/ARQUITETURA_INSTITUCIONAL.md`.
 
@@ -59,7 +59,19 @@ critério.
 | Qualidade | Testes Python e TypeScript; fallback explícito | E2E, carga, resiliência, segurança e compatibilidade contratual |
 | Operação | Atualização automatizada dos caches públicos | Observabilidade, SLO, incidentes, continuidade e suporte |
 | Comercial | Tese de uso clara | Piloto controlado, KPIs, referência institucional e receita recorrente |
-| Propriedade intelectual | Código próprio e fontes atribuídas | Licença do código, cadeia de titularidade e pendência do e-mail histórico |
+| Propriedade intelectual | Código próprio, fontes atribuídas e licença MIT no projeto de referência | Titularidade e licença próprias para a implementação institucional |
+
+### Fronteira de publicação
+
+O app de referência, os motores educacionais e os contratos públicos deste
+repositório usam a licença MIT. Isso permite estudar e reutilizar o projeto
+público atual, mas não antecipa a forma de distribuição de uma futura
+implementação institucional.
+
+Intelligence API, Exposure Adapter, SDK, console e operação Embedded terão
+escopo e repositório próprios, privados por padrão até decisão comercial
+expressa. Nenhum código institucional futuro recebe a licença deste repositório
+automaticamente.
 
 ## 4. Produto institucional-alvo
 
