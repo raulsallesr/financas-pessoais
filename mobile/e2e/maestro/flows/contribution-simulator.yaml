@@ -5,7 +5,8 @@ tags:
   - scenarios
 ---
 - launchApp:
-    clearState: true
+    clearState: false
+    stopApp: true
 - tapOn:
     id: "tab-scenarios"
 - assertVisible:

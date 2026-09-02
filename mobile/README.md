@@ -110,7 +110,8 @@ Android `versionCode 11` e iOS `buildNumber 11`.
 npm test
 npm run e2e:maestro # requer Maestro e um binário instalado
 npm run e2e:maestro:check:windows # valida o ambiente portátil e os YAMLs
-npm run e2e:maestro:windows # exige Android autorizado e build 0.5.2/11
+npm run e2e:maestro:device:windows # confere ADB/package/versão sem abrir o app
+npm run e2e:maestro:windows # exige Android autorizado e a versão de app.json
 ```
 
 Os testes automatizados locais passaram, mas os fluxos Maestro ainda precisam
@@ -127,9 +128,10 @@ No Windows, `scripts/run-maestro-windows.ps1` procura Java, Maestro e ADB em
 `%LOCALAPPDATA%\focuslens-tools`, sem alterar o `PATH` global. Antes do E2E, ele
 confere a autorização USB, o package `com.raulsallesr.focuslens` e a versão
 nativa declarada em `app.json`; um APK antigo é recusado explicitamente.
-Os fluxos atuais iniciam com `clearState: true` e apagam o estado local do app.
-Não os execute em uma carteira que precise ser preservada; use uma instalação
-de demonstração descartável ou uma futura variante não destrutiva.
+O modo `device` encerra depois dessa conferência, sem abrir o app ou executar
+Maestro. As duas jornadas reiniciam somente o processo, com `clearState: false`,
+e preservam cofre, carteira, histórico e favoritos. O runner também recusa antes
+da execução qualquer fluxo que volte a declarar `clearState: true`.
 
 ## Revisão guiada da semana `v0.5.3`
 

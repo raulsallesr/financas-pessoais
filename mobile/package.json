@@ -42,6 +42,7 @@
     "e2e:maestro": "maestro test e2e/maestro",
     "e2e:maestro:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-maestro-windows.ps1",
     "e2e:maestro:check:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-maestro-windows.ps1 -CheckSyntaxOnly",
+    "e2e:maestro:device:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/run-maestro-windows.ps1 -CheckDeviceOnly",
     "export:android": "expo export --platform android --output-dir dist-android"
   },
   "private": true

@@ -34,6 +34,7 @@ Android autorizado — ou um selecionado explicitamente — e confere
 
 ```powershell
 npm run e2e:maestro:check:windows
+npm run e2e:maestro:device:windows
 npm run e2e:maestro:windows
 ```
 
@@ -43,7 +44,10 @@ Os caminhos podem ser sobrescritos somente para a sessão por
 `FOCUSLENS_ANDROID_DEVICE`. O script não altera o `PATH` global e não cria build
 EAS; ele falha fechado se o pacote ou a versão instalada divergir de
 `app.json`. Um mutex também impede duas instâncias locais do Maestro de disputar
-a mesma pasta de logs no Windows.
+a mesma pasta de logs no Windows. `device:windows` para depois da validação ADB,
+sem abrir o app. O executor recusa qualquer fluxo com `clearState: true`; as
+jornadas versionadas encerram e reabrem somente o processo, preservando todo o
+estado local.
 
 `src/testing/testIds.json` é a única fonte dos seletores estáveis. Mudanças de
 copy não devem exigir alteração dos fluxos; novos IDs precisam entrar primeiro

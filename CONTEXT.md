@@ -17,8 +17,8 @@
   Raul, mas não foi verificada por ADB nem avaliada fisicamente.
 - Decisão vigente do Raul: continuar melhorando utilidade e vontade de uso antes
   de priorizar a bateria física restante.
-- Não rodar Maestro automaticamente: os fluxos atuais usam `clearState: true` e
-  podem apagar a carteira local.
+- Não rodar Maestro automaticamente. Os fluxos agora são não destrutivos e o
+  runner recusa `clearState: true`, mas a execução continua manual e deliberada.
 - Pendências pausadas: BI-04–BI-13, CL-11–CL-13, DB-10–DB-12 e E2E
   Android/iOS.
 
@@ -154,6 +154,8 @@ Não houve preview EAS, Maestro, ADB nem avaliação física para `v0.5.3`–`v0
   Android/iOS.
 - Temurin `17.0.20.1`, Maestro `2.9.0` e ADB `37.0.1` estão disponíveis em
   toolchain portátil. A última consulta ADB encontrou zero aparelhos.
+- O comando `npm run e2e:maestro:device:windows` confere aparelho, package e
+  versão sem abrir o app; os fluxos preservam o estado local.
 - Os APKs internos anteriores expiram em 2026-09-11.
 
 Se os testes físicos forem retomados, usar estado descartável ou fazer backup

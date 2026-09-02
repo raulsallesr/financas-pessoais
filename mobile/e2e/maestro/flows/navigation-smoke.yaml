@@ -4,7 +4,8 @@ tags:
   - smoke
 ---
 - launchApp:
-    clearState: true
+    clearState: false
+    stopApp: true
 - assertVisible:
     id: "screen-today"
 - tapOn:

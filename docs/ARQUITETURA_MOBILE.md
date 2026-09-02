@@ -177,9 +177,10 @@ não constitui evidência E2E física.
 
 O Raul confirmou depois a instalação do preview `v0.5.2/11`, mas o aparelho
 continuou ausente do ADB; package, versão e jornadas não foram verificados. Os
-YAMLs atuais usam `clearState: true`, portanto a execução futura deve ocorrer em
-estado descartável ou em variantes não destrutivas para não apagar uma carteira
-local que precise ser preservada.
+YAMLs foram tornados não destrutivos em 2026-09-02: reiniciam somente o processo
+com `clearState: false`, preservando carteira, cofre, histórico e favoritos. O
+runner recusa `clearState: true` e oferece um gate ADB que confere aparelho,
+package e versão sem abrir o app nem executar Maestro.
 
 As dependências de teste permanecem em `devDependencies`; Metro confirmou 650
 módulos no bundle Android. Nenhum motor, storage ou contrato público/privado foi

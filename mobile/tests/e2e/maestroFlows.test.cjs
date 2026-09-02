@@ -57,12 +57,14 @@ test("fluxos usam somente seletores registrados no mapa canônico", () => {
   }
 });
 
-test("fluxos partem de estado limpo e não carregam dado pessoal", () => {
+test("fluxos preservam estado local e não carregam dado pessoal", () => {
   const combined = readFlows()
     .map((flow) => flow.content)
     .join("\n");
 
-  assert.equal((combined.match(/clearState: true/g) ?? []).length, 2);
+  assert.equal((combined.match(/clearState: false/g) ?? []).length, 2);
+  assert.equal((combined.match(/stopApp: true/g) ?? []).length, 2);
+  assert.doesNotMatch(combined, /clearState:\s*true/);
   assert.doesNotMatch(combined, /cpf|cnpj|password|token|secret|accountId/i);
 });
 
@@ -76,6 +78,8 @@ test("executor Windows falha fechado antes de acionar o binário errado", () => 
   assert.match(runner, /FOCUSLENS_MAESTRO_HOME/);
   assert.match(runner, /FOCUSLENS_ANDROID_PLATFORM_TOOLS/);
   assert.match(runner, /FOCUSLENS_ANDROID_DEVICE/);
+  assert.match(runner, /CheckDeviceOnly/);
+  assert.match(runner, /Fluxo destrutivo recusado/);
   assert.match(runner, /versionName/);
   assert.match(runner, /versionCode/);
   assert.match(runner, /Build incompatível/);

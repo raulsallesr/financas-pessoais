@@ -18,10 +18,11 @@ aprovado nem invalida as evidências físicas já registradas.
 autorizado sem fechar DB-10 a DB-12. TalkBack, texto ampliado e alvos de toque
 continuam obrigatórios antes do gate de produção.
 
-**Prioridade atual em 2026-08-31:** o Raul prefere continuar nas melhorias de
-produto antes de retomar os checklists. A pausa preserva todos os estados da
-matriz. Os fluxos Maestro usam `clearState: true` e não devem rodar em uma
-instalação cuja carteira local precise ser preservada.
+**Retomada segura preparada em 2026-09-02:** as jornadas Maestro agora usam
+`clearState: false`, reiniciam somente o processo e preservam o estado local. O
+runner recusa qualquer fluxo destrutivo e permite conferir ADB, package e versão
+sem abrir o app. Isso remove o risco de limpeza, mas não aprova nenhum gate
+físico sem execução e observação reais.
 
 Este documento é a evidência operacional da seção 13 de
 `PLANO_FOCUSLENS.md`. Não marca o incremento como concluído enquanto o APK não

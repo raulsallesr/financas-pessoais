@@ -1132,13 +1132,12 @@ troca o projeto para Expo 46 e rompe a compatibilidade do SDK 57.
 
 ### Estado dos gates físicos
 
-O Raul decidiu continuar nas melhorias antes de priorizar os testes físicos.
 BI-04 a BI-13, CL-11 a CL-13, DB-10 a DB-12 e E2E Android/iOS permanecem
-pausados e pendentes. Os dois fluxos Maestro atuais usam `clearState: true`;
-não devem ser executados em uma instalação cuja carteira local precise ser
-preservada. Antes da retomada, usar estado de demonstração descartável ou criar
-variantes não destrutivas. Etapa 6/Embedded continua bloqueada até esses gates e
-as demais condições da seção 14 serem fechados.
+pendentes. Em 2026-09-02, as duas jornadas passaram a reiniciar somente o
+processo com `clearState: false`, e o runner passou a recusar qualquer fluxo
+destrutivo. A checagem ADB pode ser executada isoladamente, sem abrir o app.
+Etapa 6/Embedded continua bloqueada até esses gates e as demais condições da
+seção 14 serem fechados.
 
 ## 24. Etapa 5C, incremento 4 — revisão guiada da semana `v0.5.3`
 

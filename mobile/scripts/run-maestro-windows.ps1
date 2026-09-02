@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
     [switch]$CheckSyntaxOnly,
+    [switch]$CheckDeviceOnly,
     [string]$FlowPath
 )
 
@@ -14,6 +15,10 @@ $appId = [string]$appConfig.expo.android.package
 $expectedVersion = [string]$appConfig.expo.version
 $expectedVersionCode = [string]$appConfig.expo.android.versionCode
 $portableRoot = Join-Path $env:LOCALAPPDATA "focuslens-tools"
+
+if ($CheckSyntaxOnly -and $CheckDeviceOnly) {
+    throw "Use somente CheckSyntaxOnly ou CheckDeviceOnly por execução."
+}
 
 function Resolve-ToolExecutable {
     param(
@@ -60,22 +65,30 @@ if (-not $javaOverride) {
     $javaOverride = $env:JAVA_HOME
 }
 
-$javaExe = Resolve-ToolExecutable -Label "Java 17+" -FileName "java.exe" `
-    -CommandName "java.exe" -ExplicitRoot $javaOverride `
-    -DefaultRoot (Join-Path $portableRoot "temurin-17")
-$maestroBat = Resolve-ToolExecutable -Label "Maestro CLI" -FileName "maestro.bat" `
-    -CommandName "maestro.bat" -ExplicitRoot $env:FOCUSLENS_MAESTRO_HOME `
-    -DefaultRoot (Join-Path $portableRoot "maestro")
-$adbExe = Resolve-ToolExecutable -Label "Android Debug Bridge" -FileName "adb.exe" `
-    -CommandName "adb.exe" -ExplicitRoot $env:FOCUSLENS_ANDROID_PLATFORM_TOOLS `
-    -DefaultRoot (Join-Path $portableRoot "android-platform-tools")
-
-$javaBin = Split-Path -Parent $javaExe
-$javaHome = Split-Path -Parent $javaBin
-$maestroBin = Split-Path -Parent $maestroBat
-$adbBin = Split-Path -Parent $adbExe
-$env:JAVA_HOME = $javaHome
-$env:Path = "$javaBin;$maestroBin;$adbBin;$env:Path"
+$maestroBat = $null
+$adbExe = $null
+$toolBins = @()
+if (-not $CheckDeviceOnly) {
+    $javaExe = Resolve-ToolExecutable -Label "Java 17+" -FileName "java.exe" `
+        -CommandName "java.exe" -ExplicitRoot $javaOverride `
+        -DefaultRoot (Join-Path $portableRoot "temurin-17")
+    $maestroBat = Resolve-ToolExecutable -Label "Maestro CLI" -FileName "maestro.bat" `
+        -CommandName "maestro.bat" -ExplicitRoot $env:FOCUSLENS_MAESTRO_HOME `
+        -DefaultRoot (Join-Path $portableRoot "maestro")
+    $javaBin = Split-Path -Parent $javaExe
+    $env:JAVA_HOME = Split-Path -Parent $javaBin
+    $toolBins += $javaBin
+    $toolBins += Split-Path -Parent $maestroBat
+}
+if (-not $CheckSyntaxOnly) {
+    $adbExe = Resolve-ToolExecutable -Label "Android Debug Bridge" -FileName "adb.exe" `
+        -CommandName "adb.exe" -ExplicitRoot $env:FOCUSLENS_ANDROID_PLATFORM_TOOLS `
+        -DefaultRoot (Join-Path $portableRoot "android-platform-tools")
+    $toolBins += Split-Path -Parent $adbExe
+}
+if ($toolBins.Count -gt 0) {
+    $env:Path = "$($toolBins -join ';');$env:Path"
+}
 $env:MAESTRO_CLI_NO_ANALYTICS = "1"
 $env:MAESTRO_CLI_ANALYSIS_NOTIFICATION_DISABLED = "true"
 $env:MAESTRO_EXIT_CONSOLE = "true"
@@ -126,8 +139,14 @@ if ($flows.Count -eq 0) {
 }
 
 foreach ($flow in $flows) {
-    Invoke-Maestro -Arguments @("check-syntax", $flow)
-    Write-Output "Sintaxe aprovada: $(Split-Path -Leaf $flow)"
+    $flowContent = Get-Content -Raw -LiteralPath $flow
+    if ($flowContent -match "(?m)^\s*clearState:\s*true\s*$") {
+        throw "Fluxo destrutivo recusado: $(Split-Path -Leaf $flow) usa clearState: true."
+    }
+    if (-not $CheckDeviceOnly) {
+        Invoke-Maestro -Arguments @("check-syntax", $flow)
+        Write-Output "Sintaxe aprovada: $(Split-Path -Leaf $flow)"
+    }
 }
 
 if ($CheckSyntaxOnly) {
@@ -199,6 +218,11 @@ $androidRelease = (& $adbExe @adbDeviceArgs shell getprop ro.build.version.relea
 $androidBuild = (& $adbExe @adbDeviceArgs shell getprop ro.build.id).Trim()
 Write-Output "Dispositivo autorizado: Android $androidRelease ($androidBuild)."
 Write-Output "Build aprovado para teste: $appId $installedVersion/$installedVersionCode."
+
+if ($CheckDeviceOnly) {
+    Write-Output "Gate ADB concluído; o app não foi aberto e nenhum fluxo Maestro foi executado."
+    return
+}
 
 $maestroArgs = @("--device=$deviceId", "test")
 if ($FlowPath) {
