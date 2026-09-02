@@ -14,10 +14,10 @@ aprovação para distribuição em loja.
 
 ## Veredito
 
-O candidato possui licença MIT, narrativa pública atual, três capturas reais do
-app, lint Python, cobertura mensurada e CI para as duas stacks. A varredura da
-árvore e do histórico não encontrou segredo, CPF/CNPJ válido, arquivo de
-carteira ou extensão sensível.
+O candidato possui licença MIT, narrativa pública atual, três capturas reais e
+uma demonstração curta do app em MP4/GIF, lint Python, cobertura mensurada e CI
+para as duas stacks. A varredura da árvore e do histórico não encontrou segredo,
+CPF/CNPJ válido, arquivo de carteira ou extensão sensível.
 
 O histórico Git foi preservado. Um endereço pessoal continua presente em
 metadados antigos; os novos commits já usam o endereço `noreply` oficial do
@@ -32,7 +32,7 @@ pendentes os gates físicos mobile; por isso o projeto deve ser apresentado como
 
 | Gate | Resultado | Evidência |
 |---|---|---|
-| Árvore atual | Aprovado | 202 arquivos rastreados; nenhum `.env`, XLSX, PDF, chave, certificado ou banco local |
+| Árvore atual | Aprovado | 204 arquivos rastreados; nenhum `.env`, XLSX, PDF, chave, certificado ou banco local |
 | Segredos e PII | Aprovado | zero arquivo com os padrões auditados de chave privada, credencial atribuída, token conhecido ou CPF/CNPJ válido |
 | Histórico Git | Aprovado com ressalva aceita | zero extensão sensível e zero família de padrão de segredo; um e-mail antigo não mascarado permanece nos metadados |
 | Licença do projeto | Aprovado | `LICENSE` MIT, copyright 2026 Raul Rolim |
@@ -44,7 +44,7 @@ pendentes os gates físicos mobile; por isso o projeto deve ser apresentado como
 | CI | Preparado | workflow `quality` executa Python e mobile; primeiro resultado remoto depende do push |
 | Dependências Python | Aprovado | `pip check` limpo; `pip-audit 2.10.1` sem vulnerabilidade conhecida |
 | Dependências mobile | Aprovado com ressalva | zero vulnerabilidade alta/crítica; 11 moderadas transitivas no toolchain Expo/UUID |
-| Ativos visuais | Aprovado | três PNGs do app real em 430×932, fotografia pública e carteira fictícia, sem imagem externa |
+| Ativos visuais | Aprovado | três PNGs e demo real de 21,2 s em MP4/GIF, com fotografia pública e carteira fictícia, sem imagem externa |
 | EAS Android | Concluído, não físico | preview `v0.6.4/23` terminou `FINISHED`; ainda não foi instalado nem conferido por ADB |
 | Visibilidade | Preservada | repositório continua privado; nenhuma tag/release ou regra de branch foi criada |
 
@@ -108,6 +108,11 @@ As imagens `focuslens-mobile-v0.6.4-*.png` foram capturadas do renderer web da
 mesma árvore React Native. Elas usam o snapshot público e a demonstração
 fictícia; não contêm captura de aparelho ou dado do titular.
 
+O MP4 `focuslens-mobile-v0.6.4-demo.mp4` tem 21,2 segundos, `720×1560`, H.264,
+sem áudio e cerca de 1,3 MB. O GIF correspondente tem `360×780` e cerca de
+1,0 MB. Ambos percorrem somente estado sintético da sessão e encerram no limite
+da leitura; os quadros temporários usados na composição não são versionados.
+
 ## Comandos e verificações executados
 
 - `ruff check .`;
@@ -121,7 +126,9 @@ fictícia; não contêm captura de aparelho ou dado do titular.
 - varredura do candidato e dos patches alcançáveis por padrões de segredo e
   documentos válidos, sem imprimir conteúdo encontrado;
 - inspeção de caminhos atuais e históricos por extensões sensíveis;
-- validação de links locais, dimensões dos PNGs e `git diff --check`.
+- validação de links locais, dimensões dos PNGs e `git diff --check`;
+- decodificação integral do MP4 e do GIF com FFmpeg, além de inspeção visual
+  dos quadros inicial, intermediários e final.
 
 ## O que falta para a abertura pública
 
@@ -130,7 +137,7 @@ fictícia; não contêm captura de aparelho ou dado do titular.
 - [x] histórico preservado por decisão explícita;
 - [x] CI Python/mobile configurado;
 - [x] cobertura real medida e protegida por piso;
-- [x] README, capturas atuais e texto de LinkedIn preparados;
+- [x] README, capturas, MP4/GIF e texto de LinkedIn preparados;
 - [x] segredos, PII, caches e dependências reavaliados;
 - [ ] fazer push e observar o workflow `quality` verde;
 - [ ] tornar o repositório público mediante ação explícita;

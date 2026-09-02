@@ -18,10 +18,9 @@
 - Preview candidato: `v0.6.4`, build `23`, EAS
   `6ac1268d-5902-46b4-8108-457977bb7e1f`, commit `a2bb4b5`, `FINISHED` em
   2026-09-02. Não está instalado nem constitui evidência física.
-- Sprint de publicação preparado no commit `f2ed931`: licença MIT, novos
-  commits via GitHub
-  `noreply`, CI Python/mobile, Ruff, cobertura com piso de 85%, README e
-  carrossel atualizados. O repositório continua privado.
+- Sprint de publicação iniciado no commit `f2ed931`: licença MIT, commits via
+  GitHub `noreply`, CI Python/mobile, Ruff, cobertura com piso de 85%, README,
+  carrossel e demonstração MP4/GIF. O repositório continua privado.
 - Decisão vigente do Raul: seguir a sequência canônica do roadmap. A Fase A
   fecha antes de qualquer implementação da Etapa 6/Embedded.
 - Não rodar Maestro automaticamente. Os fluxos agora são não destrutivos e o
@@ -193,8 +192,9 @@ npm test
 npm run export:android
 ```
 
-Validar também os quatro viewports já usados e os alvos de 44 px. Artefatos de
-export e captura são temporários e não devem permanecer versionados.
+Validar também os quatro viewports já usados e os alvos de 44 px. Bundles de
+export, quadros e perfis de captura são temporários e não devem permanecer
+versionados; somente as mídias finais aprovadas em `docs/assets/` permanecem.
 
 Para mudança Python, usar o `.venv` externo ao OneDrive indicado no `README.md`
 e rodar a suíte completa:
@@ -226,6 +226,8 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 - A exposição do e-mail antigo no histórico foi aceita como custo de preservar
   hashes e rastreabilidade; não exibir o endereço em documentação ou relatório.
 - Tag, release e visibilidade pública exigem autorização explícita do Raul.
+- A demo pública de 21,2 segundos existe em MP4 e GIF, usa somente fotografia
+  pública, carteira fictícia e estado de sessão; nenhum código do app mudou.
 - Publicação em loja também depende dos gates de segurança e da decisão sobre
   vulnerabilidades moderadas transitivas do toolchain Expo.
 

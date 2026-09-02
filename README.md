@@ -41,6 +41,15 @@ artefato público. No Android/iOS, a carteira criada pela pessoa é cifrada com
 AES-256-GCM e permanece somente no aparelho; o provider combina mercado e
 posições apenas em memória, na borda da interface.
 
+### Demonstração em 21 segundos
+
+[![Demonstração animada do FocusLens passando por Hoje, Cenários e revisão guiada](docs/assets/focuslens-mobile-v0.6.4-demo.gif)](docs/assets/focuslens-mobile-v0.6.4-demo.mp4)
+
+A sequência usa o app real e percorre leitura pública, juros compostos e os
+cinco passos de Entenda. O exemplo é fictício, não usa posição pessoal e não
+representa promessa de retorno. Toque na animação para abrir o MP4 em maior
+resolução.
+
 | Hoje | Cenários | Entenda |
 |---|---|---|
 | <img src="docs/assets/focuslens-mobile-v0.6.4-hoje.png" width="260" alt="Tela Hoje do FocusLens com recorte da carteira e leitura pública do mercado"> | <img src="docs/assets/focuslens-mobile-v0.6.4-cenarios.png" width="260" alt="Tela Cenários do FocusLens organizada por intenção de uso"> | <img src="docs/assets/focuslens-mobile-v0.6.4-entenda.png" width="260" alt="Tela Entenda do FocusLens com revisão opcional da semana"> |
@@ -192,6 +201,8 @@ Pacote da `v2.0`:
 
 Publicação móvel atual:
 
+- [demonstração MP4](docs/assets/focuslens-mobile-v0.6.4-demo.mp4) e
+  [versão GIF](docs/assets/focuslens-mobile-v0.6.4-demo.gif);
 - [`docs/POST_LINKEDIN_FOCUSLENS_MOBILE_V0.6.4.md`](docs/POST_LINKEDIN_FOCUSLENS_MOBILE_V0.6.4.md).
 
 Publicação anterior:

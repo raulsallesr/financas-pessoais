@@ -50,20 +50,31 @@ https://github.com/raulsallesr/financas-pessoais
 
 ## Mídia sugerida
 
-Use um carrossel nesta ordem:
+Use como mídia principal o arquivo
+`docs/assets/focuslens-mobile-v0.6.4-demo.mp4`: são 21,2 segundos em formato
+vertical, sem áudio, com texto legível no próprio app. A sequência mostra:
+
+1. o recorte pessoal e a fotografia pública em Hoje;
+2. o laboratório de juros compostos com exemplo fictício;
+3. a revisão guiada terminando no que a leitura não prova.
+
+Envie o MP4 diretamente ao LinkedIn, em vez de publicar apenas um link. O GIF
+`docs/assets/focuslens-mobile-v0.6.4-demo.gif` é a prévia leve para o README.
+
+Se vídeo não estiver disponível, use o carrossel nesta ordem:
 
 1. `docs/assets/focuslens-mobile-v0.6.4-hoje.png`;
 2. `docs/assets/focuslens-mobile-v0.6.4-cenarios.png`;
 3. `docs/assets/focuslens-mobile-v0.6.4-entenda.png`.
 
-As três imagens são capturas reais do renderer web da mesma árvore React
-Native, em `430×932`, com fotografia pública e carteira fictícia.
+O vídeo, o GIF e as três imagens são capturas reais do renderer web da mesma
+árvore React Native, com fotografia pública e carteira fictícia.
 
 ## Antes de publicar
 
 - tornar o repositório público somente quando essa decisão for explícita;
 - aguardar o primeiro CI público ficar verde e conferir o badge;
-- abrir o link em sessão anônima e validar README, licença e imagens;
+- abrir o link em sessão anônima e validar README, licença, GIF e MP4;
 - não chamar o beta de “validado em produção” ou dizer que os gates físicos
   pendentes foram concluídos;
 - não expor APK temporário como distribuição pública permanente.

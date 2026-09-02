@@ -4,6 +4,14 @@ App móvel do FocusLens BR em React Native, Expo e TypeScript. A
 experiência responde a uma pergunta simples: **o que o mercado está dizendo e
 onde isso encosta na minha carteira?**
 
+## Demonstração curta
+
+[![Demonstração animada do FocusLens passando por Hoje, Cenários e revisão guiada](../docs/assets/focuslens-mobile-v0.6.4-demo.gif)](../docs/assets/focuslens-mobile-v0.6.4-demo.mp4)
+
+O vídeo de 21,2 segundos foi capturado do renderer web da mesma árvore React
+Native. Ele usa fotografia pública, valores editáveis fictícios e estado apenas
+na sessão; toque na animação para abrir o MP4 em `720×1560`, sem áudio.
+
 | Hoje | Cenários | Entenda |
 |---|---|---|
 | <img src="../docs/assets/focuslens-mobile-v0.6.4-hoje.png" width="240" alt="Tela Hoje do FocusLens com recorte da carteira e leitura pública"> | <img src="../docs/assets/focuslens-mobile-v0.6.4-cenarios.png" width="240" alt="Tela Cenários do FocusLens organizada por intenção"> | <img src="../docs/assets/focuslens-mobile-v0.6.4-entenda.png" width="240" alt="Tela Entenda do FocusLens com revisão semanal opcional"> |
