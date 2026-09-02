@@ -24,6 +24,13 @@ runner recusa qualquer fluxo destrutivo e permite conferir ADB, package e versã
 sem abrir o app. Isso remove o risco de limpeza, mas não aprova nenhum gate
 físico sem execução e observação reais.
 
+**Aceite do beta em 2026-09-02:** o Raul informou que testou o app atual no
+POCO X8 Pro e considerou a experiência satisfatória. Por decisão do titular,
+USB/ADB e iOS foram dispensados e os itens físicos restantes não bloqueiam o
+beta pessoal nem o roadmap. A versão exata e os itens não executados continuam
+sem comprovação técnica individual; este roteiro volta a ser gate somente se o
+destino mudar para loja/produção.
+
 Este documento é a evidência operacional da seção 13 de
 `docs/product/PLANO_FOCUSLENS.md`. Não marca o incremento como concluído enquanto o APK não
 for gerado, instalado e validado em aparelho real.
@@ -302,11 +309,16 @@ real.
 - `npm audit fix --force` não foi aplicado: a correção sugerida faria downgrade
   incompatível de pacotes do toolchain, inclusive do Expo.
 
-Essas evidências não substituem o fechamento de DB-10 a DB-12.
+Essas evidências não substituem o fechamento de DB-10 a DB-12 caso o roteiro
+seja reaberto para loja/produção.
 
 ## 12. Critério de conclusão
 
-A seção 13 só pode mudar para concluída quando:
+Para o beta pessoal/portfólio, a seção 13 foi encerrada pelo aceite manual do
+titular em 2026-09-02, sem ADB ou iOS. Os critérios abaixo permanecem como gate
+mais rigoroso para eventual distribuição em loja/produção:
+
+A validação formal só pode ser chamada de concluída quando:
 
 - o development APK estiver vinculado a um build EAS identificável;
 - o APK estiver instalado em Android real;

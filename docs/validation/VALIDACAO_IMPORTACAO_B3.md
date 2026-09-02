@@ -68,6 +68,12 @@ o `v0.4.4/8` apenas como binário recomendado para a próxima execução.
 O próximo trabalho de produto é a revisão guiada da semana `v0.5.3`; este gate
 continua preservado e pausado.
 
+**Aceite do beta em 2026-09-02:** o Raul informou que testou o app atual no
+POCO X8 Pro e aceitou a experiência. BI-04 a BI-13 continuam sem evidência
+individual e não são reclassificados como aprovados, mas o titular dispensou o
+fechamento formal como bloqueador do beta pessoal. O roteiro permanece como
+gate para eventual loja/produção e não exige o envio de planilha ou valores.
+
 ## O que relatar ao fechar o gate
 
 Envie apenas:
@@ -82,9 +88,10 @@ captura com valores visíveis.
 
 ## Gate de conclusão
 
-A Etapa 5B.2 só muda para concluída quando um APK compatível com a importação
-B3 estiver registrado e
-BI-01 a BI-13 estiverem aprovados ou justificados. Falha de leitura, descarte,
-confirmação, persistência offline ou preservação da carteira bloqueia o avanço
-para produção e o fechamento da Etapa 5B.2. O desenvolvimento local da Etapa
-5C foi liberado separadamente pelo Raul em 2026-08-31, sem inferir aprovação.
+No beta pessoal, a dispensa explícita do titular justifica o encerramento sem
+inferir aprovação dos itens não executados. Antes de loja/produção, a Etapa
+5B.2 só pode ser chamada de validada quando um APK compatível estiver
+registrado e BI-01 a BI-13 estiverem aprovados ou justificados por item. Falha
+de leitura, descarte, confirmação, persistência offline ou preservação da
+carteira volta a bloquear esse destino. O desenvolvimento local da Etapa 5C
+foi liberado separadamente pelo Raul em 2026-08-31.

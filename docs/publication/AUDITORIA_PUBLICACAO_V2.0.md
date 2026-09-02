@@ -24,9 +24,10 @@ metadados antigos; os novos commits já usam o endereço `noreply` oficial do
 GitHub. Isso evita uma reescrita de 63 commits e a troca de todos os hashes.
 
 A abertura pública foi executada pelo titular em 2026-09-02. Tag/release e as
-regras da `main` continuam opcionais e pendentes. Também continuam pendentes os
-gates físicos mobile; por isso o projeto deve ser apresentado como **beta
-funcional**, não como app validado em produção.
+regras da `main` continuam opcionais e pendentes. O Raul aceitou manualmente o
+beta no POCO e dispensou USB/ADB e iOS como bloqueadores do portfólio. Os gates
+formais não executados continuam sem evidência; por isso o projeto deve ser
+apresentado como **beta funcional**, não como app validado em produção.
 
 ## Evidências por gate
 
@@ -45,7 +46,7 @@ funcional**, não como app validado em produção.
 | Dependências Python | Aprovado | `pip check` limpo; `pip-audit 2.10.1` sem vulnerabilidade conhecida |
 | Dependências mobile | Aprovado com ressalva | zero vulnerabilidade alta/crítica; 11 moderadas transitivas no toolchain Expo/UUID |
 | Ativos visuais | Aprovado | três PNGs e demo real de 21,2 s em MP4/GIF, com fotografia pública e carteira fictícia, sem imagem externa |
-| EAS Android | Concluído, não físico | preview `v0.6.4/23` terminou `FINISHED`; ainda não foi instalado nem conferido por ADB |
+| EAS Android | Concluído + aceite manual | preview `v0.6.4/23` terminou `FINISHED`; Raul aceitou o app atual no POCO, sem associação independente de package/build por ADB |
 | Visibilidade | Pública | repositório aberto pelo titular em 2026-09-02; nenhuma tag/release ou regra de branch foi criada |
 
 ## Cobertura e qualidade automatizada

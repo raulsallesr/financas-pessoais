@@ -378,6 +378,12 @@ Como o aparelho não estava conectado ao ADB, a versão instalada e as jornadas
 não foram verificadas; nenhum gate físico foi aprovado apenas pelo relato de
 instalação.
 
+Em 2026-09-02, o Raul informou que testou o app atual no POCO X8 Pro e aceitou
+a experiência para o beta pessoal. USB/ADB e iOS foram dispensados como gates
+do roadmap atual. Isso encerra o bloqueio de produto, mas não converte package,
+build ou checklists não executados em evidência técnica aprovada; eles devem ser
+retomados se houver publicação em loja/produção.
+
 Se o checkout estiver dentro de OneDrive e a instalação encontrar limites de
 caminho, prefira um clone local curto para o desenvolvimento móvel. Nesta
 máquina, as dependências foram mantidas fora do OneDrive e ligadas por um
@@ -450,9 +456,10 @@ arquitetura-alvo em
 [`ARQUITETURA_INSTITUCIONAL.md`](../docs/architecture/ARQUITETURA_INSTITUCIONAL.md).
 O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
 2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador por
-classe, revisão guiada e o laboratório educacional formam a `v0.6.4`; os
-fluxos E2E nativos ainda aguardam execução. Os gates de importação, TalkBack,
-texto ampliado e alvos de toque continuam pausados e pendentes. A Etapa 6 e a
+classe, revisão guiada e o laboratório educacional formam a `v0.6.4`. Em
+2026-09-02, o aceite manual do beta encerrou os gates físicos como bloqueadores
+do produto pessoal; E2E nativo, USB/ADB, iOS e os itens formais restantes não
+foram executados e ficam reservados para eventual loja/produção. A Etapa 6 e a
 camada institucional não foram antecipadas.
 
 O código de referência deste repositório usa a licença MIT. Uma futura

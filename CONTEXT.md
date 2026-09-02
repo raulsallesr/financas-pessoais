@@ -13,12 +13,12 @@
   iOS `buildNumber 23`.
 - Entrega atual: revisão semanal opcional e laboratório do dinheiro organizados
   por intenção, com estado somente na sessão.
-- Preview realmente instalado: `v0.5.2`, build `11`, EAS
-  `c08e5397-427f-42c2-a163-ab5cd815cb55`. A instalação foi confirmada pelo
-  Raul, mas não foi verificada por ADB nem avaliada fisicamente.
+- Aceite manual: em 2026-09-02, o Raul informou que testou o app atual no POCO
+  X8 Pro e considerou a experiência satisfatória para o beta pessoal.
 - Preview candidato: `v0.6.4`, build `23`, EAS
   `6ac1268d-5902-46b4-8108-457977bb7e1f`, commit `a2bb4b5`, `FINISHED` em
-  2026-09-02. Não está instalado nem constitui evidência física.
+  2026-09-02. Sem ADB, não há confirmação independente de que o binário
+  avaliado manualmente corresponde exatamente a esse package/build.
 - Sprint de publicação iniciado no commit `f2ed931`: licença MIT, commits via
   GitHub `noreply`, CI Python/mobile, Ruff, cobertura com piso de 85%, README,
   carrossel e demonstração MP4/GIF. O Raul tornou o repositório público em
@@ -26,12 +26,14 @@
 - A raiz pública está organizada por responsabilidade: motores em
   `focuslens/core/`, I/O em `focuslens/adapters/`, Streamlit em `focuslens/ui/`,
   executáveis em `scripts/` e documentos em quatro categorias sob `docs/`.
-- Decisão vigente do Raul: seguir a sequência canônica do roadmap. A Fase A
-  fecha antes de qualquer implementação da Etapa 6/Embedded.
+- Decisão vigente do Raul: o aceite manual encerra a Fase A para o escopo de
+  beta pessoal/portfólio. USB/ADB e validação iOS foram dispensados e não
+  bloqueiam a continuação; não devem ser apresentados como testes aprovados.
 - Não rodar Maestro automaticamente. Os fluxos agora são não destrutivos e o
   runner recusa `clearState: true`, mas a execução continua manual e deliberada.
-- Pendências físicas ativas: BI-04–BI-13, CL-11–CL-13, DB-10–DB-12 e E2E
-  Android/iOS.
+- BI-04–BI-13, CL-11–CL-13, DB-10–DB-12 e E2E nativo não foram registrados
+  item a item. Deixaram de ser gates do beta por decisão do titular e ficam
+  como checklists opcionais antes de eventual publicação em loja/produção.
 
 ## Retomada segura
 
@@ -155,8 +157,9 @@ dentro do sandbox e passaram em execução isolada/fora dele sem mudança de
 código. Trate-os primeiro como ruído do Windows/OneDrive, não como motivo para
 afrouxar gates.
 
-O preview EAS `v0.6.4/23` terminou, mas não foi instalado. Não houve Maestro,
-ADB nem avaliação física para `v0.5.3`–`v0.6.4`.
+O preview EAS `v0.6.4/23` terminou. O Raul informou ter testado o app atual no
+POCO e aceitou a experiência do beta. Não houve Maestro, ADB nem validação iOS;
+por isso a versão exata do binário não foi comprovada de forma independente.
 
 ## Estado físico e toolchain
 
@@ -164,17 +167,17 @@ ADB nem avaliação física para `v0.5.3`–`v0.6.4`.
   (`BP2A.250605.031.A3`).
 - Evidência já aprovada: DB-01–DB-05 e DB-07–DB-09; DB-06 é automatizado;
   BI-01–BI-03; CL-02–CL-10.
-- Ainda pendente: DB-10–DB-12, BI-04–BI-13, CL-11–CL-13 e E2E
-  Android/iOS.
+- DB-10–DB-12, BI-04–BI-13, CL-11–CL-13 e E2E nativo permanecem sem evidência
+  individual, mas foram dispensados como bloqueadores do beta pessoal.
 - Temurin `17.0.20.1`, Maestro `2.9.0` e ADB `37.0.1` estão disponíveis em
   toolchain portátil. A consulta de 2026-09-02 encontrou zero aparelhos.
 - O comando `npm run e2e:maestro:device:windows` confere aparelho, package e
   versão sem abrir o app; os fluxos preservam o estado local.
 - O APK candidato `v0.6.4/23` expira em 2026-09-16.
 
-Se os testes físicos forem retomados, usar estado descartável ou fazer backup
-fora do chat. Nunca inferir aprovação pela automação e nunca enviar evidência
-com dados reais da carteira.
+Se esses testes forem retomados antes de loja/produção, usar estado descartável
+ou fazer backup fora do chat. Nunca inferir aprovação pela automação e nunca
+enviar evidência com dados reais da carteira.
 
 ## Stashes preservados
 
@@ -214,14 +217,13 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 
 ## Próxima decisão
 
-- Instalar o preview `v0.6.4/23` já concluído no EAS
-  `6ac1268d-5902-46b4-8108-457977bb7e1f` e conectar o POCO por USB para o gate
-  ADB sem abrir o app.
-- Executar Maestro somente por decisão manual do Raul. As jornadas já preservam
-  o estado, mas não substituem TalkBack, texto ampliado ou o roteiro B3.
-- Fechar E2E iOS com ambiente/aparelho compatível.
-- Somente depois fechar receipt/threat model e iniciar a Etapa 6 na ordem da
+- Escolher se o marco público recebe tag/release `v0.6.4-beta` e configurar o
+  ruleset da `main`; essas ações continuam separadas da abertura do repositório.
+- Se o Raul quiser iniciar a Etapa 6, o próximo trabalho é fechar o contrato de
+  receipt e o threat model inicial antes do sandbox institucional, seguindo a
   seção 14 de `docs/product/PLANO_FOCUSLENS.md`.
+- Não planejar USB/ADB, Maestro ou iOS no escopo atual. Reabrir esses roteiros
+  somente por nova decisão ou antes de distribuição em loja/produção.
 
 ## Estado da publicação pública
 
@@ -244,18 +246,20 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 > `CONTEXT.md`, `docs/product/PLANO_FOCUSLENS.md`, `mobile/README.md` e
 > `docs/architecture/ARQUITETURA_MOBILE.md`. Preserve os três stashes
 > documentados. O corte
-> funcional é mobile `v0.6.4/23`; o preview instalado continua
-> `v0.5.2/11`, sem verificação ADB nem avaliação física. O preview candidato
-> `v0.6.4/23` terminou no EAS
-> `6ac1268d-5902-46b4-8108-457977bb7e1f`, mas ainda não foi instalado. Siga o
-> roadmap canônico: feche primeiro os gates físicos e iOS,
-> sem iniciar silenciosamente a Etapa 6. Preserve quatro abas, Home pessoal,
+> funcional é mobile `v0.6.4/23`; o Raul informou que testou o app atual no
+> POCO e aceitou o beta pessoal. O preview candidato `v0.6.4/23` terminou no
+> EAS `6ac1268d-5902-46b4-8108-457977bb7e1f`; sem ADB, não associe a avaliação
+> a esse package/build como evidência independente. USB/ADB e iOS foram
+> dispensados e não bloqueiam o roadmap, mas também não contam como aprovados.
+> Preserve quatro abas, Home pessoal,
 > distinção demo × local, modo discreto, B3 antes da carteira fictícia e estado
 > novo somente na
 > sessão. Não altere motores Python, snapshot `v1`, cofre, importador B3 ou
 > persistências; não adicione dependência, rede, telemetria, recomendação ou
 > produto. Não rode Maestro automaticamente. Os fluxos preservam estado e o
-> runner recusa `clearState: true`. BI-04–BI-13, CL-11–CL-13, DB-10–DB-12 e
-> E2E Android/iOS seguem pendentes. Ao concluir, rode os gates,
+> runner recusa `clearState: true`. Os checklists BI-04–BI-13, CL-11–CL-13,
+> DB-10–DB-12 e E2E nativo ficam opcionais para loja/produção. A próxima
+> decisão é tag/release + ruleset ou a preparação de receipt/threat model para
+> a Etapa 6. Ao concluir, rode os gates,
 > atualize a documentação sem recriar um changelog no `CONTEXT.md`, remova
 > temporários e faça commit/push somente no Git interno.

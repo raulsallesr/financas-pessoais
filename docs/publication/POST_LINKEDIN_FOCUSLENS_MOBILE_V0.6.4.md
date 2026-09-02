@@ -38,9 +38,10 @@ O corte atual, `v0.6.4`, fecha com **301 testes automatizados**: 194 no núcleo
 Python e 107 no mobile. O CI também verifica Ruff, cobertura Python com piso de
 85%, TypeScript e o export Android.
 
-É um beta honesto: os gates físicos completos de Android/iOS, TalkBack e texto
-ampliado continuam pendentes e não são substituídos por um print bonito ou por
-testes verdes.
+É um beta honesto: a experiência foi aceita manualmente no POCO X8 Pro, mas
+ADB, iOS, TalkBack e texto ampliado não foram executados como validação formal.
+Eles ficam reservados para eventual distribuição em loja/produção e não são
+substituídos por um print bonito ou por testes verdes.
 
 Código, arquitetura e decisões:
 https://github.com/raulsallesr/financas-pessoais
@@ -76,5 +77,5 @@ O vídeo, o GIF e as três imagens são capturas reais do renderer web da mesma
 - CI público `quality` conferido verde;
 - abrir o link em sessão anônima e validar README, licença, GIF e MP4;
 - não chamar o beta de “validado em produção” ou dizer que os gates físicos
-  pendentes foram concluídos;
+  dispensados no escopo pessoal foram tecnicamente aprovados;
 - não expor APK temporário como distribuição pública permanente.

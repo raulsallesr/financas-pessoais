@@ -101,9 +101,11 @@ A estratégia completa está em
 [`docs/product/ESTRATEGIA_INSTITUCIONAL.md`](docs/product/ESTRATEGIA_INSTITUCIONAL.md). A
 arquitetura-alvo, os contratos e os gates estão em
 [`docs/architecture/ARQUITETURA_INSTITUCIONAL.md`](docs/architecture/ARQUITETURA_INSTITUCIONAL.md).
-Nenhum desses componentes institucionais está implementado neste corte. A
-Etapa 6 continua bloqueada pelos gates físicos Android/iOS documentados; esta
-preparação pública não antecipa API, autenticação, telemetria ou Open Finance.
+Nenhum desses componentes institucionais está implementado neste corte. O
+Raul aceitou manualmente o beta pessoal e dispensou USB/ADB e iOS como
+bloqueadores; a Etapa 6 ainda depende de decisão explícita, receipt e threat
+model. Esta preparação pública não antecipa API, autenticação, telemetria ou
+Open Finance.
 
 ## Referência Streamlit `v2.0`
 
@@ -239,7 +241,9 @@ npm run web
 A prévia imediata usa o renderer web da mesma base React Native. O preview
 instalado e os builds posteriores estão registrados em
 [`mobile/README.md`](mobile/README.md); instalação, ADB e avaliação física não
-são inferidos a partir dos gates locais. O gate completo é:
+são inferidos a partir dos gates locais. O beta foi aceito manualmente pelo
+Raul no POCO; ADB e iOS foram dispensados no escopo pessoal, sem serem chamados
+de testes aprovados. O gate automatizado completo é:
 
 ```powershell
 npm run typecheck

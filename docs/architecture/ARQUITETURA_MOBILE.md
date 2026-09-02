@@ -184,6 +184,12 @@ com `clearState: false`, preservando carteira, cofre, histórico e favoritos. O
 runner recusa `clearState: true` e oferece um gate ADB que confere aparelho,
 package e versão sem abrir o app nem executar Maestro.
 
+Em 2026-09-02, o Raul informou que testou o app atual no POCO e aceitou o beta
+pessoal. USB/ADB e iOS foram dispensados como bloqueadores do roadmap. Essa
+decisão não transforma package, build, Maestro ou checklists não executados em
+evidência aprovada; a validação formal permanece exigível antes de
+loja/produção.
+
 As dependências de teste permanecem em `devDependencies`; Metro confirmou 650
 módulos no bundle Android. Nenhum motor, storage ou contrato público/privado foi
 alterado.
@@ -475,15 +481,18 @@ build atual.
 1. **concluído:** snapshot JSON público e versionado a partir dos motores
    Python, sem carteira, com schema e teste de compatibilidade;
 2. **concluído:** provider somente leitura com fallback local explícito;
-3. **pausado após evidência parcial:** configuração EAS/dev client, safe areas, rotação,
+3. **encerrado no beta por aceite manual:** configuração EAS/dev client, safe areas, rotação,
    identificadores, splash e perfis internos concluída; APKs Android
    `development` e `preview` gerados e instalados no POCO X8 Pro, com fluxo
-   principal/offline aprovado, acessibilidade física pendente e rota iOS em
+   principal/offline aprovado; acessibilidade formal e iOS ficam reservados
+   para loja/produção em
    [`VALIDACAO_DEVELOPMENT_BUILD.md`](../validation/VALIDACAO_DEVELOPMENT_BUILD.md);
 4. **implementado; CL-02 a CL-10 aprovados:** carteira local editável e
-   criptografada, sem nuvem por padrão; acessibilidade física pendente;
+   criptografada, sem nuvem por padrão; CL-11 a CL-13 ficam sem evidência
+   individual e reservados para loja/produção;
 5. **implementado; BI-01 a BI-03 aprovados:** importação B3 sanitizada para o
-   mesmo contrato privado; restante do ciclo físico pendente;
+   mesmo contrato privado; BI-04 a BI-13 ficam sem evidência individual e
+   reservados para loja/produção;
 6. **implementado localmente em `v0.4.1`:** recorte pessoal, distribuição por
    classe, cobertura honesta e revelação progressiva;
 7. **implementado localmente em `v0.4.2`:** modo discreto entre abas e resumo
@@ -521,8 +530,10 @@ build atual.
     implícita sob convenção explícita;
 24. **implementado localmente em `v0.6.4`:** duração de saldo sob retiradas
     mensais e reajuste anual opcional, somente na sessão;
-25. executar os fluxos E2E em estado seguro e fechar os gates físicos pendentes;
-26. somente depois, avaliar autenticação e integrações bancárias/Open Finance.
+25. **encerrado para o beta pessoal:** aceite manual no POCO; USB/ADB, E2E
+    nativo e iOS dispensados como bloqueadores, sem inferir aprovação técnica;
+26. se a Etapa 6 for autorizada, fechar primeiro receipt e threat model; gates
+    físicos completos voltam a ser obrigatórios apenas para loja/produção.
 
 ## Gate de produção
 
@@ -553,7 +564,7 @@ toolchain, inclusive do Expo.
   e abertura em modo avião foram aprovados;
 - rotação, safe areas em paisagem e botão Voltar foram aprovados no POCO X8
   Pro com Android 16 (`BP2A.250605.031.A3`); TalkBack, texto ampliado e alvos de
-  toque permanecem pendentes e pausados;
+  toque permanecem sem evidência individual e reservados para loja/produção;
 - a evidência operacional está em
   [`VALIDACAO_DEVELOPMENT_BUILD.md`](../validation/VALIDACAO_DEVELOPMENT_BUILD.md).
 
@@ -585,5 +596,6 @@ toolchain, inclusive do Expo.
 - o preview `c7695638-2f38-42a4-af07-92303f2a5ce0`, commit `c6bb875` e
   fingerprint `4df3790bd18465bb8a429b23f9814aabf1ac6dc8` terminou `FINISHED`;
 - o APK `v0.4.0`, build `4`, expira em 2026-09-11; BI-01 a BI-03 foram
-  aprovados e BI-04 a BI-13 continuam pendentes em
+  aprovados e BI-04 a BI-13 continuam sem evidência individual, reservados
+  como gate para eventual loja/produção em
   [`VALIDACAO_IMPORTACAO_B3.md`](../validation/VALIDACAO_IMPORTACAO_B3.md).

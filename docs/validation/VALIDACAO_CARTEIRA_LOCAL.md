@@ -31,6 +31,12 @@ o `v0.5.2/11` é somente o binário consolidado recomendado para retomá-los.
 Em seguida, o Raul decidiu continuar no incremento de produto `v0.5.3` antes
 dos testes; isso também não muda a matriz.
 
+**Aceite do beta em 2026-09-02:** após informar que testou o app atual no POCO
+X8 Pro e que a experiência estava boa, o Raul dispensou USB/ADB e iOS. CL-11 a
+CL-13 continuam sem evidência individual e não devem ser chamados de aprovados,
+mas deixam de bloquear o beta pessoal. Retomar somente antes de loja/produção
+ou por nova decisão do titular.
+
 Este documento é a evidência operacional da seção 15 de
 `docs/product/PLANO_FOCUSLENS.md`. Não registrar aqui nome de ativo real, valor, conta,
 instituição, print da carteira pessoal ou qualquer outro dado financeiro.

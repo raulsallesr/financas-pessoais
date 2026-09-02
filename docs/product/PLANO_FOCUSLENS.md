@@ -277,7 +277,10 @@ sincronização de conta, Open Finance, cloud de carteira ou publicação em loj
 **Estado:** fundação `v0.1`, contrato vivo `v1`, distribuição Android, carteira
 local, importação B3 e os três primeiros incrementos da Etapa 5C chegaram ao
 preview `v0.5.2/11`. O Raul confirmou a instalação desse APK em 2026-08-31;
-gates físicos permanecem parciais e pausados. A revisão guiada da semana
+os registros físicos permaneceram parciais. Em 2026-09-02, após informar que
+testou o app atual no POCO e que a experiência estava boa, o Raul aceitou o
+beta pessoal e dispensou USB/ADB e validação iOS como bloqueadores. Esses gates
+não executados não devem ser chamados de aprovados. A revisão guiada da semana
 `v0.5.3` e o laboratório educacional `v0.5.4`–`v0.6.4` foram concluídos
 localmente e estão documentados nas seções 24 a 35. O corte atual organiza
 Cenários por intenção e inclui aportes variáveis, parcelamento e duração de um
@@ -629,9 +632,10 @@ equivalente para iOS, que depende de ambiente e assinatura Apple compatíveis.
 6. manter carteira editável, importação B3, alertas, autenticação e Open
    Finance fora deste incremento.
 
-### Estado da execução em 2026-08-28
+### Estado da execução e aceite do beta
 
-**Em andamento; fechamento de acessibilidade pendente.** A configuração portátil do build está
+**Encerrado para o escopo de beta pessoal por aceite do titular em 2026-09-02.**
+A configuração portátil do build está
 fechada: Expo SDK `57.0.18`, `expo-dev-client`, EAS CLI mínimo `23.0.0`, perfis
 `development`/`preview`, identificadores nativos, scheme, safe areas, rotação e
 splash compatível. Expo Doctor passou `21/21`, TypeScript e os testes móveis
@@ -651,12 +655,11 @@ o Metro foi bloqueada pelo firewall corporativo `BlockInbound`; o preview foi
 instalado em seguida e aprovou quatro abas, snapshot e reabertura em modo avião.
 O aparelho usa Android 16 (`BP2A.250605.031.A3`).
 
-Completar DB-10 a DB-12 em `docs/validation/VALIDACAO_DEVELOPMENT_BUILD.md`:
-TalkBack,
-texto ampliado e alvos de toque. Esses gates foram pausados por decisão do Raul
-enquanto a utilidade cotidiana do produto é refinada no `v0.4.4`.
-Não marcar esta seção como concluída só porque o fluxo principal e o offline
-passaram; a evidência de acessibilidade continua obrigatória.
+DB-10 a DB-12, BI-04 a BI-13 e CL-11 a CL-13 não foram executados item a item.
+O Raul dispensou o fechamento formal desses roteiros, USB/ADB e iOS como
+condição para continuar o produto pessoal. Eles permanecem documentados para
+uma eventual distribuição em loja/produção e não devem ser apresentados como
+testes aprovados.
 
 ## 14. Roadmap aprovado — FocusLens Embedded
 
@@ -669,6 +672,13 @@ A tese, o pacote comercial e o desenho do piloto estão em
 `docs/product/ESTRATEGIA_INSTITUCIONAL.md`. Fronteiras, contratos, segurança,
 observabilidade e gates estão em
 `docs/architecture/ARQUITETURA_INSTITUCIONAL.md`.
+
+**Decisão de 2026-09-02:** o aceite manual informado pelo Raul fecha a trilha
+móvel para o beta pessoal/portfólio. USB/ADB, Maestro, os checklists físicos
+restantes e iOS não bloqueiam mais a continuação por decisão do titular; seguem
+sem evidência individual e voltam a ser necessários se o destino mudar para
+loja/produção. O início da Etapa 6 ainda exige decisão explícita e o fechamento
+de receipt/threat model abaixo.
 
 ### Sequência canônica
 
@@ -1125,8 +1135,8 @@ commit `1c477f5`, fingerprint `4a0bc79db5a2beeb9b694f3ee8718ff13be38dff`.
 O [APK direto](https://expo.dev/artifacts/eas/dvVgjSbINj4f3OdJ4CJXx_O651PcG-llvTyurlh0Ytc.apk)
 expira em 2026-09-14 e teve a instalação confirmada pelo Raul. O aparelho não
 estava conectado ao ADB, portanto package/versão e as jornadas não foram
-verificados. O build não usou variáveis `Plain text` ou `Sensitive`. Isso mantém
-E2E Android/iOS e os demais gates físicos como pendentes.
+verificados. O build não usou variáveis `Plain text` ou `Sensitive`. Naquele
+momento, E2E Android/iOS e os demais gates físicos permaneceram pendentes.
 
 A auditoria inclui zero vulnerabilidade alta/crítica e 11 moderadas transitivas
 no toolchain Expo. `npm audit fix --force` não foi aplicado: a correção sugerida
@@ -1134,12 +1144,13 @@ troca o projeto para Expo 46 e rompe a compatibilidade do SDK 57.
 
 ### Estado dos gates físicos
 
-BI-04 a BI-13, CL-11 a CL-13, DB-10 a DB-12 e E2E Android/iOS permanecem
-pendentes. Em 2026-09-02, as duas jornadas passaram a reiniciar somente o
-processo com `clearState: false`, e o runner passou a recusar qualquer fluxo
-destrutivo. A checagem ADB pode ser executada isoladamente, sem abrir o app.
-Etapa 6/Embedded continua bloqueada até esses gates e as demais condições da
-seção 14 serem fechados.
+BI-04 a BI-13, CL-11 a CL-13, DB-10 a DB-12 e E2E nativo não receberam
+evidência individual. Em 2026-09-02, as jornadas passaram a preservar o estado
+local; depois, o Raul informou que testou o app atual no POCO, aceitou o beta e
+dispensou USB/ADB e iOS. Esses itens deixam de bloquear o produto pessoal sem
+ser reclassificados como aprovados. Antes da Etapa 6 ainda é necessário fechar
+receipt/threat model e receber decisão explícita; os gates físicos retornam se
+o destino mudar para loja/produção.
 
 ## 24. Etapa 5C, incremento 4 — revisão guiada da semana `v0.5.3`
 
@@ -1550,5 +1561,8 @@ O export e o Playwright reproduziram, respectivamente, `spawn EPERM` e
 O preview EAS `v0.6.4/23` foi submetido em 2026-09-02 no ID
 `6ac1268d-5902-46b4-8108-457977bb7e1f`, commit `a2bb4b5`, e terminou
 `FINISHED` no mesmo dia. O APK expira em 2026-09-16. O preview instalado
-continua `v0.5.2/11`; nenhum Maestro ou gate físico novo foi executado. BI-04 a
-BI-13, CL-11 a CL-13, DB-10 a DB-12 e E2E Android/iOS permanecem pendentes.
+permaneceu sem confirmação independente por ADB. Depois, o Raul informou que
+testou o app atual no POCO e aceitou o beta pessoal. Nenhum Maestro ou teste
+iOS foi executado; BI-04 a BI-13, CL-11 a CL-13, DB-10 a DB-12 e E2E nativo
+continuam sem evidência individual, mas não bloqueiam o roadmap atual por
+decisão do titular.
