@@ -194,6 +194,14 @@ simulador de aportes e o harness E2E. O Raul confirmou a instalação por cima d
 app em 2026-08-31, mas o ADB encontrou zero aparelhos conectados e não confirmou
 package ou versão. Nenhum gate físico mudou de estado apenas por esse relato.
 
+**Preview candidato atual:** app `0.6.4`, build `23`, EAS
+[`6ac1268d-5902-46b4-8108-457977bb7e1f`](https://expo.dev/accounts/raulsallesr/projects/focuslens-br/builds/6ac1268d-5902-46b4-8108-457977bb7e1f),
+commit `a2bb4b5`, fingerprint
+`057c832c7452945400ff2d5f2c34b90bf9f3b275`. O build foi submetido em
+2026-09-02 e permanecia `IN_QUEUE` na última consulta. Não registrar instalação,
+package, versão ou gate físico até o artefato terminar e ser observado no
+aparelho.
+
 Com o preview instalado:
 
 1. abrir conectado e confirmar `DADOS PÚBLICOS`, data e fontes;

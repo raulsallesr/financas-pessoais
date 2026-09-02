@@ -1545,6 +1545,8 @@ do gate final.
 
 O export e o Playwright reproduziram, respectivamente, `spawn EPERM` e
 `WinError 5` dentro do sandbox e passaram fora dele sem mudança funcional.
-Nenhum preview EAS, Maestro ou gate físico foi executado. O preview instalado
-continua `v0.5.2/11`; BI-04 a BI-13, CL-11 a CL-13, DB-10 a DB-12 e E2E
-Android/iOS permanecem pausados e pendentes.
+O preview EAS `v0.6.4/23` foi submetido em 2026-09-02 no ID
+`6ac1268d-5902-46b4-8108-457977bb7e1f`, commit `a2bb4b5`, e permanecia
+`IN_QUEUE` na última consulta. O preview instalado continua `v0.5.2/11`;
+nenhum Maestro ou gate físico novo foi executado. BI-04 a BI-13, CL-11 a CL-13,
+DB-10 a DB-12 e E2E Android/iOS permanecem pendentes.

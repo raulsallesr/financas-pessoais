@@ -245,8 +245,9 @@ movimento reduzido, sem overflow horizontal ou alvo interativo visível abaixo
 de 44 px. A inflação opcional e a parte inferior do resultado também foram
 inspecionadas. O primeiro export e o primeiro Playwright reproduziram os
 bloqueios conhecidos `spawn EPERM` e `WinError 5` no sandbox; ambos passaram
-fora dele, sem mudança funcional. Nenhum preview EAS, Maestro ou gate físico
-foi executado para `v0.6.1`–`v0.6.4`.
+fora dele, sem mudança funcional. O preview `v0.6.4/23`, commit `a2bb4b5`, foi
+submetido no EAS `6ac1268d-5902-46b4-8108-457977bb7e1f` e ainda estava
+`IN_QUEUE` na última consulta. Nenhum Maestro ou gate físico novo foi executado.
 
 ## Como atualizar a fotografia pública
 

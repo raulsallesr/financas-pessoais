@@ -15,11 +15,14 @@
 - Preview realmente instalado: `v0.5.2`, build `11`, EAS
   `c08e5397-427f-42c2-a163-ab5cd815cb55`. A instalação foi confirmada pelo
   Raul, mas não foi verificada por ADB nem avaliada fisicamente.
-- Decisão vigente do Raul: continuar melhorando utilidade e vontade de uso antes
-  de priorizar a bateria física restante.
+- Preview atual submetido: `v0.6.4`, build `23`, EAS
+  `6ac1268d-5902-46b4-8108-457977bb7e1f`, commit `a2bb4b5`, ainda `IN_QUEUE`
+  na última consulta. Não está instalado nem constitui evidência física.
+- Decisão vigente do Raul: seguir a sequência canônica do roadmap. A Fase A
+  fecha antes de qualquer implementação da Etapa 6/Embedded.
 - Não rodar Maestro automaticamente. Os fluxos agora são não destrutivos e o
   runner recusa `clearState: true`, mas a execução continua manual e deliberada.
-- Pendências pausadas: BI-04–BI-13, CL-11–CL-13, DB-10–DB-12 e E2E
+- Pendências físicas ativas: BI-04–BI-13, CL-11–CL-13, DB-10–DB-12 e E2E
   Android/iOS.
 
 ## Retomada segura
@@ -153,7 +156,7 @@ Não houve preview EAS, Maestro, ADB nem avaliação física para `v0.5.3`–`v0
 - Ainda pendente: DB-10–DB-12, BI-04–BI-13, CL-11–CL-13 e E2E
   Android/iOS.
 - Temurin `17.0.20.1`, Maestro `2.9.0` e ADB `37.0.1` estão disponíveis em
-  toolchain portátil. A última consulta ADB encontrou zero aparelhos.
+  toolchain portátil. A consulta de 2026-09-02 encontrou zero aparelhos.
 - O comando `npm run e2e:maestro:device:windows` confere aparelho, package e
   versão sem abrir o app; os fluxos preservam o estado local.
 - Os APKs internos anteriores expiram em 2026-09-11.
@@ -197,15 +200,13 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 
 ## Próxima decisão
 
-- O usuário quer **mais melhorias de produto antes da bateria física**.
-- Nenhum incremento posterior a `v0.6.4` está escolhido. Não inventar uma etapa
-  como se estivesse aprovada; propor ou selecionar a próxima utilidade com base
-  em clareza para iniciantes e motivo recorrente para voltar.
-- Priorizar perguntas reconhecíveis, resposta em poucos segundos e profundidade
-  opcional. Evitar empilhar novos painéis sem orientação.
-- Quando houver nova entrega: atualizar este estado curto, registrar detalhes no
-  `PLANO_FOCUSLENS.md`/arquitetura somente quando necessários, rodar gates,
-  remover temporários e publicar no Git interno.
+- Aguardar o EAS `6ac1268d-5902-46b4-8108-457977bb7e1f` terminar, instalar o
+  `v0.6.4/23` e conectar o POCO por USB para o gate ADB sem abrir o app.
+- Executar Maestro somente por decisão manual do Raul. As jornadas já preservam
+  o estado, mas não substituem TalkBack, texto ampliado ou o roteiro B3.
+- Fechar E2E iOS com ambiente/aparelho compatível e escolher a licença do código.
+- Somente depois fechar receipt/threat model e iniciar a Etapa 6 na ordem da
+  seção 14 de `PLANO_FOCUSLENS.md`.
 
 ## Bloqueios de publicação pública
 
@@ -223,13 +224,16 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 > `CONTEXT.md`, `PLANO_FOCUSLENS.md`, `mobile/README.md` e
 > `docs/ARQUITETURA_MOBILE.md`. Preserve os três stashes documentados. O corte
 > funcional é mobile `v0.6.4/23`; o preview instalado continua
-> `v0.5.2/11`, sem verificação ADB nem avaliação física. Continue melhorias de
-> produto para iniciantes antes da bateria física, sem escolher silenciosamente
-> uma etapa não aprovada. Preserve quatro abas, Home pessoal, distinção demo ×
+> `v0.5.2/11`, sem verificação ADB nem avaliação física. O preview atual está no
+> EAS `6ac1268d-5902-46b4-8108-457977bb7e1f`; consulte o status antes de criar
+> outro. Siga o roadmap canônico: feche primeiro os gates físicos, iOS e licença,
+> sem iniciar silenciosamente a Etapa 6. Preserve quatro abas, Home pessoal,
+> distinção demo ×
 > local, modo discreto, B3 antes da carteira fictícia e estado novo somente na
 > sessão. Não altere motores Python, snapshot `v1`, cofre, importador B3 ou
 > persistências; não adicione dependência, rede, telemetria, recomendação ou
-> produto. Não rode Maestro automaticamente. BI-04–BI-13, CL-11–CL-13,
-> DB-10–DB-12 e E2E Android/iOS seguem pausados. Ao concluir, rode os gates,
+> produto. Não rode Maestro automaticamente. Os fluxos preservam estado e o
+> runner recusa `clearState: true`. BI-04–BI-13, CL-11–CL-13, DB-10–DB-12 e
+> E2E Android/iOS seguem pendentes. Ao concluir, rode os gates,
 > atualize a documentação sem recriar um changelog no `CONTEXT.md`, remova
 > temporários e faça commit/push somente no Git interno.
