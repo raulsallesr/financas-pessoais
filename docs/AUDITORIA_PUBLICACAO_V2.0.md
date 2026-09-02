@@ -1,66 +1,73 @@
-# Auditoria de publicação — FocusLens BR v2.0
+# Auditoria de publicação — FocusLens BR
 
-**Data da auditoria:** 27/08/2026
+**Data da auditoria:** 02/09/2026
 
-**Base auditada:** `main` em `536916c`
+**Base funcional auditada:** `f2ed931` (`main`)
 
-**Estado:** tecnicamente aprovado como release candidate; repositório mantido
-privado até as decisões de governança descritas abaixo.
+**Cortes apresentados:** Streamlit `v2.0` e mobile `v0.6.4/23`
 
-Esta é uma auditoria técnica de publicação, não um parecer jurídico.
+**Estado:** pronto para abertura pública como projeto de portfólio, condicionada
+à ação explícita do titular e à conferência do primeiro CI público.
+
+Esta é uma auditoria técnica de publicação, não um parecer jurídico nem uma
+aprovação para distribuição em loja.
 
 ## Veredito
 
-O código, os dados versionados, os ativos visuais e as dependências não
-apresentaram segredo, dado pessoal, arquivo de carteira, extensão sensível ou
-vulnerabilidade conhecida nos testes executados. O pacote pode ser versionado
-e apresentado como release candidate.
+O candidato possui licença MIT, narrativa pública atual, três capturas reais do
+app, lint Python, cobertura mensurada e CI para as duas stacks. A varredura da
+árvore e do histórico não encontrou segredo, CPF/CNPJ válido, arquivo de
+carteira ou extensão sensível.
 
-A abertura pública e a tag `v2.0` ficam pendentes de duas decisões do titular:
+O histórico Git foi preservado. Um endereço pessoal continua presente em
+metadados antigos; os novos commits já usam o endereço `noreply` oficial do
+GitHub. Isso evita uma reescrita de 63 commits e a troca de todos os hashes.
 
-1. escolher a licença do código — por exemplo, uma licença aberta ou a
-   manutenção explícita de todos os direitos reservados;
-2. aceitar a exposição de um e-mail de autor não mascarado presente nos
-   metadados de commits ou autorizar uma reescrita controlada do histórico.
-
-Reescrita de histórico e mudança de visibilidade não foram executadas.
+A abertura pública, a tag/release e as regras da `main` não foram executadas.
+Essas são ações de publicação, não lacunas do candidato. Também continuam
+pendentes os gates físicos mobile; por isso o projeto deve ser apresentado como
+**beta funcional**, não como app validado em produção.
 
 ## Evidências por gate
 
 | Gate | Resultado | Evidência |
 |---|---|---|
-| Árvore atual | Aprovado | 107 arquivos no candidato final (102 da base e cinco novos); nenhum caminho `.env`, XLSX, PDF, chave, certificado ou banco local |
-| Segredos e PII | Aprovado | nenhum token conhecido, chave privada, credencial atribuída, CPF/CNPJ válido ou padrão equivalente encontrado |
-| Histórico Git | Aprovado com ressalva | conteúdo e caminhos dos refs alcançáveis limpos; um e-mail de autor não mascarado permanece nos metadados |
-| Caches públicos | Aprovado | 90 registros Focus e 225 pontos de curva; somente campos públicos documentados |
-| Carteira | Aprovado | importação XLSX em memória; identificadores descartados; nenhum valor ou arquivo pessoal versionado |
-| Dependências | Aprovado | `pip check` limpo; `pip-audit 2.10.1 -r requirements.txt` sem vulnerabilidade conhecida nesta data |
-| Licenças de dependências | Aprovado | árvore instalada com 39 distribuições; licenças permissivas ou compatíveis identificadas, sem GPL/AGPL detectada |
-| Fontes e atribuição | Aprovado | BACEN/Focus e Tesouro sob ODbL; atribuições visíveis; EIA/FRED citado; Binance e RSS consumidos sem republicar bases ou corpos editoriais |
-| Ativos visuais | Aprovado | PNG obtido do app real e SVG autoral, sem fonte, foto, logotipo ou biblioteca visual externa |
-| Workflows | Aprovado | ações oficiais; permissões de escrita usadas somente para versionar os dois caches públicos |
-| Licença do código | Decisão pendente | não existe arquivo `LICENSE`; sem licença, terceiros não recebem permissão explícita de reutilização |
-| Visibilidade | Preservada | consulta anônima ao GitHub retornou 404 e o push autenticado continuou funcional: repositório privado |
+| Árvore atual | Aprovado | 202 arquivos rastreados; nenhum `.env`, XLSX, PDF, chave, certificado ou banco local |
+| Segredos e PII | Aprovado | zero arquivo com os padrões auditados de chave privada, credencial atribuída, token conhecido ou CPF/CNPJ válido |
+| Histórico Git | Aprovado com ressalva aceita | zero extensão sensível e zero família de padrão de segredo; um e-mail antigo não mascarado permanece nos metadados |
+| Licença do projeto | Aprovado | `LICENSE` MIT, copyright 2026 Raul Rolim |
+| Identidade futura | Aprovado | commit `f2ed931` criado com GitHub `noreply`; histórico não reescrito |
+| Caches públicos | Aprovado | 96 registros Focus e 225 pontos de curva, somente com campos públicos documentados |
+| Carteira | Aprovado | XLSX processado localmente; identificadores descartados; nenhum valor ou arquivo pessoal versionado |
+| Python | Aprovado | Ruff limpo; 191 testes; cobertura de branches em 86,1%, acima do piso de 85% |
+| Mobile | Aprovado localmente | TypeScript, 70 testes de domínio, 33 de componentes, 4 contratos E2E e export Android com 656 módulos |
+| CI | Preparado | workflow `quality` executa Python e mobile; primeiro resultado remoto depende do push |
+| Dependências Python | Aprovado | `pip check` limpo; `pip-audit 2.10.1` sem vulnerabilidade conhecida |
+| Dependências mobile | Aprovado com ressalva | zero vulnerabilidade alta/crítica; 11 moderadas transitivas no toolchain Expo/UUID |
+| Ativos visuais | Aprovado | três PNGs do app real em 430×932, fotografia pública e carteira fictícia, sem imagem externa |
+| EAS Android | Concluído, não físico | preview `v0.6.4/23` terminou `FINISHED`; ainda não foi instalado nem conferido por ADB |
+| Visibilidade | Preservada | repositório continua privado; nenhuma tag/release ou regra de branch foi criada |
 
-## Dados versionados
+## Cobertura e qualidade automatizada
 
-### `dados/focus_cache.json`
+O workflow `.github/workflows/tests.yml` possui dois jobs independentes:
 
-- campos: indicador, referência, data de coleta, mediana, média, mínimo,
-  máximo, desvio-padrão e número de respondentes;
-- origem: Sistema de Expectativas de Mercado/BACEN;
-- não contém instituição respondente, CPF, CNPJ, conta ou posição pessoal.
+1. **Python:** instala `requirements-dev.txt`, executa Ruff, roda a suíte com
+   cobertura de branches e publica `coverage.xml` como artefato do job;
+2. **Mobile:** usa Node 24, instalação reproduzível por `npm ci`, TypeScript,
+   todos os testes e export Android/Hermes.
 
-### `dados/curva_prefixada_cache.json`
+O piso de cobertura está em `pyproject.toml`. Ele vale sobre a aplicação
+Python inteira, incluindo apresentação e scripts; testes não entram no
+denominador. A medição do candidato foi 86,1%, sem exclusão artificial de
+módulo pouco coberto.
 
-- campos: data-base, tipo de título, vencimento, taxas, preços unitários e
-  fonte;
-- origem: Tesouro Transparente;
-- não contém custódia, investidor, corretora ou posição individual.
+Os 191 testes Python e os 107 testes mobile totalizam **298 testes
+automatizados**. Maestro não foi executado nesta auditoria.
 
-## Dependências e licenças
+## Dependências
 
-Dependências diretas verificadas no ambiente da auditoria:
+Dependências diretas Python verificadas no ambiente:
 
 | Pacote | Versão instalada | Licença declarada |
 |---|---:|---|
@@ -69,50 +76,69 @@ Dependências diretas verificadas no ambiente da auditoria:
 | Pandas | 3.0.5 | BSD-3-Clause |
 | openpyxl | 3.1.5 | MIT |
 
-A árvore transitiva instalada totalizou 39 distribuições. Foram observadas
-licenças Apache, BSD, MIT, MPL-2.0, PSF e equivalentes permissivas. O resultado
-é uma fotografia do ambiente em 27/08/2026; vulnerabilidades e metadados podem
-mudar e devem ser reavaliados em cada release.
+`pip-audit 2.10.1 -r requirements.txt` não encontrou vulnerabilidade conhecida
+em 02/09/2026.
 
-## Fontes públicas e direitos de conteúdo
+O `npm audit`, inclusive com `--omit=dev`, reportou 11 vulnerabilidades
+moderadas na cadeia `uuid → xcode → @expo/config-plugins`. Não existe achado
+alto ou crítico. O reparo automático sugerido exige uma mudança incompatível
+com o Expo SDK 57; `npm audit fix --force` não foi aplicado. Esse risco deve ser
+reavaliado numa atualização coordenada do Expo e antes de distribuição em loja,
+mas não exige quebrar o beta apenas para produzir um número verde.
 
-- **BACEN/Focus:** o catálogo oficial declara Open Data Commons ODbL e o app
-  mantém fonte e datas junto da leitura.
-- **Tesouro Transparente:** o metadado CKAN declara `odc-odbl`; o cache mantém
-  atribuição por registro e a metodologia registra o recorte utilizado.
-- **Brent:** a série DCOILBRENTEU identifica a EIA como fonte e solicita
-  citação; o projeto exibe a atribuição e não versiona uma cópia da série.
-- **Binance:** somente a API pública de mercado é consultada; não há base bruta
-  redistribuída no repositório.
-- **Notícias:** o app exibe título, veículo, horário e link do RSS. Corpo,
-  imagem e paywall não são republicados; análise sob demanda é efêmera.
-- **Imagens da release:** a captura é do próprio app e o diagrama é SVG
-  produzido no repositório com tipografia do sistema.
+## Dados, fontes e ativos
+
+### `dados/focus_cache.json`
+
+- 96 registros de expectativas;
+- origem: Sistema de Expectativas de Mercado/BACEN;
+- sem instituição respondente, documento, conta ou posição pessoal.
+
+### `dados/curva_prefixada_cache.json`
+
+- 225 pontos de curva;
+- origem: Tesouro Transparente;
+- sem custódia, investidor, corretora ou posição individual.
+
+O snapshot mobile público transporta somente leitura, fonte, data, evidência e
+efeitos por classe. Carteira, histórico privado, favoritos e estados de
+simulação ficam fora desse artefato.
+
+As imagens `focuslens-mobile-v0.6.4-*.png` foram capturadas do renderer web da
+mesma árvore React Native. Elas usam o snapshot público e a demonstração
+fictícia; não contêm captura de aparelho ou dado do titular.
 
 ## Comandos e verificações executados
 
-- varredura do estado atual e dos patches de todos os refs alcançáveis por
-  padrões de chaves, tokens, credenciais, CPF e CNPJ, sem imprimir conteúdo;
-- inspeção dos caminhos atuais e históricos por extensões sensíveis;
-- inventário estrutural dos dois caches, exibindo apenas chaves e contagens;
-- inventário de licenças da árvore de dependências instalada;
-- `pip-audit 2.10.1 -r requirements.txt` em ambiente temporário isolado;
-- `pip check`, suíte completa, `py_compile` e `git diff --check`;
-- validação do PNG real em 375, 768, 1024, 1440 e 844×390 px;
-- parsing XML e renderização real do SVG técnico;
-- consulta anônima de visibilidade do repositório no GitHub.
+- `ruff check .`;
+- `pytest tests/ -q --cov=.` com branch coverage e piso de 85%;
+- `pip check`;
+- `pip-audit 2.10.1 -r requirements.txt`;
+- `npm run typecheck`;
+- `npm test`;
+- `npm run export:android` fora do sandbox após o `spawn EPERM` conhecido;
+- `npm audit --omit=dev --audit-level=high` e auditoria da árvore completa;
+- varredura do candidato e dos patches alcançáveis por padrões de segredo e
+  documentos válidos, sem imprimir conteúdo encontrado;
+- inspeção de caminhos atuais e históricos por extensões sensíveis;
+- validação de links locais, dimensões dos PNGs e `git diff --check`.
 
-## Checklist antes de abrir o repositório
+## O que falta para a abertura pública
 
-- [x] segredos e dados pessoais auditados;
-- [x] histórico e caminhos removidos auditados;
-- [x] caches públicos inspecionados;
-- [x] dependências e vulnerabilidades auditadas;
-- [x] atribuições das fontes documentadas;
-- [x] captura principal e imagem técnica geradas;
-- [x] README, release notes e texto de LinkedIn preparados;
-- [ ] licença do código decidida e registrada;
-- [ ] exposição do e-mail histórico aceita ou saneada;
-- [ ] tag e release `v2.0` criadas;
-- [ ] visibilidade alterada mediante autorização explícita;
-- [ ] links públicos conferidos antes do post.
+- [x] licença MIT registrada;
+- [x] identidade futura alterada para GitHub `noreply`;
+- [x] histórico preservado por decisão explícita;
+- [x] CI Python/mobile configurado;
+- [x] cobertura real medida e protegida por piso;
+- [x] README, capturas atuais e texto de LinkedIn preparados;
+- [x] segredos, PII, caches e dependências reavaliados;
+- [ ] fazer push e observar o workflow `quality` verde;
+- [ ] tornar o repositório público mediante ação explícita;
+- [ ] abrir o link em sessão anônima e conferir README, licença e imagens;
+- [ ] criar tag/release somente se houver um marco público desejado;
+- [ ] configurar ruleset da `main` sem bloquear os workflows que atualizam os
+  caches públicos automaticamente.
+
+`CONTRIBUTING.md`, Codecov e reescrita do histórico não são necessários para a
+primeira publicação. Se contribuições externas forem abertas depois, esses
+itens podem ser reavaliados com base no uso real.

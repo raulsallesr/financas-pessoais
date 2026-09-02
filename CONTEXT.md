@@ -15,9 +15,13 @@
 - Preview realmente instalado: `v0.5.2`, build `11`, EAS
   `c08e5397-427f-42c2-a163-ab5cd815cb55`. A instalação foi confirmada pelo
   Raul, mas não foi verificada por ADB nem avaliada fisicamente.
-- Preview atual submetido: `v0.6.4`, build `23`, EAS
-  `6ac1268d-5902-46b4-8108-457977bb7e1f`, commit `a2bb4b5`, ainda `IN_QUEUE`
-  na última consulta. Não está instalado nem constitui evidência física.
+- Preview candidato: `v0.6.4`, build `23`, EAS
+  `6ac1268d-5902-46b4-8108-457977bb7e1f`, commit `a2bb4b5`, `FINISHED` em
+  2026-09-02. Não está instalado nem constitui evidência física.
+- Sprint de publicação preparado no commit `f2ed931`: licença MIT, novos
+  commits via GitHub
+  `noreply`, CI Python/mobile, Ruff, cobertura com piso de 85%, README e
+  carrossel atualizados. O repositório continua privado.
 - Decisão vigente do Raul: seguir a sequência canônica do roadmap. A Fase A
   fecha antes de qualquer implementação da Etapa 6/Embedded.
 - Não rodar Maestro automaticamente. Os fluxos agora são não destrutivos e o
@@ -132,20 +136,23 @@ nas seções 24–35 de `PLANO_FOCUSLENS.md` e em
 
 ## Evidência automatizada do corte `v0.6.4/23`
 
-Executado em 2026-09-01:
+Executado em 2026-09-01 e ampliado em 2026-09-02:
 
 - `npm run typecheck`: aprovado;
 - `npm test`: 70 testes de domínio, 33 de componentes e 4 contratos E2E;
 - `npm run export:android`: aprovado, bundle Android/Hermes com 656 módulos;
 - viewports 375×812, 430×932, 768×1024 e 844×390: sem overflow horizontal e
   sem alvo interativo visível abaixo de 44 px, inclusive com movimento reduzido.
+- Python: 191 testes, Ruff aprovado e cobertura de branches em 86,1%, com
+  piso de 85% configurado no CI.
 
 O `spawn EPERM` do export e o `WinError 5` do navegador já foram reproduzidos
 dentro do sandbox e passaram em execução isolada/fora dele sem mudança de
 código. Trate-os primeiro como ruído do Windows/OneDrive, não como motivo para
 afrouxar gates.
 
-Não houve preview EAS, Maestro, ADB nem avaliação física para `v0.5.3`–`v0.6.4`.
+O preview EAS `v0.6.4/23` terminou, mas não foi instalado. Não houve Maestro,
+ADB nem avaliação física para `v0.5.3`–`v0.6.4`.
 
 ## Estado físico e toolchain
 
@@ -159,7 +166,7 @@ Não houve preview EAS, Maestro, ADB nem avaliação física para `v0.5.3`–`v0
   toolchain portátil. A consulta de 2026-09-02 encontrou zero aparelhos.
 - O comando `npm run e2e:maestro:device:windows` confere aparelho, package e
   versão sem abrir o app; os fluxos preservam o estado local.
-- Os APKs internos anteriores expiram em 2026-09-11.
+- O APK candidato `v0.6.4/23` expira em 2026-09-16.
 
 Se os testes físicos forem retomados, usar estado descartável ou fazer backup
 fora do chat. Nunca inferir aprovação pela automação e nunca enviar evidência
@@ -193,26 +200,31 @@ Para mudança Python, usar o `.venv` externo ao OneDrive indicado no `README.md`
 e rodar a suíte completa:
 
 ```powershell
-python -m pytest tests/
+pip install -r requirements-dev.txt
+ruff check .
+python -m pytest tests/ --cov=.
 ```
 
 Maestro é sempre manual e deliberado. O comando existir não autoriza executá-lo.
 
 ## Próxima decisão
 
-- Aguardar o EAS `6ac1268d-5902-46b4-8108-457977bb7e1f` terminar, instalar o
-  `v0.6.4/23` e conectar o POCO por USB para o gate ADB sem abrir o app.
+- Instalar o preview `v0.6.4/23` já concluído no EAS
+  `6ac1268d-5902-46b4-8108-457977bb7e1f` e conectar o POCO por USB para o gate
+  ADB sem abrir o app.
 - Executar Maestro somente por decisão manual do Raul. As jornadas já preservam
   o estado, mas não substituem TalkBack, texto ampliado ou o roteiro B3.
-- Fechar E2E iOS com ambiente/aparelho compatível e escolher a licença do código.
+- Fechar E2E iOS com ambiente/aparelho compatível.
 - Somente depois fechar receipt/threat model e iniciar a Etapa 6 na ordem da
   seção 14 de `PLANO_FOCUSLENS.md`.
 
-## Bloqueios de publicação pública
+## Estado da publicação pública
 
 - O repositório continua privado.
-- Escolher licença antes de abertura pública.
-- Resolver ou aceitar a exposição do e-mail não mascarado no histórico.
+- Licença MIT registrada; o histórico foi preservado e os próximos commits usam
+  o endereço `noreply` oficial do GitHub.
+- A exposição do e-mail antigo no histórico foi aceita como custo de preservar
+  hashes e rastreabilidade; não exibir o endereço em documentação ou relatório.
 - Tag, release e visibilidade pública exigem autorização explícita do Raul.
 - Publicação em loja também depende dos gates de segurança e da decisão sobre
   vulnerabilidades moderadas transitivas do toolchain Expo.
@@ -224,12 +236,13 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 > `CONTEXT.md`, `PLANO_FOCUSLENS.md`, `mobile/README.md` e
 > `docs/ARQUITETURA_MOBILE.md`. Preserve os três stashes documentados. O corte
 > funcional é mobile `v0.6.4/23`; o preview instalado continua
-> `v0.5.2/11`, sem verificação ADB nem avaliação física. O preview atual está no
-> EAS `6ac1268d-5902-46b4-8108-457977bb7e1f`; consulte o status antes de criar
-> outro. Siga o roadmap canônico: feche primeiro os gates físicos, iOS e licença,
+> `v0.5.2/11`, sem verificação ADB nem avaliação física. O preview candidato
+> `v0.6.4/23` terminou no EAS
+> `6ac1268d-5902-46b4-8108-457977bb7e1f`, mas ainda não foi instalado. Siga o
+> roadmap canônico: feche primeiro os gates físicos e iOS,
 > sem iniciar silenciosamente a Etapa 6. Preserve quatro abas, Home pessoal,
-> distinção demo ×
-> local, modo discreto, B3 antes da carteira fictícia e estado novo somente na
+> distinção demo × local, modo discreto, B3 antes da carteira fictícia e estado
+> novo somente na
 > sessão. Não altere motores Python, snapshot `v1`, cofre, importador B3 ou
 > persistências; não adicione dependência, rede, telemetria, recomendação ou
 > produto. Não rode Maestro automaticamente. Os fluxos preservam estado e o
