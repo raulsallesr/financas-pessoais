@@ -7,7 +7,7 @@
 **Cortes apresentados:** Streamlit `v2.0` e mobile `v0.6.4/23`
 
 **Estado:** repositório público por ação explícita do titular; CI público
-`quality` conferido verde.
+`quality` verde, prerelease `v0.6.4-beta` publicada e `main` protegida.
 
 Esta é uma auditoria técnica de publicação, não um parecer jurídico nem uma
 aprovação para distribuição em loja.
@@ -47,7 +47,7 @@ apresentado como **beta funcional**, não como app validado em produção.
 | Dependências mobile | Aprovado com ressalva | zero vulnerabilidade alta/crítica; 11 moderadas transitivas no toolchain Expo/UUID |
 | Ativos visuais | Aprovado | três PNGs e demo real de 21,2 s em MP4/GIF, com fotografia pública e carteira fictícia, sem imagem externa |
 | EAS Android | Concluído + aceite manual | preview `v0.6.4/23` terminou `FINISHED`; Raul aceitou o app atual no POCO, sem associação independente de package/build por ADB |
-| Visibilidade | Pública | repositório aberto pelo titular em 2026-09-02; nenhuma tag/release ou regra de branch foi criada |
+| Visibilidade | Pública e protegida | repositório aberto pelo titular em 2026-09-02; prerelease `v0.6.4-beta` publicada e ruleset `Proteção da main` ativo |
 
 ## Cobertura e qualidade automatizada
 
@@ -143,8 +143,8 @@ da leitura; os quadros temporários usados na composição não são versionados
 - [x] fazer push e observar o workflow `quality` verde;
 - [x] tornar o repositório público mediante ação explícita;
 - [ ] abrir o link em sessão anônima e conferir README, licença e imagens;
-- [ ] criar tag/release somente se houver um marco público desejado;
-- [ ] configurar ruleset da `main` sem bloquear os workflows que atualizam os
+- [x] criar a prerelease pública `v0.6.4-beta`, sem APK temporário anexado;
+- [x] configurar ruleset da `main` sem bloquear os workflows que atualizam os
   caches públicos automaticamente.
 
 `CONTRIBUTING.md`, Codecov e reescrita do histórico não são necessários para a

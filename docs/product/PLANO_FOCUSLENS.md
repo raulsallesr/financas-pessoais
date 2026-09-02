@@ -438,6 +438,7 @@ descartáveis:
 | Curva Tesouro | O que mudou nas taxas | `v1.13` |
 | Focus × Curva | Expectativa versus precificação | `v1.14` |
 | FocusLens BR | Produto integrado | `v2.0` |
+| FocusLens Mobile | Beta pessoal explicável | `v0.6.4-beta` |
 
 A auditoria específica de segredos, dados pessoais, direitos de conteúdo,
 dependências e histórico Git foi executada antes da abertura pública.

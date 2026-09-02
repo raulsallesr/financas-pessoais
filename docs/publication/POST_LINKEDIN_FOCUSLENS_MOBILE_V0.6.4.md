@@ -74,6 +74,7 @@ O vídeo, o GIF e as três imagens são capturas reais do renderer web da mesma
 ## Antes de publicar
 
 - repositório público por decisão explícita do titular;
+- prerelease pública `v0.6.4-beta` disponível, sem APK temporário anexado;
 - CI público `quality` conferido verde;
 - abrir o link em sessão anônima e validar README, licença, GIF e MP4;
 - não chamar o beta de “validado em produção” ou dizer que os gates físicos

@@ -217,11 +217,11 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 
 ## Próxima decisão
 
-- Escolher se o marco público recebe tag/release `v0.6.4-beta` e configurar o
-  ruleset da `main`; essas ações continuam separadas da abertura do repositório.
 - Se o Raul quiser iniciar a Etapa 6, o próximo trabalho é fechar o contrato de
   receipt e o threat model inicial antes do sandbox institucional, seguindo a
   seção 14 de `docs/product/PLANO_FOCUSLENS.md`.
+- Publicar o post do LinkedIn com o MP4/GIF já preparado é opcional e não
+  altera o estado técnico do produto.
 - Não planejar USB/ADB, Maestro ou iOS no escopo atual. Reabrir esses roteiros
   somente por nova decisão ou antes de distribuição em loja/produção.
 
@@ -233,7 +233,12 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
   o endereço `noreply` oficial do GitHub.
 - A exposição do e-mail antigo no histórico foi aceita como custo de preservar
   hashes e rastreabilidade; não exibir o endereço em documentação ou relatório.
-- Tag, release e ruleset da `main` ainda exigem decisão explícita do Raul.
+- A prerelease pública
+  [`v0.6.4-beta`](https://github.com/raulsallesr/financas-pessoais/releases/tag/v0.6.4-beta)
+  foi criada em 2026-09-02, sem APK temporário anexado.
+- O ruleset ativo `Proteção da main` (`22142158`) bloqueia exclusão, force-push
+  e histórico não linear sem impedir os pushes fast-forward dos workflows de
+  cache. Pull request e status obrigatório não foram impostos.
 - A demo pública de 21,2 segundos existe em MP4 e GIF, usa somente fotografia
   pública, carteira fictícia e estado de sessão; nenhum código do app mudou.
 - Publicação em loja também depende dos gates de segurança e da decisão sobre
@@ -258,8 +263,9 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 > persistências; não adicione dependência, rede, telemetria, recomendação ou
 > produto. Não rode Maestro automaticamente. Os fluxos preservam estado e o
 > runner recusa `clearState: true`. Os checklists BI-04–BI-13, CL-11–CL-13,
-> DB-10–DB-12 e E2E nativo ficam opcionais para loja/produção. A próxima
-> decisão é tag/release + ruleset ou a preparação de receipt/threat model para
-> a Etapa 6. Ao concluir, rode os gates,
+> DB-10–DB-12 e E2E nativo ficam opcionais para loja/produção. A prerelease
+> pública `v0.6.4-beta` e o ruleset `Proteção da main` estão ativos. A próxima
+> decisão técnica é preparar receipt/threat model para a Etapa 6. Ao concluir,
+> rode os gates,
 > atualize a documentação sem recriar um changelog no `CONTEXT.md`, remova
 > temporários e faça commit/push somente no Git interno.

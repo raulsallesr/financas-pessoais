@@ -2,6 +2,7 @@
 
 [![quality](https://github.com/raulsallesr/financas-pessoais/actions/workflows/tests.yml/badge.svg)](https://github.com/raulsallesr/financas-pessoais/actions/workflows/tests.yml)
 [![mobile beta](https://img.shields.io/badge/mobile-v0.6.4_beta-0f766e)](mobile/README.md)
+[![release](https://img.shields.io/github/v/release/raulsallesr/financas-pessoais?include_prereleases&label=release)](https://github.com/raulsallesr/financas-pessoais/releases/tag/v0.6.4-beta)
 [![tests](https://img.shields.io/badge/testes-301-173f3a)](#qualidade-verificável)
 [![license MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-b7791f)](LICENSE)
 
@@ -20,6 +21,11 @@ sequência de publicação, está em
 [`docs/product/PLANO_FOCUSLENS.md`](docs/product/PLANO_FOCUSLENS.md).
 
 ## FocusLens Mobile `v0.6.4` — beta funcional
+
+A primeira prerelease pública está disponível em
+[`v0.6.4-beta`](https://github.com/raulsallesr/financas-pessoais/releases/tag/v0.6.4-beta).
+Ela marca o código-fonte e a documentação do beta; nenhum APK temporário foi
+anexado como distribuição permanente.
 
 Em 2026-08-27, o Raul redirecionou o destino do produto para um app Android/iOS.
 O diretório [`mobile/`](mobile/) contém o app React Native, Expo e TypeScript,

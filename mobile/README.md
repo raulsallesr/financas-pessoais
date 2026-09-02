@@ -251,6 +251,9 @@ texto ampliado e os gates físicos seguem pendentes. Nenhum preview EAS ou
 Maestro foi executado para `v0.5.7`–`v0.6.0`.
 
 O corte atual é `v0.6.4`, Android `versionCode 23` e iOS `buildNumber 23`.
+A prerelease pública do código-fonte e da documentação está em
+[`v0.6.4-beta`](https://github.com/raulsallesr/financas-pessoais/releases/tag/v0.6.4-beta),
+sem APK temporário anexado como distribuição permanente.
 Passaram TypeScript, 70 testes de domínio, 33 de componentes, 4 contratos E2E
 e o export Android/Hermes com 656 módulos. As três famílias e as três contas de
 vida real foram percorridas em 375×812, 430×932, 768×1024 e 844×390 com
