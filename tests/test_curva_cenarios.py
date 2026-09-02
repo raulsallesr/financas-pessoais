@@ -7,9 +7,9 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from curva_cenarios import simular_choque_paralelo
-from curva_data import PontoCurva
-from curva_modelo import FotografiaCurva
+from focuslens.core.curva_cenarios import simular_choque_paralelo
+from focuslens.core.curva_data import PontoCurva
+from focuslens.core.curva_modelo import FotografiaCurva
 
 
 DATA_BASE = date(2026, 8, 26)

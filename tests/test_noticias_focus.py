@@ -1,9 +1,9 @@
 from datetime import UTC, date, datetime
 
-from financas_taxonomia import Direcao
-from focus_data import ComparativoIndicador, LeituraIndicador
-from noticias_data import Noticia
-from noticias_focus import cruzar_noticias_com_focus
+from focuslens.core.financas_taxonomia import Direcao
+from focuslens.core.focus_data import ComparativoIndicador, LeituraIndicador
+from focuslens.core.noticias_data import Noticia
+from focuslens.core.noticias_focus import cruzar_noticias_com_focus
 
 
 def _comparativo(indicador: str, direcao: Direcao) -> ComparativoIndicador:

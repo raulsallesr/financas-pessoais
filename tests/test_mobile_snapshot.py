@@ -5,9 +5,9 @@ import json
 
 import pytest
 
-from curva_data import PontoCurva
-from focus_data import LeituraIndicador
-from mobile_snapshot import (
+from focuslens.core.curva_data import PontoCurva
+from focuslens.core.focus_data import LeituraIndicador
+from focuslens.adapters.mobile_snapshot import (
     gerar_snapshot_mobile,
     montar_contratos_snapshot,
     montar_snapshot_mobile,
@@ -113,7 +113,7 @@ def test_gerador_preserva_generated_at_quando_conteudo_nao_muda(
     caminho = tmp_path / "snapshot.json"
     primeiro_instante = datetime(2026, 8, 27, 15, 30, tzinfo=timezone.utc)
     monkeypatch.setattr(
-        "mobile_snapshot.carregar_contratos_dos_caches",
+        "focuslens.adapters.mobile_snapshot.carregar_contratos_dos_caches",
         lambda hoje=None: contratos,
     )
 

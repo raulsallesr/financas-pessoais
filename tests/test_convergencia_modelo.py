@@ -6,15 +6,15 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from convergencia_modelo import (
+from focuslens.core.convergencia_modelo import (
     DirecaoSinal,
     EstadoConvergencia,
     montar_leitura_convergencia,
 )
-from curva_data import PontoCurva
-from curva_modelo import montar_leitura_curva
-from financas_taxonomia import Direcao
-from focus_data import ComparativoIndicador, LeituraIndicador, comparar
+from focuslens.core.curva_data import PontoCurva
+from focuslens.core.curva_modelo import montar_leitura_curva
+from focuslens.core.financas_taxonomia import Direcao
+from focuslens.core.focus_data import ComparativoIndicador, LeituraIndicador, comparar
 
 
 HOJE = date(2026, 8, 26)

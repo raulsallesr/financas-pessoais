@@ -7,15 +7,15 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from streamlit.testing.v1 import AppTest
 
-import pagina_focus
-from focus_data import LeituraIndicador
-from noticias_analise import (
+from focuslens.ui import pagina_focus
+from focuslens.core.focus_data import LeituraIndicador
+from focuslens.core.noticias_analise import (
     AnaliseArtigo,
     ConexaoFocus,
     EvidenciaNumerica,
 )
-from noticias_data import Noticia
-from noticias_feed import ResultadoNoticias
+from focuslens.core.noticias_data import Noticia
+from focuslens.adapters.noticias_feed import ResultadoNoticias
 
 
 DATA_ATUAL = date.today()

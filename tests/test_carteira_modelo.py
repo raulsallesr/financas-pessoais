@@ -4,15 +4,15 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from carteira_modelo import (
+from focuslens.core.carteira_modelo import (
     PosicaoCarteira,
     comparar_com_benchmarks,
     cruzar_cenario,
     montar_posicoes,
     resumir_carteira,
 )
-from macro_modelo import CenarioMacro, PerspectivaClasse
-from mercado_data import PontoMercado, SerieMercado
+from focuslens.core.macro_modelo import CenarioMacro, PerspectivaClasse
+from focuslens.core.mercado_data import PontoMercado, SerieMercado
 
 
 def _cenario():

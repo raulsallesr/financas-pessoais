@@ -4,10 +4,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from focus_data import LeituraIndicador, comparar
-from macro_modelo import construir_cenario, extrair_temas_editoriais
-from mercado_data import PontoMercado, SerieMercado
-from noticias_data import Noticia
+from focuslens.core.focus_data import LeituraIndicador, comparar
+from focuslens.core.macro_modelo import construir_cenario, extrair_temas_editoriais
+from focuslens.core.mercado_data import PontoMercado, SerieMercado
+from focuslens.core.noticias_data import Noticia
 
 
 def _leitura(indicador: str, valor: float, data_coleta: date):

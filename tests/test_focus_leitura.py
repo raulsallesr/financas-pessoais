@@ -7,8 +7,8 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-import focus_leitura
-from focus_leitura import (
+from focuslens.adapters import focus_leitura
+from focuslens.adapters.focus_leitura import (
     ErroBuscaFocus,
     ErroCacheFocus,
     _amostrar_uma_leitura_por_semana,
@@ -54,7 +54,7 @@ def test_linha_para_leitura_converte_campos_da_api():
     assert leitura.mediana == 14.0
 
 
-@patch("focus_leitura.requests.get")
+@patch("focuslens.adapters.focus_leitura.requests.get")
 def test_buscar_selic_proxima_reuniao_usa_menor_reuniao_da_data_mais_recente(mock_get):
     mock_get.return_value.raise_for_status.return_value = None
     mock_get.return_value.json.return_value = {
@@ -82,7 +82,7 @@ def test_buscar_selic_proxima_reuniao_usa_menor_reuniao_da_data_mais_recente(moc
     assert leitura.mediana == 14.0
 
 
-@patch("focus_leitura.requests.get")
+@patch("focuslens.adapters.focus_leitura.requests.get")
 def test_buscar_selic_sem_linhas_levanta_erro(mock_get):
     mock_get.return_value.raise_for_status.return_value = None
     mock_get.return_value.json.return_value = {"value": []}
@@ -93,7 +93,7 @@ def test_buscar_selic_sem_linhas_levanta_erro(mock_get):
         pass
 
 
-@patch("focus_leitura.requests.get")
+@patch("focuslens.adapters.focus_leitura.requests.get")
 def test_erro_de_rede_gera_erro_busca_focus(mock_get):
     mock_get.side_effect = requests.exceptions.Timeout("timeout")
     try:
@@ -103,7 +103,7 @@ def test_erro_de_rede_gera_erro_busca_focus(mock_get):
         pass
 
 
-@patch("focus_leitura.requests.get")
+@patch("focuslens.adapters.focus_leitura.requests.get")
 def test_buscar_anual_codifica_indicador_acentuado_corretamente(mock_get):
     mock_get.return_value.raise_for_status.return_value = None
     mock_get.return_value.json.return_value = {

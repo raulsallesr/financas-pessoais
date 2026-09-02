@@ -22,24 +22,28 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
 ## Convenções do projeto
 
 - Motor puro (sem I/O) separado de adaptador (I/O) separado de UI:
-  `focus_data.py` / `motor_indicadores.py` (puro) vs. `focus_leitura.py`
-  (adaptador da API do BACEN) vs. `pagina_*.py` (UI).
-- Importações Excel usam `openpyxl`; `b3_importacao.py` é o adaptador da
+  `focuslens/core/` (puro) vs. `focuslens/adapters/` (I/O) vs.
+  `focuslens/ui/` (Streamlit).
+- Importações Excel usam `openpyxl`;
+  `focuslens/adapters/b3_importacao.py` é o adaptador da
   posição B3. Nunca versione planilha real nem seus valores/identificadores.
   Testes de importação devem gerar o XLSX sintético em memória durante o
   próprio teste.
 - A experiência de produto agora está em `mobile/`, com Hoje, Carteira,
   Cenários e Entenda. A referência Streamlit permanece em página única:
-  `app_financas.py` chama `pagina_home.py`, sem novos entrypoints em `pages/`.
+  `app_financas.py` chama `focuslens/ui/pagina_home.py`, sem novos entrypoints
+  em `pages/`.
   Não remover nem reescrever os motores `v1.12`–`v2.0` durante a migração.
-- Guardrail de conteúdo, sem exceção: nenhuma regra em `motor_indicadores.py`
-  ou texto em `focus_regras.py` pode usar linguagem imperativa de
+- Guardrail de conteúdo, sem exceção: nenhuma regra em
+  `focuslens/core/motor_indicadores.py` ou texto em
+  `focuslens/core/focus_regras.py` pode usar linguagem imperativa de
   investimento ("invista", "compre", "venda", "recomendo") nem receber dado
   do usuário (patrimônio, carteira) — é conteúdo educacional, nunca
   recomendação personalizada. `tests/test_focus_regras.py` faz lint disso
   automaticamente; se adicionar indicador/regra nova, roda esse teste antes
   de considerar terminado. O cruzamento com valores pessoais pertence
-  exclusivamente a `carteira_modelo.py`, fora do motor educacional.
+  exclusivamente a `focuslens/core/carteira_modelo.py`, fora do motor
+  educacional.
 - Todo código roda dentro de um `.venv` (precisa ser recriado em cada
   máquina, não é versionado) — nunca contra o Python global. **Desde
   2026-08-04 crie o `.venv` fora da pasta do projeto**, porque ela vive
@@ -77,5 +81,5 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
 
 ## Onde queremos chegar
 
-Visão completa e lista de próximos passos vivem em `CONTEXT.md` — não
-duplicar aqui para não haver duas fontes de verdade.
+Visão completa e próximos passos vivem em `CONTEXT.md`; o plano detalhado está
+em `docs/product/PLANO_FOCUSLENS.md`. Não duplicar o estado entre documentos.

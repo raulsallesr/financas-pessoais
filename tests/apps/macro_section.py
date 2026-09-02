@@ -5,7 +5,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
-from pagina_macro import render_secao
+from focuslens.ui.pagina_macro import render_secao
 
 
 render_secao()

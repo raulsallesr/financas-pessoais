@@ -6,8 +6,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from streamlit.testing.v1 import AppTest
 
-import pagina_home
-from pagina_macro import DadosRadar
+from focuslens.ui import pagina_home
+from focuslens.ui.pagina_macro import DadosRadar
 
 
 def test_home_consolida_jornada_e_reutiliza_radar_na_carteira():

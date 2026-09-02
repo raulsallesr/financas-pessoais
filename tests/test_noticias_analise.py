@@ -4,11 +4,11 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from financas_taxonomia import Direcao
-from focus_data import ComparativoIndicador, LeituraIndicador
-from noticias_analise import analisar_artigo
-from noticias_artigo import ArtigoExtraido
-from noticias_data import Noticia
+from focuslens.core.financas_taxonomia import Direcao
+from focuslens.core.focus_data import ComparativoIndicador, LeituraIndicador
+from focuslens.core.noticias_analise import analisar_artigo
+from focuslens.adapters.noticias_artigo import ArtigoExtraido
+from focuslens.core.noticias_data import Noticia
 
 
 def _comparativo(indicador, direcao, mediana):

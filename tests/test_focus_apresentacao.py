@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from focus_apresentacao import (
+from focuslens.ui.focus_apresentacao import (
     descricao_resumo_semanal,
     escolher_destaque,
     formatar_delta,
@@ -13,8 +13,8 @@ from focus_apresentacao import (
     titulo_resumo_semanal,
     titulo_resumo,
 )
-from focus_data import LeituraIndicador, comparar
-from focus_semanal import montar_resumo_semanal
+from focuslens.core.focus_data import LeituraIndicador, comparar
+from focuslens.core.focus_semanal import montar_resumo_semanal
 
 
 def _leitura(

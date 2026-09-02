@@ -5,8 +5,8 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-import atualizar_curva_cache
-from curva_data import PontoCurva
+from scripts import atualizar_curva_cache
+from focuslens.core.curva_data import PontoCurva
 
 
 def _ponto(ano: int) -> PontoCurva:

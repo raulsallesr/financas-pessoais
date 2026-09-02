@@ -5,9 +5,9 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-import motor_indicadores
-from focus_data import LeituraIndicador, comparar
-from focus_regras import explicar_leigo, resumo_efeitos
+from focuslens.core import motor_indicadores
+from focuslens.core.focus_data import LeituraIndicador, comparar
+from focuslens.core.focus_regras import explicar_leigo, resumo_efeitos
 
 VERBOS_PROIBIDOS = re.compile(
     r"\b(invista|invisto|compre|comprar|venda|vender|recomendo|recomendamos|recomendação)\w*",

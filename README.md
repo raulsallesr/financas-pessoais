@@ -2,7 +2,7 @@
 
 [![quality](https://github.com/raulsallesr/financas-pessoais/actions/workflows/tests.yml/badge.svg)](https://github.com/raulsallesr/financas-pessoais/actions/workflows/tests.yml)
 [![mobile beta](https://img.shields.io/badge/mobile-v0.6.4_beta-0f766e)](mobile/README.md)
-[![tests](https://img.shields.io/badge/testes-298-173f3a)](#qualidade-verificável)
+[![tests](https://img.shields.io/badge/testes-301-173f3a)](#qualidade-verificável)
 [![license MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-b7791f)](LICENSE)
 
 Produto pessoal e educacional que transforma dados públicos do mercado
@@ -16,7 +16,8 @@ brincar com aportes, juros compostos, inflação, metas, parcelamento e retirada
 Não conecta conta, não recomenda produto e não envia a carteira para a rede.
 
 O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
-sequência de publicação, está em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
+sequência de publicação, está em
+[`docs/product/PLANO_FOCUSLENS.md`](docs/product/PLANO_FOCUSLENS.md).
 
 ## FocusLens Mobile `v0.6.4` — beta funcional
 
@@ -58,7 +59,25 @@ As imagens vêm do renderer web da mesma árvore React Native, em `430×932`, co
 fotografia pública e carteira fictícia. Não mostram posição pessoal.
 
 Detalhes de execução em [`mobile/README.md`](mobile/README.md) e da fronteira
-técnica em [`docs/ARQUITETURA_MOBILE.md`](docs/ARQUITETURA_MOBILE.md).
+técnica em
+[`docs/architecture/ARQUITETURA_MOBILE.md`](docs/architecture/ARQUITETURA_MOBILE.md).
+
+## Estrutura do repositório
+
+```text
+app_financas.py       entrada estável da referência Streamlit
+focuslens/core/       modelos, regras e cálculos puros
+focuslens/adapters/   fontes públicas, B3 e snapshot mobile
+focuslens/ui/         apresentação Streamlit
+scripts/              atualizações de cache e geração do snapshot
+mobile/               aplicativo React Native/Expo
+tests/                testes Python
+docs/                 produto, arquitetura, validação e publicação
+dados/                caches públicos versionados
+```
+
+A raiz mantém somente entrada, configuração, licença e handoff. O índice
+completo da documentação está em [`docs/README.md`](docs/README.md).
 
 ## Visão institucional — FocusLens Embedded
 
@@ -79,9 +98,9 @@ O produto institucional planejado combina:
   risco.
 
 A estratégia completa está em
-[`docs/ESTRATEGIA_INSTITUCIONAL.md`](docs/ESTRATEGIA_INSTITUCIONAL.md). A
+[`docs/product/ESTRATEGIA_INSTITUCIONAL.md`](docs/product/ESTRATEGIA_INSTITUCIONAL.md). A
 arquitetura-alvo, os contratos e os gates estão em
-[`docs/ARQUITETURA_INSTITUCIONAL.md`](docs/ARQUITETURA_INSTITUCIONAL.md).
+[`docs/architecture/ARQUITETURA_INSTITUCIONAL.md`](docs/architecture/ARQUITETURA_INSTITUCIONAL.md).
 Nenhum desses componentes institucionais está implementado neste corte. A
 Etapa 6 continua bloqueada pelos gates físicos Android/iOS documentados; esta
 preparação pública não antecipa API, autenticação, telemetria ou Open Finance.
@@ -175,11 +194,12 @@ endereço `noreply` do GitHub.
   ISIN e contratos. A planilha é processada apenas em memória.
 
 O ponto de entrada do método está em
-[`METODOLOGIA_FOCUSLENS.md`](METODOLOGIA_FOCUSLENS.md). Os contratos
-especializados permanecem em [`METODOLOGIA_FOCUS.md`](METODOLOGIA_FOCUS.md),
-[`METODOLOGIA_CURVA.md`](METODOLOGIA_CURVA.md) e
-[`METODOLOGIA_FOCUS_CURVA.md`](METODOLOGIA_FOCUS_CURVA.md), além de
-[`METODOLOGIA_RADAR.md`](METODOLOGIA_RADAR.md).
+[`docs/product/METODOLOGIA_FOCUSLENS.md`](docs/product/METODOLOGIA_FOCUSLENS.md).
+Os contratos especializados permanecem em
+[`docs/product/METODOLOGIA_FOCUS.md`](docs/product/METODOLOGIA_FOCUS.md),
+[`docs/product/METODOLOGIA_CURVA.md`](docs/product/METODOLOGIA_CURVA.md),
+[`docs/product/METODOLOGIA_FOCUS_CURVA.md`](docs/product/METODOLOGIA_FOCUS_CURVA.md)
+e [`docs/product/METODOLOGIA_RADAR.md`](docs/product/METODOLOGIA_RADAR.md).
 
 ### Marcos anteriores
 
@@ -195,18 +215,18 @@ especializados permanecem em [`METODOLOGIA_FOCUS.md`](METODOLOGIA_FOCUS.md),
 
 Pacote da `v2.0`:
 
-- [`docs/RELEASE_V2.0.md`](docs/RELEASE_V2.0.md);
-- [`docs/AUDITORIA_PUBLICACAO_V2.0.md`](docs/AUDITORIA_PUBLICACAO_V2.0.md);
-- [`docs/POST_LINKEDIN_FOCUSLENS_V2.0.md`](docs/POST_LINKEDIN_FOCUSLENS_V2.0.md).
+- [`docs/publication/RELEASE_V2.0.md`](docs/publication/RELEASE_V2.0.md);
+- [`docs/publication/AUDITORIA_PUBLICACAO_V2.0.md`](docs/publication/AUDITORIA_PUBLICACAO_V2.0.md);
+- [`docs/publication/POST_LINKEDIN_FOCUSLENS_V2.0.md`](docs/publication/POST_LINKEDIN_FOCUSLENS_V2.0.md).
 
 Publicação móvel atual:
 
 - [demonstração MP4](docs/assets/focuslens-mobile-v0.6.4-demo.mp4) e
   [versão GIF](docs/assets/focuslens-mobile-v0.6.4-demo.gif);
-- [`docs/POST_LINKEDIN_FOCUSLENS_MOBILE_V0.6.4.md`](docs/POST_LINKEDIN_FOCUSLENS_MOBILE_V0.6.4.md).
+- [`docs/publication/POST_LINKEDIN_FOCUSLENS_MOBILE_V0.6.4.md`](docs/publication/POST_LINKEDIN_FOCUSLENS_MOBILE_V0.6.4.md).
 
 Publicação anterior:
-[`docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md`](docs/POST_LINKEDIN_FOCUS_CURVA_V1.14.md).
+[`docs/publication/POST_LINKEDIN_FOCUS_CURVA_V1.14.md`](docs/publication/POST_LINKEDIN_FOCUS_CURVA_V1.14.md).
 
 ## Como rodar o app móvel
 
@@ -230,7 +250,7 @@ npm run export:android
 O comando exato já validado no computador de trabalho, com Node portátil e
 dependências fora do OneDrive, está em [`mobile/README.md`](mobile/README.md).
 O roteiro de build, instalação, acessibilidade, offline e iOS está em
-[`docs/VALIDACAO_DEVELOPMENT_BUILD.md`](docs/VALIDACAO_DEVELOPMENT_BUILD.md).
+[`docs/validation/VALIDACAO_DEVELOPMENT_BUILD.md`](docs/validation/VALIDACAO_DEVELOPMENT_BUILD.md).
 
 ## Como rodar a referência Streamlit
 
@@ -285,18 +305,19 @@ mantém o contexto entre casa e trabalho.
 Para retomar o projeto em um chat novo, use o bloco **“Handoff para um novo
 chat”** no início de [`CONTEXT.md`](CONTEXT.md). Ele registra o ponto exato da
 entrega, as decisões preservadas e um prompt pronto; a ordem técnica da próxima
-etapa permanece em [`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md).
+etapa permanece em
+[`docs/product/PLANO_FOCUSLENS.md`](docs/product/PLANO_FOCUSLENS.md).
 
 ## Qualidade verificável
 
 O repositório mantém dois gates independentes no GitHub Actions:
 
-- **Python:** Ruff, 191 testes e cobertura de branches com piso de 85%; a
+- **Python:** Ruff, 194 testes e cobertura de branches com piso de 85%; a
   medição local deste corte foi **86,1%**;
 - **Mobile:** TypeScript, 70 testes de domínio, 33 de componentes, 4 contratos
   E2E não destrutivos e export Android/Hermes.
 
-São **298 testes automatizados** no total. Os fluxos Maestro e os checklists
+São **301 testes automatizados** no total. Os fluxos Maestro e os checklists
 físicos continuam separados: teste automatizado verde não equivale a aparelho,
 TalkBack, texto ampliado ou iOS aprovados.
 
@@ -326,13 +347,13 @@ mesmo repositório:
 
 Cada marco precisa funcionar sozinho, passar pelos gates técnico e visual e
 gerar uma publicação própria. O escopo completo está em
-[`PLANO_FOCUSLENS.md`](PLANO_FOCUSLENS.md); a sequência institucional começa na
+[`docs/product/PLANO_FOCUSLENS.md`](docs/product/PLANO_FOCUSLENS.md); a sequência institucional começa na
 seção 14 sem substituir a próxima execução da seção 13.
 
 ## Publicação e licença
 
 A auditoria técnica atual está em
-[`docs/AUDITORIA_PUBLICACAO_V2.0.md`](docs/AUDITORIA_PUBLICACAO_V2.0.md). O
+[`docs/publication/AUDITORIA_PUBLICACAO_V2.0.md`](docs/publication/AUDITORIA_PUBLICACAO_V2.0.md). O
 projeto de referência deste repositório é distribuído sob a
 [`MIT License`](LICENSE). Isso não publica nem licencia automaticamente uma
 futura implementação institucional: API, adaptadores privados, SDK e operação

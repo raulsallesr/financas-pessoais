@@ -6,7 +6,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from curva_data import PontoCurva, consolidar_pontos_curva, manter_datas_recentes
+from focuslens.core.curva_data import PontoCurva, consolidar_pontos_curva, manter_datas_recentes
 
 
 def _ponto(data_ref: date, vencimento: date, taxa: float) -> PontoCurva:

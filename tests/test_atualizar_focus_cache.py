@@ -5,8 +5,8 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-import atualizar_focus_cache
-from focus_data import LeituraIndicador
+from scripts import atualizar_focus_cache
+from focuslens.core.focus_data import LeituraIndicador
 
 
 def _leitura() -> LeituraIndicador:

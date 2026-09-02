@@ -4,8 +4,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from focus_data import LeituraIndicador, comparar
-from focus_semanal import (
+from focuslens.core.focus_data import LeituraIndicador, comparar
+from focuslens.core.focus_semanal import (
     EstadoFocusSemanal,
     calcular_relevancia,
     montar_resumo_semanal,

@@ -1,7 +1,7 @@
 import streamlit as st
 
-import pagina_curva
-from ui_estilos import aplicar_estilos
+from focuslens.ui import pagina_curva
+from focuslens.ui.ui_estilos import aplicar_estilos
 
 
 st.set_page_config(layout="wide")

@@ -7,8 +7,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from streamlit.testing.v1 import AppTest
 
-import pagina_curva
-from curva_data import PontoCurva
+from focuslens.ui import pagina_curva
+from focuslens.core.curva_data import PontoCurva
 
 
 HOJE = date.today()

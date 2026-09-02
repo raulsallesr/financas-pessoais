@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from mercado_data import (
+from focuslens.core.mercado_data import (
     PontoMercado,
     SerieMercado,
     acumular_taxas_diarias,

@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from noticias_data import (
+from focuslens.core.noticias_data import (
     Noticia,
     canonicalizar_link,
     deduplicar_noticias,

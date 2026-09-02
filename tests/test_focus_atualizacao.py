@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from focus_atualizacao import (
+from focuslens.core.focus_atualizacao import (
     avaliar_atualidade,
     deve_verificar_automaticamente,
     dias_uteis_desde,

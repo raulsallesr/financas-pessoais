@@ -4,8 +4,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from financas_taxonomia import Direcao
-from focus_data import (
+from focuslens.core.financas_taxonomia import Direcao
+from focuslens.core.focus_data import (
     LeituraIndicador,
     calcular_delta,
     comparar,

@@ -1,12 +1,13 @@
 # CONTEXT — Finanças Pessoais
 
 > Fonte de verdade operacional curta para retomada. Não é changelog.
-> O histórico detalhado está no Git e nas seções 24–35 de `PLANO_FOCUSLENS.md`.
+> O histórico detalhado está no Git e nas seções 24–35 de
+> `docs/product/PLANO_FOCUSLENS.md`.
 > O último handoff extenso, anterior a esta condensação, está no commit `54382df`.
 
 ## Estado em uma tela
 
-- Produto: **FocusLens BR**, educacional e privado. `mobile/` é a interface
+- Produto: **FocusLens BR**, educacional e orientado à privacidade. `mobile/` é a interface
   principal; o app Streamlit permanece como referência funcional.
 - Branch: `main`. Corte funcional: mobile `v0.6.4`, Android `versionCode 23`,
   iOS `buildNumber 23`.
@@ -20,7 +21,11 @@
   2026-09-02. Não está instalado nem constitui evidência física.
 - Sprint de publicação iniciado no commit `f2ed931`: licença MIT, commits via
   GitHub `noreply`, CI Python/mobile, Ruff, cobertura com piso de 85%, README,
-  carrossel e demonstração MP4/GIF. O repositório continua privado.
+  carrossel e demonstração MP4/GIF. O Raul tornou o repositório público em
+  2026-09-02; o workflow remoto `quality` já concluiu verde.
+- A raiz pública está organizada por responsabilidade: motores em
+  `focuslens/core/`, I/O em `focuslens/adapters/`, Streamlit em `focuslens/ui/`,
+  executáveis em `scripts/` e documentos em quatro categorias sob `docs/`.
 - Decisão vigente do Raul: seguir a sequência canônica do roadmap. A Fase A
   fecha antes de qualquer implementação da Etapa 6/Embedded.
 - Não rodar Maestro automaticamente. Os fluxos agora são não destrutivos e o
@@ -42,9 +47,9 @@ Leia, nesta ordem:
 
 1. `CLAUDE.md`;
 2. este `CONTEXT.md`;
-3. `PLANO_FOCUSLENS.md`;
+3. `docs/product/PLANO_FOCUSLENS.md`;
 4. `mobile/README.md`;
-5. `docs/ARQUITETURA_MOBILE.md`.
+5. `docs/architecture/ARQUITETURA_MOBILE.md`.
 
 Use somente o Git interno deste projeto. Não faça `git add`, commit ou push no
 Git da raiz do hub.
@@ -66,7 +71,7 @@ Git da raiz do hub.
 
 - Os motores Python `v1.12`–`v2.0` continuam sendo a fonte das leituras. Não os
   reescrever durante a evolução mobile.
-- `mobile_snapshot.py` entrega somente fotografia pública já calculada no
+- `focuslens/adapters/mobile_snapshot.py` entrega somente fotografia pública já calculada no
   contrato `v1`; `snapshotProvider.ts` valida o JSON e usa fallback demo
   explícito quando necessário.
 - A carteira local permanece separada do snapshot público, cifrada com
@@ -130,8 +135,8 @@ o caminho e testar situações da vida real — com uma família visível por ve
 - duração de um saldo sob retiradas mensais, com reajuste anual opcional.
 
 Convenções completas, fórmulas, limites e evidências de cada incremento estão
-nas seções 24–35 de `PLANO_FOCUSLENS.md` e em
-`docs/ARQUITETURA_MOBILE.md`.
+nas seções 24–35 de `docs/product/PLANO_FOCUSLENS.md` e em
+`docs/architecture/ARQUITETURA_MOBILE.md`.
 
 ## Evidência automatizada do corte `v0.6.4/23`
 
@@ -142,7 +147,7 @@ Executado em 2026-09-01 e ampliado em 2026-09-02:
 - `npm run export:android`: aprovado, bundle Android/Hermes com 656 módulos;
 - viewports 375×812, 430×932, 768×1024 e 844×390: sem overflow horizontal e
   sem alvo interativo visível abaixo de 44 px, inclusive com movimento reduzido.
-- Python: 191 testes, Ruff aprovado e cobertura de branches em 86,1%, com
+- Python: 194 testes, Ruff aprovado e cobertura de branches em 86,1%, com
   piso de 85% configurado no CI.
 
 O `spawn EPERM` do export e o `WinError 5` do navegador já foram reproduzidos
@@ -216,16 +221,17 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
   o estado, mas não substituem TalkBack, texto ampliado ou o roteiro B3.
 - Fechar E2E iOS com ambiente/aparelho compatível.
 - Somente depois fechar receipt/threat model e iniciar a Etapa 6 na ordem da
-  seção 14 de `PLANO_FOCUSLENS.md`.
+  seção 14 de `docs/product/PLANO_FOCUSLENS.md`.
 
 ## Estado da publicação pública
 
-- O repositório continua privado.
+- O repositório é público desde 2026-09-02 por decisão explícita do Raul; o
+  workflow `quality` foi conferido verde no GitHub Actions.
 - Licença MIT registrada; o histórico foi preservado e os próximos commits usam
   o endereço `noreply` oficial do GitHub.
 - A exposição do e-mail antigo no histórico foi aceita como custo de preservar
   hashes e rastreabilidade; não exibir o endereço em documentação ou relatório.
-- Tag, release e visibilidade pública exigem autorização explícita do Raul.
+- Tag, release e ruleset da `main` ainda exigem decisão explícita do Raul.
 - A demo pública de 21,2 segundos existe em MP4 e GIF, usa somente fotografia
   pública, carteira fictícia e estado de sessão; nenhum código do app mudou.
 - Publicação em loja também depende dos gates de segurança e da decisão sobre
@@ -235,8 +241,9 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 
 > Abra `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only`, confira
 > `git status --short --branch` e `git stash list`, e leia `CLAUDE.md`,
-> `CONTEXT.md`, `PLANO_FOCUSLENS.md`, `mobile/README.md` e
-> `docs/ARQUITETURA_MOBILE.md`. Preserve os três stashes documentados. O corte
+> `CONTEXT.md`, `docs/product/PLANO_FOCUSLENS.md`, `mobile/README.md` e
+> `docs/architecture/ARQUITETURA_MOBILE.md`. Preserve os três stashes
+> documentados. O corte
 > funcional é mobile `v0.6.4/23`; o preview instalado continua
 > `v0.5.2/11`, sem verificação ADB nem avaliação física. O preview candidato
 > `v0.6.4/23` terminou no EAS

@@ -4,8 +4,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from curva_data import PontoCurva
-from curva_modelo import (
+from focuslens.core.curva_data import PontoCurva
+from focuslens.core.curva_modelo import (
     EstadoCurva,
     descricao_leitura_curva,
     montar_leitura_curva,

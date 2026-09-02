@@ -7,12 +7,12 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from streamlit.testing.v1 import AppTest
 
-import pagina_macro
-from focus_data import LeituraIndicador
-from mercado_data import PontoMercado, SerieMercado
-from mercado_fontes import ResultadoMercados
-from noticias_data import Noticia
-from noticias_feed import ResultadoNoticias
+from focuslens.ui import pagina_macro
+from focuslens.core.focus_data import LeituraIndicador
+from focuslens.core.mercado_data import PontoMercado, SerieMercado
+from focuslens.adapters.mercado_fontes import ResultadoMercados
+from focuslens.core.noticias_data import Noticia
+from focuslens.adapters.noticias_feed import ResultadoNoticias
 
 
 def _leitura(indicador, valor, data_coleta):

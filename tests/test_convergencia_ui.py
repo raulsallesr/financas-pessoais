@@ -7,8 +7,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from streamlit.testing.v1 import AppTest
 
-import pagina_convergencia
-from convergencia_modelo import (
+from focuslens.ui import pagina_convergencia
+from focuslens.core.convergencia_modelo import (
     DirecaoSinal,
     EstadoConvergencia,
     LeituraConvergencia,

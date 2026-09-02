@@ -7,8 +7,8 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-import mercado_fontes
-from mercado_fontes import ErroFonteMercado
+from focuslens.adapters import mercado_fontes
+from focuslens.adapters.mercado_fontes import ErroFonteMercado
 
 
 def _resposta(*, json_data=None, texto="", conteudo=b"ok"):
@@ -27,7 +27,7 @@ def _resposta(*, json_data=None, texto="", conteudo=b"ok"):
     return Resposta()
 
 
-@patch("mercado_fontes.requests.get")
+@patch("focuslens.adapters.mercado_fontes.requests.get")
 def test_buscar_dolar_ptax_converte_cotacao_oficial(mock_get):
     mock_get.return_value = _resposta(
         json_data={
@@ -51,7 +51,7 @@ def test_buscar_dolar_ptax_converte_cotacao_oficial(mock_get):
     )
 
 
-@patch("mercado_fontes.requests.get")
+@patch("focuslens.adapters.mercado_fontes.requests.get")
 def test_buscar_brent_ignora_observacao_ausente(mock_get):
     texto = (
         "observation_date,DCOILBRENTEU\n"
@@ -67,7 +67,7 @@ def test_buscar_brent_ignora_observacao_ausente(mock_get):
     assert [ponto.valor for ponto in serie.pontos] == [80.5, 82.0]
 
 
-@patch("mercado_fontes.requests.get")
+@patch("focuslens.adapters.mercado_fontes.requests.get")
 def test_buscar_bitcoin_usa_fechamento_diario_em_reais(mock_get):
     mock_get.return_value = _resposta(
         json_data=[
@@ -81,7 +81,7 @@ def test_buscar_bitcoin_usa_fechamento_diario_em_reais(mock_get):
     assert mock_get.call_args.kwargs["params"]["limit"] == 1000
 
 
-@patch("mercado_fontes.requests.get")
+@patch("focuslens.adapters.mercado_fontes.requests.get")
 def test_buscar_cdi_compoe_taxas_diarias_em_indice(mock_get):
     mock_get.return_value = _resposta(
         json_data=[
@@ -98,7 +98,7 @@ def test_buscar_cdi_compoe_taxas_diarias_em_indice(mock_get):
     assert mock_get.call_args.kwargs["params"]["dataInicial"] == "01/01/2026"
 
 
-@patch("mercado_fontes.requests.get")
+@patch("focuslens.adapters.mercado_fontes.requests.get")
 def test_buscar_selic_usa_serie_diaria_oficial(mock_get):
     mock_get.return_value = _resposta(
         json_data=[
@@ -114,7 +114,7 @@ def test_buscar_selic_usa_serie_diaria_oficial(mock_get):
     assert "bcdata.sgs.11" in mock_get.call_args.args[0]
 
 
-@patch("mercado_fontes.requests.get")
+@patch("focuslens.adapters.mercado_fontes.requests.get")
 def test_erro_de_rede_vira_falha_controlada(mock_get):
     mock_get.side_effect = requests.Timeout("timeout")
     try:

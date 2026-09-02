@@ -3,8 +3,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from financas_taxonomia import ClasseAtivo, Direcao
-from motor_indicadores import (
+from focuslens.core.financas_taxonomia import ClasseAtivo, Direcao
+from focuslens.core.motor_indicadores import (
     classificar_direcao,
     efeitos_por_indicador,
     limiar_estavel,

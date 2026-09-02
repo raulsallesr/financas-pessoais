@@ -5,12 +5,12 @@ from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from noticias_artigo import (
+from focuslens.adapters.noticias_artigo import (
     ErroLeituraArtigo,
     PALAVRAS_TRECHO,
     buscar_artigo,
 )
-from noticias_data import Noticia
+from focuslens.core.noticias_data import Noticia
 
 
 class RespostaFake:
@@ -88,7 +88,7 @@ def _html_artigo():
     """.encode()
 
 
-@patch("noticias_artigo.requests.get")
+@patch("focuslens.adapters.noticias_artigo.requests.get")
 def test_buscar_artigo_respeita_robots_e_extrai_so_conteudo(mock_get):
     mock_get.side_effect = [
         RespostaFake(
@@ -115,7 +115,7 @@ def test_buscar_artigo_respeita_robots_e_extrai_so_conteudo(mock_get):
     )
 
 
-@patch("noticias_artigo.requests.get")
+@patch("focuslens.adapters.noticias_artigo.requests.get")
 def test_buscar_artigo_recusa_quando_robots_bloqueia(mock_get):
     mock_get.return_value = RespostaFake(
         url="https://www.infomoney.com.br/robots.txt",
@@ -130,7 +130,7 @@ def test_buscar_artigo_recusa_quando_robots_bloqueia(mock_get):
         assert "não autoriza" in str(erro)
 
 
-@patch("noticias_artigo.requests.get")
+@patch("focuslens.adapters.noticias_artigo.requests.get")
 def test_buscar_artigo_recusa_host_fora_da_fonte_sem_rede(mock_get):
     try:
         buscar_artigo(_noticia("https://exemplo-malicioso.test/materia"))
@@ -140,7 +140,7 @@ def test_buscar_artigo_recusa_host_fora_da_fonte_sem_rede(mock_get):
     mock_get.assert_not_called()
 
 
-@patch("noticias_artigo.requests.get")
+@patch("focuslens.adapters.noticias_artigo.requests.get")
 def test_buscar_artigo_recusa_redirecionamento_para_host_externo(mock_get):
     mock_get.side_effect = [
         RespostaFake(

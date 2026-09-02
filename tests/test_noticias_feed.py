@@ -6,7 +6,7 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from noticias_feed import (
+from focuslens.adapters.noticias_feed import (
     ErroFonteNoticias,
     FONTES_RSS,
     FonteRSS,
@@ -64,7 +64,7 @@ def test_fontes_padrao_cobrem_seis_veiculos_validados():
     }
 
 
-@patch("noticias_feed.requests.get")
+@patch("focuslens.adapters.noticias_feed.requests.get")
 def test_buscar_fonte_le_apenas_metadados_e_filtra_host(mock_get):
     mock_get.return_value = RespostaFake()
     noticias = buscar_fonte(FONTE)
@@ -75,7 +75,7 @@ def test_buscar_fonte_le_apenas_metadados_e_filtra_host(mock_get):
     assert mock_get.call_args.kwargs["timeout"] == 8
 
 
-@patch("noticias_feed.requests.get")
+@patch("focuslens.adapters.noticias_feed.requests.get")
 def test_buscar_fonte_converte_falha_de_rede(mock_get):
     mock_get.side_effect = requests.Timeout("timeout")
     try:
@@ -85,7 +85,7 @@ def test_buscar_fonte_converte_falha_de_rede(mock_get):
         pass
 
 
-@patch("noticias_feed.buscar_fonte")
+@patch("focuslens.adapters.noticias_feed.buscar_fonte")
 def test_buscar_noticias_isola_fonte_indisponivel(mock_buscar):
     outra = FonteRSS(
         nome="Brazil Journal",
@@ -97,7 +97,7 @@ def test_buscar_noticias_isola_fonte_indisponivel(mock_buscar):
         if fonte.nome == "Brazil Journal":
             raise ErroFonteNoticias("fora")
         from datetime import UTC, datetime
-        from noticias_data import Noticia
+        from focuslens.core.noticias_data import Noticia
 
         return [
             Noticia(

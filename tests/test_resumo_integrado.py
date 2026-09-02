@@ -4,7 +4,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from convergencia_modelo import (
+from focuslens.core.convergencia_modelo import (
     DirecaoSinal,
     EstadoConvergencia,
     LeituraConvergencia,
@@ -12,21 +12,21 @@ from convergencia_modelo import (
     SinalFocus,
     montar_leitura_convergencia,
 )
-from curva_data import PontoCurva, TIPO_PREFIXADO_SEM_CUPOM
-from curva_modelo import (
+from focuslens.core.curva_data import PontoCurva, TIPO_PREFIXADO_SEM_CUPOM
+from focuslens.core.curva_modelo import (
     EstadoCurva,
     FotografiaCurva,
     LeituraCurva,
     montar_leitura_curva,
 )
-from focus_data import LeituraIndicador, comparar
-from focus_semanal import (
+from focuslens.core.focus_data import LeituraIndicador, comparar
+from focuslens.core.focus_semanal import (
     EstadoFocusSemanal,
     ResumoFocusSemanal,
     montar_resumo_semanal,
 )
-from macro_modelo import CenarioMacro, SinalMacro
-from resumo_integrado import (
+from focuslens.core.macro_modelo import CenarioMacro, SinalMacro
+from focuslens.core.resumo_integrado import (
     FONTE_CURVA,
     FONTE_FOCUS,
     PrioridadeResumo,

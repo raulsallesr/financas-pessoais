@@ -9,7 +9,7 @@ from openpyxl import Workbook
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from b3_importacao import ErroImportacaoB3, importar_posicao_b3
+from focuslens.adapters.b3_importacao import ErroImportacaoB3, importar_posicao_b3
 
 
 def _planilha_sintetica() -> bytes:

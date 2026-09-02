@@ -9,9 +9,9 @@ import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-import curva_fontes
-from curva_data import PontoCurva
-from curva_fontes import ErroCacheCurva, ErroFonteCurva
+from focuslens.adapters import curva_fontes
+from focuslens.core.curva_data import PontoCurva
+from focuslens.adapters.curva_fontes import ErroCacheCurva, ErroFonteCurva
 
 
 CABECALHO = (
@@ -73,7 +73,7 @@ def test_interpretacao_rejeita_pontos_conflitantes():
         curva_fontes.interpretar_csv(conteudo)
 
 
-@patch("curva_fontes.requests.get")
+@patch("focuslens.adapters.curva_fontes.requests.get")
 def test_busca_limita_download_e_interpreta_resposta(mock_get):
     resposta = mock_get.return_value
     resposta.raise_for_status.return_value = None
@@ -91,7 +91,7 @@ def test_busca_limita_download_e_interpreta_resposta(mock_get):
     resposta.close.assert_called_once_with()
 
 
-@patch("curva_fontes.requests.get")
+@patch("focuslens.adapters.curva_fontes.requests.get")
 def test_erro_de_rede_vira_falha_controlada(mock_get):
     mock_get.side_effect = requests.Timeout("timeout")
 

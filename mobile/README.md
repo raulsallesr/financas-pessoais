@@ -175,8 +175,8 @@ nem alvo visível abaixo de 44 px. Isso é evidência local; não substitui os
 gates físicos pausados.
 
 Os checklists físicos continuam preservados, porém pausados por decisão de
-produto enquanto a utilidade melhora. O escopo entregue está nas seções 24 a 35 de
-[`PLANO_FOCUSLENS.md`](../PLANO_FOCUSLENS.md).
+produto enquanto a utilidade melhora. O escopo entregue está nas seções 24 a
+35 de [`PLANO_FOCUSLENS.md`](../docs/product/PLANO_FOCUSLENS.md).
 
 ## Laboratório do dinheiro `v0.5.4` a `v0.6.4`
 
@@ -272,7 +272,7 @@ Na raiz do projeto, usando o `.venv` externo já documentado:
 
 ```powershell
 $pythonProjeto = "$env:USERPROFILE\.venvs\financas-pessoais\Scripts\python.exe"
-& $pythonProjeto gerar_mobile_snapshot.py
+& $pythonProjeto -m scripts.gerar_mobile_snapshot
 ```
 
 O comando lê somente `dados/focus_cache.json` e
@@ -349,7 +349,7 @@ npm run start:dev-client
 O perfil `preview` gera um APK interno com bundle incorporado para o teste de
 abertura offline; não publica em loja. Os IDs, links temporários, instalação,
 checklist Android, rota iOS, evidências e limites estão em
-[`docs/VALIDACAO_DEVELOPMENT_BUILD.md`](../docs/VALIDACAO_DEVELOPMENT_BUILD.md).
+[`VALIDACAO_DEVELOPMENT_BUILD.md`](../docs/validation/VALIDACAO_DEVELOPMENT_BUILD.md).
 
 O corte `v0.4.0` adicionou o seletor nativo de documentos ao cofre já existente;
 portanto exige um novo APK. O preview anterior continua válido para o fluxo
@@ -392,8 +392,8 @@ npm run export:android
 ```
 
 Na raiz do repositório, o gate Python complementar usa `requirements-dev.txt`,
-Ruff e cobertura com piso de 85%. O corte atual soma 191 testes Python aos 107
-testes mobile, totalizando 298 testes automatizados.
+Ruff e cobertura com piso de 85%. O corte atual soma 194 testes Python aos 107
+testes mobile, totalizando 301 testes automatizados.
 
 O gate de domínio cobre contrato demo, público e privado, schema incompatível,
 documento inválido, proibição de carteira no artefato público, valores e campos
@@ -428,26 +428,26 @@ tests/e2e/              contratos dos fluxos nativos
 e2e/maestro/flows/      jornadas Android/iOS executáveis
 ```
 
-Na raiz, `mobile_snapshot.py` adapta os quatro contratos Python sem alterar os
-motores; `gerar_mobile_snapshot.py` é a entrada local de geração. O app importa
-o JSON como recurso read-only, valida o schema `1` e só então combina os sinais
-com `demoSnapshot.ts` em memória.
+`focuslens/adapters/mobile_snapshot.py` adapta os quatro contratos Python sem
+alterar os motores; `python -m scripts.gerar_mobile_snapshot` é a entrada local
+de geração. O app importa o JSON como recurso read-only, valida o schema `1` e
+só então combina os sinais com `demoSnapshot.ts` em memória.
 
 A arquitetura e a fronteira entre os motores Python e o app estão em
-[`docs/ARQUITETURA_MOBILE.md`](../docs/ARQUITETURA_MOBILE.md).
+[`ARQUITETURA_MOBILE.md`](../docs/architecture/ARQUITETURA_MOBILE.md).
 O roteiro físico do editor/cofre `v0.3.0` está em
-[`docs/VALIDACAO_CARTEIRA_LOCAL.md`](../docs/VALIDACAO_CARTEIRA_LOCAL.md).
+[`VALIDACAO_CARTEIRA_LOCAL.md`](../docs/validation/VALIDACAO_CARTEIRA_LOCAL.md).
 O roteiro da importação `v0.4.0` está em
-[`docs/VALIDACAO_IMPORTACAO_B3.md`](../docs/VALIDACAO_IMPORTACAO_B3.md).
+[`VALIDACAO_IMPORTACAO_B3.md`](../docs/validation/VALIDACAO_IMPORTACAO_B3.md).
 
 ## Relação com o produto institucional
 
 Este app é o cliente de referência da futura camada **FocusLens Embedded**. Ele
 não consome hoje API bancária, Open Finance, autenticação institucional ou
 carteira em nuvem. A estratégia aprovada está em
-[`docs/ESTRATEGIA_INSTITUCIONAL.md`](../docs/ESTRATEGIA_INSTITUCIONAL.md) e a
+[`ESTRATEGIA_INSTITUCIONAL.md`](../docs/product/ESTRATEGIA_INSTITUCIONAL.md) e a
 arquitetura-alvo em
-[`docs/ARQUITETURA_INSTITUCIONAL.md`](../docs/ARQUITETURA_INSTITUCIONAL.md).
+[`ARQUITETURA_INSTITUCIONAL.md`](../docs/architecture/ARQUITETURA_INSTITUCIONAL.md).
 O desenvolvimento local entrou na Etapa 5C por decisão explícita do Raul em
 2026-08-31. Histórico público, favoritos, alertas explicáveis, simulador por
 classe, revisão guiada e o laboratório educacional formam a `v0.6.4`; os
