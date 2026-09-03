@@ -11,7 +11,6 @@ from focuslens.core.noticias_data import (
     selecionar_destaques,
 )
 
-
 AGORA = datetime(2026, 8, 4, 12, tzinfo=UTC)
 
 

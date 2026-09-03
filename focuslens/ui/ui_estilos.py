@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import streamlit as st
 
-
 COR_GRAFICO_PRIMARIA = "#0F766E"
 
 CSS_APP = """

@@ -4,6 +4,12 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from focuslens.core.convergencia_modelo import (
+    DirecaoSinal,
+    SinalCurva,
+    SinalFocus,
+    SinalPonta,
+)
 from focuslens.ui.convergencia_apresentacao import (
     detalhe_curva,
     detalhe_focus,
@@ -11,12 +17,6 @@ from focuslens.ui.convergencia_apresentacao import (
     valor_curva,
     valor_focus,
     valor_ponta,
-)
-from focuslens.core.convergencia_modelo import (
-    DirecaoSinal,
-    SinalCurva,
-    SinalFocus,
-    SinalPonta,
 )
 
 

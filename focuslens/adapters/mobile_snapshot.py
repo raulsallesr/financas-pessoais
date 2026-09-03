@@ -7,18 +7,20 @@ somente dados públicos do Focus e do Tesouro Transparente.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
-from datetime import date, datetime, timezone
 import json
 import os
-from pathlib import Path
 import tempfile
+from dataclasses import dataclass
+from datetime import UTC, date, datetime
+from pathlib import Path
 from typing import Any
 
+from focuslens.adapters.curva_fontes import ErroCacheCurva
+from focuslens.adapters.curva_fontes import carregar_cache as carregar_cache_curva
+from focuslens.adapters.focus_leitura import ErroCacheFocus
+from focuslens.adapters.focus_leitura import carregar_cache as carregar_cache_focus
 from focuslens.core.convergencia_modelo import LeituraConvergencia, montar_leitura_convergencia
-from focuslens.ui.curva_apresentacao import formatar_bps
 from focuslens.core.curva_data import PontoCurva
-from focuslens.adapters.curva_fontes import ErroCacheCurva, carregar_cache as carregar_cache_curva
 from focuslens.core.curva_modelo import (
     EstadoCurva,
     LeituraCurva,
@@ -27,9 +29,7 @@ from focuslens.core.curva_modelo import (
     titulo_leitura_curva,
 )
 from focuslens.core.financas_taxonomia import ClasseAtivo, Direcao
-from focuslens.ui.focus_apresentacao import formatar_delta, formatar_valor
 from focuslens.core.focus_data import ComparativoIndicador, LeituraIndicador, montar_comparativos
-from focuslens.adapters.focus_leitura import ErroCacheFocus, carregar_cache as carregar_cache_focus
 from focuslens.core.focus_regras import explicar_leigo, resumo_efeitos
 from focuslens.core.focus_semanal import (
     EstadoFocusSemanal,
@@ -38,7 +38,8 @@ from focuslens.core.focus_semanal import (
 )
 from focuslens.core.resumo_integrado import ResumoIntegrado, montar_resumo_integrado
 from focuslens.paths import MOBILE_DIR
-
+from focuslens.ui.curva_apresentacao import formatar_bps
+from focuslens.ui.focus_apresentacao import formatar_delta, formatar_valor
 
 SCHEMA_VERSION = 1
 DEFAULT_SNAPSHOT_PATH = MOBILE_DIR / "src" / "data" / "liveSnapshot.json"
@@ -137,8 +138,8 @@ def carregar_contratos_dos_caches(
 
 def _datetime_iso(valor: datetime) -> str:
     if valor.tzinfo is None:
-        valor = valor.replace(tzinfo=timezone.utc)
-    return valor.astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+        valor = valor.replace(tzinfo=UTC)
+    return valor.astimezone(UTC).isoformat().replace("+00:00", "Z")
 
 
 def _efeitos_mobile(comparativo: ComparativoIndicador) -> dict[str, dict[str, str]]:
@@ -268,7 +269,7 @@ def montar_snapshot_mobile(
     snapshot = {
         "schemaVersion": SCHEMA_VERSION,
         "mode": "live",
-        "generatedAt": _datetime_iso(gerado_em or datetime.now(timezone.utc)),
+        "generatedAt": _datetime_iso(gerado_em or datetime.now(UTC)),
         "asOf": max(datas),
         "verdict": contratos.resumo.veredito,
         "verdictSupport": provas[0]["text"],

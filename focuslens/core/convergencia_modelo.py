@@ -23,7 +23,6 @@ from focuslens.core.focus_data import ComparativoIndicador
 from focuslens.core.focus_semanal import LIMITE_DEFASAGEM_DIAS_UTEIS
 from focuslens.core.motor_indicadores import classificar_direcao, limiar_estavel
 
-
 MINIMO_VENCIMENTOS_COMPARAVEIS = 2
 MINIMO_VENCIMENTOS_PARA_PONTAS = 4
 

@@ -5,7 +5,6 @@ from __future__ import annotations
 from focuslens.core.curva_cenarios import CenarioCurva
 from focuslens.core.curva_modelo import FotografiaCurva, LeituraCurva
 
-
 CORES_PERIODOS = ("#0F766E", "#A16207", "#64748B")
 TRACOS_PERIODOS = ((), (7, 4), (2, 4))
 

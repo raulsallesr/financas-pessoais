@@ -2,5 +2,4 @@
 
 from focuslens.ui.pagina_home import render
 
-
 render()

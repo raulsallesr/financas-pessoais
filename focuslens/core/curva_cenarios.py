@@ -8,7 +8,6 @@ from math import isfinite
 
 from focuslens.core.curva_modelo import FotografiaCurva
 
-
 LIMITE_ABSOLUTO_CHOQUE_BPS = 200.0
 LIMITES_CENARIO_PARALELO = (
     "É uma hipótese mecânica, não uma previsão nem uma probabilidade.",

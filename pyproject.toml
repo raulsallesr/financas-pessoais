@@ -4,7 +4,14 @@ line-length = 100
 extend-exclude = ["mobile"]
 
 [tool.ruff.lint]
-select = ["E4", "E7", "E9", "F"]
+select = ["E4", "E7", "E9", "E5", "F", "I", "B", "UP"]
+# UP042: manter `class X(str, Enum)` — StrEnum muda serialização/repr em
+# pontos que não foram revalidados; risco não vale o ganho cosmético agora.
+ignore = ["UP042"]
+
+[tool.ruff.lint.per-file-ignores]
+# Markup SVG embutido em string HTML; quebrar a linha alteraria o atributo `d`.
+"focuslens/ui/pagina_home.py" = ["E501"]
 
 [tool.coverage.run]
 branch = true

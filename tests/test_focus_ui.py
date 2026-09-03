@@ -7,7 +7,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from streamlit.testing.v1 import AppTest
 
-from focuslens.ui import pagina_focus
+from focuslens.adapters.noticias_feed import ResultadoNoticias
 from focuslens.core.focus_data import LeituraIndicador
 from focuslens.core.noticias_analise import (
     AnaliseArtigo,
@@ -15,8 +15,7 @@ from focuslens.core.noticias_analise import (
     EvidenciaNumerica,
 )
 from focuslens.core.noticias_data import Noticia
-from focuslens.adapters.noticias_feed import ResultadoNoticias
-
+from focuslens.ui import pagina_focus
 
 DATA_ATUAL = date.today()
 DATA_ANTERIOR = DATA_ATUAL - timedelta(days=7)

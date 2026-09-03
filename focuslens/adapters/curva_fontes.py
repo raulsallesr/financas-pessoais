@@ -13,12 +13,11 @@ from pathlib import Path
 import requests
 
 from focuslens.core.curva_data import (
-    PontoCurva,
     TIPO_PREFIXADO_SEM_CUPOM,
+    PontoCurva,
     manter_datas_recentes,
 )
 from focuslens.paths import DATA_DIR
-
 
 CURVA_CSV_URL = (
     "https://www.tesourotransparente.gov.br/ckan/dataset/"

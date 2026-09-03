@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from datetime import date, datetime, timezone
 import json
+from datetime import UTC, date, datetime
 
 import pytest
 
-from focuslens.core.curva_data import PontoCurva
-from focuslens.core.focus_data import LeituraIndicador
 from focuslens.adapters.mobile_snapshot import (
     gerar_snapshot_mobile,
     montar_contratos_snapshot,
@@ -14,6 +12,8 @@ from focuslens.adapters.mobile_snapshot import (
     salvar_snapshot_mobile,
     validar_snapshot_publico,
 )
+from focuslens.core.curva_data import PontoCurva
+from focuslens.core.focus_data import LeituraIndicador
 
 
 def _leitura(
@@ -71,7 +71,7 @@ def _contratos_completos():
 def test_snapshot_v1_serializa_contratos_e_datas_iso():
     snapshot = montar_snapshot_mobile(
         _contratos_completos(),
-        gerado_em=datetime(2026, 8, 27, 15, 30, tzinfo=timezone.utc),
+        gerado_em=datetime(2026, 8, 27, 15, 30, tzinfo=UTC),
     )
 
     assert snapshot["schemaVersion"] == 1
@@ -90,7 +90,7 @@ def test_snapshot_v1_serializa_contratos_e_datas_iso():
 
 def test_serializacao_e_deterministica_com_os_mesmos_contratos(tmp_path):
     contratos = _contratos_completos()
-    gerado_em = datetime(2026, 8, 27, 15, 30, tzinfo=timezone.utc)
+    gerado_em = datetime(2026, 8, 27, 15, 30, tzinfo=UTC)
     primeiro = montar_snapshot_mobile(contratos, gerado_em=gerado_em)
     segundo = montar_snapshot_mobile(contratos, gerado_em=gerado_em)
     caminho = tmp_path / "snapshot.json"
@@ -111,7 +111,7 @@ def test_gerador_preserva_generated_at_quando_conteudo_nao_muda(
 ):
     contratos = _contratos_completos()
     caminho = tmp_path / "snapshot.json"
-    primeiro_instante = datetime(2026, 8, 27, 15, 30, tzinfo=timezone.utc)
+    primeiro_instante = datetime(2026, 8, 27, 15, 30, tzinfo=UTC)
     monkeypatch.setattr(
         "focuslens.adapters.mobile_snapshot.carregar_contratos_dos_caches",
         lambda hoje=None: contratos,
@@ -128,7 +128,7 @@ def test_gerador_preserva_generated_at_quando_conteudo_nao_muda(
 def test_snapshot_publico_rejeita_dados_de_carteira():
     snapshot = montar_snapshot_mobile(
         _contratos_completos(),
-        gerado_em=datetime(2026, 8, 27, tzinfo=timezone.utc),
+        gerado_em=datetime(2026, 8, 27, tzinfo=UTC),
     )
     incompleto = dict(snapshot)
     del incompleto["generatedAt"]
@@ -154,7 +154,7 @@ def test_fonte_indisponivel_degrada_sem_apagar_a_outra():
     contratos = montar_contratos_snapshot([], pontos, date(2026, 8, 24))
     snapshot = montar_snapshot_mobile(
         contratos,
-        gerado_em=datetime(2026, 8, 27, tzinfo=timezone.utc),
+        gerado_em=datetime(2026, 8, 27, tzinfo=UTC),
     )
     fontes = {fonte["id"]: fonte for fonte in snapshot["sources"]}
 
@@ -170,5 +170,5 @@ def test_sem_as_duas_fontes_nao_substitui_snapshot_por_vazio():
     with pytest.raises(ValueError, match="nenhum sinal"):
         montar_snapshot_mobile(
             contratos,
-            gerado_em=datetime(2026, 8, 27, tzinfo=timezone.utc),
+            gerado_em=datetime(2026, 8, 27, tzinfo=UTC),
         )

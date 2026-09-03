@@ -4,11 +4,7 @@ from __future__ import annotations
 
 import streamlit as st
 
-from focuslens.ui import pagina_carteira
-from focuslens.ui import pagina_curva
-from focuslens.ui import pagina_focus
-from focuslens.ui import pagina_macro
-from focuslens.ui import pagina_resumo
+from focuslens.ui import pagina_carteira, pagina_curva, pagina_focus, pagina_macro, pagina_resumo
 from focuslens.ui.ui_estilos import aplicar_estilos
 
 

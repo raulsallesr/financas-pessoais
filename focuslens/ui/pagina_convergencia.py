@@ -6,6 +6,26 @@ from datetime import date
 
 import streamlit as st
 
+from focuslens.adapters.curva_fontes import (
+    CURVA_FONTE_URL,
+    ErroCacheCurva,
+)
+from focuslens.adapters.curva_fontes import (
+    carregar_cache as carregar_curva,
+)
+from focuslens.adapters.focus_leitura import (
+    ErroCacheFocus,
+)
+from focuslens.adapters.focus_leitura import (
+    carregar_cache as carregar_focus,
+)
+from focuslens.core.convergencia_modelo import (
+    EstadoConvergencia,
+    LeituraConvergencia,
+    montar_leitura_convergencia,
+)
+from focuslens.core.curva_modelo import montar_leitura_curva
+from focuslens.core.focus_data import montar_comparativos
 from focuslens.ui.convergencia_apresentacao import (
     detalhe_curva,
     detalhe_focus,
@@ -14,23 +34,6 @@ from focuslens.ui.convergencia_apresentacao import (
     valor_focus,
     valor_ponta,
 )
-from focuslens.core.convergencia_modelo import (
-    EstadoConvergencia,
-    LeituraConvergencia,
-    montar_leitura_convergencia,
-)
-from focuslens.adapters.curva_fontes import (
-    CURVA_FONTE_URL,
-    ErroCacheCurva,
-    carregar_cache as carregar_curva,
-)
-from focuslens.core.curva_modelo import montar_leitura_curva
-from focuslens.core.focus_data import montar_comparativos
-from focuslens.adapters.focus_leitura import (
-    ErroCacheFocus,
-    carregar_cache as carregar_focus,
-)
-
 
 FOCUS_FONTE_URL = "https://www.bcb.gov.br/controleinflacao/expectativasmercado"
 
@@ -110,7 +113,7 @@ def _renderizar_resumo(leitura: LeituraConvergencia) -> None:
                 detalhe_ponta(leitura.ponta_longa),
             ),
         )
-        for coluna, (rotulo, valor, detalhe) in zip(metricas, configuracoes):
+        for coluna, (rotulo, valor, detalhe) in zip(metricas, configuracoes, strict=True):
             with coluna:
                 st.metric(
                     rotulo,

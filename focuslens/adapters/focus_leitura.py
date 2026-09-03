@@ -109,7 +109,10 @@ def buscar_anual(indicador: str, ano: int) -> LeituraIndicador:
     linhas = _get(
         "ExpectativasMercadoAnuais",
         {
-            "$filter": f"Indicador eq '{indicador}' and baseCalculo eq 0 and DataReferencia eq '{ano}'",
+            "$filter": (
+                f"Indicador eq '{indicador}' and baseCalculo eq 0 "
+                f"and DataReferencia eq '{ano}'"
+            ),
             "$orderby": "Data desc",
             "$top": 1,
         },

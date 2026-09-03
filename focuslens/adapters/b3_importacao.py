@@ -13,7 +13,6 @@ from zipfile import BadZipFile
 from openpyxl import load_workbook
 from openpyxl.utils.exceptions import InvalidFileException
 
-
 MAX_ARQUIVO_BYTES = 5_000_000
 
 _ABAS_SUPORTADAS = {

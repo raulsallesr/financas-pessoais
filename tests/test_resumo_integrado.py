@@ -12,7 +12,7 @@ from focuslens.core.convergencia_modelo import (
     SinalFocus,
     montar_leitura_convergencia,
 )
-from focuslens.core.curva_data import PontoCurva, TIPO_PREFIXADO_SEM_CUPOM
+from focuslens.core.curva_data import TIPO_PREFIXADO_SEM_CUPOM, PontoCurva
 from focuslens.core.curva_modelo import (
     EstadoCurva,
     FotografiaCurva,
@@ -33,7 +33,6 @@ from focuslens.core.resumo_integrado import (
     montar_resumo_integrado,
     selecionar_contexto_radar,
 )
-
 
 HOJE = date(2026, 8, 27)
 

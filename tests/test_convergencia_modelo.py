@@ -16,7 +16,6 @@ from focuslens.core.curva_modelo import montar_leitura_curva
 from focuslens.core.financas_taxonomia import Direcao
 from focuslens.core.focus_data import ComparativoIndicador, LeituraIndicador, comparar
 
-
 HOJE = date(2026, 8, 26)
 VENCIMENTOS = (2027, 2028, 2029, 2031, 2032)
 

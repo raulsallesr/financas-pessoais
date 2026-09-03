@@ -6,17 +6,21 @@ from datetime import date
 
 import streamlit as st
 
-from focuslens.core.convergencia_modelo import montar_leitura_convergencia
 from focuslens.adapters.curva_fontes import (
     ErroCacheCurva,
+)
+from focuslens.adapters.curva_fontes import (
     carregar_cache as carregar_cache_curva,
 )
-from focuslens.core.curva_modelo import montar_leitura_curva
-from focuslens.core.focus_data import montar_comparativos
 from focuslens.adapters.focus_leitura import (
     ErroCacheFocus,
+)
+from focuslens.adapters.focus_leitura import (
     carregar_cache as carregar_cache_focus,
 )
+from focuslens.core.convergencia_modelo import montar_leitura_convergencia
+from focuslens.core.curva_modelo import montar_leitura_curva
+from focuslens.core.focus_data import montar_comparativos
 from focuslens.core.focus_semanal import montar_resumo_semanal
 from focuslens.core.macro_modelo import CenarioMacro
 from focuslens.core.resumo_integrado import (
@@ -26,7 +30,6 @@ from focuslens.core.resumo_integrado import (
     montar_resumo_integrado,
     selecionar_contexto_radar,
 )
-
 
 _ESTILO_PRIORIDADE = {
     PrioridadeResumo.FOCUS_CURVA: ("compare_arrows", "blue"),

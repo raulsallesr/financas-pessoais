@@ -10,7 +10,6 @@ from statistics import median
 from focuslens.core.curva_data import PontoCurva, consolidar_pontos_curva
 from focuslens.core.focus_atualizacao import dias_uteis_desde
 
-
 LIMIAR_MOVIMENTO_BPS = 2.0
 LIMITE_DEFASAGEM_DIAS_UTEIS = 2
 

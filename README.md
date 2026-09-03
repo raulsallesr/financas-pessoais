@@ -4,6 +4,7 @@
 [![mobile beta](https://img.shields.io/badge/mobile-v0.6.4_beta-0f766e)](mobile/README.md)
 [![release](https://img.shields.io/github/v/release/raulsallesr/financas-pessoais?include_prereleases&label=release)](https://github.com/raulsallesr/financas-pessoais/releases/tag/v0.6.4-beta)
 [![tests](https://img.shields.io/badge/testes-301-173f3a)](#qualidade-verificável)
+[![coverage](https://img.shields.io/badge/cobertura-86%25-2f855a)](pyproject.toml)
 [![license MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-b7791f)](LICENSE)
 
 Produto pessoal e educacional que transforma dados públicos do mercado
@@ -367,7 +368,9 @@ A auditoria técnica atual está em
 projeto de referência deste repositório é distribuído sob a
 [`MIT License`](LICENSE). Isso não publica nem licencia automaticamente uma
 futura implementação institucional: API, adaptadores privados, SDK e operação
-Embedded serão decididos e versionados em escopo próprio.
+Embedded serão decididos e versionados em escopo próprio. Correções técnicas
+via PR são bem-vindas — ver [`CONTRIBUTING.md`](CONTRIBUTING.md) para gates e
+convenções.
 
 ## Fonte oficial dos dados
 

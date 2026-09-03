@@ -4,17 +4,6 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from focuslens.ui.curva_apresentacao import (
-    CORES_PERIODOS,
-    especificacao_grafico_cenario,
-    especificacao_grafico,
-    formatar_bps,
-    formatar_numero,
-    linhas_grafico_cenario,
-    linhas_grafico,
-    linhas_tabela_cenario,
-    linhas_tabela,
-)
 from focuslens.core.curva_cenarios import simular_choque_paralelo
 from focuslens.core.curva_data import PontoCurva
 from focuslens.core.curva_modelo import (
@@ -22,6 +11,17 @@ from focuslens.core.curva_modelo import (
     EstadoCurva,
     FotografiaCurva,
     LeituraCurva,
+)
+from focuslens.ui.curva_apresentacao import (
+    CORES_PERIODOS,
+    especificacao_grafico,
+    especificacao_grafico_cenario,
+    formatar_bps,
+    formatar_numero,
+    linhas_grafico,
+    linhas_grafico_cenario,
+    linhas_tabela,
+    linhas_tabela_cenario,
 )
 
 

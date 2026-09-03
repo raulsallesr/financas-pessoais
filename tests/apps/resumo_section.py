@@ -6,15 +6,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 
+from focuslens.core.macro_modelo import CenarioMacro, SinalMacro
 from focuslens.core.resumo_integrado import (
     DatasFonteResumo,
     PrioridadeResumo,
     ProvaResumo,
     ResumoIntegrado,
 )
-from focuslens.core.macro_modelo import CenarioMacro, SinalMacro
 from focuslens.ui.pagina_resumo import render_secao, renderizar_contexto_radar
-
 
 render_secao(
     ResumoIntegrado(

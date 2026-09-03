@@ -3,11 +3,13 @@ from datetime import UTC, datetime
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from focuslens.adapters.noticias_artigo import (
-    ErroLeituraArtigo,
     PALAVRAS_TRECHO,
+    ErroLeituraArtigo,
     buscar_artigo,
 )
 from focuslens.core.noticias_data import Noticia
@@ -123,20 +125,14 @@ def test_buscar_artigo_recusa_quando_robots_bloqueia(mock_get):
         content_type="text/plain",
     )
 
-    try:
+    with pytest.raises(ErroLeituraArtigo, match="não autoriza"):
         buscar_artigo(_noticia())
-        assert False, "deveria recusar a leitura bloqueada"
-    except ErroLeituraArtigo as erro:
-        assert "não autoriza" in str(erro)
 
 
 @patch("focuslens.adapters.noticias_artigo.requests.get")
 def test_buscar_artigo_recusa_host_fora_da_fonte_sem_rede(mock_get):
-    try:
+    with pytest.raises(ErroLeituraArtigo, match="não pertence"):
         buscar_artigo(_noticia("https://exemplo-malicioso.test/materia"))
-        assert False, "deveria recusar host externo"
-    except ErroLeituraArtigo as erro:
-        assert "não pertence" in str(erro)
     mock_get.assert_not_called()
 
 
@@ -155,8 +151,5 @@ def test_buscar_artigo_recusa_redirecionamento_para_host_externo(mock_get):
         ),
     ]
 
-    try:
+    with pytest.raises(ErroLeituraArtigo, match="não pertence"):
         buscar_artigo(_noticia())
-        assert False, "deveria impedir redirecionamento externo"
-    except ErroLeituraArtigo as erro:
-        assert "não pertence" in str(erro)

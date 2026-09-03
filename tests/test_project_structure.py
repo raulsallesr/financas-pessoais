@@ -1,5 +1,5 @@
-from pathlib import Path
 import re
+from pathlib import Path
 from urllib.parse import unquote
 
 from focuslens.paths import DATA_DIR, MOBILE_DIR, PROJECT_ROOT

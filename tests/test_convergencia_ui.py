@@ -7,7 +7,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from streamlit.testing.v1 import AppTest
 
-from focuslens.ui import pagina_convergencia
 from focuslens.core.convergencia_modelo import (
     DirecaoSinal,
     EstadoConvergencia,
@@ -16,6 +15,7 @@ from focuslens.core.convergencia_modelo import (
     SinalFocus,
     SinalPonta,
 )
+from focuslens.ui import pagina_convergencia
 
 
 def _leitura_publicavel() -> LeituraConvergencia:

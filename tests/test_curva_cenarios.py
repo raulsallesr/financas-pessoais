@@ -11,7 +11,6 @@ from focuslens.core.curva_cenarios import simular_choque_paralelo
 from focuslens.core.curva_data import PontoCurva
 from focuslens.core.curva_modelo import FotografiaCurva
 
-
 DATA_BASE = date(2026, 8, 26)
 
 

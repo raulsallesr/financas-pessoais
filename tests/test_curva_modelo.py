@@ -12,7 +12,6 @@ from focuslens.core.curva_modelo import (
     titulo_leitura_curva,
 )
 
-
 HOJE = date(2026, 8, 26)
 
 

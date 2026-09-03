@@ -2,18 +2,18 @@ import sys
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from focuslens.adapters.noticias_feed import (
-    ErroFonteNoticias,
     FONTES_RSS,
+    ErroFonteNoticias,
     FonteRSS,
     buscar_fonte,
     buscar_noticias,
 )
-
 
 RSS = b"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
@@ -78,11 +78,8 @@ def test_buscar_fonte_le_apenas_metadados_e_filtra_host(mock_get):
 @patch("focuslens.adapters.noticias_feed.requests.get")
 def test_buscar_fonte_converte_falha_de_rede(mock_get):
     mock_get.side_effect = requests.Timeout("timeout")
-    try:
+    with pytest.raises(ErroFonteNoticias):
         buscar_fonte(FONTE)
-        assert False, "deveria levantar ErroFonteNoticias"
-    except ErroFonteNoticias:
-        pass
 
 
 @patch("focuslens.adapters.noticias_feed.buscar_fonte")
@@ -97,6 +94,7 @@ def test_buscar_noticias_isola_fonte_indisponivel(mock_buscar):
         if fonte.nome == "Brazil Journal":
             raise ErroFonteNoticias("fora")
         from datetime import UTC, datetime
+
         from focuslens.core.noticias_data import Noticia
 
         return [

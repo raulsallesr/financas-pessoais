@@ -8,10 +8,34 @@ from datetime import date
 import pandas as pd
 import streamlit as st
 
+from focuslens.adapters.focus_leitura import (
+    ErroBuscaFocus,
+    ErroCacheFocus,
+    atualizar_e_obter_historico,
+    carregar_cache,
+    data_ultima_atualizacao_cache,
+)
+from focuslens.adapters.noticias_artigo import ErroLeituraArtigo, buscar_artigo
+from focuslens.adapters.noticias_feed import ResultadoNoticias, buscar_noticias
 from focuslens.core.financas_taxonomia import Direcao
 from focuslens.core.focus_atualizacao import (
     deve_verificar_automaticamente,
 )
+from focuslens.core.focus_data import (
+    ComparativoIndicador,
+    LeituraIndicador,
+    montar_comparativos,
+    serie_historica,
+)
+from focuslens.core.focus_regras import explicar_leigo, resumo_efeitos
+from focuslens.core.focus_semanal import (
+    EstadoFocusSemanal,
+    ResumoFocusSemanal,
+    montar_resumo_semanal,
+)
+from focuslens.core.noticias_analise import AnaliseArtigo, analisar_artigo
+from focuslens.core.noticias_data import Noticia
+from focuslens.core.noticias_focus import cruzar_noticias_com_focus
 from focuslens.ui.focus_apresentacao import (
     descricao_resumo_semanal,
     escolher_destaque,
@@ -20,30 +44,6 @@ from focuslens.ui.focus_apresentacao import (
     ordenar_comparativos,
     titulo_resumo_semanal,
 )
-from focuslens.core.focus_data import (
-    ComparativoIndicador,
-    LeituraIndicador,
-    montar_comparativos,
-    serie_historica,
-)
-from focuslens.core.focus_semanal import (
-    EstadoFocusSemanal,
-    ResumoFocusSemanal,
-    montar_resumo_semanal,
-)
-from focuslens.adapters.focus_leitura import (
-    ErroBuscaFocus,
-    ErroCacheFocus,
-    atualizar_e_obter_historico,
-    carregar_cache,
-    data_ultima_atualizacao_cache,
-)
-from focuslens.core.focus_regras import explicar_leigo, resumo_efeitos
-from focuslens.core.noticias_analise import AnaliseArtigo, analisar_artigo
-from focuslens.adapters.noticias_artigo import ErroLeituraArtigo, buscar_artigo
-from focuslens.core.noticias_data import Noticia
-from focuslens.adapters.noticias_feed import ResultadoNoticias, buscar_noticias
-from focuslens.core.noticias_focus import cruzar_noticias_com_focus
 
 _ROTULOS_EFEITO = {
     "positivo": ("Tende a favorecer", "trending_up", "blue"),
@@ -248,7 +248,7 @@ def _renderizar_resumo(
         if resumo.destaques:
             colunas = st.columns(len(resumo.destaques), gap="medium")
             for posicao, (coluna, comparativo) in enumerate(
-                zip(colunas, resumo.destaques),
+                zip(colunas, resumo.destaques, strict=True),
                 start=1,
             ):
                 with coluna:
@@ -283,7 +283,7 @@ def _renderizar_metricas(
         icon=":material/add_chart:",
     ):
         colunas = st.columns(min(3, len(restantes)), gap="medium")
-        for coluna, comparativo in zip(colunas, restantes):
+        for coluna, comparativo in zip(colunas, restantes, strict=True):
             with coluna:
                 _renderizar_metrica(
                     comparativo, historico, com_grafico=False
@@ -330,7 +330,7 @@ def _renderizar_impactos(
         for inicio in range(0, len(efeitos), 3):
             grupo = efeitos[inicio : inicio + 3]
             colunas = st.columns(len(grupo), gap="medium")
-            for coluna, efeito in zip(colunas, grupo):
+            for coluna, efeito in zip(colunas, grupo, strict=True):
                 rotulo, icone, cor = _ROTULOS_EFEITO[efeito.sentido]
                 with coluna:
                     with st.container(border=True):
@@ -371,7 +371,7 @@ def _renderizar_noticias_focus(
         )
     else:
         colunas = st.columns(len(leituras), gap="medium")
-        for coluna, leitura in zip(colunas, leituras):
+        for coluna, leitura in zip(colunas, leituras, strict=True):
             with coluna:
                 with st.container(border=True):
                     st.badge(

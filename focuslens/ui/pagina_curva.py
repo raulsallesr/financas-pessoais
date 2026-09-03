@@ -7,18 +7,6 @@ from datetime import date
 import pandas as pd
 import streamlit as st
 
-from focuslens.ui.curva_apresentacao import (
-    especificacao_grafico_cenario,
-    especificacao_grafico,
-    formatar_bps,
-    formatar_numero,
-    linhas_grafico_cenario,
-    linhas_grafico,
-    linhas_tabela_cenario,
-    linhas_tabela,
-)
-from focuslens.core.curva_cenarios import simular_choque_paralelo
-from focuslens.core.curva_data import PontoCurva
 from focuslens.adapters.curva_fontes import (
     CURVA_FONTE_URL,
     ErroCacheCurva,
@@ -27,6 +15,8 @@ from focuslens.adapters.curva_fontes import (
     carregar_cache,
     data_ultima_atualizacao_cache,
 )
+from focuslens.core.curva_cenarios import simular_choque_paralelo
+from focuslens.core.curva_data import PontoCurva
 from focuslens.core.curva_modelo import (
     EstadoCurva,
     LeituraCurva,
@@ -35,7 +25,16 @@ from focuslens.core.curva_modelo import (
     titulo_leitura_curva,
 )
 from focuslens.core.focus_atualizacao import deve_verificar_automaticamente
-
+from focuslens.ui.curva_apresentacao import (
+    especificacao_grafico,
+    especificacao_grafico_cenario,
+    formatar_bps,
+    formatar_numero,
+    linhas_grafico,
+    linhas_grafico_cenario,
+    linhas_tabela,
+    linhas_tabela_cenario,
+)
 
 _ESTILO_ESTADO = {
     EstadoCurva.ATUALIZADA: ("check_circle", "green"),

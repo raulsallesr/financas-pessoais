@@ -12,7 +12,6 @@ from focuslens.core.focus_semanal import (
     ordenar_por_relevancia,
 )
 
-
 HOJE = date(2026, 8, 26)
 
 

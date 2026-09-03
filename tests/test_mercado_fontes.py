@@ -3,6 +3,7 @@ from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -117,11 +118,8 @@ def test_buscar_selic_usa_serie_diaria_oficial(mock_get):
 @patch("focuslens.adapters.mercado_fontes.requests.get")
 def test_erro_de_rede_vira_falha_controlada(mock_get):
     mock_get.side_effect = requests.Timeout("timeout")
-    try:
+    with pytest.raises(ErroFonteMercado):
         mercado_fontes.buscar_brent()
-        assert False, "deveria ter levantado ErroFonteMercado"
-    except ErroFonteMercado:
-        pass
 
 
 def test_busca_conjunta_preserva_fontes_que_responderam():

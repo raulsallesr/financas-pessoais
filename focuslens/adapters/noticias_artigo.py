@@ -15,8 +15,8 @@ from urllib.robotparser import RobotFileParser
 
 import requests
 
-from focuslens.core.noticias_data import Noticia, normalizar_texto
 from focuslens.adapters.noticias_feed import FONTES_RSS, TIMEOUT_SEGUNDOS, USER_AGENT, FonteRSS
+from focuslens.core.noticias_data import Noticia, normalizar_texto
 
 MAX_BYTES_ARTIGO = 2_000_000
 MAX_PALAVRAS_ARTIGO = 6_000

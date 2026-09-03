@@ -6,13 +6,13 @@ Ele descreve exposição, resultado e contexto; não gera ordem de compra/venda.
 
 from __future__ import annotations
 
+from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 from math import isfinite
-from typing import Any, Iterable, Mapping
+from typing import Any
 
 from focuslens.core.macro_modelo import CenarioMacro
 from focuslens.core.mercado_data import SerieMercado, pontos_base_100
-
 
 CLASSES_CARTEIRA = (
     "Renda fixa pós-fixada",

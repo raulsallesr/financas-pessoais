@@ -4,10 +4,10 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from focuslens.adapters.noticias_artigo import ArtigoExtraido
 from focuslens.core.financas_taxonomia import Direcao
 from focuslens.core.focus_data import ComparativoIndicador, LeituraIndicador
 from focuslens.core.noticias_analise import analisar_artigo
-from focuslens.adapters.noticias_artigo import ArtigoExtraido
 from focuslens.core.noticias_data import Noticia
 
 

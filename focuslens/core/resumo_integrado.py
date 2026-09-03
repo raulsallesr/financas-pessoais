@@ -13,22 +13,21 @@ from datetime import date
 from enum import Enum
 
 from focuslens.core.convergencia_modelo import EstadoConvergencia, LeituraConvergencia
-from focuslens.ui.curva_apresentacao import formatar_bps
 from focuslens.core.curva_modelo import (
     EstadoCurva,
     LeituraCurva,
     descricao_leitura_curva,
     titulo_leitura_curva,
 )
+from focuslens.core.focus_semanal import EstadoFocusSemanal, ResumoFocusSemanal
+from focuslens.core.macro_modelo import CenarioMacro
+from focuslens.ui.curva_apresentacao import formatar_bps
 from focuslens.ui.focus_apresentacao import (
     descricao_resumo_semanal,
     formatar_delta,
     formatar_valor,
     titulo_resumo_semanal,
 )
-from focuslens.core.focus_semanal import EstadoFocusSemanal, ResumoFocusSemanal
-from focuslens.core.macro_modelo import CenarioMacro
-
 
 FONTE_FOCUS = "BACEN · Focus"
 FONTE_CURVA = "Tesouro Transparente"

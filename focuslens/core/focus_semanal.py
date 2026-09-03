@@ -16,7 +16,6 @@ from focuslens.core.focus_atualizacao import dias_uteis_desde
 from focuslens.core.focus_data import ComparativoIndicador
 from focuslens.core.motor_indicadores import limiar_estavel
 
-
 INDICADORES_FOCUS_SEMANAL = (
     "Selic",
     "IPCA",

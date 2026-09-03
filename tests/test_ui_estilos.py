@@ -1,10 +1,9 @@
 from __future__ import annotations
 
-from pathlib import Path
 import tomllib
+from pathlib import Path
 
 from focuslens.ui.ui_estilos import COR_GRAFICO_PRIMARIA, CSS_APP
-
 
 RAIZ_PROJETO = Path(__file__).resolve().parent.parent
 

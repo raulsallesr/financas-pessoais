@@ -1,5 +1,5 @@
-import sys
 import re
+import sys
 from io import BytesIO
 from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile

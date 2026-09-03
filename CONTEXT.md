@@ -34,6 +34,14 @@
 - BI-04–BI-13, CL-11–CL-13, DB-10–DB-12 e E2E nativo não foram registrados
   item a item. Deixaram de ser gates do beta por decisão do titular e ficam
   como checklists opcionais antes de eventual publicação em loja/produção.
+- Polimento pós-publicação (2026-09-03): `pyproject.toml` ampliou o lint do
+  Ruff (`E5`, `I`, `B`, `UP`, com `UP042` ignorado por risco/ganho — trocar
+  `class X(str, Enum)` por `StrEnum` fica para depois, se quiser); imports
+  reordenados em ~50 arquivos (auto-fix, cosmético); 9 `zip()` na UI ganharam
+  `strict=True`; 11 blocos `try/assert False/except` nos testes viraram
+  `pytest.raises(...)`. Badge de cobertura (86%) no README. `CONTRIBUTING.md`
+  novo, linkado no README. `pytest tests/ -q --cov=.` e `ruff check .`
+  confirmados verdes antes do commit (194 testes, 86,1%).
 
 ## Retomada segura
 

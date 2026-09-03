@@ -3,6 +3,7 @@ from datetime import date
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
 import requests
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -86,21 +87,15 @@ def test_buscar_selic_proxima_reuniao_usa_menor_reuniao_da_data_mais_recente(moc
 def test_buscar_selic_sem_linhas_levanta_erro(mock_get):
     mock_get.return_value.raise_for_status.return_value = None
     mock_get.return_value.json.return_value = {"value": []}
-    try:
+    with pytest.raises(ErroBuscaFocus):
         focus_leitura.buscar_selic_proxima_reuniao()
-        assert False, "deveria ter levantado ErroBuscaFocus"
-    except ErroBuscaFocus:
-        pass
 
 
 @patch("focuslens.adapters.focus_leitura.requests.get")
 def test_erro_de_rede_gera_erro_busca_focus(mock_get):
     mock_get.side_effect = requests.exceptions.Timeout("timeout")
-    try:
+    with pytest.raises(ErroBuscaFocus):
         focus_leitura.buscar_selic_proxima_reuniao()
-        assert False, "deveria ter levantado ErroBuscaFocus"
-    except ErroBuscaFocus:
-        pass
 
 
 @patch("focuslens.adapters.focus_leitura.requests.get")
@@ -151,11 +146,8 @@ def test_cache_invalido_gera_erro_controlado(tmp_path, monkeypatch):
     caminho.write_text("{incompleto", encoding="utf-8")
     monkeypatch.setattr(focus_leitura, "CACHE_PATH", caminho)
 
-    try:
+    with pytest.raises(ErroCacheFocus):
         focus_leitura.carregar_cache()
-        assert False, "deveria ter levantado ErroCacheFocus"
-    except ErroCacheFocus:
-        pass
 
 
 def test_amostra_mantem_apenas_a_coleta_mais_recente_de_cada_semana():

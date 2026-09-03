@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from datetime import date
 from math import isfinite
 
-
 TIPO_PREFIXADO_SEM_CUPOM = "Tesouro Prefixado"
 
 

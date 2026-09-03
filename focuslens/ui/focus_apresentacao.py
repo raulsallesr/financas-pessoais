@@ -2,8 +2,8 @@
 
 from __future__ import annotations
 
-from focuslens.core.focus_data import ComparativoIndicador
 from focuslens.core.financas_taxonomia import Direcao
+from focuslens.core.focus_data import ComparativoIndicador
 from focuslens.core.focus_semanal import EstadoFocusSemanal, ResumoFocusSemanal
 from focuslens.core.motor_indicadores import limiar_estavel
 

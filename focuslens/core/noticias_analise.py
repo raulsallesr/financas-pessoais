@@ -10,9 +10,9 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+from focuslens.adapters.noticias_artigo import ArtigoExtraido
 from focuslens.core.financas_taxonomia import Direcao
 from focuslens.core.focus_data import ComparativoIndicador
-from focuslens.adapters.noticias_artigo import ArtigoExtraido
 from focuslens.core.noticias_data import Noticia, normalizar_texto
 
 

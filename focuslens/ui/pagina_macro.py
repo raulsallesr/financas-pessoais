@@ -8,8 +8,10 @@ from datetime import UTC, date
 import pandas as pd
 import streamlit as st
 
-from focuslens.core.focus_data import montar_comparativos
 from focuslens.adapters.focus_leitura import ErroCacheFocus, carregar_cache
+from focuslens.adapters.mercado_fontes import ResultadoMercados, buscar_mercados
+from focuslens.adapters.noticias_feed import ResultadoNoticias, buscar_noticias
+from focuslens.core.focus_data import montar_comparativos
 from focuslens.core.macro_modelo import CenarioMacro, construir_cenario
 from focuslens.core.mercado_data import (
     MovimentoMercado,
@@ -17,9 +19,7 @@ from focuslens.core.mercado_data import (
     calcular_movimento,
     pontos_base_100,
 )
-from focuslens.adapters.mercado_fontes import ResultadoMercados, buscar_mercados
 from focuslens.core.noticias_data import Noticia, selecionar_destaques
-from focuslens.adapters.noticias_feed import ResultadoNoticias, buscar_noticias
 from focuslens.ui.ui_estilos import COR_GRAFICO_PRIMARIA
 
 _CORES_ESTADO = {
@@ -111,7 +111,7 @@ def _renderizar_precos(series: list[SerieMercado]) -> list[MovimentoMercado]:
     st.subheader("Mercados agora")
     movimentos = [calcular_movimento(serie) for serie in series]
     colunas = st.columns(max(1, len(movimentos)), gap="medium")
-    for coluna, serie, movimento in zip(colunas, series, movimentos):
+    for coluna, serie, movimento in zip(colunas, series, movimentos, strict=True):
         with coluna:
             st.metric(
                 label=movimento.nome,
@@ -157,7 +157,7 @@ def _renderizar_eixos(cenario: CenarioMacro) -> None:
     for inicio in range(0, len(cenario.eixos), 3):
         grupo = cenario.eixos[inicio : inicio + 3]
         colunas = st.columns(len(grupo), gap="medium")
-        for coluna, eixo in zip(colunas, grupo):
+        for coluna, eixo in zip(colunas, grupo, strict=True):
             with coluna:
                 with st.container(border=True):
                     st.markdown(f"**{eixo.nome}**")
@@ -254,7 +254,7 @@ def _renderizar_noticias(
     st.subheader("Temas nas manchetes")
     if cenario.temas_editoriais:
         colunas = st.columns(len(cenario.temas_editoriais), gap="small")
-        for coluna, tema in zip(colunas, cenario.temas_editoriais):
+        for coluna, tema in zip(colunas, cenario.temas_editoriais, strict=True):
             with coluna:
                 st.metric(
                     tema.tema,

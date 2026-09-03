@@ -7,7 +7,7 @@ tests/test_focus_regras.py, que varre este arquivo em busca desse vocabulário.
 
 from __future__ import annotations
 
-from focuslens.core.financas_taxonomia import Direcao, UNIDADE_INDICADOR
+from focuslens.core.financas_taxonomia import UNIDADE_INDICADOR, Direcao
 from focuslens.core.focus_data import ComparativoIndicador
 from focuslens.core.motor_indicadores import EfeitoClasseAtivo, efeitos_por_indicador
 

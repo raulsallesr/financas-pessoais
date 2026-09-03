@@ -20,7 +20,6 @@ from focuslens.core.macro_modelo import CenarioMacro
 from focuslens.core.mercado_data import SerieMercado
 from focuslens.ui.ui_estilos import COR_GRAFICO_PRIMARIA
 
-
 _COLUNAS = (
     "Ativo",
     "Classe",
@@ -208,7 +207,7 @@ def _renderizar_impactos(posicoes, cenario: CenarioMacro | None) -> None:
         for inicio in range(0, len(impactos), 2):
             grupo = impactos[inicio : inicio + 2]
             colunas = st.columns(len(grupo), gap="medium")
-            for coluna, impacto in zip(colunas, grupo):
+            for coluna, impacto in zip(colunas, grupo, strict=True):
                 with coluna:
                     with st.container(border=True):
                         st.badge(

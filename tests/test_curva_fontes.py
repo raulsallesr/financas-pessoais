@@ -10,9 +10,8 @@ import requests
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from focuslens.adapters import curva_fontes
-from focuslens.core.curva_data import PontoCurva
 from focuslens.adapters.curva_fontes import ErroCacheCurva, ErroFonteCurva
-
+from focuslens.core.curva_data import PontoCurva
 
 CABECALHO = (
     "Tipo Titulo;Data Vencimento;Data Base;Taxa Compra Manha;"
@@ -54,11 +53,8 @@ def test_interpretacao_filtra_prefixado_sem_cupom_e_converte_pt_br():
 
 
 def test_interpretacao_falha_fechada_quando_schema_muda():
-    try:
+    with pytest.raises(ErroFonteCurva, match="estrutura"):
         curva_fontes.interpretar_csv(b"coluna;outra\n1;2\n")
-        assert False, "deveria rejeitar schema inesperado"
-    except ErroFonteCurva as erro:
-        assert "estrutura" in str(erro)
 
 
 def test_interpretacao_rejeita_pontos_conflitantes():
@@ -95,11 +91,8 @@ def test_busca_limita_download_e_interpreta_resposta(mock_get):
 def test_erro_de_rede_vira_falha_controlada(mock_get):
     mock_get.side_effect = requests.Timeout("timeout")
 
-    try:
+    with pytest.raises(ErroFonteCurva):
         curva_fontes.buscar_curva_prefixada()
-        assert False, "deveria converter o timeout"
-    except ErroFonteCurva:
-        pass
 
 
 def test_cache_ida_e_volta_e_nao_regrava_conteudo_igual(
@@ -125,11 +118,8 @@ def test_cache_invalido_gera_erro_controlado(tmp_path, monkeypatch):
     caminho.write_text("{incompleto", encoding="utf-8")
     monkeypatch.setattr(curva_fontes, "CACHE_PATH", caminho)
 
-    try:
+    with pytest.raises(ErroCacheCurva):
         curva_fontes.carregar_cache()
-        assert False, "deveria rejeitar cache inválido"
-    except ErroCacheCurva:
-        pass
 
 
 def test_cache_rejeita_numero_nao_finito(tmp_path, monkeypatch):
