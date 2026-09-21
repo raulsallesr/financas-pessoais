@@ -1,5 +1,5 @@
 {
-  "atualizado_em": "2026-09-14",
+  "atualizado_em": "2026-09-21",
   "registros": [
     {
       "indicador": "Câmbio",
@@ -189,6 +189,17 @@
       "num_respondentes": 113
     },
     {
+      "indicador": "Câmbio",
+      "referencia": "2026",
+      "data_coleta": "2026-09-18",
+      "mediana": 5.2,
+      "media": 5.1894,
+      "minimo": 4.8,
+      "maximo": 5.45,
+      "desvio_padrao": 0.1213,
+      "num_respondentes": 115
+    },
+    {
       "indicador": "Dívida líquida do setor público",
       "referencia": "2026",
       "data_coleta": "2026-05-15",
@@ -374,6 +385,17 @@
       "maximo": 73.9,
       "desvio_padrao": 1.0817,
       "num_respondentes": 57
+    },
+    {
+      "indicador": "Dívida líquida do setor público",
+      "referencia": "2026",
+      "data_coleta": "2026-09-18",
+      "mediana": 70.0,
+      "media": 70.1339,
+      "minimo": 67.2,
+      "maximo": 73.9,
+      "desvio_padrao": 1.0086,
+      "num_respondentes": 58
     },
     {
       "indicador": "IGP-M",
@@ -563,6 +585,17 @@
       "num_respondentes": 67
     },
     {
+      "indicador": "IGP-M",
+      "referencia": "2026",
+      "data_coleta": "2026-09-18",
+      "mediana": 4.7295,
+      "media": 4.6013,
+      "minimo": 0.7617,
+      "maximo": 6.3,
+      "desvio_padrao": 0.9668,
+      "num_respondentes": 70
+    },
+    {
       "indicador": "IPCA",
       "referencia": "2026",
       "data_coleta": "2026-05-15",
@@ -748,6 +781,17 @@
       "maximo": 5.8332,
       "desvio_padrao": 0.2212,
       "num_respondentes": 147
+    },
+    {
+      "indicador": "IPCA",
+      "referencia": "2026",
+      "data_coleta": "2026-09-18",
+      "mediana": 4.9205,
+      "media": 4.9356,
+      "minimo": 4.047,
+      "maximo": 5.8963,
+      "desvio_padrao": 0.2347,
+      "num_respondentes": 146
     },
     {
       "indicador": "PIB Total",
@@ -937,6 +981,17 @@
       "num_respondentes": 112
     },
     {
+      "indicador": "PIB Total",
+      "referencia": "2026",
+      "data_coleta": "2026-09-18",
+      "mediana": 1.8805,
+      "media": 1.8732,
+      "minimo": 1.5551,
+      "maximo": 2.2825,
+      "desvio_padrao": 0.1176,
+      "num_respondentes": 111
+    },
+    {
       "indicador": "Selic",
       "referencia": "R5/2026",
       "data_coleta": "2026-05-15",
@@ -1122,6 +1177,17 @@
       "maximo": 14.0,
       "desvio_padrao": 0.0802,
       "num_respondentes": 142
+    },
+    {
+      "indicador": "Selic",
+      "referencia": "R7/2026",
+      "data_coleta": "2026-09-18",
+      "mediana": 13.625,
+      "media": 13.6359,
+      "minimo": 13.25,
+      "maximo": 14.0,
+      "desvio_padrao": 0.1508,
+      "num_respondentes": 138
     }
   ]
 }
