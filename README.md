@@ -21,6 +21,21 @@ O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em
 [`docs/product/PLANO_FOCUSLENS.md`](docs/product/PLANO_FOCUSLENS.md).
 
+## Em construção: Lastro e o módulo Ativos B3
+
+O FocusLens passa a ser o módulo **Macro** de uma plataforma maior, provisoriamente
+chamada **Lastro**. O novo módulo **Ativos B3** traz métricas fundamentalistas, screener,
+score quantitativo, valor intrínseco em faixa, ranking de ETFs e otimização de carteira.
+Tudo é calculado a partir de fontes oficiais e gratuitas: CVM Dados Abertos e o
+COTAHIST da B3.
+
+> Ferramenta de uso pessoal, com metodologia aberta. Scores, faixas de valor e carteiras
+> simuladas são cálculos quantitativos para estudo, sem caráter de aconselhamento.
+
+Plano em [`docs/product/PLANO_LASTRO.md`](docs/product/PLANO_LASTRO.md) e cobertura das
+fontes em
+[`docs/validation/COBERTURA_ATIVOS_FASE0.md`](docs/validation/COBERTURA_ATIVOS_FASE0.md).
+
 ## FocusLens Mobile `v0.6.4` — beta funcional
 
 A primeira prerelease pública está disponível em

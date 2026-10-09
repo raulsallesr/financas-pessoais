@@ -7,8 +7,20 @@
 
 ## Estado em uma tela
 
-- Produto: **FocusLens BR**, educacional e orientado à privacidade. `mobile/` é a interface
-  principal; o app Streamlit permanece como referência funcional.
+- **Nova direção (2026-10-09):** o FocusLens vira o módulo **Macro** de uma plataforma
+  maior, provisoriamente chamada **Lastro**.
+  - Novo módulo **Ativos B3** (`ativos/`), com plano em `docs/product/PLANO_LASTRO.md`.
+  - Decisões do Raul: uso pessoal com repositório público como portfólio; motor Python
+    + web Streamlit primeiro; fontes oficiais e gratuitas (CVM + COTAHIST); nome novo
+    para a plataforma.
+  - A **Fase 0 está concluída**: navegação Macro + Ativos (placeholder) e relatório de
+    cobertura em `docs/validation/COBERTURA_ATIVOS_FASE0.md`. Ações e FIIs são
+    viáveis; ETFs pedem tabela curada.
+  - **Próximo passo:** Fase 1, a base de dados point-in-time.
+  - **Pendente do Raul:** decidir o retorno total para backtest (DVA oficial
+    aproximada ou Yahoo ajustado).
+- Produto (módulo Macro): **FocusLens BR**, educacional e orientado à privacidade.
+  `mobile/` é a interface principal; o app Streamlit permanece como referência funcional.
 - Branch: `main`. Corte funcional: mobile `v0.6.4`, Android `versionCode 23`,
   iOS `buildNumber 23`.
 - Entrega atual: revisão semanal opcional e laboratório do dinheiro organizados
@@ -225,6 +237,12 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 
 ## Próxima decisão
 
+- **Lastro / Ativos B3:** executar a Fase 1 de `docs/product/PLANO_LASTRO.md`.
+  - Escopo: adapters CVM e COTAHIST, normalização de escala, contas e units, ajuste de
+    desdobramento e grupamento, pipeline, workflow e asset de release.
+  - As armadilhas medidas na Fase 0 viram requisito; estão listadas no relatório de
+    cobertura.
+  - Os itens abaixo referem-se ao módulo Macro e ao mobile.
 - Se o Raul quiser iniciar a Etapa 6, o próximo trabalho é fechar o contrato de
   receipt e o threat model inicial antes do sandbox institucional, seguindo a
   seção 14 de `docs/product/PLANO_FOCUSLENS.md`.

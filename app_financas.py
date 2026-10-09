@@ -1,5 +1,18 @@
-"""Entrypoint da home. Execute com: streamlit run app_financas.py"""
+"""Entrypoint da plataforma Lastro. Execute com: streamlit run app_financas.py
 
-from focuslens.ui.pagina_home import render
+Módulos: Macro (FocusLens BR) e Ativos B3.
+"""
 
-render()
+import streamlit as st
+
+from ativos.ui import pagina_ativos
+from focuslens.ui.pagina_home import render as render_macro
+
+pagina = st.navigation(
+    [
+        st.Page(render_macro, title="Macro · FocusLens", url_path="macro", default=True),
+        st.Page(pagina_ativos.render, title="Ativos B3", url_path="ativos"),
+    ],
+    position="top",
+)
+pagina.run()

@@ -30,9 +30,16 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
   Testes de importação devem gerar o XLSX sintético em memória durante o
   próprio teste.
 - A experiência de produto agora está em `mobile/`, com Hoje, Carteira,
-  Cenários e Entenda. A referência Streamlit permanece em página única:
-  `app_financas.py` chama `focuslens/ui/pagina_home.py`, sem novos entrypoints
-  em `pages/`.
+  Cenários e Entenda. Na web, `app_financas.py` é a entrada da plataforma
+  **Lastro** (nome provisório, 2026-10-09). Ele usa `st.navigation` com dois
+  módulos:
+  - **Macro**: `focuslens/ui/pagina_home.py`;
+  - **Ativos B3**: `ativos/ui/`.
+  Páginas novas entram nessa lista, nunca em `pages/`.
+- Módulo `ativos/`: mesmo padrão `core`/`adapters`/`ui`. Plano e princípios em
+  `docs/product/PLANO_LASTRO.md`. Todo texto exibido passa por
+  `ativos/core/linguagem.py`: score e faixa, nunca ordem nem preço-alvo. Dado
+  bruto da CVM e da B3 fica em `%USERPROFILE%\.cache\lastro\`, nunca no git.
   Não remover nem reescrever os motores `v1.12`–`v2.0` durante a migração.
 - Guardrail de conteúdo, sem exceção: nenhuma regra em
   `focuslens/core/motor_indicadores.py` ou texto em
