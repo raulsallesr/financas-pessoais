@@ -20,7 +20,8 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
    bloqueios e próximos passos). O histórico detalhado fica no Git e no plano.
 3. Trabalhando no módulo **Lastro / Ativos B3**: leia também
    `docs/RETOMADA_EM_OUTRA_MAQUINA.md` (ambiente e dados),
-   `docs/product/ROTEIRO_PROXIMAS_FASES.md` (o que falta e o desenho de cada corte) e
+   `docs/product/DIAGNOSTICO_E_PLANO_2026-10-11.md` (o que está bom/ruim e a ordem aprovada),
+   `docs/product/ROTEIRO_PROXIMAS_FASES.md` (desenho técnico de cada corte) e
    `docs/validation/LICOES_DADOS_PUBLICOS.md` (erros reais dos dados públicos).
 
 ## Convenções do projeto

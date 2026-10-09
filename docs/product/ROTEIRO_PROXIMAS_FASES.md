@@ -10,6 +10,12 @@ Estado em 2026-10-09: concluídos Fase 0, base de dados, busca de ações, busca
 valor estimado (sem DCF) e ficha do ativo. Veja os specs `SPEC_BUSCA_AVANCADA_ACOES.md`,
 `SPEC_BUSCA_FIIS.md` e `SPEC_VALOR_ESTIMADO.md` como modelo de especificação.
 
+> **Atualização 2026-10-11:** a ordem abaixo foi revista. Vale
+> [`DIAGNOSTICO_E_PLANO_2026-10-11.md`](DIAGNOSTICO_E_PLANO_2026-10-11.md): primeiro o Ciclo 1
+> (confiança: calibrar valuation, qualidade de dados, reconciliação, automação, refatoração),
+> depois ETFs, DCF, histórico e preço ajustado, e só então Score, risco e carteira. A decisão
+> sobre retorno total está tomada: Yahoo só para preço (ver seção D).
+
 ## Ordem sugerida
 
 1. **Atualização automática** (pequeno, destrava o uso diário).
@@ -89,7 +95,7 @@ valor estimado (sem DCF) e ficha do ativo. Veja os specs `SPEC_BUSCA_AVANCADA_AC
   quintil e o **IC de Spearman**. É onde a fórmula se calibra antes de qualquer confiança.
 - **Dependência crítica (decisão do Raul):** retorno total ajustado de desdobramento e
   dividendos. Opção A: aproximar só com dados oficiais (DY da DFC/DVA + ajuste por eventos
-  de capital), menos preciso. Opção B: Yahoo Finance (gratuito, não oficial) apenas para
+  de capital), menos preciso. Opção B (ESCOLHIDA em 2026-10-11): Yahoo Finance (gratuito, não oficial) apenas para
   preço ajustado. **Sem esta decisão o Score Lab não começa.** Também precisa dos
   COTAHIST de 2020 em diante e de fundamentos históricos (DFP/ITR 2020+, já baixados).
 - **Gate:** teste dedicado **anti look-ahead**; golden da decomposição; monotonicidade
@@ -133,7 +139,8 @@ consumindo um snapshot `ativos-v1` (o snapshot `v1` do FocusLens não muda).
 
 ## Decisões abertas do Raul
 
-1. Retorno total para o backtest (opção A oficial aproximada ou B Yahoo).
+1. ~~Retorno total para o backtest~~ **Decidido em 2026-10-11: opção B, Yahoo só para preço**
+   (adapter isolado, cache, aviso de fonte não oficial; spike de comparação antes de plugar).
 2. Nome definitivo da plataforma ("Lastro" é provisório).
 3. Abrir a plataforma para outras pessoas? Isso exige validação jurídica/compliance
    (CVM Res. 19 e 20/2021, analista e consultor); enquanto for pessoal, vale o aviso de uso

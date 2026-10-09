@@ -18,12 +18,18 @@
     premissas editáveis; **Ficha do ativo**. Sem DCF ainda.
   - **Como rodar do zero:** `docs/RETOMADA_EM_OUTRA_MAQUINA.md` (clonar, venv, baixar dados,
     gerar tabelas, abrir). Os dados e o ambiente Python **não** vão no Git.
-  - **Próximo passo concreto:** escolher entre atualização automática dos derivados (GitHub
-    Actions + release), ETFs (tabela curada), DCF ou Score. Ordem sugerida e desenho de cada
-    um em `docs/product/ROTEIRO_PROXIMAS_FASES.md`.
-  - **Bloqueios / decisões do Raul:** (1) retorno total para o backtest do Score (oficial
-    aproximado ou Yahoo ajustado); (2) nome definitivo; (3) qualquer abertura a terceiros
-    exige validação jurídica.
+  - **Próximo passo concreto (decidido pelo Raul em 2026-10-11): Ciclo 1, "confiança
+    primeiro"**: calibrar o valuation (Bazin ligado à `rf`; hoje 6% fixo contra rf de 12,8%
+    deixa metade do mercado fora da faixa), painel de qualidade de dados, reconciliação
+    automática, atualização automática (Actions + release), sentinela das fontes, vitrine do
+    README e refatoração antes dos ETFs. Diagnóstico e plano completos em
+    `docs/product/DIAGNOSTICO_E_PLANO_2026-10-11.md`; desenho técnico em
+    `docs/product/ROTEIRO_PROXIMAS_FASES.md`.
+  - **Decisões do Raul (2026-10-11):** foco em confiança primeiro; **retorno total = Yahoo
+    Finance só para preço ajustado** (backtest e risco, adapter isolado, aviso de fonte não
+    oficial; antes, spike de comparação em 20 tickers); **sem demo pública** por ora.
+    **Em aberto:** nome definitivo da plataforma; qualquer abertura a terceiros exige
+    validação jurídica.
   - **Lições dos dados públicos** (erros reais da CVM/B3 e como foram tratados):
     `docs/validation/LICOES_DADOS_PUBLICOS.md`. **Leia antes de mexer em métricas.**
   - Registro detalhado do dia de criação: `docs/validation/ESTADO_ATIVOS_2026-10-09.md`.
