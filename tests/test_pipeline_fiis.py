@@ -337,6 +337,7 @@ def test_pipeline_fii_golden_integra_versao_defasagem_composicao_e_imoveis():
     assert linha["tipo"] == "Tijolo"
     assert linha["p_vp"] == pytest.approx(0.90)
     assert linha["dy_12m"] == pytest.approx(12 / 90)
+    assert linha["rendimento_12m_cota"] == pytest.approx(12)
     assert linha["rentab_12m"] == pytest.approx(1.01**12 - 1)
     assert linha["vacancia"] == pytest.approx(0.14)
     assert linha["passivo_ativo"] == pytest.approx(0.15)

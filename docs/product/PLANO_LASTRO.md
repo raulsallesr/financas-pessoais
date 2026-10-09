@@ -60,11 +60,11 @@ app_financas.py   entrada com st.navigation: Macro e Ativos
 | Fase | Entrega | Gate | Situação |
 |---|---|---|---|
 | 0 | Navegação Macro + Ativos, este plano, [relatório de cobertura](../validation/COBERTURA_ATIVOS_FASE0.md) | relatório revisado pelo Raul | concluída em 2026-10-09 |
-| 1 | Base de dados point-in-time: adapters, normalização (escala, contas, units), ajuste de eventos, pipeline, workflow e asset de release | testes com fixtures sintéticas; reconciliação de 5 tickers contra o DFP publicado | próxima |
-| 2 | Métricas (ações e FIIs), ficha do ativo, screener com presets | golden tests calculados à mão | planejada |
-| 3 | ETFs: tabela curada, exposição, ranking por custo, liquidez, PL e tracking | conferência de 10 ETFs | planejada |
-| 4 | Valor intrínseco em faixa (Graham, Bazin, Gordon, DCF 2 estágios, múltiplo setorial) | golden tests e sensibilidade | planejada |
-| 5 | Score Lastro (6 fatores, percentil setorial, pesos editáveis) e Score Lab (backtest por quintil, IC) | teste anti look-ahead | planejada |
+| 1 | Base de dados point-in-time: adapters, normalização (escala, contas, units) e pipeline local | testes com fixtures sintéticas e pipeline real | concluída em 2026-10-09; automação/asset pendentes |
+| 2 | Métricas (ações e FIIs), ficha do ativo e screener com presets | golden tests calculados à mão | concluída em 2026-10-09 |
+| 3 | ETFs: tabela curada, exposição, ranking por custo, liquidez, PL e tracking | conferência de 10 ETFs | próxima |
+| 4 | Valor estimado em faixa (Graham, Bazin, Gordon, múltiplo setorial e FIIs); DCF 2 estágios | golden tests e sensibilidade | parcial em 2026-10-09; DCF pendente |
+| 5 | Score Lastro (6 fatores, percentil setorial, pesos editáveis) e Score Lab (backtest por quintil, IC) | teste anti look-ahead | próxima |
 | 6 | Risco, otimizador (mínima variância, MV com Ledoit-Wolf, HRP), fronteira, walk-forward, raio-x da carteira importada | testes numéricos de restrição e determinismo | planejada |
 | 7 | Proventos e fatos relevantes (CVM IPE), renda passiva, mobile | conforme item | planejada |
 
@@ -92,11 +92,15 @@ difference.
 **Valor intrínseco:**
 - Modelos:
   - Graham: √(22,5 × LPA × VPA);
-  - Bazin, com taxa mínima ligada à NTN-B;
-  - Gordon;
-  - DCF de 2 estágios, com WACC derivado da curva Tesouro e beta do COTAHIST;
-  - múltiplo setorial.
-- Saída: faixa P25–P75 e margem de segurança.
+  - Bazin com taxa mínima editável, padrão de 6%;
+  - Gordon com `k = Tesouro Prefixado de 5 anos + ERP` e crescimento editável;
+  - múltiplos setoriais sobre empresas distintas, excluindo o próprio CNPJ;
+  - FII patrimonial e renda de 12 meses capitalizada pela taxa prefixada líquida de 15%;
+  - DCF de 2 estágios, com WACC derivado da curva Tesouro e beta do COTAHIST, pendente.
+- Saída: faixa P25–P75, mediana, quantidade de modelos, margem calculada e posição do
+  preço na faixa; menos de dois modelos permanece sem faixa.
+- Premissas são visíveis, editáveis e compartilhadas entre as duas buscas e a ficha.
+  O parquet esquema 3 persiste apenas os insumos; o valuation é recalculado na sessão.
 
 **Score Lastro (0–100, letras A–E por quintil):**
 - Fatores: Valor, Qualidade, Saúde, Crescimento, Dividendos e Risco.
@@ -113,4 +117,6 @@ difference.
 
 - **Retorno total para backtest:** aproximação oficial pela DVA ou série ajustada do
   Yahoo. Ver o relatório de cobertura.
+- **Próximo modelo de valor:** definir fluxo de caixa, beta, dívida e crescimento do
+  DCF de dois estágios antes de implementar, sem preencher lacunas com estimativas opacas.
 - **Nome definitivo** da plataforma.

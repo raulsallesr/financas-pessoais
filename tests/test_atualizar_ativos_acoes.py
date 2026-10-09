@@ -14,6 +14,7 @@ def _tabela_final():
                 "ticker": "AAA3",
                 "p_l": 10.0,
                 "dy": 0.05,
+                "dpa": 0.50,
                 "origem_cnpj": "nome",
                 "alertas": [],
             },
@@ -21,6 +22,7 @@ def _tabela_final():
                 "ticker": "BBB3",
                 "p_l": None,
                 "dy": None,
+                "dpa": None,
                 "origem_cnpj": None,
                 "alertas": ["sem_cnpj"],
             },
@@ -83,7 +85,8 @@ def test_executar_orquestra_cache_grava_atomico_e_gera_metadados(tmp_path, monke
     assert meta["cobertura_dy"] == 0.5
     assert meta["pendencias_ticker"] == ["BBB3"]
     assert meta["tickers_resolvidos_por_nome"] == ["AAA3"]
-    assert meta["schema_version"] == 2
+    assert meta["schema_version"] == 3
+    assert meta["cobertura_dpa"] == 0.5
     assert pd.read_parquet(derivado / "acoes.parquet")["ticker"].tolist() == ["AAA3", "BBB3"]
     assert json.loads((derivado / "acoes_meta.json").read_text(encoding="utf-8")) == meta
 
@@ -172,6 +175,7 @@ def test_resumo_e_main_imprimem_contrato(monkeypatch, capsys):
         "linhas": 2,
         "cobertura_p_l": 0.5,
         "cobertura_dy": 0.5,
+        "cobertura_dpa": 0.5,
         "pendencias_ticker": ["BBB3"],
     }
     monkeypatch.setattr(atualizar_ativos, "executar", lambda **kwargs: (_tabela_final(), meta))

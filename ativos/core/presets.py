@@ -9,7 +9,15 @@ GRAHAM_DEFENSIVO = "Graham defensivo"
 BAZIN = "Bazin"
 MAGIC_FORMULA = "Magic Formula"
 QUALIDADE_DIVIDA_BAIXA = "Qualidade com dívida baixa"
-PRESETS = (SEM_PRESET, GRAHAM_DEFENSIVO, BAZIN, MAGIC_FORMULA, QUALIDADE_DIVIDA_BAIXA)
+MARGEM_CALCULADA = "Margem calculada ≥ 30% com 3+ modelos"
+PRESETS = (
+    SEM_PRESET,
+    GRAHAM_DEFENSIVO,
+    BAZIN,
+    MAGIC_FORMULA,
+    QUALIDADE_DIVIDA_BAIXA,
+    MARGEM_CALCULADA,
+)
 
 
 def aplicar_preset(quadro: pd.DataFrame, preset: str) -> pd.DataFrame:
@@ -50,5 +58,9 @@ def aplicar_preset(quadro: pd.DataFrame, preset: str) -> pd.DataFrame:
             quadro["roe"].ge(0.15)
             & quadro["margem_liquida"].ge(0.10)
             & quadro["div_liq_ebit"].le(2)
+        ].copy()
+    if preset == MARGEM_CALCULADA:
+        return quadro[
+            quadro["margem_seguranca"].ge(0.30) & quadro["n_modelos"].ge(3)
         ].copy()
     raise ValueError(f"Preset desconhecido: {preset}")

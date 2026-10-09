@@ -5,6 +5,7 @@ from ativos.core.presets import (
     BAZIN,
     GRAHAM_DEFENSIVO,
     MAGIC_FORMULA,
+    MARGEM_CALCULADA,
     QUALIDADE_DIVIDA_BAIXA,
     SEM_PRESET,
     aplicar_preset,
@@ -26,6 +27,8 @@ def _base():
                 "roic": 0.20,
                 "roe": 0.20,
                 "margem_liquida": 0.15,
+                "margem_seguranca": 0.35,
+                "n_modelos": 3,
             },
             {
                 "ticker": "BBB3",
@@ -39,6 +42,8 @@ def _base():
                 "roic": 0.10,
                 "roe": 0.10,
                 "margem_liquida": 0.05,
+                "margem_seguranca": 0.10,
+                "n_modelos": 4,
             },
             {
                 "ticker": "CCC3",
@@ -52,6 +57,8 @@ def _base():
                 "roic": None,
                 "roe": 0.30,
                 "margem_liquida": 0.20,
+                "margem_seguranca": None,
+                "n_modelos": 1,
             },
         ]
     )
@@ -65,6 +72,7 @@ def _base():
         (BAZIN, ["AAA3"]),
         (QUALIDADE_DIVIDA_BAIXA, ["AAA3"]),
         (MAGIC_FORMULA, ["AAA3", "BBB3"]),
+        (MARGEM_CALCULADA, ["AAA3"]),
     ],
 )
 def test_presets_e_nan_fora_de_criterios_obrigatorios(preset, tickers):

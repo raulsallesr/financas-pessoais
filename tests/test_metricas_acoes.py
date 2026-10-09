@@ -53,6 +53,7 @@ CAGR_LUCROS = 2.43 ** (1 / 5) - 1
         ("p_l", 10),
         ("vpa", 5),
         ("p_vp", 2),
+        ("dpa", 0.6),
         ("dy", 0.06),
         ("peg", 10 / (CAGR_LUCROS * 100)),
         ("p_ativos", 1),

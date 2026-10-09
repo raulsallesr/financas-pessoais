@@ -11,6 +11,7 @@ import streamlit as st
 
 from ativos.core.linguagem import validar_textos
 from ativos.core.presets_fiis import PRESETS_FIIS, SEM_PRESET_FII, aplicar_preset_fii
+from ativos.core.valuation import calcular_valuation_fiis
 from ativos.paths import caminho_fiis, caminho_meta_fiis
 from ativos.ui.componentes_tabela import (
     alertas,
@@ -19,6 +20,7 @@ from ativos.ui.componentes_tabela import (
     renderizar_tabela_e_csv,
 )
 from ativos.ui.pagina_ativos import AVISO
+from ativos.ui.premissas_valuation import renderizar_premissas
 from focuslens.ui.ui_estilos import aplicar_estilos
 
 METRICAS_FII: dict[str, dict[str, str]] = {
@@ -27,6 +29,42 @@ METRICAS_FII: dict[str, dict[str, str]] = {
         "grupo": "Liquidez e tamanho",
         "formato": "moeda",
         "descricao": "Último fechamento disponível da cota.",
+    },
+    "valor_central": {
+        "rotulo": "Valor central",
+        "grupo": "Avaliação",
+        "formato": "moeda",
+        "descricao": "Mediana dos modelos patrimonial e de renda quando ambos se aplicam.",
+    },
+    "faixa_baixa": {
+        "rotulo": "Faixa baixa",
+        "grupo": "Avaliação",
+        "formato": "moeda",
+        "descricao": "Percentil 25 dos valores produzidos pelos modelos aplicáveis.",
+    },
+    "faixa_alta": {
+        "rotulo": "Faixa alta",
+        "grupo": "Avaliação",
+        "formato": "moeda",
+        "descricao": "Percentil 75 dos valores produzidos pelos modelos aplicáveis.",
+    },
+    "margem_seguranca": {
+        "rotulo": "Margem calculada",
+        "grupo": "Avaliação",
+        "formato": "percentual",
+        "descricao": "Valor central dividido pelo preço atual, menos um.",
+    },
+    "n_modelos": {
+        "rotulo": "Modelos",
+        "grupo": "Avaliação",
+        "formato": "inteiro",
+        "descricao": "Quantidade de modelos aplicáveis ao fundo.",
+    },
+    "situacao_faixa": {
+        "rotulo": "Situação na faixa",
+        "grupo": "Avaliação",
+        "formato": "texto",
+        "descricao": "Posição do preço atual em relação aos percentis 25 e 75.",
     },
     "valor_mercado": {
         "rotulo": "Valor de mercado (R$)",
@@ -75,6 +113,12 @@ METRICAS_FII: dict[str, dict[str, str]] = {
         "grupo": "Renda",
         "formato": "percentual",
         "descricao": "Rendimentos por cota dos últimos 12 informes divididos pelo preço atual.",
+    },
+    "rendimento_12m_cota": {
+        "rotulo": "Rendimento 12m/cota",
+        "grupo": "Renda",
+        "formato": "moeda",
+        "descricao": "Soma anualizada dos rendimentos por cota válidos usados no DY 12m.",
     },
     "dy_ultimo_mes": {
         "rotulo": "DY último mês anualizado",
@@ -164,6 +208,7 @@ TEXTOS_UI_FII = validar_textos(
         "Vacância máxima (%)",
         "Liquidez mínima diária (R$)",
         "Ocultar fundos com alertas de dados",
+        "Margem de segurança mínima (%)",
         "Preset",
         "Grupos de colunas",
         "Comparador",
@@ -215,6 +260,7 @@ def aplicar_filtros_fiis(
     vacancia: tuple[float | None, float | None] = (None, None),
     liquidez_minima: float = 0,
     ocultar_alertas: bool = False,
+    margem_minima: float | None = None,
     preset: str = SEM_PRESET_FII,
 ) -> pd.DataFrame:
     """Aplica filtros próprios de FII; NaN não satisfaz uma faixa ativa."""
@@ -229,6 +275,8 @@ def aplicar_filtros_fiis(
     resultado = _faixa(resultado, "vacancia", vacancia)
     if ocultar_alertas:
         resultado = resultado[resultado["alertas"].map(lambda valor: not alertas(valor))]
+    if margem_minima is not None:
+        resultado = resultado[resultado["margem_seguranca"].ge(margem_minima)]
     return aplicar_preset_fii(resultado, preset)
 
 
@@ -289,6 +337,8 @@ def render() -> None:
         return
     quadro = carregar_fiis(str(parquet))
     meta = carregar_meta_fiis(str(meta_path)) if meta_path.exists() else {}
+    premissas = renderizar_premissas()
+    quadro = calcular_valuation_fiis(quadro, premissas)
     total = len(quadro)
 
     with st.expander("Filtros", expanded=True):
@@ -310,6 +360,9 @@ def render() -> None:
             )
         with col_c:
             ocultar_alertas = st.checkbox("Ocultar fundos com alertas de dados")
+            margem_minima_pct = st.number_input(
+                "Margem de segurança mínima (%)", value=None, placeholder="Sem limite"
+            )
             preset = st.selectbox("Preset", PRESETS_FIIS)
             grupos = st.multiselect(
                 "Grupos de colunas", GRUPOS_FII, default=list(GRUPOS_FII)
@@ -324,6 +377,9 @@ def render() -> None:
         vacancia=(None, _percentual_ou_none(vacancia_max)),
         liquidez_minima=liquidez_minima,
         ocultar_alertas=ocultar_alertas,
+        margem_minima=(
+            float(margem_minima_pct) / 100 if margem_minima_pct is not None else None
+        ),
         preset=preset,
     )
     topo_a, topo_b, topo_c = st.columns(3)

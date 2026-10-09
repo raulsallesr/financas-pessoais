@@ -15,6 +15,7 @@ def _tabela_fiis():
                 "tipo": "Tijolo",
                 "p_vp": 0.9,
                 "dy_12m": 0.10,
+                "rendimento_12m_cota": 9.0,
                 "vacancia": 0.05,
                 "alertas": ["dy_dados_suspeitos"],
             },
@@ -24,6 +25,7 @@ def _tabela_fiis():
                 "tipo": "Papel",
                 "p_vp": None,
                 "dy_12m": None,
+                "rendimento_12m_cota": None,
                 "vacancia": None,
                 "alertas": [],
             },
@@ -81,9 +83,10 @@ def test_executar_fiis_orquestra_cache_persistencia_e_metadados(tmp_path, monkey
     )
 
     assert tabela["ticker"].tolist() == ["AAAA11", "BBBB11"]
-    assert meta["schema_version"] == 2
+    assert meta["schema_version"] == 3
     assert meta["cobertura_p_vp"] == 0.5
     assert meta["cobertura_dy_12m"] == 0.5
+    assert meta["cobertura_rendimento_12m_cota"] == 0.5
     assert meta["cobertura_vacancia"] == 0.5
     assert meta["fundos_com_alerta_dy_dados_suspeitos"] == 1
     assert meta["pendencias_ticker"] == ["PEND11"]
@@ -143,6 +146,7 @@ def test_resumo_e_cli_da_classe_fiis(monkeypatch, capsys):
         "linhas": 2,
         "cobertura_p_vp": 0.5,
         "cobertura_dy_12m": 0.5,
+        "cobertura_rendimento_12m_cota": 0.5,
         "cobertura_vacancia": 0.5,
         "fundos_com_alerta_dy_dados_suspeitos": 1,
         "pendencias_ticker": ["PEND11"],

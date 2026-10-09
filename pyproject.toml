@@ -1,7 +1,7 @@
 [tool.ruff]
 target-version = "py313"
 line-length = 100
-extend-exclude = ["mobile", ".pytest-runtime-*"]
+extend-exclude = ["mobile", ".pytest-runtime-*", ".pytest_tmp-*", "tests/.pytest_runtime_val"]
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "E5", "F", "I", "B", "UP"]

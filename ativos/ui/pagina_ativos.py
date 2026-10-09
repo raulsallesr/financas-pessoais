@@ -6,12 +6,13 @@ from focuslens.ui.ui_estilos import aplicar_estilos
 
 ETAPAS = (
     ("Fase 0", "Fundação e cobertura das fontes oficiais", "concluída"),
-    ("Fase 1", "Base de dados point-in-time (CVM + COTAHIST)", "próxima"),
-    ("Fase 2", "Métricas, ficha do ativo e screener (ações e FIIs)", "planejada"),
-    ("Fase 3", "ETFs por exposição, custo e liquidez", "planejada"),
-    ("Fase 4", "Valor intrínseco estimado em faixa multi-modelo", "planejada"),
-    ("Fase 5", "Score Lastro e laboratório de backtest", "planejada"),
+    ("Fase 1", "Base point-in-time e pipelines manuais", "concluída"),
+    ("Fase 2", "Métricas, duas buscas e ficha do ativo", "concluída"),
+    ("Fase 3", "ETFs por exposição, custo e liquidez", "próxima"),
+    ("Fase 4", "Faixa multi-modelo; DCF de dois estágios pendente", "parcial"),
+    ("Fase 5", "Score Lastro e laboratório de backtest", "próxima"),
     ("Fase 6", "Risco, otimizador de carteira e raio-x", "planejada"),
+    ("Operação", "Atualização automática dos derivados", "próxima"),
 )
 
 AVISO = (

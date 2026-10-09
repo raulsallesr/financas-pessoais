@@ -1,3 +1,4 @@
+import ast
 from pathlib import Path
 
 import pytest
@@ -26,6 +27,20 @@ def test_textos_do_modulo_ativos_respeitam_guardrail_de_linguagem():
     assert textos_proibidos(textos) == []
 
 
+def test_literais_de_interface_do_modulo_ativos_respeitam_guardrail():
+    proibidos = []
+    for arquivo in (RAIZ / "ativos" / "ui").glob("*.py"):
+        arvore = ast.parse(arquivo.read_text(encoding="utf-8"))
+        literais = [
+            no.value
+            for no in ast.walk(arvore)
+            if isinstance(no, ast.Constant) and isinstance(no.value, str)
+        ]
+        proibidos.extend(textos_proibidos(literais))
+
+    assert proibidos == []
+
+
 def test_guardrail_bloqueia_ordem_e_preco_alvo():
     assert textos_proibidos(["Compre agora", "preço-alvo de R$ 30", "faixa estimada"]) == [
         "Compre agora",
@@ -33,6 +48,12 @@ def test_guardrail_bloqueia_ordem_e_preco_alvo():
     ]
     with pytest.raises(ValueError, match="incompatível"):
         validar_textos(["Compre agora"])
+
+
+def test_guardrail_ampliado_bloqueia_julgamentos_de_valor():
+    textos = ["ativo barato", "ação cara", "oportunidade", "carteira diversificada"]
+
+    assert textos_proibidos(textos) == textos[:3]
 
 
 def test_entrypoint_navega_entre_macro_e_ativos():
@@ -43,3 +64,4 @@ def test_entrypoint_navega_entre_macro_e_ativos():
     assert 'url_path="ativos"' in codigo
     assert 'url_path="busca-acoes"' in codigo
     assert 'url_path="busca-fiis"' in codigo
+    assert 'url_path="ficha"' in codigo

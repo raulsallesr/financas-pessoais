@@ -9,12 +9,14 @@ RENDA_DESCONTO = "Renda com desconto"
 TIJOLO_BAIXA_VACANCIA = "Tijolo com baixa vacância"
 PAPEL_DIVERSIFICADO = "Papel diversificado"
 ALTA_LIQUIDEZ = "Alta liquidez"
+ABAIXO_DA_FAIXA = "Abaixo da faixa patrimonial e de renda"
 PRESETS_FIIS = (
     SEM_PRESET_FII,
     RENDA_DESCONTO,
     TIJOLO_BAIXA_VACANCIA,
     PAPEL_DIVERSIFICADO,
     ALTA_LIQUIDEZ,
+    ABAIXO_DA_FAIXA,
 )
 
 
@@ -44,6 +46,8 @@ def aplicar_preset_fii(quadro: pd.DataFrame, preset: str) -> pd.DataFrame:
         mascara = quadro["liquidez_media_diaria"].ge(3_000_000) & quadro["cotistas"].ge(
             50_000
         )
+    elif preset == ABAIXO_DA_FAIXA:
+        mascara = quadro["situacao_faixa"].eq("abaixo da faixa")
     else:
         raise ValueError(f"Preset de FII desconhecido: {preset}")
     return quadro[mascara].copy()

@@ -9,7 +9,7 @@ import re
 
 VERBOS_PROIBIDOS = re.compile(
     r"\b(invista|invisto|compre|comprar|venda|vender|recomendo|recomendamos|recomendação"
-    r"|preço[- ]alvo)\w*",
+    r"|preço[- ]alvo)\w*|\b(barat[oa]|car[oa]|oportunidade)\b",
     re.IGNORECASE,
 )
 

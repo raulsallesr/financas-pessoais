@@ -38,6 +38,7 @@ COLUNAS_METRICAS_FII = (
     "vp_cota",
     "p_vp",
     "dy_12m",
+    "rendimento_12m_cota",
     "dy_ultimo_mes",
     "rendimento_ultimo_mes",
     "rentab_12m",
@@ -114,6 +115,7 @@ def calcular_metricas_mensais(historico: pd.DataFrame, preco: object) -> dict[st
     """Calcula renda e rentabilidade a partir dos últimos 12 informes do fundo."""
     vazio = {
         "dy_12m": np.nan,
+        "rendimento_12m_cota": np.nan,
         "dy_ultimo_mes": np.nan,
         "rendimento_ultimo_mes": np.nan,
         "rentab_12m": np.nan,
@@ -142,8 +144,10 @@ def calcular_metricas_mensais(historico: pd.DataFrame, preco: object) -> dict[st
     preco_numero = _numero(preco)
     if quantidade_valida >= 6 and pd.notna(preco_numero) and preco_numero > 0:
         fator = 12 / quantidade_valida if quantidade_valida < 12 else 1
-        dy_12m = float(validos.sum() * fator / preco_numero)
+        rendimento_12m_cota = float(validos.sum() * fator)
+        dy_12m = rendimento_12m_cota / preco_numero
     else:
+        rendimento_12m_cota = np.nan
         dy_12m = np.nan
 
     rendimento_ultimo = rendimentos.iloc[-1]
@@ -170,6 +174,7 @@ def calcular_metricas_mensais(historico: pd.DataFrame, preco: object) -> dict[st
     )
     return {
         "dy_12m": dy_12m,
+        "rendimento_12m_cota": rendimento_12m_cota,
         "dy_ultimo_mes": dy_ultimo,
         "rendimento_ultimo_mes": rendimento_ultimo,
         "rentab_12m": rentab_12m,

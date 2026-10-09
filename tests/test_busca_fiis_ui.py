@@ -8,6 +8,8 @@ from streamlit.testing.v1 import AppTest
 
 from ativos.core.linguagem import textos_proibidos
 from ativos.core.metricas_fiis import COLUNAS_METRICAS_FII
+from ativos.core.presets_fiis import ABAIXO_DA_FAIXA
+from ativos.core.valuation import COLUNAS_AVALIACAO
 from ativos.ui import componentes_tabela, pagina_busca_fiis
 
 APP_BUSCA_FIIS = Path(__file__).parent / "fixtures" / "app_busca_fiis.py"
@@ -56,11 +58,16 @@ def test_pagina_busca_fiis_carrega_parquet_e_mostra_metadados(tmp_path, monkeypa
 
     assert not app.exception
     assert app.title[0].value == "Busca de FIIs"
-    assert [metrica.value for metrica in app.metric] == [
+    assert [metrica.value for metrica in app.metric][-3:] == [
         "2026-10-08",
         "2026-10-09 12:00:00",
         "2 de 2",
     ]
+    assert app.dataframe[0].value["ticker"].tolist() == ["AAAA11", "BBBB11"]
+    assert set(COLUNAS_AVALIACAO).issubset(app.dataframe[0].value.columns)
+    assert "Premissas" in [expander.label for expander in app.expander]
+
+    app.selectbox[0].select(ABAIXO_DA_FAIXA).run()
     assert app.dataframe[0].value["ticker"].tolist() == ["AAAA11", "BBBB11"]
 
 
@@ -93,7 +100,9 @@ def test_filtros_fii_excluem_nan_e_aplicam_tipo_segmento_alertas_e_liquidez():
 
 
 def test_catalogo_textos_csv_e_formatacao_compartilhada_respeitam_contratos():
-    assert set(pagina_busca_fiis.METRICAS_FII) == set(COLUNAS_METRICAS_FII)
+    assert set(pagina_busca_fiis.METRICAS_FII) == set(COLUNAS_METRICAS_FII) | set(
+        COLUNAS_AVALIACAO
+    )
     assert textos_proibidos(list(pagina_busca_fiis.TEXTOS_UI_FII)) == []
     assert pagina_busca_fiis.colunas_dos_grupos_fii(["Valuation"]) == ["vp_cota", "p_vp"]
     arvore = ast.parse(Path(pagina_busca_fiis.__file__).read_text(encoding="utf-8"))

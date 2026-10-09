@@ -20,8 +20,8 @@ from ativos.core.pipeline_acoes import construir_tabela_acoes
 from ativos.core.pipeline_fiis import construir_tabela_fiis
 from ativos.paths import cache_bruto_dir, dados_derivados_dir
 
-SCHEMA_VERSION_ACOES = 2
-SCHEMA_VERSION_FIIS = 2
+SCHEMA_VERSION_ACOES = 3
+SCHEMA_VERSION_FIIS = 3
 # Compatibilidade com consumidores e testes da primeira fatia vertical.
 SCHEMA_VERSION = SCHEMA_VERSION_ACOES
 
@@ -252,6 +252,7 @@ def _executar_acoes(
     ].tolist()
     cobertura_pl = float(tabela["p_l"].notna().mean()) if len(tabela) else 0.0
     cobertura_dy = float(tabela["dy"].notna().mean()) if len(tabela) else 0.0
+    cobertura_dpa = float(tabela["dpa"].notna().mean()) if len(tabela) else 0.0
     resolvidos_por_nome = tabela.loc[
         tabela["origem_cnpj"].eq("nome"), "ticker"
     ].tolist()
@@ -263,6 +264,7 @@ def _executar_acoes(
         "liquidez_minima": liquidez_minima,
         "cobertura_p_l": cobertura_pl,
         "cobertura_dy": cobertura_dy,
+        "cobertura_dpa": cobertura_dpa,
         "pendencias_ticker": pendencias,
         "tickers_resolvidos_por_nome": resolvidos_por_nome,
     }
@@ -366,6 +368,9 @@ def _executar_fiis(
     )
     cobertura_p_vp = float(tabela["p_vp"].notna().mean()) if len(tabela) else 0.0
     cobertura_dy = float(tabela["dy_12m"].notna().mean()) if len(tabela) else 0.0
+    cobertura_rendimento = (
+        float(tabela["rendimento_12m_cota"].notna().mean()) if len(tabela) else 0.0
+    )
     cobertura_vacancia = float(tabela["vacancia"].notna().mean()) if len(tabela) else 0.0
     contagem_tipo = {
         str(tipo): int(contagem)
@@ -382,6 +387,7 @@ def _executar_fiis(
         "liquidez_minima": liquidez_minima,
         "cobertura_p_vp": cobertura_p_vp,
         "cobertura_dy_12m": cobertura_dy,
+        "cobertura_rendimento_12m_cota": cobertura_rendimento,
         "cobertura_vacancia": cobertura_vacancia,
         "fundos_com_alerta_dy_dados_suspeitos": fundos_dy_suspeito,
         **diagnostico,
@@ -437,10 +443,12 @@ def _formatar_resumo(meta: dict[str, object]) -> str:
     lista = ", ".join(pendencias) if pendencias else "nenhuma"
     cobertura = float(meta["cobertura_p_l"]) * 100
     cobertura_dy = float(meta["cobertura_dy"]) * 100
+    cobertura_dpa = float(meta["cobertura_dpa"]) * 100
     return (
         f"Universo: {meta['linhas']} tickers\n"
         f"Cobertura de P/L: {cobertura:.1f}%\n"
         f"Cobertura de DY: {cobertura_dy:.1f}%\n"
+        f"Cobertura de DPA: {cobertura_dpa:.1f}%\n"
         f"Pendências de ticker: {lista}"
     )
 
@@ -455,6 +463,8 @@ def _formatar_resumo_fiis(meta: dict[str, object]) -> str:
         f"Universo: {meta['linhas']} FIIs\n"
         f"Cobertura de P/VP: {float(meta['cobertura_p_vp']) * 100:.1f}%\n"
         f"Cobertura de DY 12m: {float(meta['cobertura_dy_12m']) * 100:.1f}%\n"
+        "Cobertura de rendimento 12m/cota: "
+        f"{float(meta['cobertura_rendimento_12m_cota']) * 100:.1f}%\n"
         f"Cobertura de vacância: {float(meta['cobertura_vacancia']) * 100:.1f}%\n"
         "Fundos com DY/rentabilidade suspeitos: "
         f"{meta['fundos_com_alerta_dy_dados_suspeitos']}\n"

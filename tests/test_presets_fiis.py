@@ -2,6 +2,7 @@ import pandas as pd
 import pytest
 
 from ativos.core.presets_fiis import (
+    ABAIXO_DA_FAIXA,
     ALTA_LIQUIDEZ,
     PAPEL_DIVERSIFICADO,
     RENDA_DESCONTO,
@@ -23,6 +24,7 @@ def _base():
                 "vacancia": 0.08,
                 "passivo_ativo": 0.10,
                 "cotistas": 10_000,
+                "situacao_faixa": "abaixo da faixa",
             },
             {
                 "ticker": "PAPEL11",
@@ -33,6 +35,7 @@ def _base():
                 "vacancia": None,
                 "passivo_ativo": 0.15,
                 "cotistas": 20_000,
+                "situacao_faixa": "dentro da faixa",
             },
             {
                 "ticker": "LIQDO11",
@@ -43,6 +46,7 @@ def _base():
                 "vacancia": None,
                 "passivo_ativo": None,
                 "cotistas": 50_000,
+                "situacao_faixa": None,
             },
         ]
     )
@@ -56,6 +60,7 @@ def _base():
         (TIJOLO_BAIXA_VACANCIA, ["RENDA11"]),
         (PAPEL_DIVERSIFICADO, ["PAPEL11"]),
         (ALTA_LIQUIDEZ, ["LIQDO11"]),
+        (ABAIXO_DA_FAIXA, ["RENDA11"]),
     ],
 )
 def test_presets_fiis_incluem_limites_e_excluem_nan(preset, tickers):

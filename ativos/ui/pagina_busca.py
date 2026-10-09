@@ -11,6 +11,7 @@ import streamlit as st
 
 from ativos.core.linguagem import validar_textos
 from ativos.core.presets import PRESETS, SEM_PRESET, aplicar_preset
+from ativos.core.valuation import calcular_valuation_acoes
 from ativos.paths import caminho_acoes, caminho_meta_acoes
 from ativos.ui.componentes_tabela import (
     alertas as _alertas,
@@ -25,6 +26,7 @@ from ativos.ui.componentes_tabela import (
     formatar_comparacao as _formatar_comparacao_compartilhada,
 )
 from ativos.ui.pagina_ativos import AVISO
+from ativos.ui.premissas_valuation import renderizar_premissas
 from focuslens.ui.ui_estilos import aplicar_estilos
 
 METRICAS: dict[str, dict[str, str]] = {
@@ -33,6 +35,42 @@ METRICAS: dict[str, dict[str, str]] = {
         "grupo": "Liquidez e tamanho",
         "formato": "moeda",
         "descricao": "Último fechamento disponível do ticker.",
+    },
+    "valor_central": {
+        "rotulo": "Valor central",
+        "grupo": "Avaliação",
+        "formato": "moeda",
+        "descricao": "Mediana dos modelos aplicáveis; exige ao menos dois modelos.",
+    },
+    "faixa_baixa": {
+        "rotulo": "Faixa baixa",
+        "grupo": "Avaliação",
+        "formato": "moeda",
+        "descricao": "Percentil 25 dos valores produzidos pelos modelos aplicáveis.",
+    },
+    "faixa_alta": {
+        "rotulo": "Faixa alta",
+        "grupo": "Avaliação",
+        "formato": "moeda",
+        "descricao": "Percentil 75 dos valores produzidos pelos modelos aplicáveis.",
+    },
+    "margem_seguranca": {
+        "rotulo": "Margem calculada",
+        "grupo": "Avaliação",
+        "formato": "percentual",
+        "descricao": "Valor central dividido pelo preço atual, menos um.",
+    },
+    "n_modelos": {
+        "rotulo": "Modelos",
+        "grupo": "Avaliação",
+        "formato": "inteiro",
+        "descricao": "Quantidade de modelos aplicáveis ao ativo.",
+    },
+    "situacao_faixa": {
+        "rotulo": "Situação na faixa",
+        "grupo": "Avaliação",
+        "formato": "texto",
+        "descricao": "Posição do preço atual em relação aos percentis 25 e 75.",
     },
     "valor_mercado": {
         "rotulo": "Valor de mercado (R$)",
@@ -69,6 +107,12 @@ METRICAS: dict[str, dict[str, str]] = {
         "grupo": "Valuation",
         "formato": "multiplo",
         "descricao": "Valor de mercado dividido pelo patrimônio líquido dos controladores.",
+    },
+    "dpa": {
+        "rotulo": "DPA",
+        "grupo": "Valuation",
+        "formato": "moeda",
+        "descricao": "Dividendos e JCP pagos nos últimos 12 meses divididos pelas ações.",
     },
     "dy": {
         "rotulo": "DY",
@@ -226,6 +270,7 @@ TEXTOS_UI = validar_textos(
         "Liquidez mínima diária (R$)",
         "Excluir financeiras",
         "Ocultar linhas com alertas de dados",
+        "Margem de segurança mínima (%)",
         "Preset",
         "Grupos de colunas",
         "Indicadores com faixa",
@@ -262,6 +307,7 @@ def aplicar_filtros(
     liquidez_minima: float = 0,
     excluir_financeiras: bool = False,
     ocultar_alertas: bool = False,
+    margem_minima: float | None = None,
     faixas: Mapping[str, tuple[float | None, float | None]] | None = None,
     preset: str = SEM_PRESET,
 ) -> pd.DataFrame:
@@ -276,6 +322,8 @@ def aplicar_filtros(
         resultado = resultado[
             resultado["alertas"].map(lambda valor: len(_alertas(valor)) == 0)
         ]
+    if margem_minima is not None:
+        resultado = resultado[resultado["margem_seguranca"].ge(margem_minima)]
     for coluna, (minimo, maximo) in (faixas or {}).items():
         if minimo is not None:
             resultado = resultado[resultado[coluna].ge(minimo)]
@@ -319,7 +367,9 @@ def _configuracao_colunas(colunas: Sequence[str]) -> dict[str, object]:
 def _renderizar_faixas(quadro: pd.DataFrame) -> dict[str, tuple[float, float]]:
     escolhidas = st.multiselect(
         "Indicadores com faixa",
-        options=list(METRICAS),
+        options=[
+            coluna for coluna, metrica in METRICAS.items() if metrica["formato"] != "texto"
+        ],
         format_func=lambda coluna: METRICAS[coluna]["rotulo"],
         help="Valores ausentes não entram quando uma faixa está ativa.",
     )
@@ -369,6 +419,8 @@ def render() -> None:
         return
     quadro = carregar_acoes(str(parquet))
     meta = carregar_meta(str(meta_path)) if meta_path.exists() else {}
+    premissas = renderizar_premissas()
+    quadro = calcular_valuation_acoes(quadro, premissas)
     total = len(quadro)
 
     with st.expander("Filtros", expanded=True):
@@ -382,6 +434,9 @@ def render() -> None:
         with col_b:
             excluir_financeiras = st.checkbox("Excluir financeiras")
             ocultar_alertas = st.checkbox("Ocultar linhas com alertas de dados")
+            margem_minima_pct = st.number_input(
+                "Margem de segurança mínima (%)", value=None, placeholder="Sem limite"
+            )
             preset = st.selectbox("Preset", PRESETS)
         with col_c:
             grupos = st.multiselect("Grupos de colunas", GRUPOS, default=list(GRUPOS))
@@ -393,6 +448,9 @@ def render() -> None:
         liquidez_minima=liquidez_minima,
         excluir_financeiras=excluir_financeiras,
         ocultar_alertas=ocultar_alertas,
+        margem_minima=(
+            float(margem_minima_pct) / 100 if margem_minima_pct is not None else None
+        ),
         faixas=faixas,
         preset=preset,
     )

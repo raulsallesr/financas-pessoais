@@ -8,6 +8,8 @@ from streamlit.testing.v1 import AppTest
 
 from ativos.core.linguagem import textos_proibidos
 from ativos.core.metricas_acoes import COLUNAS_METRICAS
+from ativos.core.presets import MARGEM_CALCULADA
+from ativos.core.valuation import COLUNAS_AVALIACAO
 from ativos.ui import pagina_busca
 
 APP_BUSCA = Path(__file__).parent / "fixtures" / "app_busca.py"
@@ -52,11 +54,16 @@ def test_pagina_busca_carrega_parquet_sintetico_e_mostra_metadados(tmp_path, mon
 
     assert not app.exception
     assert app.title[0].value == "Busca avançada"
-    assert [metrica.value for metrica in app.metric] == [
+    assert [metrica.value for metrica in app.metric][-3:] == [
         "2026-10-08",
         "2026-10-09 10:00:00",
         "2 de 2",
     ]
+    assert app.dataframe[0].value["ticker"].tolist() == ["AAA3", "BBB3"]
+    assert set(COLUNAS_AVALIACAO).issubset(app.dataframe[0].value.columns)
+    assert "Premissas" in [expander.label for expander in app.expander]
+
+    app.selectbox[0].select(MARGEM_CALCULADA).run()
     assert app.dataframe[0].value["ticker"].tolist() == ["AAA3", "BBB3"]
 
 
@@ -97,7 +104,7 @@ def test_filtros_ocultam_financeiras_alertas_e_csv_usa_contrato_pt_br():
 
 
 def test_catalogo_e_todos_os_textos_da_tela_respeitam_guardrail():
-    assert set(pagina_busca.METRICAS) == set(COLUNAS_METRICAS)
+    assert set(pagina_busca.METRICAS) == set(COLUNAS_METRICAS) | set(COLUNAS_AVALIACAO)
     assert textos_proibidos(list(pagina_busca.TEXTOS_UI)) == []
     assert pagina_busca.colunas_dos_grupos(["Crescimento"]) == [
         "cagr_receitas_5a",

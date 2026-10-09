@@ -32,6 +32,8 @@ def exportar_csv(quadro: pd.DataFrame) -> bytes:
 def formatar_comparacao(valor: object, formato: str) -> str:
     if pd.isna(valor):
         return "—"
+    if formato == "texto":
+        return str(valor)
     numero = float(valor)
     if formato == "percentual":
         return f"{numero:.2%}".replace(".", ",")
@@ -58,14 +60,21 @@ def configuracao_metricas(
         "multiplo": "%.2f",
         "inteiro": "localized",
     }
-    return {
-        coluna: st.column_config.NumberColumn(
-            metricas[coluna]["rotulo"],
-            help=metricas[coluna]["descricao"],
-            format=formatos[metricas[coluna]["formato"]],
-        )
-        for coluna in colunas
-    }
+    configuracao = {}
+    for coluna in colunas:
+        formato = metricas[coluna]["formato"]
+        if formato == "texto":
+            configuracao[coluna] = st.column_config.TextColumn(
+                metricas[coluna]["rotulo"],
+                help=metricas[coluna]["descricao"],
+            )
+        else:
+            configuracao[coluna] = st.column_config.NumberColumn(
+                metricas[coluna]["rotulo"],
+                help=metricas[coluna]["descricao"],
+                format=formatos[formato],
+            )
+    return configuracao
 
 
 def renderizar_tabela_e_csv(

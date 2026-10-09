@@ -65,6 +65,7 @@ def test_golden_dy_12m_dy_mensal_e_rentabilidade_composta():
     resultado = calcular_metricas_mensais(_historico(12), 100)
 
     assert resultado["dy_12m"] == pytest.approx(0.12)
+    assert resultado["rendimento_12m_cota"] == pytest.approx(12.0)
     assert resultado["rendimento_ultimo_mes"] == pytest.approx(1.0)
     assert resultado["dy_ultimo_mes"] == pytest.approx(0.12)
     assert resultado["rentab_12m"] == pytest.approx(1.01**12 - 1)
@@ -78,9 +79,11 @@ def test_dy_com_seis_meses_anualiza_e_com_cinco_fica_vazio():
     insuficiente = calcular_metricas_mensais(_historico(5), 100)
 
     assert parcial["dy_12m"] == pytest.approx(0.12)
+    assert parcial["rendimento_12m_cota"] == pytest.approx(12.0)
     assert parcial["dy_parcial"] and parcial["fundo_novo"]
     assert math.isnan(parcial["rentab_12m"])
     assert math.isnan(insuficiente["dy_12m"])
+    assert math.isnan(insuficiente["rendimento_12m_cota"])
 
 
 def test_golden_xpml11_descarta_dy_negativo_anualiza_e_alerta():

@@ -245,6 +245,7 @@ def test_pipeline_normaliza_ttm_pl_units_e_metricas_por_empresa():
     assert tabela["valor_mercado"].tolist() == [55_000, 55_000, 55_000]
     assert tabela["p_l"].tolist() == pytest.approx([500, 500, 500])
     assert tabela["vpa"].tolist() == pytest.approx([29_000 / 3_000] * 3)
+    assert tabela["dpa"].tolist() == pytest.approx([500 / 3_000] * 3)
     assert tabela["data_balanco"].dt.date.astype(str).tolist() == ["2026-06-30"] * 3
     assert "salto_preco" in tabela.loc[tabela["ticker"].eq("ACME3"), "alertas"].iloc[0]
     assert "alertas" in tabela
