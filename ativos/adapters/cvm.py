@@ -15,7 +15,9 @@ import requests
 from ativos.paths import cache_bruto_dir
 
 CVM_DADOS_URL = "https://dados.cvm.gov.br/dados/CIA_ABERTA"
+FII_DADOS_URL = "https://dados.cvm.gov.br/dados/FII/DOC"
 TIPOS_DOCUMENTO = {"dfp", "itr", "fca"}
+TIPOS_INFORME_FII = {"mensal": "INF_MENSAL", "trimestral": "INF_TRIMESTRAL"}
 RELATORIOS = {
     "DRE",
     "BPA",
@@ -108,6 +110,31 @@ def baixar_cadastro(
         (pasta or cache_bruto_dir()) / nome,
         ano=referencia.year,
         hoje=referencia,
+        cliente=cliente,
+    )
+
+
+def baixar_informe_fii(
+    tipo: str,
+    ano: int,
+    *,
+    pasta: Path | None = None,
+    hoje: date | None = None,
+    cliente: Any = requests,
+) -> Path:
+    """Baixa um ZIP anual de informes mensais ou trimestrais de FII."""
+    tipo = tipo.lower()
+    try:
+        documento = TIPOS_INFORME_FII[tipo]
+    except KeyError as erro:
+        raise ValueError(f"Tipo de informe FII desconhecido: {tipo}") from erro
+    nome = f"inf_{tipo}_fii_{ano}.zip"
+    url = f"{FII_DADOS_URL}/{documento}/DADOS/{nome}"
+    return baixar_arquivo(
+        url,
+        (pasta or cache_bruto_dir()) / nome,
+        ano=ano,
+        hoje=hoje,
         cliente=cliente,
     )
 
@@ -216,3 +243,22 @@ def ler_cadastro(*, pasta: Path | None = None) -> pd.DataFrame:
         dtype=str,
         low_memory=False,
     )
+
+
+def ler_informe_fii(
+    tipo: str,
+    ano: int,
+    quadro: str,
+    *,
+    pasta: Path | None = None,
+    colunas: Iterable[str] | None = None,
+) -> pd.DataFrame:
+    """Lê um quadro de informe FII anual sem inferir tipos."""
+    tipo = tipo.lower()
+    if tipo not in TIPOS_INFORME_FII:
+        raise ValueError(f"Tipo de informe FII desconhecido: {tipo}")
+    caminho = (pasta or cache_bruto_dir()) / f"inf_{tipo}_fii_{ano}.zip"
+    esperado = f"inf_{tipo}_fii_{quadro}_{ano}.csv"
+    with ZipFile(caminho) as arquivo_zip:
+        membro = _nome_membro(arquivo_zip, esperado)
+    return _ler_csv_zip(caminho, membro, colunas=colunas)

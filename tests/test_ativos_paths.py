@@ -13,6 +13,8 @@ def test_paths_respeitam_variaveis_de_ambiente(monkeypatch, tmp_path):
     assert paths.dados_derivados_dir() == derivado
     assert paths.caminho_acoes() == derivado / "acoes.parquet"
     assert paths.caminho_meta_acoes() == derivado / "acoes_meta.json"
+    assert paths.caminho_fiis() == derivado / "fiis.parquet"
+    assert paths.caminho_meta_fiis() == derivado / "fiis_meta.json"
 
 
 def test_paths_padrao_ficam_fora_do_repositorio(monkeypatch):

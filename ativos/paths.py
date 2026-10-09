@@ -33,3 +33,11 @@ def caminho_acoes() -> Path:
 
 def caminho_meta_acoes() -> Path:
     return dados_derivados_dir() / "acoes_meta.json"
+
+
+def caminho_fiis() -> Path:
+    return dados_derivados_dir() / "fiis.parquet"
+
+
+def caminho_meta_fiis() -> Path:
+    return dados_derivados_dir() / "fiis_meta.json"

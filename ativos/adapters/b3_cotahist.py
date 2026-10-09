@@ -107,10 +107,20 @@ def ler_cotahist(
     *,
     pasta: Path | None = None,
     apenas_acoes: bool = False,
+    apenas_fiis: bool = False,
 ) -> pd.DataFrame:
-    """Lê um ano do COTAHIST; o filtro de ações reduz memória no pipeline."""
+    """Lê um ano do COTAHIST; filtros por classe reduzem memória no pipeline."""
+    if apenas_acoes and apenas_fiis:
+        raise ValueError("Escolha apenas uma classe de ativo")
     caminho = (pasta or cache_bruto_dir()) / f"COTAHIST_A{ano}.ZIP"
     registros = iterar_cotahist(caminho)
     if apenas_acoes:
         registros = (registro for registro in registros if registro["codbdi"] == "02")
+    if apenas_fiis:
+        registros = (
+            registro
+            for registro in registros
+            if registro["codbdi"] == "12"
+            and str(registro["especi"]).strip().upper().startswith("CI")
+        )
     return pd.DataFrame.from_records(registros)

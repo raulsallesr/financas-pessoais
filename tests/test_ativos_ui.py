@@ -7,16 +7,11 @@ from ativos.core.linguagem import textos_proibidos, validar_textos
 from ativos.ui import pagina_ativos
 
 RAIZ = Path(__file__).resolve().parent.parent
-
-
-def _app_ativos():
-    from ativos.ui import pagina_ativos
-
-    pagina_ativos.render()
+APP_ATIVOS = Path(__file__).parent / "fixtures" / "app_ativos.py"
 
 
 def test_pagina_ativos_mostra_fases_e_aviso_de_uso_pessoal():
-    app = AppTest.from_function(_app_ativos, default_timeout=15).run()
+    app = AppTest.from_file(str(APP_ATIVOS), default_timeout=15).run()
 
     assert not app.exception
     assert app.title[0].value == "Ativos B3"
@@ -47,3 +42,4 @@ def test_entrypoint_navega_entre_macro_e_ativos():
     assert 'url_path="macro", default=True' in codigo
     assert 'url_path="ativos"' in codigo
     assert 'url_path="busca-acoes"' in codigo
+    assert 'url_path="busca-fiis"' in codigo

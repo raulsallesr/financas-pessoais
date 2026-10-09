@@ -6,13 +6,24 @@ import json
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 import streamlit as st
 
 from ativos.core.linguagem import validar_textos
 from ativos.core.presets import PRESETS, SEM_PRESET, aplicar_preset
 from ativos.paths import caminho_acoes, caminho_meta_acoes
+from ativos.ui.componentes_tabela import (
+    alertas as _alertas,
+)
+from ativos.ui.componentes_tabela import (
+    configuracao_metricas,
+    renderizar_comparador,
+    renderizar_tabela_e_csv,
+)
+from ativos.ui.componentes_tabela import exportar_csv as _exportar_csv_compartilhado
+from ativos.ui.componentes_tabela import (
+    formatar_comparacao as _formatar_comparacao_compartilhada,
+)
 from ativos.ui.pagina_ativos import AVISO
 from focuslens.ui.ui_estilos import aplicar_estilos
 
@@ -273,27 +284,17 @@ def aplicar_filtros(
     return aplicar_preset(resultado, preset)
 
 
-def _alertas(valor: object) -> list[str]:
-    if isinstance(valor, np.ndarray):
-        return [str(item) for item in valor.tolist()]
-    if isinstance(valor, (list, tuple)):
-        return [str(item) for item in valor]
-    if valor is None or pd.isna(valor):
-        return []
-    return [str(valor)]
-
-
 def colunas_dos_grupos(grupos: Sequence[str]) -> list[str]:
     return [coluna for coluna, metrica in METRICAS.items() if metrica["grupo"] in grupos]
 
 
 def exportar_csv(quadro: pd.DataFrame) -> bytes:
-    exportacao = quadro.copy()
-    if "alertas" in exportacao:
-        exportacao["alertas"] = exportacao["alertas"].map(
-            lambda valor: ", ".join(_alertas(valor))
-        )
-    return exportacao.to_csv(index=False, sep=";", decimal=",").encode("utf-8-sig")
+    """Compatibilidade pública com a primeira versão da página."""
+    return _exportar_csv_compartilhado(quadro)
+
+
+def _formatar_comparacao(valor: object, formato: str) -> str:
+    return _formatar_comparacao_compartilhada(valor, formato)
 
 
 def _configuracao_colunas(colunas: Sequence[str]) -> dict[str, object]:
@@ -311,36 +312,8 @@ def _configuracao_colunas(colunas: Sequence[str]) -> dict[str, object]:
             "Alertas", help="Sinais de escala, preço ou casamento de cadastro."
         ),
     }
-    formatos = {
-        "moeda": "R$ %.2f",
-        "reais_abreviado": "compact",
-        "percentual": "percent",
-        "multiplo": "%.2f",
-    }
-    for coluna in colunas:
-        metrica = METRICAS[coluna]
-        configuracao[coluna] = st.column_config.NumberColumn(
-            metrica["rotulo"],
-            help=metrica["descricao"],
-            format=formatos[metrica["formato"]],
-        )
+    configuracao.update(configuracao_metricas(METRICAS, colunas))
     return configuracao
-
-
-def _formatar_comparacao(valor: object, formato: str) -> str:
-    if pd.isna(valor):
-        return "—"
-    numero = float(valor)
-    if formato == "percentual":
-        return f"{numero:.2%}".replace(".", ",")
-    if formato == "moeda":
-        return f"R$ {numero:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-    if formato == "reais_abreviado":
-        for divisor, sufixo in ((1e9, "B"), (1e6, "M"), (1e3, "K")):
-            if abs(numero) >= divisor:
-                return f"R$ {numero / divisor:.2f} {sufixo}".replace(".", ",")
-        return f"R$ {numero:.2f}".replace(".", ",")
-    return f"{numero:.2f}".replace(".", ",")
 
 
 def _renderizar_faixas(quadro: pd.DataFrame) -> dict[str, tuple[float, float]]:
@@ -436,38 +409,15 @@ def render() -> None:
         for coluna in ["ticker", *colunas_metricas, *colunas_cadastro]
         if coluna in filtrado
     ]
-    st.dataframe(
-        filtrado[colunas_visiveis],
-        hide_index=True,
-        width="stretch",
-        height=620,
-        column_config=_configuracao_colunas(colunas_metricas),
-        placeholder="—",
+    renderizar_tabela_e_csv(
+        filtrado,
+        colunas_visiveis,
+        configuracao=_configuracao_colunas(colunas_metricas),
+        arquivo="lastro_busca_acoes.csv",
     )
-    st.download_button(
-        "Exportar CSV",
-        data=exportar_csv(filtrado[colunas_visiveis]),
-        file_name="lastro_busca_acoes.csv",
-        mime="text/csv",
-    )
-
-    st.subheader("Comparador")
-    tickers = st.multiselect(
-        "Selecione até 5 tickers",
-        filtrado["ticker"].tolist(),
-        max_selections=5,
+    renderizar_comparador(
+        filtrado,
+        colunas_metricas,
+        METRICAS,
         key="comparador_tickers",
     )
-    if tickers:
-        comparacao = filtrado[filtrado["ticker"].isin(tickers)].set_index("ticker")
-        linhas = {}
-        for coluna in colunas_metricas:
-            linhas[METRICAS[coluna]["rotulo"]] = [
-                _formatar_comparacao(comparacao.at[ticker, coluna], METRICAS[coluna]["formato"])
-                for ticker in tickers
-            ]
-        st.dataframe(
-            pd.DataFrame(linhas, index=tickers).T,
-            width="stretch",
-            column_config={ticker: st.column_config.TextColumn(ticker) for ticker in tickers},
-        )

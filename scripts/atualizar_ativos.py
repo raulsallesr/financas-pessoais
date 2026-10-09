@@ -1,7 +1,7 @@
-"""Gera a tabela derivada de ações a partir do cache oficial local.
+"""Gera tabelas derivadas de ações e FIIs a partir do cache oficial local.
 
 Uso:
-    python -m scripts.atualizar_ativos --data 2026-10-08 --liquidez-minima 100000
+    python -m scripts.atualizar_ativos --classe todos --liquidez-minima 100000
 """
 
 from __future__ import annotations
@@ -17,9 +17,13 @@ import pandas as pd
 
 from ativos.adapters import b3_cotahist, cvm
 from ativos.core.pipeline_acoes import construir_tabela_acoes
+from ativos.core.pipeline_fiis import construir_tabela_fiis
 from ativos.paths import cache_bruto_dir, dados_derivados_dir
 
-SCHEMA_VERSION = 2
+SCHEMA_VERSION_ACOES = 2
+SCHEMA_VERSION_FIIS = 2
+# Compatibilidade com consumidores e testes da primeira fatia vertical.
+SCHEMA_VERSION = SCHEMA_VERSION_ACOES
 
 COLUNAS_DEMONSTRACAO = [
     "CNPJ_CIA",
@@ -190,7 +194,7 @@ def _gravar_atomico(caminho: Path, gravar) -> None:
         temporario.unlink(missing_ok=True)
 
 
-def executar(
+def _executar_acoes(
     *,
     data_referencia: str | None = None,
     liquidez_minima: float = 100_000,
@@ -252,7 +256,7 @@ def executar(
         tabela["origem_cnpj"].eq("nome"), "ticker"
     ].tolist()
     meta = {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": SCHEMA_VERSION_ACOES,
         "data_cotacao": cotacoes["data"].max().date().isoformat(),
         "gerado_em": datetime.now().astimezone().isoformat(timespec="seconds"),
         "linhas": len(tabela),
@@ -275,6 +279,159 @@ def executar(
     return tabela, meta
 
 
+def _concatenar_informes(
+    tipo: str,
+    anos: list[int],
+    quadro: str,
+    *,
+    pasta: Path,
+) -> pd.DataFrame:
+    partes = [
+        cvm.ler_informe_fii(tipo, ano, quadro, pasta=pasta)
+        for ano in anos
+    ]
+    return pd.concat(partes, ignore_index=True, sort=False) if partes else pd.DataFrame()
+
+
+def _carregar_informes_fii(
+    pasta: Path,
+    data_referencia: pd.Timestamp,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    anos_mensais = [
+        ano
+        for ano in _anos_disponiveis(pasta, r"inf_mensal_fii_(\d{4})\.zip")
+        if ano <= data_referencia.year
+    ]
+    anos_trimestrais = [
+        ano
+        for ano in _anos_disponiveis(pasta, r"inf_trimestral_fii_(\d{4})\.zip")
+        if ano <= data_referencia.year
+    ]
+    if not anos_mensais:
+        raise FileNotFoundError("Nenhum informe mensal de FII foi encontrado no cache bruto")
+    if not anos_trimestrais:
+        raise FileNotFoundError("Nenhum informe trimestral de FII foi encontrado no cache bruto")
+    anos_mensais = anos_mensais[-2:]
+    anos_trimestrais = anos_trimestrais[-2:]
+    return (
+        _concatenar_informes("mensal", anos_mensais, "geral", pasta=pasta),
+        _concatenar_informes("mensal", anos_mensais, "complemento", pasta=pasta),
+        _concatenar_informes("mensal", anos_mensais, "ativo_passivo", pasta=pasta),
+        _concatenar_informes("trimestral", anos_trimestrais, "imovel", pasta=pasta),
+    )
+
+
+def _executar_fiis(
+    *,
+    data_referencia: str | None = None,
+    liquidez_minima: float = 100_000,
+    pasta_bruta: Path | None = None,
+    pasta_derivada: Path | None = None,
+    minimo_pregoes: int = 40,
+) -> tuple[pd.DataFrame, dict[str, object]]:
+    pasta_bruta = Path(pasta_bruta or cache_bruto_dir())
+    pasta_derivada = Path(pasta_derivada or dados_derivados_dir())
+    anos_cotahist = _anos_disponiveis(pasta_bruta, r"COTAHIST_A(\d{4})\.ZIP")
+    if not anos_cotahist:
+        raise FileNotFoundError("Nenhum COTAHIST anual foi encontrado no cache bruto")
+    if data_referencia is not None:
+        limite_inicial = pd.Timestamp(data_referencia)
+        anos_cotahist = [ano for ano in anos_cotahist if ano <= limite_inicial.year]
+    cotacoes = pd.concat(
+        [
+            b3_cotahist.ler_cotahist(ano, pasta=pasta_bruta, apenas_fiis=True)
+            for ano in anos_cotahist[-2:]
+        ],
+        ignore_index=True,
+        sort=False,
+    )
+    if cotacoes.empty:
+        raise ValueError("Não há cotações de FII no cache bruto")
+    limite = pd.Timestamp(data_referencia) if data_referencia else cotacoes["data"].max()
+    cotacoes = cotacoes[cotacoes["data"].le(limite)].copy()
+    if cotacoes.empty:
+        raise ValueError(f"Não há cotação de FII disponível até {limite.date().isoformat()}")
+    geral, complemento, ativo_passivo, imovel = _carregar_informes_fii(
+        pasta_bruta, limite
+    )
+    tabela, diagnostico = construir_tabela_fiis(
+        cotacoes,
+        geral,
+        complemento,
+        ativo_passivo,
+        imovel,
+        data_referencia=limite,
+        liquidez_minima=liquidez_minima,
+        minimo_pregoes=minimo_pregoes,
+    )
+    cobertura_p_vp = float(tabela["p_vp"].notna().mean()) if len(tabela) else 0.0
+    cobertura_dy = float(tabela["dy_12m"].notna().mean()) if len(tabela) else 0.0
+    cobertura_vacancia = float(tabela["vacancia"].notna().mean()) if len(tabela) else 0.0
+    contagem_tipo = {
+        str(tipo): int(contagem)
+        for tipo, contagem in tabela["tipo"].value_counts(dropna=False).sort_index().items()
+    }
+    fundos_dy_suspeito = int(
+        tabela["alertas"].map(lambda alertas: "dy_dados_suspeitos" in alertas).sum()
+    )
+    meta = {
+        "schema_version": SCHEMA_VERSION_FIIS,
+        "data_cotacao": cotacoes["data"].max().date().isoformat(),
+        "gerado_em": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "linhas": len(tabela),
+        "liquidez_minima": liquidez_minima,
+        "cobertura_p_vp": cobertura_p_vp,
+        "cobertura_dy_12m": cobertura_dy,
+        "cobertura_vacancia": cobertura_vacancia,
+        "fundos_com_alerta_dy_dados_suspeitos": fundos_dy_suspeito,
+        **diagnostico,
+        "contagem_por_tipo": contagem_tipo,
+    }
+    _gravar_atomico(
+        pasta_derivada / "fiis.parquet",
+        lambda caminho: tabela.to_parquet(caminho, index=False),
+    )
+    _gravar_atomico(
+        pasta_derivada / "fiis_meta.json",
+        lambda caminho: caminho.write_text(
+            json.dumps(meta, ensure_ascii=False, indent=2) + "\n",
+            encoding="utf-8",
+        ),
+    )
+    return tabela, meta
+
+
+def executar(
+    *,
+    classe: str = "acoes",
+    data_referencia: str | None = None,
+    liquidez_minima: float = 100_000,
+    pasta_bruta: Path | None = None,
+    pasta_derivada: Path | None = None,
+    minimo_pregoes: int = 40,
+) -> tuple[pd.DataFrame, dict[str, object]] | dict[
+    str, tuple[pd.DataFrame, dict[str, object]]
+]:
+    """Executa uma classe ou ambas; a omissão na API preserva o contrato de ações."""
+    argumentos = {
+        "data_referencia": data_referencia,
+        "liquidez_minima": liquidez_minima,
+        "pasta_bruta": pasta_bruta,
+        "pasta_derivada": pasta_derivada,
+        "minimo_pregoes": minimo_pregoes,
+    }
+    if classe == "acoes":
+        return _executar_acoes(**argumentos)
+    if classe == "fiis":
+        return _executar_fiis(**argumentos)
+    if classe == "todos":
+        return {
+            "acoes": _executar_acoes(**argumentos),
+            "fiis": _executar_fiis(**argumentos),
+        }
+    raise ValueError(f"Classe desconhecida: {classe}")
+
+
 def _formatar_resumo(meta: dict[str, object]) -> str:
     pendencias = meta["pendencias_ticker"]
     lista = ", ".join(pendencias) if pendencias else "nenhuma"
@@ -288,16 +445,46 @@ def _formatar_resumo(meta: dict[str, object]) -> str:
     )
 
 
+def _formatar_resumo_fiis(meta: dict[str, object]) -> str:
+    pendencias = meta["pendencias_ticker"]
+    lista = ", ".join(pendencias) if pendencias else "nenhuma"
+    tipos = ", ".join(
+        f"{tipo}: {contagem}" for tipo, contagem in meta["contagem_por_tipo"].items()
+    )
+    return (
+        f"Universo: {meta['linhas']} FIIs\n"
+        f"Cobertura de P/VP: {float(meta['cobertura_p_vp']) * 100:.1f}%\n"
+        f"Cobertura de DY 12m: {float(meta['cobertura_dy_12m']) * 100:.1f}%\n"
+        f"Cobertura de vacância: {float(meta['cobertura_vacancia']) * 100:.1f}%\n"
+        "Fundos com DY/rentabilidade suspeitos: "
+        f"{meta['fundos_com_alerta_dy_dados_suspeitos']}\n"
+        f"Pendências de ticker: {lista}\n"
+        f"Contagem por tipo: {tipos or 'nenhuma'}"
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--data", dest="data_referencia", help="Data limite AAAA-MM-DD")
     parser.add_argument("--liquidez-minima", type=float, default=100_000)
+    parser.add_argument("--classe", choices=("acoes", "fiis", "todos"), default="todos")
     argumentos = parser.parse_args()
-    _, meta = executar(
+    resultado = executar(
+        classe=argumentos.classe,
         data_referencia=argumentos.data_referencia,
         liquidez_minima=argumentos.liquidez_minima,
     )
-    print(_formatar_resumo(meta))
+    if isinstance(resultado, tuple):
+        _, meta = resultado
+        formatador = _formatar_resumo_fiis if argumentos.classe == "fiis" else _formatar_resumo
+        print(formatador(meta))
+        return
+    for indice, classe in enumerate(("acoes", "fiis")):
+        if indice:
+            print()
+        print(f"[{classe.upper()}]")
+        _, meta = resultado[classe]
+        print(_formatar_resumo(meta) if classe == "acoes" else _formatar_resumo_fiis(meta))
 
 
 if __name__ == "__main__":  # pragma: no cover - invocação do módulo

@@ -19,6 +19,10 @@
   - A primeira fatia vertical de ações está implementada: adapters CVM/COTAHIST,
     base point-in-time, 31 métricas, presets/filtros, pipeline Parquet/JSON e página
     **Busca avançada**. A visão geral **Ativos B3** foi preservada.
+  - A segunda fatia vertical, **Busca de FIIs**, também está implementada: informes
+    mensais/trimestrais, composição e tipo, renda, vacância, presets/filtros,
+    comparador, CSV e derivados `fiis.parquet`/`fiis_meta.json`. O CLI aceita
+    `--classe {acoes,fiis,todos}` e usa `todos` por padrão.
   - Busca avançada no esquema 2: `alertas` substitui o nome anterior; DY usa dividendos
     e JCP pagos TTM da DFC (DVA apenas como fallback `dy_dva`); P/ACL usa passivo
     exigível; units podem derivar valor de mercado pela composição do FCA.
@@ -28,12 +32,28 @@
   - GFSA3 e MEAL3 permanecem com `escala_suspeita` e, por segurança, sem valor de
     mercado nem múltiplos dependentes. GFSA combina grupamento/diluição e composição
     defasada; MEAL tem sequência anômala de quantidades ON/PN nos informes de 2026.
-  - O sandbox bloqueou `%USERPROFILE%\.cache\lastro\derived`; a validação real foi
-    gravada via `LASTRO_DADOS_DIR=.pytest_tmp-derived-real`, fora do git.
-  - Gate atual: 276 testes, cobertura total de 86,29% e Ruff limpo. O `tmp_path` sob
-    Python 3.13/Windows exige basetemp com ACL compatível; não é falha funcional.
-  - **Próximo passo:** revisar visualmente a tabela com o derivado local e, se aprovada,
-    ampliar o módulo para FIIs.
+  - Pipeline real de FIIs em 2026-10-09, com cotação até 2026-10-08 e liquidez mínima
+    de R$ 100 mil/dia: 155 fundos, 100% com P/VP, 99,4% com DY 12m e 47,7% com
+    vacância. Tipos: 72 Tijolo, 51 Papel, 22 Fundo de fundos, 4 Híbrido e 6 Outros.
+  - O DY 12m agora descarta mês com `Percentual_Dividend_Yield_Mes` negativo ou acima
+    de 5%, preserva zero como válido e anualiza pelos meses válidos; menos de 6 válidos
+    fica vazio. Rentabilidade mensal fora de `[-50%; 50%]` invalida `rentab_12m`.
+    Ambos geram `dy_dados_suspeitos`; o metadado real registrou 21 fundos. No XPML11,
+    o mês negativo de 2026-01 foi excluído e o DY 12m passou de 3,05% para 10,00% pela
+    regra solicitada (soma válida de R$ 9,7622, anualizada por 11 meses, sobre R$ 106,50).
+  - Colisões do mesmo ISIN em vários CNPJs agora usam desempate nominal estrito e
+    auditável. `KISU11`, `SNEL11`, `TRXF11` e `XPML11` foram resolvidos pelo nome de
+    pregão. Restam 20 pendências fail-closed: 16 sem informe mensal correspondente,
+    3 sem palavra nominal em comum (`PQDP11`, `RBRY11`, `ZAGH11`) e 1 empate nominal
+    (`HSAF11`). O metadado esquema 2 registra resolvidos e motivo por pendência.
+  - O sandbox bloqueou `%USERPROFILE%\.cache\lastro\derived`; ações haviam sido
+    validadas via `LASTRO_DADOS_DIR=.pytest_tmp-derived-real` e FIIs foram gravados em
+    `.pytest_tmp-derived-real-fiis-dy`, ambos fora do git.
+  - Gate atual: 319 testes, cobertura total de 86,58% e Ruff limpo. O `tmp_path` sob
+    Python 3.13/Windows exige diretórios pré-criados com ACL herdada; a tentativa tardia
+    de limpeza ainda pode emitir `WinError 5`, sem alterar o código de saída do gate.
+  - **Próximo passo:** revisar visualmente as duas buscas com os derivados locais e,
+    se aprovadas, decidir a tabela curada necessária para ETFs.
   - **Pendência de ambiente:** `requirements.txt` tem ACL legado e não aceitou escrita
     neste sandbox. `numpy` e `pyarrow` ficaram explicitados em `requirements-dev.txt`;
     movê-los para o arquivo base quando a ACL for normalizada.
