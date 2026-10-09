@@ -17,3 +17,11 @@ VERBOS_PROIBIDOS = re.compile(
 def textos_proibidos(textos: list[str]) -> list[str]:
     """Devolve os textos que violam o guardrail (vazio = tudo certo)."""
     return [texto for texto in textos if VERBOS_PROIBIDOS.search(texto)]
+
+
+def validar_textos(textos: list[str]) -> tuple[str, ...]:
+    """Valida textos destinados à tela e devolve uma coleção imutável."""
+    proibidos = textos_proibidos(textos)
+    if proibidos:
+        raise ValueError(f"Linguagem incompatível com o módulo Ativos: {proibidos}")
+    return tuple(textos)

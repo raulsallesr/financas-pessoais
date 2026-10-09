@@ -13,10 +13,30 @@
   - Decisões do Raul: uso pessoal com repositório público como portfólio; motor Python
     + web Streamlit primeiro; fontes oficiais e gratuitas (CVM + COTAHIST); nome novo
     para a plataforma.
-  - A **Fase 0 está concluída**: navegação Macro + Ativos (placeholder) e relatório de
-    cobertura em `docs/validation/COBERTURA_ATIVOS_FASE0.md`. Ações e FIIs são
-    viáveis; ETFs pedem tabela curada.
-  - **Próximo passo:** Fase 1, a base de dados point-in-time.
+  - A **Fase 0 está concluída**: navegação Macro + Ativos e relatório de cobertura em
+    `docs/validation/COBERTURA_ATIVOS_FASE0.md`. Ações e FIIs são viáveis; ETFs pedem
+    tabela curada.
+  - A primeira fatia vertical de ações está implementada: adapters CVM/COTAHIST,
+    base point-in-time, 31 métricas, presets/filtros, pipeline Parquet/JSON e página
+    **Busca avançada**. A visão geral **Ativos B3** foi preservada.
+  - Busca avançada no esquema 2: `alertas` substitui o nome anterior; DY usa dividendos
+    e JCP pagos TTM da DFC (DVA apenas como fallback `dy_dva`); P/ACL usa passivo
+    exigível; units podem derivar valor de mercado pela composição do FCA.
+  - Pipeline real em 2026-10-09, com liquidez mínima de R$ 100 mil/dia: 244 tickers,
+    82,0% com P/L, 95,5% com DY e nenhuma pendência de CNPJ. O metadado registra 12
+    tickers resolvidos por nome, inclusive `AMAR3`, `BPAC3/5/11` e `CSNA3`.
+  - GFSA3 e MEAL3 permanecem com `escala_suspeita` e, por segurança, sem valor de
+    mercado nem múltiplos dependentes. GFSA combina grupamento/diluição e composição
+    defasada; MEAL tem sequência anômala de quantidades ON/PN nos informes de 2026.
+  - O sandbox bloqueou `%USERPROFILE%\.cache\lastro\derived`; a validação real foi
+    gravada via `LASTRO_DADOS_DIR=.pytest_tmp-derived-real`, fora do git.
+  - Gate atual: 276 testes, cobertura total de 86,29% e Ruff limpo. O `tmp_path` sob
+    Python 3.13/Windows exige basetemp com ACL compatível; não é falha funcional.
+  - **Próximo passo:** revisar visualmente a tabela com o derivado local e, se aprovada,
+    ampliar o módulo para FIIs.
+  - **Pendência de ambiente:** `requirements.txt` tem ACL legado e não aceitou escrita
+    neste sandbox. `numpy` e `pyarrow` ficaram explicitados em `requirements-dev.txt`;
+    movê-los para o arquivo base quando a ACL for normalizada.
   - **Pendente do Raul:** decidir o retorno total para backtest (DVA oficial
     aproximada ou Yahoo ajustado).
 - Produto (módulo Macro): **FocusLens BR**, educacional e orientado à privacidade.
@@ -237,12 +257,12 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 
 ## Próxima decisão
 
-- **Lastro / Ativos B3:** executar a Fase 1 de `docs/product/PLANO_LASTRO.md`.
-  - Escopo: adapters CVM e COTAHIST, normalização de escala, contas e units, ajuste de
-    desdobramento e grupamento, pipeline, workflow e asset de release.
-  - As armadilhas medidas na Fase 0 viram requisito; estão listadas no relatório de
-    cobertura.
-  - Os itens abaixo referem-se ao módulo Macro e ao mobile.
+- **Lastro / Ativos B3:** a busca avançada de ações já entrega a base point-in-time,
+  métricas, presets e tela; o casamento de CNPJ está completo no universo corrente.
+  Próximo corte: revisão visual do derivado e decisão de avanço para FIIs. Workflow,
+  asset de release e preço ajustado continuam fora desta fatia vertical, conforme a
+  especificação.
+- Os itens abaixo referem-se ao módulo Macro e ao mobile.
 - Se o Raul quiser iniciar a Etapa 6, o próximo trabalho é fechar o contrato de
   receipt e o threat model inicial antes do sandbox institucional, seguindo a
   seção 14 de `docs/product/PLANO_FOCUSLENS.md`.

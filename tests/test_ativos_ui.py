@@ -1,8 +1,9 @@
 from pathlib import Path
 
+import pytest
 from streamlit.testing.v1 import AppTest
 
-from ativos.core.linguagem import textos_proibidos
+from ativos.core.linguagem import textos_proibidos, validar_textos
 from ativos.ui import pagina_ativos
 
 RAIZ = Path(__file__).resolve().parent.parent
@@ -35,6 +36,8 @@ def test_guardrail_bloqueia_ordem_e_preco_alvo():
         "Compre agora",
         "preço-alvo de R$ 30",
     ]
+    with pytest.raises(ValueError, match="incompatível"):
+        validar_textos(["Compre agora"])
 
 
 def test_entrypoint_navega_entre_macro_e_ativos():
@@ -43,3 +46,4 @@ def test_entrypoint_navega_entre_macro_e_ativos():
     assert "st.navigation" in codigo
     assert 'url_path="macro", default=True' in codigo
     assert 'url_path="ativos"' in codigo
+    assert 'url_path="busca-acoes"' in codigo
