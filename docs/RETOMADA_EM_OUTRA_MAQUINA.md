@@ -43,7 +43,7 @@ dados sintéticos; se algum falhar aqui, o problema é de ambiente, não de dado
 ## 5. Baixar os dados públicos e gerar as tabelas
 
 ```powershell
-python -m scripts.baixar_dados_ativos      # ~400 MB, alguns minutos; mostra progresso
+python -m scripts.baixar_dados_ativos      # ~300 MB, alguns minutos; mostra progresso
 python -m scripts.atualizar_ativos         # gera acoes.parquet e fiis.parquet
 ```
 

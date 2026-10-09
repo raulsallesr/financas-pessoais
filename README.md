@@ -39,7 +39,7 @@ Próximos cortes: atualização automática, ETFs, DCF, score e otimização de 
 
 ```powershell
 python -m pip install -r requirements-dev.txt
-python -m scripts.baixar_dados_ativos      # dados públicos da CVM e da B3 (~400 MB)
+python -m scripts.baixar_dados_ativos      # dados públicos da CVM e da B3 (~300 MB)
 python -m scripts.atualizar_ativos         # gera as tabelas locais
 streamlit run app_financas.py              # menu no topo: Macro · Ativos B3
 ```

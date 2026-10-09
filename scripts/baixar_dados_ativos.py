@@ -5,7 +5,7 @@ Uso: python -m scripts.baixar_dados_ativos [--ano AAAA] [--listar]
 Os arquivos vão para o cache bruto (`%USERPROFILE%\\.cache\\lastro\\raw`, ou
 `LASTRO_CACHE_DIR`), fora do repositório. O download é idempotente: ano encerrado
 nunca é baixado de novo; o ano corrente é renovado se tiver mais de um dia. São
-cerca de 400 MB na primeira execução. Depois, rode `python -m scripts.atualizar_ativos`.
+cerca de 300 MB na primeira execução. Depois, rode `python -m scripts.atualizar_ativos`.
 """
 
 from __future__ import annotations

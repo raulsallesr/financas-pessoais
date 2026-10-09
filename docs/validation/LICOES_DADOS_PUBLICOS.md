@@ -18,6 +18,7 @@ a fonte, não nos testes sintéticos. Datas: dados de 2026-10-08/09.
 | **COTAHIST não ajusta** desdobramento e grupamento (8 saltos > 35% em 2026) | Só o último preço e a liquidez entram; alerta `salto_preco` sinaliza risco |
 | **Passivo Total (`2`) inclui o PL** | "Passivo exigível" = `2.01` + `2.02` (P/Ativo Circ. Líq. estava 100% vazio por isso) |
 | **PL dos controladores** | `2.03` − `2.03.09` (não controladores) |
+| **Exercício fiscal fora do ano civil** (AGRO3, SMTO3, CAML3, RAIZ4, JALL3): o DFP do ano corrente já existe para elas, e sem ele o balanço e o DPA ficam defasados | O download baixa DFP de `ano−6` até o ano corrente. Descoberto ao comparar um clone limpo com o cache antigo; o cache manual não tinha o DFP 2026 |
 
 ## FIIs (informe mensal e trimestral)
 
