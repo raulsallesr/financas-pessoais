@@ -32,9 +32,26 @@ COTAHIST da B3.
 > Ferramenta de uso pessoal, com metodologia aberta. Scores, faixas de valor e carteiras
 > simuladas são cálculos quantitativos para estudo, sem caráter de aconselhamento.
 
-Plano em [`docs/product/PLANO_LASTRO.md`](docs/product/PLANO_LASTRO.md) e cobertura das
+Já funcionam: **busca avançada de ações** (32 indicadores, filtros, presets, comparador e
+CSV), **busca de FIIs**, **valor estimado em faixa** (Graham, Bazin, Gordon, múltiplos do
+setor; FIIs por valor patrimonial e renda) com premissas editáveis e **ficha do ativo**.
+Próximos cortes: atualização automática, ETFs, DCF, score e otimização de carteira.
+
+```powershell
+python -m pip install -r requirements-dev.txt
+python -m scripts.baixar_dados_ativos      # dados públicos da CVM e da B3 (~400 MB)
+python -m scripts.atualizar_ativos         # gera as tabelas locais
+streamlit run app_financas.py              # menu no topo: Macro · Ativos B3
+```
+
+Guia completo, do zero, em
+[`docs/RETOMADA_EM_OUTRA_MAQUINA.md`](docs/RETOMADA_EM_OUTRA_MAQUINA.md). Plano em
+[`docs/product/PLANO_LASTRO.md`](docs/product/PLANO_LASTRO.md), roteiro em
+[`docs/product/ROTEIRO_PROXIMAS_FASES.md`](docs/product/ROTEIRO_PROXIMAS_FASES.md), cobertura das
 fontes em
-[`docs/validation/COBERTURA_ATIVOS_FASE0.md`](docs/validation/COBERTURA_ATIVOS_FASE0.md).
+[`docs/validation/COBERTURA_ATIVOS_FASE0.md`](docs/validation/COBERTURA_ATIVOS_FASE0.md) e erros
+reais dos dados públicos em
+[`docs/validation/LICOES_DADOS_PUBLICOS.md`](docs/validation/LICOES_DADOS_PUBLICOS.md).
 
 ## FocusLens Mobile `v0.6.4` — beta funcional
 

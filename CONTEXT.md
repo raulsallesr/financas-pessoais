@@ -7,65 +7,27 @@
 
 ## Estado em uma tela
 
-- **Nova direção (2026-10-09):** o FocusLens vira o módulo **Macro** de uma plataforma
-  maior, provisoriamente chamada **Lastro**.
-  - Novo módulo **Ativos B3** (`ativos/`), com plano em `docs/product/PLANO_LASTRO.md`.
-  - Decisões do Raul: uso pessoal com repositório público como portfólio; motor Python
-    + web Streamlit primeiro; fontes oficiais e gratuitas (CVM + COTAHIST); nome novo
-    para a plataforma.
-  - A **Fase 0 está concluída**: navegação Macro + Ativos e relatório de cobertura em
-    `docs/validation/COBERTURA_ATIVOS_FASE0.md`. Ações e FIIs são viáveis; ETFs pedem
-    tabela curada.
-  - A primeira fatia vertical de ações está implementada: adapters CVM/COTAHIST,
-    base point-in-time, 32 métricas/insumos (incluindo DPA), presets/filtros, pipeline
-    Parquet/JSON e página **Busca avançada**. A visão geral **Ativos B3** foi preservada.
-  - A segunda fatia vertical, **Busca de FIIs**, também está implementada: informes
-    mensais/trimestrais, composição e tipo, renda, vacância, presets/filtros,
-    comparador, CSV e derivados `fiis.parquet`/`fiis_meta.json`. O CLI aceita
-    `--classe {acoes,fiis,todos}` e usa `todos` por padrão.
-  - O corte de valor estimado também está concluído, exceto DCF: taxa livre de risco
-    interpolada da curva prefixada local, premissas editáveis, Graham, Bazin, Gordon,
-    múltiplos setoriais, modelos patrimonial e de renda para FIIs, faixa P25–P75 e
-    página unificada **Ficha do ativo**. As buscas calculam tudo em memória; os parquets
-    esquema 3 persistem apenas `dpa` e `rendimento_12m_cota` como novos insumos.
-  - Busca avançada no esquema 2: `alertas` substitui o nome anterior; DY usa dividendos
-    e JCP pagos TTM da DFC (DVA apenas como fallback `dy_dva`); P/ACL usa passivo
-    exigível; units podem derivar valor de mercado pela composição do FCA.
-  - Pipeline real em 2026-10-09, com liquidez mínima de R$ 100 mil/dia: 244 tickers,
-    82,0% com P/L, 95,5% com DY, 98,8% com DPA e nenhuma pendência de CNPJ. O metadado registra 12
-    tickers resolvidos por nome, inclusive `AMAR3`, `BPAC3/5/11` e `CSNA3`.
-  - GFSA3 e MEAL3 permanecem com `escala_suspeita` e, por segurança, sem valor de
-    mercado nem múltiplos dependentes. GFSA combina grupamento/diluição e composição
-    defasada; MEAL tem sequência anômala de quantidades ON/PN nos informes de 2026.
-  - Pipeline real de FIIs em 2026-10-09, com cotação até 2026-10-08 e liquidez mínima
-    de R$ 100 mil/dia: 155 fundos, 100% com P/VP, 99,4% com DY/rendimento 12m e 47,7% com
-    vacância. Tipos: 72 Tijolo, 51 Papel, 22 Fundo de fundos, 4 Híbrido e 6 Outros.
-  - O DY 12m agora descarta mês com `Percentual_Dividend_Yield_Mes` negativo ou acima
-    de 5%, preserva zero como válido e anualiza pelos meses válidos; menos de 6 válidos
-    fica vazio. Rentabilidade mensal fora de `[-50%; 50%]` invalida `rentab_12m`.
-    Ambos geram `dy_dados_suspeitos`; a carga real atual registrou 27 fundos. No XPML11,
-    o mês negativo de 2026-01 foi excluído e o DY 12m passou de 3,05% para 10,00% pela
-    regra solicitada (soma válida de R$ 9,7622, anualizada por 11 meses, sobre R$ 106,50).
-  - Colisões do mesmo ISIN em vários CNPJs agora usam desempate nominal estrito e
-    auditável. `KISU11`, `SNEL11`, `TRXF11` e `XPML11` foram resolvidos pelo nome de
-    pregão. Restam 20 pendências fail-closed: 16 sem informe mensal correspondente,
-    3 sem palavra nominal em comum (`PQDP11`, `RBRY11`, `ZAGH11`) e 1 empate nominal
-    (`HSAF11`). O metadado esquema 3 registra resolvidos e motivo por pendência.
-  - O sandbox bloqueou `%USERPROFILE%\.cache\lastro\derived`; o pipeline conjunto
-    foi validado via `LASTRO_DADOS_DIR=.pytest_tmp-derived-real-valuation`, fora do git.
-  - Valuation real com a curva de 2026-10-07 (`rf=12,7965%`): ações com 29 linhas sem
-    faixa e 215 com faixa; FIIs com 16 sem faixa e 139 com faixa. O alerta calculado
-    `valuation_fragil` marcou 21 ações e 32 FIIs, sem ser persistido no parquet.
-  - Gate atual: 354 testes, cobertura total de 87,15% e Ruff limpo. O `tmp_path` sob
-    Python 3.13/Windows foi executado com criação `0777` isolada; diretórios temporários
-    ainda podem emitir `WinError 5` na limpeza tardia sem indicar falha funcional.
-  - **Próximo passo:** DCF de dois estágios, score, tabela curada de ETFs e atualização
-    automática dos derivados permanecem como cortes independentes.
-  - **Pendência de ambiente:** `requirements.txt` tem ACL legado e não aceitou escrita
-    neste sandbox. `numpy` e `pyarrow` ficaram explicitados em `requirements-dev.txt`;
-    movê-los para o arquivo base quando a ACL for normalizada.
-  - **Pendente do Raul:** decidir o retorno total para backtest (DVA oficial
-    aproximada ou Yahoo ajustado).
+- **Lastro (nova plataforma, 2026-10-09).** O FocusLens BR virou o módulo **Macro**; o novo
+  módulo **Ativos B3** (`ativos/`) analisa ações e FIIs da B3 com fontes oficiais e
+  gratuitas (CVM e COTAHIST). Nome "Lastro" é provisório. Uso pessoal do Raul, repositório
+  público como portfólio; nunca linguagem de recomendação.
+  - **Pronto e publicado:** navegação Macro + Ativos; base point-in-time (adapters CVM e
+    B3, normalização, pipeline para Parquet); **Busca avançada** de ações (32 colunas,
+    filtros, 4 presets, comparador, CSV); **Busca de FIIs**; **valor estimado** em faixa
+    (Graham, Bazin, Gordon, múltiplos do setor; FIIs: patrimonial e renda capitalizada) com
+    premissas editáveis; **Ficha do ativo**. Sem DCF ainda.
+  - **Como rodar do zero:** `docs/RETOMADA_EM_OUTRA_MAQUINA.md` (clonar, venv, baixar dados,
+    gerar tabelas, abrir). Os dados e o ambiente Python **não** vão no Git.
+  - **Próximo passo concreto:** escolher entre atualização automática dos derivados (GitHub
+    Actions + release), ETFs (tabela curada), DCF ou Score. Ordem sugerida e desenho de cada
+    um em `docs/product/ROTEIRO_PROXIMAS_FASES.md`.
+  - **Bloqueios / decisões do Raul:** (1) retorno total para o backtest do Score (oficial
+    aproximado ou Yahoo ajustado); (2) nome definitivo; (3) qualquer abertura a terceiros
+    exige validação jurídica.
+  - **Lições dos dados públicos** (erros reais da CVM/B3 e como foram tratados):
+    `docs/validation/LICOES_DADOS_PUBLICOS.md`. **Leia antes de mexer em métricas.**
+  - Registro detalhado do dia de criação: `docs/validation/ESTADO_ATIVOS_2026-10-09.md`.
+  - Gate no fim do dia: ruff limpo, 363 testes, cobertura 87,3%.
 - Produto (módulo Macro): **FocusLens BR**, educacional e orientado à privacidade.
   `mobile/` é a interface principal; o app Streamlit permanece como referência funcional.
 - Branch: `main`. Corte funcional: mobile `v0.6.4`, Android `versionCode 23`,
@@ -116,12 +78,18 @@ Leia, nesta ordem:
 
 1. `CLAUDE.md`;
 2. este `CONTEXT.md`;
-3. `docs/product/PLANO_FOCUSLENS.md`;
+3. **Lastro/Ativos:** `docs/RETOMADA_EM_OUTRA_MAQUINA.md`,
+   `docs/product/ROTEIRO_PROXIMAS_FASES.md`, `docs/product/PLANO_LASTRO.md` e
+   `docs/validation/LICOES_DADOS_PUBLICOS.md`; **Macro/mobile:** `docs/product/PLANO_FOCUSLENS.md`;
 4. `mobile/README.md`;
 5. `docs/architecture/ARQUITETURA_MOBILE.md`.
 
-Use somente o Git interno deste projeto. Não faça `git add`, commit ou push no
-Git da raiz do hub.
+Use somente o Git interno deste projeto. (Na máquina de trabalho este repositório mora
+dentro de um hub maior da empresa; nunca faça `git add`, commit ou push no Git da raiz
+desse hub. Em outra máquina, o repositório é só este.)
+
+Os três **stashes** abaixo existem apenas no clone da máquina de trabalho (stash não
+vai para o GitHub); em outra máquina eles não existem e isso é esperado.
 
 ## Contrato de produto que não deve ser reaberto
 
@@ -284,10 +252,8 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 
 ## Próxima decisão
 
-- **Lastro / Ativos B3:** base, métricas, buscas de ações/FIIs, valor estimado sem DCF
-  e ficha unificada estão concluídos. Próximos cortes possíveis: DCF de dois estágios,
-  Score Lastro, tabela curada de ETFs ou atualização automática dos derivados.
-  Workflow, asset de release e preço ajustado continuam fora do corte atual.
+- **Lastro / Ativos B3:** ver `docs/product/ROTEIRO_PROXIMAS_FASES.md` (ordem sugerida:
+  atualização automática, ETFs, DCF, Score, risco e carteira).
 - Os itens abaixo referem-se ao módulo Macro e ao mobile.
 - Se o Raul quiser iniciar a Etapa 6, o próximo trabalho é fechar o contrato de
   receipt e o threat model inicial antes do sandbox institucional, seguindo a
@@ -316,7 +282,24 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 - Publicação em loja também depende dos gates de segurança e da decisão sobre
   vulnerabilidades moderadas transitivas do toolchain Expo.
 
-## Prompt curto para o próximo chat
+## Prompt curto para o próximo chat — Lastro / Ativos B3
+
+> Estou continuando o projeto Lastro (módulo Ativos B3 do repositório
+> `raulsallesr/financas-pessoais`) em outra máquina, sem memória da conversa anterior. Rode
+> `git pull --ff-only`, leia `CLAUDE.md`, `CONTEXT.md`, `docs/RETOMADA_EM_OUTRA_MAQUINA.md`,
+> `docs/product/ROTEIRO_PROXIMAS_FASES.md`, `docs/product/PLANO_LASTRO.md` e
+> `docs/validation/LICOES_DADOS_PUBLICOS.md`. Se o ambiente ainda não existe, siga o guia de
+> retomada (venv fora do OneDrive, `pip install -r requirements-dev.txt`, `python -m
+> scripts.baixar_dados_ativos`, `python -m scripts.atualizar_ativos`, `streamlit run
+> app_financas.py --server.port 8551`). O que está pronto: busca de ações, busca de FIIs,
+> valor estimado em faixa (sem DCF) e ficha do ativo. Pergunte-me qual corte atacar
+> (atualização automática, ETFs, DCF ou Score) e proponha o spec em `docs/product/SPEC_*.md`
+> antes de implementar. Não use linguagem de recomendação; o guardrail está em
+> `ativos/core/linguagem.py`. Confira todo número contra a fonte (método em
+> `LICOES_DADOS_PUBLICOS.md`) antes de commitar. Commit e push no git deste projeto estão
+> autorizados depois do gate (`ruff check .` e `python -m pytest tests -q --cov=.`).
+
+## Prompt curto para o próximo chat — Macro / mobile
 
 > Abra `01_Projetos/Financas-Pessoais`, rode `git pull --ff-only`, confira
 > `git status --short --branch` e `git stash list`, e leia `CLAUDE.md`,

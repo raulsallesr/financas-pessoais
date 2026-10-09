@@ -18,6 +18,10 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
    Focus ficar igual nas duas máquinas).
 2. Leia `CONTEXT.md` — estado operacional curto do projeto (decisões,
    bloqueios e próximos passos). O histórico detalhado fica no Git e no plano.
+3. Trabalhando no módulo **Lastro / Ativos B3**: leia também
+   `docs/RETOMADA_EM_OUTRA_MAQUINA.md` (ambiente e dados),
+   `docs/product/ROTEIRO_PROXIMAS_FASES.md` (o que falta e o desenho de cada corte) e
+   `docs/validation/LICOES_DADOS_PUBLICOS.md` (erros reais dos dados públicos).
 
 ## Convenções do projeto
 
@@ -76,6 +80,48 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
   Commit e `git push` estão permanentemente autorizados depois do gate
   passar, sem nova confirmação a cada tarefa (decisão do Raul, 2026-08-04).
 
+## Lastro / Ativos B3 — como trabalhar
+
+Decisões do Raul (2026-10-09), que não se reabrem sem ele pedir: **uso pessoal** (repo
+público é portfólio); **Python + Streamlit primeiro**, mobile depois; **fontes oficiais e
+gratuitas** (CVM Dados Abertos, B3 COTAHIST, BACEN, Tesouro); plataforma "Lastro" com o
+FocusLens como módulo Macro (nome provisório). Linguagem sempre de **score, faixa e
+margem calculada**, nunca "compre/venda/barato/caro/oportunidade/preço-alvo"; o
+guardrail `ativos/core/linguagem.py` testa isso em todo texto novo. Abrir para terceiros
+exige validação jurídica (CVM Res. 19 e 20/2021).
+
+**Ciclo que funcionou, repita:**
+
+1. Escreva `docs/product/SPEC_<corte>.md` com fórmulas exatas, fontes, regras de
+   "não se aplica", testes obrigatórios e fora de escopo (modelo: `SPEC_VALOR_ESTIMADO.md`).
+2. Implemente (o Codex fez a parte pesada: `'' | codex exec --sandbox workspace-write
+   --cd <repo> "<instrução>"`; veja `docs/RETOMADA_EM_OUTRA_MAQUINA.md`, seção 7).
+3. **Revise sem confiar no resumo do implementador:** rode `ruff` e `pytest` você mesmo,
+   rode o pipeline real, reconcilie 5 tickers contra o CSV da CVM com um cálculo
+   independente, olhe distribuições e séries brutas de quem destoar, abra a tela.
+   `docs/validation/LICOES_DADOS_PUBLICOS.md` explica o método e mostra o que isso já achou
+   (DY zerado, escala de ações, dados sujos da CVM).
+4. Commit escopado por caminho (`git checkout -- dados/` antes, para descartar o ruído do
+   cache do Macro), mensagem via arquivo (`git commit -F`), `git push`.
+
+**Regras do módulo:**
+
+- Cálculo puro em `ativos/core`, I/O em `ativos/adapters`, telas em `ativos/ui`; nada de
+  rede nem dado real nos testes (fixtures sintéticas); nunca versionar dado da CVM/B3,
+  Parquet ou carteira real.
+- Vazio é vazio: dado ausente ou inaplicável é `NaN`/"—", nunca zero; modelo inaplicável
+  mostra o motivo; menos de 2 modelos ⇒ sem faixa.
+- Todo valor estimado é **faixa** com premissas visíveis e editáveis.
+- Dado com cara de erro (múltiplo absurdo, valor negativo onde não cabe) é bug a investigar
+  na fonte, não número para exibir; marque com alerta.
+- A coluna é `alertas` (e não `flags`, que colide com o pandas).
+
+**Preferências do Raul:** conversa em português do Brasil, direta e curta, sem preâmbulo.
+Quer ver resultado na **tela**, não só investigação. "Manda bala" significa seguir
+autonomamente com a sugestão proposta. Valoriza ideias próprias além do pedido e conferência
+de números contra a fonte. Em tarefas abertas e novas, faça 2 a 4 perguntas de escopo antes
+de agir; em tarefas mecânicas, execute.
+
 ## Ao terminar qualquer tarefa
 
 1. Roda a suíte inteira (`pytest tests/`) quando tocar Python. Ao tocar
@@ -89,4 +135,6 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
 ## Onde queremos chegar
 
 Visão completa e próximos passos vivem em `CONTEXT.md`; o plano detalhado está
-em `docs/product/PLANO_FOCUSLENS.md`. Não duplicar o estado entre documentos.
+em `docs/product/PLANO_FOCUSLENS.md` (módulo Macro/mobile) e
+`docs/product/PLANO_LASTRO.md` com `ROTEIRO_PROXIMAS_FASES.md` (módulo Ativos). Não duplicar
+o estado entre documentos.

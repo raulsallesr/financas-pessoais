@@ -69,7 +69,9 @@ app_financas.py   entrada com st.navigation: Macro e Ativos
 | 7 | Proventos e fatos relevantes (CVM IPE), renda passiva, mobile | conforme item | planejada |
 
 O detalhamento de métricas, modelos e fatores aprovado em 2026-10-09 está resumido
-abaixo e é refinado no início de cada fase.
+abaixo e é refinado no início de cada fase. O desenho dos cortes que faltam (ETFs, DCF,
+Score, risco e carteira, atualização automática) está em
+[`ROTEIRO_PROXIMAS_FASES.md`](ROTEIRO_PROXIMAS_FASES.md).
 
 ## 5. Métricas, modelos e fatores
 
