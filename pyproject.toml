@@ -13,6 +13,12 @@ ignore = ["UP042"]
 # Markup SVG embutido em string HTML; quebrar a linha alteraria o atributo `d`.
 "focuslens/ui/pagina_home.py" = ["E501"]
 
+[tool.pytest.ini_options]
+# O CI roda o executável `pytest` (não `python -m pytest`), que não põe a raiz no caminho
+# de importação: sem isto, `import ativos` e `from scripts import ...` falham na coleta.
+pythonpath = ["."]
+testpaths = ["tests"]
+
 [tool.coverage.run]
 branch = true
 source = ["."]
