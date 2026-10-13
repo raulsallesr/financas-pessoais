@@ -20,8 +20,13 @@
     `docs/coordenacao/PROTOCOLO.md`. Toda sessão começa com `python scripts/equipe.py iniciar`
     (`--prompt` gera o prompt de retomada), reserva o item antes de editar e fecha com
     `equipe fechar`. Estado e quem está fazendo o quê: `docs/coordenacao/QUADRO.md` e `INDICE.md`.
-    Decisões, ideias e o diário das sessões vivem em `docs/coordenacao/`. Item 0.1 no quadro;
-    faltam a Fase D (dados iguais nas duas máquinas), a simulação de duas máquinas e a ponte com o hub.
+    Decisões, ideias e o diário das sessões vivem em `docs/coordenacao/`. Simulação de duas máquinas
+    e um robô feita e aprovada. Falta só a ponte com o hub da Fits (precisa do OK do Raul).
+  - **Dados iguais nas duas máquinas (2026-10-13):** o workflow `atualizar-ativos.yml` publica os
+    Parquet na release fixa `dados-ativos` todo dia útil (22:00 UTC). Em qualquer máquina:
+    `python -m scripts.sincronizar_dados` (segundos, ~150 KB). Verificado ao vivo no GitHub.
+  - **CI:** o remoto é a fonte da verdade do gate. Ficou vermelho de 09 a 13/10 por erro de
+    importação (`pythonpath` no pyproject resolveu). O `equipe iniciar` alerta CI vermelho.
   - **Como rodar do zero:** `docs/RETOMADA_EM_OUTRA_MAQUINA.md` (clonar, venv, baixar dados,
     gerar tabelas, abrir). Os dados e o ambiente Python **não** vão no Git.
   - **Ciclo 1, "confiança primeiro" (decidido pelo Raul em 2026-10-09):** item 1.1
