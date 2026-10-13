@@ -11,7 +11,7 @@ Atualizado em 2026-10-13.
 | ID | Item | Status | Dono | Atualizado | Decisão do Raul | Notas |
 |---|---|---|---|---|---|---|
 | 0.1 | Protocolo de coordenação entre IAs e máquinas | em andamento | claude-trabalho | 2026-10-13 | | `SPEC_EQUIPE_CLI.md`; fases A a F do plano |
-| 0.2 | Dados de mercado iguais nas duas máquinas (workflow + release `dados-ativos` + sincronizar) | aberto | | 2026-10-13 | | É o item 1.4; depende de rodar o workflow no GitHub |
+| 0.2 | Dados de mercado iguais nas duas máquinas (workflow + release `dados-ativos` + sincronizar) | em andamento | claude-trabalho | 2026-10-13 |  | É o item 1.4; depende de rodar o workflow no GitHub |
 | 1.1 | Calibrar o valuation (Bazin = rf × fator) | pronto | claude-trabalho | 2026-10-13 | | `e121edc`; feito por sessão paralela, reconferido |
 | 1.2 | Painel de qualidade de dados | aberto | | 2026-10-13 | | Próximo passo do Ciclo 1 |
 | 1.3 | Reconciliação automática contra a CVM no CI | aberto | | 2026-10-13 | | 6 tickers fixos, cálculo independente |
