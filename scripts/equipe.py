@@ -388,18 +388,34 @@ def _ci_status(root: Path) -> str:
     owner, name = repository
     url = (
         f"https://api.github.com/repos/{owner}/{name}/actions/workflows/"
-        "tests.yml/runs?branch=main&per_page=1"
+        "tests.yml/runs?branch=main&per_page=5"
     )
     request = urllib.request.Request(url, headers={"User-Agent": "lastro-equipe-cli"})
     try:
         with urllib.request.urlopen(request, timeout=API_TIMEOUT) as response:
             payload = json.load(response)
-        run = payload.get("workflow_runs", [])[0]
-        conclusion = run.get("conclusion") or run.get("status") or "desconhecida"
-        date = (run.get("updated_at") or run.get("created_at") or "sem data").replace("T", " ")
-        return f"CI: {conclusion} em {date[:16]}"
+        runs = payload.get("workflow_runs", [])
+        latest = runs[0]
+        concluded = next((run for run in runs if run.get("status") == "completed"), None)
     except (OSError, ValueError, KeyError, IndexError, urllib.error.URLError):
         return "CI: indisponível"
+    if concluded is None:
+        return f"CI: {latest.get('status', 'desconhecida')} (sem execução concluída recente)"
+    conclusion = concluded.get("conclusion") or "desconhecida"
+    date = (concluded.get("updated_at") or concluded.get("created_at") or "sem data")
+    date = date.replace("T", " ")[:16]
+    sha = str(concluded.get("head_sha", ""))[:7]
+    if conclusion in {"failure", "timed_out", "startup_failure"}:
+        title = str(concluded.get("display_title", "")).strip()[:60]
+        return (
+            f"ATENÇÃO: CI VERMELHO na main ({conclusion}, commit {sha}, {date}): {title}. "
+            "Prioridade zero: corrija antes de qualquer item (rode o comando do workflow "
+            "com o executável pytest e confira o passo que falhou)."
+        )
+    note = ""
+    if latest is not concluded and latest.get("status") != "completed":
+        note = f"; nova execução em andamento ({str(latest.get('head_sha', ''))[:7]})"
+    return f"CI: {conclusion} em {date} ({sha}){note}"
 
 
 def _read_json(path: Path) -> dict[str, Any]:

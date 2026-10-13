@@ -109,3 +109,16 @@ def test_secret_scanner_catches_planted_fake_secret(tmp_path: Path) -> None:
         "alguem@example.com",
     }
 
+
+def test_pytest_do_ci_enxerga_a_raiz_do_projeto() -> None:
+    """O CI roda o executável `pytest`, que não põe a raiz em sys.path.
+
+    Sem `pythonpath` no pyproject, `import ativos` e `from scripts import ...` falham na
+    coleta (exit code 2) e o CI fica vermelho enquanto `python -m pytest` passa local.
+    """
+    pyproject = (Path(__file__).resolve().parent.parent / "pyproject.toml").read_text(
+        encoding="utf-8"
+    )
+
+    assert "[tool.pytest.ini_options]" in pyproject
+    assert 'pythonpath = ["."]' in pyproject

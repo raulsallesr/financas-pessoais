@@ -30,6 +30,7 @@ Gerado por `scripts/equipe.py indice` em 2026-10-13. Não edite.
 - [Sem demonstração pública hospedada por ora](decisoes/2026-10-09_sem-demo-publica.md)
 - [Lastro: uso pessoal, Python e Streamlit primeiro, fontes oficiais e gratuitas](decisoes/2026-10-09_uso-pessoal-streamlit-fontes-oficiais.md)
 - [Coordenação em arquivos versionados e verificação no CI, sem Issues por ora](decisoes/2026-10-13_arquivos-e-ci-sem-issues.md)
+- [O CI remoto é a fonte da verdade do gate](decisoes/2026-10-13_ci-remoto-e-a-fonte-da-verdade-do-gate.md)
 - [Fluxo git: main com disciplina](decisoes/2026-10-13_main-com-disciplina.md)
 
 ## Aguardam o Raul

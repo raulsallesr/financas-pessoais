@@ -762,3 +762,78 @@ def test_fechar_aborta_quando_o_remoto_mostra_outro_dono_no_mesmo_item(
     verificacao = clone_repo(bare, tmp_path / "verificacao", "Verificador")
     linhas = quadro_por_id(verificacao)
     assert linhas["1.2"]["Dono"] == "outra-pc"
+
+
+class _RespostaFalsa:
+    def __init__(self, runs: list[dict[str, str]]) -> None:
+        self._corpo = json.dumps({"workflow_runs": runs}).encode("utf-8")
+
+    def __enter__(self) -> _RespostaFalsa:
+        return self
+
+    def __exit__(self, *args: object) -> None:
+        return None
+
+    def read(self, *args: object) -> bytes:
+        return self._corpo
+
+
+def _ci_com(monkeypatch: pytest.MonkeyPatch, root: Path, runs: list[dict[str, str]]) -> str:
+    monkeypatch.setattr(equipe, "_github_repo", lambda _root: ("dono", "repo"))
+    monkeypatch.setattr(
+        equipe.urllib.request, "urlopen", lambda *a, **k: _RespostaFalsa(runs)
+    )
+    return equipe._ci_status(root)
+
+
+def test_ci_vermelho_vira_alerta_de_prioridade_zero(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root, _ = make_repo(tmp_path)
+    runs = [
+        {
+            "status": "in_progress",
+            "conclusion": None,
+            "head_sha": "bbbbbbb1",
+            "display_title": "novo",
+        },
+        {
+            "status": "completed",
+            "conclusion": "failure",
+            "head_sha": "aaaaaaa1",
+            "display_title": "Lastro: algo quebrou",
+            "updated_at": "2026-10-13T15:31:00Z",
+        },
+    ]
+
+    saida = _ci_com(monkeypatch, root, runs)
+
+    assert saida.startswith("ATENÇÃO: CI VERMELHO na main")
+    assert "aaaaaaa" in saida
+    assert "Prioridade zero" in saida
+
+
+def test_ci_verde_informa_execucao_nova_em_andamento(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root, _ = make_repo(tmp_path)
+    runs = [
+        {
+            "status": "in_progress",
+            "conclusion": None,
+            "head_sha": "bbbbbbb1",
+            "display_title": "novo",
+        },
+        {
+            "status": "completed",
+            "conclusion": "success",
+            "head_sha": "aaaaaaa1",
+            "display_title": "ok",
+            "updated_at": "2026-10-13T15:31:00Z",
+        },
+    ]
+
+    saida = _ci_com(monkeypatch, root, runs)
+
+    esperado = "CI: success em 2026-10-13 15:31 (aaaaaaa); nova execução em andamento (bbbbbbb)"
+    assert saida == esperado

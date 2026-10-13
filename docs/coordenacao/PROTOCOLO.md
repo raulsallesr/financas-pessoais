@@ -53,10 +53,15 @@ equipe fechar --resumo "..." --proximo "..."
 4. **`git pull --rebase --autostash` antes de todo push.** O robô do GitHub commita em `main`
    por volta de 6 vezes por semana; só mexe em `dados/*.json`, que o `equipe` ignora no status.
    Push pequeno e frequente.
-5. **Suíte verde antes do push** (`ruff check .` e `python -m pytest tests -q --cov=.`);
+5. **Suíte verde antes do push** (`ruff check .` e `pytest tests/ -q --cov=.`, o comando exato do
+   CI; `python -m pytest` esconde erros de importação que só o executável `pytest` mostra);
    commit escopado por caminho, nunca `git add -A` às cegas; mensagem por arquivo (`git commit -F`).
 6. **Fechar com `equipe fechar`.** Reserva esquecida vence em 24 h e o `iniciar` avisa.
 7. **Parar nas decisões do Raul.** Item com "Decisão do Raul" no quadro não avança sem ele.
+8. **Conferir o CI depois do push.** Teste local verde não basta: o CI roda em Linux, com
+   instalação limpa. O `equipe iniciar` mostra o último CI concluído da `main`; **CI vermelho é
+   prioridade zero**, antes de qualquer item. (Já aconteceu: ficou vermelho 11 execuções seguidas,
+   de 09 a 13/10, sem ninguém perceber, por um erro de importação que só o executável `pytest` revela.)
 
 ## Formatos dos arquivos
 
