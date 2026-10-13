@@ -1,15 +1,23 @@
 # Contribuindo
 
-FocusLens BR é um projeto pessoal e educacional — não está aberto a roadmap
-externo nem aceita mudanças de escopo de produto por terceiros. Ainda assim,
-correções técnicas (bug, typo, teste faltando) são bem-vindas via PR.
+Este é um projeto pessoal e educacional. O trabalho das IAs autorizadas pelo titular acontece
+diretamente na `main`, com commits pequenos e escopados. O repositório não mantém um fluxo de
+Pull Request para colaboração externa nem recebe mudanças de roadmap por terceiros.
+
+Antes de editar, leia [`AGENTS.md`](AGENTS.md) e o
+[`protocolo de coordenação`](docs/coordenacao/PROTOCOLO.md). Comece com:
+
+```bash
+python scripts/equipe.py iniciar
+python scripts/equipe.py reservar ID --agente NOME --maquina NOME
+```
 
 ## Rodando localmente
 
-Instruções completas de setup (Python fora do OneDrive, `.venv`, mobile) estão
-no README: [rodar o app móvel](README.md#como-rodar-o-app-móvel) e
-[rodar a referência Streamlit](README.md#como-rodar-a-referência-streamlit).
-Resumo dos gates antes de abrir PR:
+Instruções completas de setup (Python fora do OneDrive, `.venv`, mobile) estão no README:
+[rodar o app móvel](README.md#como-rodar-o-app-móvel) e
+[rodar a referência Streamlit](README.md#como-rodar-a-referência-streamlit). Antes de qualquer
+push, rode os gates aplicáveis:
 
 ```bash
 # Python
@@ -32,11 +40,15 @@ npm test
   automaticamente.
 - Nunca versionar planilha B3 real, dado de carteira pessoal ou segredo. Testes
   de importação geram XLSX sintético em memória.
-- Lint (`ruff`) e cobertura mínima (85%, `pyproject.toml`) são obrigatórios no
-  CI; PR que não passar não é revisado.
+- Lint (`ruff`) e cobertura mínima (85%, `pyproject.toml`) são obrigatórios no CI.
 
-## Escopo de PR
+## Fechando o trabalho
 
-PRs pequenos e de intenção única (uma correção por vez) são mais fáceis de
-revisar e têm chance real de merge. Mudanças de arquitetura ou de escopo de
-produto devem abrir uma issue de discussão antes do código.
+Faça commit somente dos caminhos da tarefa, nunca `git add -A` às cegas. Antes do push, rode
+`git pull --rebase --autostash`. Ao terminar, registre o resultado e libere a reserva:
+
+```bash
+python scripts/equipe.py fechar --resumo "O que mudou" --proximo "O que falta"
+```
+
+Mudanças de arquitetura ou escopo exigem decisão explícita do titular e registro no protocolo.

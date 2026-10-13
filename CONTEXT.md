@@ -16,6 +16,12 @@
     filtros, 4 presets, comparador, CSV); **Busca de FIIs**; **valor estimado** em faixa
     (Graham, Bazin, Gordon, múltiplos do setor; FIIs: patrimonial e renda capitalizada) com
     premissas editáveis; **Ficha do ativo**. Sem DCF ainda.
+  - **Coordenação entre IAs e máquinas (2026-10-13):** protocolo em `AGENTS.md` e
+    `docs/coordenacao/PROTOCOLO.md`. Toda sessão começa com `python scripts/equipe.py iniciar`
+    (`--prompt` gera o prompt de retomada), reserva o item antes de editar e fecha com
+    `equipe fechar`. Estado e quem está fazendo o quê: `docs/coordenacao/QUADRO.md` e `INDICE.md`.
+    Decisões, ideias e o diário das sessões vivem em `docs/coordenacao/`. Item 0.1 no quadro;
+    faltam a Fase D (dados iguais nas duas máquinas), a simulação de duas máquinas e a ponte com o hub.
   - **Como rodar do zero:** `docs/RETOMADA_EM_OUTRA_MAQUINA.md` (clonar, venv, baixar dados,
     gerar tabelas, abrir). Os dados e o ambiente Python **não** vão no Git.
   - **Ciclo 1, "confiança primeiro" (decidido pelo Raul em 2026-10-09):** item 1.1

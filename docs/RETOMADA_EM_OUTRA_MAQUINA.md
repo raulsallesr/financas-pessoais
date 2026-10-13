@@ -68,6 +68,15 @@ Sem as tabelas derivadas, as páginas de ativos mostram o comando para gerá-las
 
 ## 7. Trabalhar com Claude Code e Codex em casa
 
+- Comece sempre pelo diagnóstico automático, antes de pedir qualquer edição:
+
+  ```powershell
+  python scripts/equipe.py iniciar
+  ```
+
+  `python scripts/equipe.py iniciar --prompt` gera um texto de retomada determinístico, pronto
+  para colar em qualquer IA. Depois, siga as reservas e o fechamento descritos em `AGENTS.md` e
+  `docs/coordenacao/PROTOCOLO.md`.
 - **Claude Code não tem memória das conversas de outro PC.** Abra a pasta do repositório
   e peça para ler, nesta ordem: `CLAUDE.md`, `CONTEXT.md`, este guia,
   `docs/product/ROTEIRO_PROXIMAS_FASES.md` e `docs/validation/LICOES_DADOS_PUBLICOS.md`.

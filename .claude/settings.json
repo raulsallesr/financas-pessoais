@@ -1,0 +1,7 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {"hooks": [{"type": "command", "command": "python scripts/equipe.py iniciar --hook"}]}
+    ]
+  }
+}

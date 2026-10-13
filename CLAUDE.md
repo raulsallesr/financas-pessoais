@@ -11,6 +11,16 @@ mesma conta Claude mas **sem memória de conversa compartilhada entre elas**
 — cada sessão começa do zero. O git (e este arquivo + `CONTEXT.md`) é a
 única fonte de verdade entre sessões e máquinas.
 
+## Coordenação entre IAs e máquinas (leia antes de tudo)
+
+Várias IAs (Claude, Codex e outras) trabalham aqui, no PC do trabalho e no de casa, sem memória
+compartilhada. Regras completas em `AGENTS.md` e `docs/coordenacao/PROTOCOLO.md`. Em resumo:
+comece com `python scripts/equipe.py iniciar`, **reserve** o item antes de editar
+(`equipe reservar <item>`), trate árvore suja que não é sua como trabalho de outra IA
+(não sobrescreva, não apague), empurre só com a suíte verde e `git pull --rebase --autostash`, e
+**feche** com `equipe fechar --resumo "..." --proximo "..."`. Itens "Decisão do Raul" no
+`docs/coordenacao/QUADRO.md`: pare e pergunte. Datas vêm do relógio (`date`), nunca deduzidas.
+
 ## Antes de qualquer tarefa
 
 1. `git pull` — pegue o que a outra máquina fez, incluindo o cache de dados

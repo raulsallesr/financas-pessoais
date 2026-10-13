@@ -21,6 +21,15 @@ O plano canônico do produto, com escopo, arquitetura, padrão visual, gates e
 sequência de publicação, está em
 [`docs/product/PLANO_FOCUSLENS.md`](docs/product/PLANO_FOCUSLENS.md).
 
+## Como as IAs trabalham aqui
+
+Claude, Codex e outras IAs podem atuar em máquinas diferentes sem compartilhar memória. O
+repositório registra reservas, sessões, ideias, decisões e checkpoints; `python
+scripts/equipe.py iniciar` mostra o estado antes de qualquer edição. As regras de reserva,
+gate, sincronização e encerramento estão no
+[`protocolo de coordenação`](docs/coordenacao/PROTOCOLO.md) e resumidas em
+[`AGENTS.md`](AGENTS.md).
+
 ## Em construção: Lastro e o módulo Ativos B3
 
 O FocusLens passa a ser o módulo **Macro** de uma plataforma maior, provisoriamente
