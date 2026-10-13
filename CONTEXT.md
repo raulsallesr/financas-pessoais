@@ -18,14 +18,16 @@
     premissas editáveis; **Ficha do ativo**. Sem DCF ainda.
   - **Como rodar do zero:** `docs/RETOMADA_EM_OUTRA_MAQUINA.md` (clonar, venv, baixar dados,
     gerar tabelas, abrir). Os dados e o ambiente Python **não** vão no Git.
-  - **Próximo passo concreto (decidido pelo Raul em 2026-10-11): Ciclo 1, "confiança
-    primeiro"**: calibrar o valuation (Bazin ligado à `rf`; hoje 6% fixo contra rf de 12,8%
-    deixa metade do mercado fora da faixa), painel de qualidade de dados, reconciliação
-    automática, atualização automática (Actions + release), sentinela das fontes, vitrine do
-    README e refatoração antes dos ETFs. Diagnóstico e plano completos em
-    `docs/product/DIAGNOSTICO_E_PLANO_2026-10-11.md`; desenho técnico em
+  - **Ciclo 1, "confiança primeiro" (decidido pelo Raul em 2026-10-09):** item 1.1
+    concluído — Bazin agora usa `rf × fator` (padrão 0,50), com taxa derivada visível e
+    editável; ERP 5% e `g` 4% foram mantidos para evitar ajuste circular aos preços atuais.
+    A distribuição e os ativos de referência estão em
+    `docs/validation/CALIBRACAO_VALUATION_2026-10-09.md`. **Próximo passo: 1.2, painel de
+    qualidade de dados.** Depois vêm reconciliação, automação, sentinela, vitrine e
+    refatoração antes dos ETFs. Diagnóstico e plano completos em
+    `docs/product/DIAGNOSTICO_E_PLANO_2026-10-09.md`; desenho técnico em
     `docs/product/ROTEIRO_PROXIMAS_FASES.md`.
-  - **Decisões do Raul (2026-10-11):** foco em confiança primeiro; **retorno total = Yahoo
+  - **Decisões do Raul (2026-10-09):** foco em confiança primeiro; **retorno total = Yahoo
     Finance só para preço ajustado** (backtest e risco, adapter isolado, aviso de fonte não
     oficial; antes, spike de comparação em 20 tickers); **sem demo pública** por ora.
     **Em aberto:** nome definitivo da plataforma; qualquer abertura a terceiros exige
@@ -33,7 +35,8 @@
   - **Lições dos dados públicos** (erros reais da CVM/B3 e como foram tratados):
     `docs/validation/LICOES_DADOS_PUBLICOS.md`. **Leia antes de mexer em métricas.**
   - Registro detalhado do dia de criação: `docs/validation/ESTADO_ATIVOS_2026-10-09.md`.
-  - Gate no fim do dia: ruff limpo, 363 testes, cobertura 87,3%.
+  - Gate do item 1.1: Ruff limpo, 369 testes, cobertura 87,3%; pipeline real regenerado
+    com 244 ações e 155 FIIs.
 - Produto (módulo Macro): **FocusLens BR**, educacional e orientado à privacidade.
   `mobile/` é a interface principal; o app Streamlit permanece como referência funcional.
 - Branch: `main`. Corte funcional: mobile `v0.6.4`, Android `versionCode 23`,
@@ -258,8 +261,8 @@ Maestro é sempre manual e deliberado. O comando existir não autoriza executá-
 
 ## Próxima decisão
 
-- **Lastro / Ativos B3:** ver `docs/product/ROTEIRO_PROXIMAS_FASES.md` (ordem sugerida:
-  atualização automática, ETFs, DCF, Score, risco e carteira).
+- **Lastro / Ativos B3:** executar o item 1.2, painel de qualidade de dados; depois seguir
+  o Ciclo 1 em `docs/product/DIAGNOSTICO_E_PLANO_2026-10-09.md` antes de ETFs e DCF.
 - Os itens abaixo referem-se ao módulo Macro e ao mobile.
 - Se o Raul quiser iniciar a Etapa 6, o próximo trabalho é fechar o contrato de
   receipt e o threat model inicial antes do sandbox institucional, seguindo a

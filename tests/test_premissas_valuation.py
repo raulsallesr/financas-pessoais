@@ -70,6 +70,8 @@ def test_falha_do_cache_usa_fallback_marcado(monkeypatch):
     assert referencia.rf_padrao
     assert padrao.rf == 0.12
     assert padrao.k == pytest.approx(0.17)
+    assert padrao.bazin_fator_rf == pytest.approx(0.50)
+    assert padrao.bazin_taxa == pytest.approx(0.06)
     assert padrao.fii_taxa_exigida == pytest.approx(0.102)
 
 
@@ -81,7 +83,24 @@ def test_restaurar_premissas_recoloca_valores_visiveis_em_percentual():
 
     assert estado["valuation_rf"] == pytest.approx(12.8)
     assert estado["valuation_erp"] == pytest.approx(5.0)
+    assert estado["valuation_bazin_fator_rf"] == pytest.approx(0.50)
     assert estado["valuation_data_curva"] == date(2026, 10, 8)
+
+
+def test_taxa_de_bazin_acompanha_rf_e_fator_editavel():
+    padrao = PremissasValuation(rf=0.12)
+    juros_maiores = PremissasValuation(rf=0.14)
+    fator_editado = PremissasValuation(rf=0.12, bazin_fator_rf=0.75)
+
+    assert padrao.bazin_taxa == pytest.approx(0.06)
+    assert juros_maiores.bazin_taxa == pytest.approx(0.07)
+    assert fator_editado.bazin_taxa == pytest.approx(0.09)
+
+
+@pytest.mark.parametrize("fator", [0, -0.1, float("nan"), float("inf")])
+def test_fator_de_bazin_invalido_falha(fator):
+    with pytest.raises(ValueError, match="fator de Bazin"):
+        PremissasValuation(bazin_fator_rf=fator)
 
 
 @pytest.mark.parametrize("anos", [0, -1, float("nan")])

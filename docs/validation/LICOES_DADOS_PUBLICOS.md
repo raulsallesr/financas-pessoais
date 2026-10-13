@@ -37,8 +37,11 @@ a fonte, não nos testes sintéticos. Datas: dados de 2026-10-08/09.
   crescimento ficam bem abaixo do preço (WEGE3: faixa R$ 9–13 contra R$ 52). Não é bug:
   a tela mostra aviso fixo e o sinal `modelos_valor_limitados` (P/L > 25 ou P/VP > 6).
   O DCF (ver roteiro) existe para tratar isso.
-- Resultado agregado em 2026-10-09: 101 de 215 ações acima da faixa, 39 abaixo; FIIs: 90
-  abaixo, 26 acima. Leia como retrato dos modelos com as premissas padrão, não como sinal.
+- Desde a calibração de 2026-10-09, Bazin usa `rf × fator` (0,50 por padrão) em vez de 6%
+  fixos. Resultado agregado: 102 de 215 ações acima da faixa e 39 abaixo; FIIs, que não
+  usam Bazin, permanecem com 90 abaixo e 26 acima. Leia como retrato dos modelos com as
+  premissas padrão, não como sinal. Relatório completo em
+  [`CALIBRACAO_VALUATION_2026-10-09.md`](CALIBRACAO_VALUATION_2026-10-09.md).
 
 ## Armadilhas de ferramenta
 

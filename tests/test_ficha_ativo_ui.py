@@ -98,6 +98,8 @@ def test_ficha_mostra_acao_fii_e_ativo_sem_faixa(tmp_path, monkeypatch):
     assert not app.exception
     assert app.title[0].value == "Ficha do ativo"
     assert "AAA3" in app.header[0].value
+    assert "Fator da taxa do Bazin (× rf)" in [campo.label for campo in app.number_input]
+    assert "Taxa mínima de Bazin" in [metrica.label for metrica in app.metric]
     assert app.metric[-1].value == "3"
     assert app.dataframe[0].value["Modelo"].tolist() == [
         "Graham",

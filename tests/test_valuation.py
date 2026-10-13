@@ -41,16 +41,29 @@ def test_goldens_graham_bazin_e_gordon_e_recalculo_de_premissa():
 
     calculado = calcular_valuation_acoes(quadro, PREMISSAS).iloc[0]
     alterado = calcular_valuation_acoes(
-        quadro, replace(PREMISSAS, bazin_taxa=0.08)
+        quadro, replace(PREMISSAS, bazin_fator_rf=0.625)
     ).iloc[0]
     restaurado = calcular_valuation_acoes(quadro, PREMISSAS).iloc[0]
 
     assert calculado["modelo_graham"] == pytest.approx(21.2132, rel=1e-5)
-    assert calculado["modelo_bazin"] == pytest.approx(10.0)
+    assert calculado["modelo_bazin"] == pytest.approx(9.375)
     assert calculado["modelo_gordon"] == pytest.approx(4.5217391304)
     assert alterado["modelo_bazin"] == pytest.approx(7.5)
     assert restaurado["modelo_bazin"] == calculado["modelo_bazin"]
     assert calculado["n_modelos"] == 3
+
+
+def test_golden_bazin_ligado_a_rf_e_ao_fator():
+    premissas = PremissasValuation(rf=0.12, bazin_fator_rf=0.50)
+    calculado = calcular_valuation_acoes(pd.DataFrame([_acao()]), premissas).iloc[0]
+
+    assert premissas.bazin_taxa == pytest.approx(0.06)
+    assert calculado["modelo_bazin"] == pytest.approx(10.0)
+
+    juros_maiores = calcular_valuation_acoes(
+        pd.DataFrame([_acao()]), replace(premissas, rf=0.15)
+    ).iloc[0]
+    assert juros_maiores["modelo_bazin"] == pytest.approx(8.0)
 
 
 def test_golden_gordon_da_especificacao():
@@ -216,6 +229,7 @@ def test_tabela_de_modelos_e_sensibilidades_expoem_calculos():
     ]
     assert gordon.loc["g 4.00%", "k 17.80%"] == pytest.approx(7.5362, rel=1e-5)
     assert bazin.loc[1, "Valor"] == pytest.approx(10.0)
+    assert "fator = 0.50" in tabela.loc[tabela["Modelo"].eq("Bazin"), "Premissas"].item()
 
 
 @pytest.mark.parametrize(

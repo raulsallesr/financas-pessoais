@@ -15,7 +15,7 @@ from focuslens.core.curva_data import PontoCurva
 RF_FALLBACK = 0.12
 ERP_PADRAO = 0.05
 G_PADRAO = 0.04
-BAZIN_TAXA_PADRAO = 0.06
+BAZIN_FATOR_RF_PADRAO = 0.50
 GRAHAM_MULT_PADRAO = 22.5
 MIN_PARES_SETOR_PADRAO = 6
 
@@ -37,7 +37,7 @@ class PremissasValuation:
     rf: float = RF_FALLBACK
     erp: float = ERP_PADRAO
     g: float = G_PADRAO
-    bazin_taxa: float = BAZIN_TAXA_PADRAO
+    bazin_fator_rf: float = BAZIN_FATOR_RF_PADRAO
     graham_mult: float = GRAHAM_MULT_PADRAO
     min_pares_setor: int = MIN_PARES_SETOR_PADRAO
     fonte_rf: str = "Padrão documentado"
@@ -45,9 +45,11 @@ class PremissasValuation:
     rf_padrao: bool = True
 
     def __post_init__(self) -> None:
-        taxas = (self.rf, self.erp, self.g, self.bazin_taxa)
+        taxas = (self.rf, self.erp, self.g)
         if any(not isfinite(valor) or valor < 0 for valor in taxas):
             raise ValueError("Taxas de valuation devem ser finitas e não negativas.")
+        if not isfinite(self.bazin_fator_rf) or self.bazin_fator_rf <= 0:
+            raise ValueError("O fator de Bazin deve ser finito e positivo.")
         if not isfinite(self.graham_mult) or self.graham_mult <= 0:
             raise ValueError("O multiplicador de Graham deve ser positivo.")
         if isinstance(self.min_pares_setor, bool) or self.min_pares_setor < 1:
@@ -57,6 +59,11 @@ class PremissasValuation:
     def k(self) -> float:
         """Custo do capital próprio, derivado da taxa livre de risco e do ERP."""
         return self.rf + self.erp
+
+    @property
+    def bazin_taxa(self) -> float:
+        """Taxa mínima de Bazin, ligada ao mesmo regime de juros do valuation."""
+        return self.rf * self.bazin_fator_rf
 
     @property
     def fii_taxa_exigida(self) -> float:

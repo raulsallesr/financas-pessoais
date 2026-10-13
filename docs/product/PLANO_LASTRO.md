@@ -63,7 +63,7 @@ app_financas.py   entrada com st.navigation: Macro e Ativos
 | 1 | Base de dados point-in-time: adapters, normalização (escala, contas, units) e pipeline local | testes com fixtures sintéticas e pipeline real | concluída em 2026-10-09; automação/asset pendentes |
 | 2 | Métricas (ações e FIIs), ficha do ativo e screener com presets | golden tests calculados à mão | concluída em 2026-10-09 |
 | 3 | ETFs: tabela curada, exposição, ranking por custo, liquidez, PL e tracking | conferência de 10 ETFs | próxima |
-| 4 | Valor estimado em faixa (Graham, Bazin, Gordon, múltiplo setorial e FIIs); DCF 2 estágios | golden tests e sensibilidade | parcial em 2026-10-09; DCF pendente |
+| 4 | Valor estimado em faixa (Graham, Bazin, Gordon, múltiplo setorial e FIIs); DCF 2 estágios | golden tests e sensibilidade | valuation calibrado em 2026-10-09; DCF pendente |
 | 5 | Score Lastro (6 fatores, percentil setorial, pesos editáveis) e Score Lab (backtest por quintil, IC) | teste anti look-ahead | próxima |
 | 6 | Risco, otimizador (mínima variância, MV com Ledoit-Wolf, HRP), fronteira, walk-forward, raio-x da carteira importada | testes numéricos de restrição e determinismo | planejada |
 | 7 | Proventos e fatos relevantes (CVM IPE), renda passiva, mobile | conforme item | planejada |
@@ -94,7 +94,7 @@ difference.
 **Valor intrínseco:**
 - Modelos:
   - Graham: √(22,5 × LPA × VPA);
-  - Bazin com taxa mínima editável, padrão de 6%;
+  - Bazin com `taxa mínima = rf × fator`; fator padrão 0,50 e editável;
   - Gordon com `k = Tesouro Prefixado de 5 anos + ERP` e crescimento editável;
   - múltiplos setoriais sobre empresas distintas, excluindo o próprio CNPJ;
   - FII patrimonial e renda de 12 meses capitalizada pela taxa prefixada líquida de 15%;

@@ -47,7 +47,8 @@ Teste golden para ambos.
 | `erp` (prêmio de risco de ações) | 5,0% | |
 | `k` (custo do capital próprio) | `rf + erp` | derivado |
 | `g` (crescimento perpétuo nominal) | 4,0% | |
-| `bazin_taxa` | 6,0% | taxa mínima clássica do método Bazin |
+| `bazin_fator_rf` | 0,50 | fator editável; calibração detalhada em [`SPEC_CALIBRACAO_VALUATION.md`](SPEC_CALIBRACAO_VALUATION.md) |
+| `bazin_taxa` | `rf × bazin_fator_rf` | derivada; 6,0% quando `rf` é 12% |
 | `graham_mult` | 22,5 | |
 | `fii_taxa_exigida` | `rf × (1 − 0,15)` | FII é isento de IR para pessoa física; equivale ao Tesouro líquido de 15% |
 | `min_pares_setor` | 6 | |
@@ -57,7 +58,7 @@ Teste golden para ambos.
 | Modelo | Fórmula | Não se aplica quando |
 |---|---|---|
 | Graham | `√(graham_mult × LPA × VPA)` | LPA ≤ 0 ou VPA ≤ 0 |
-| Bazin | `DPA ÷ bazin_taxa` | DPA vazio ou ≤ 0 |
+| Bazin | `DPA ÷ (rf × bazin_fator_rf)` | DPA vazio ou ≤ 0; taxa derivada não positiva |
 | Gordon | `DPA × (1 + g) ÷ (k − g)` | DPA ≤ 0 ou `k − g < 0,04` |
 | Múltiplos do setor | média dos disponíveis entre `LPA × mediana(P/L do setor)` e `VPA × mediana(P/VP do setor)` | setor com menos de `min_pares_setor` empresas distintas (por CNPJ) com o múltiplo válido; LPA/VPA ≤ 0 para a respectiva parcela |
 
@@ -117,7 +118,8 @@ próxima evolução.
 
 ## Testes obrigatórios
 
-- Golden à mão: Graham (LPA 2, VPA 10) = 21,2132; Bazin (DPA 0,60 e 6%) = 10,00;
+- Golden à mão: Graham (LPA 2, VPA 10) = 21,2132; Bazin (DPA 0,60, `rf` 12% e
+  fator 0,50, portanto taxa 6%) = 10,00;
   Gordon (DPA 1,00, g 4%, k 17,8%) = 7,5362; múltiplos do setor (setor sintético com
   medianas conhecidas, parcelas e média); renda capitalizada de FII; percentis da faixa
   com 2, 3 e 4 modelos; margem e `situacao_faixa` nos três casos.

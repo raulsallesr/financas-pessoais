@@ -14,7 +14,7 @@ CHAVES_EDITAVEIS = {
     "rf": "valuation_rf",
     "erp": "valuation_erp",
     "g": "valuation_g",
-    "bazin_taxa": "valuation_bazin_taxa",
+    "bazin_fator_rf": "valuation_bazin_fator_rf",
     "graham_mult": "valuation_graham_mult",
     "min_pares_setor": "valuation_min_pares_setor",
 }
@@ -23,7 +23,7 @@ CHAVES_REFERENCIA = {
     "data_curva": "valuation_data_curva",
     "rf_padrao": "valuation_rf_padrao",
 }
-CAMPOS_PERCENTUAIS = {"rf", "erp", "g", "bazin_taxa"}
+CAMPOS_PERCENTUAIS = {"rf", "erp", "g"}
 TEXTOS_UI_PREMISSAS = validar_textos(
     [
         "Premissas",
@@ -31,10 +31,11 @@ TEXTOS_UI_PREMISSAS = validar_textos(
         "Taxa livre de risco (%)",
         "Prêmio de risco de ações (%)",
         "Crescimento perpétuo g (%)",
-        "Taxa mínima de Bazin (%)",
+        "Fator da taxa do Bazin (× rf)",
         "Multiplicador de Graham",
         "Mínimo de pares do setor",
         "Custo do capital próprio (k)",
+        "Taxa mínima de Bazin",
         "Taxa exigida dos FIIs",
         "Restaurar padrão",
     ]
@@ -67,7 +68,7 @@ def _premissas_do_estado() -> PremissasValuation:
         rf=float(st.session_state[CHAVES_EDITAVEIS["rf"]]) / 100,
         erp=float(st.session_state[CHAVES_EDITAVEIS["erp"]]) / 100,
         g=float(st.session_state[CHAVES_EDITAVEIS["g"]]) / 100,
-        bazin_taxa=float(st.session_state[CHAVES_EDITAVEIS["bazin_taxa"]]) / 100,
+        bazin_fator_rf=float(st.session_state[CHAVES_EDITAVEIS["bazin_fator_rf"]]),
         graham_mult=float(st.session_state[CHAVES_EDITAVEIS["graham_mult"]]),
         min_pares_setor=int(st.session_state[CHAVES_EDITAVEIS["min_pares_setor"]]),
         fonte_rf=str(st.session_state[CHAVES_REFERENCIA["fonte_rf"]]),
@@ -117,12 +118,13 @@ def renderizar_premissas(*, expanded: bool = False) -> PremissasValuation:
         coluna_d, coluna_e, coluna_f = st.columns(3)
         with coluna_d:
             st.number_input(
-                "Taxa mínima de Bazin (%)",
+                "Fator da taxa do Bazin (× rf)",
                 min_value=0.01,
-                max_value=100.0,
-                step=0.10,
+                max_value=2.0,
+                step=0.05,
                 format="%.2f",
-                key=CHAVES_EDITAVEIS["bazin_taxa"],
+                key=CHAVES_EDITAVEIS["bazin_fator_rf"],
+                help="A taxa mínima de Bazin é a taxa livre de risco multiplicada por este fator.",
             )
         with coluna_e:
             st.number_input(
@@ -140,8 +142,9 @@ def renderizar_premissas(*, expanded: bool = False) -> PremissasValuation:
             )
 
         atuais = _premissas_do_estado()
-        metrica_k, metrica_fii = st.columns(2)
+        metrica_k, metrica_bazin, metrica_fii = st.columns(3)
         metrica_k.metric("Custo do capital próprio (k)", f"{atuais.k:.2%}")
+        metrica_bazin.metric("Taxa mínima de Bazin", f"{atuais.bazin_taxa:.2%}")
         metrica_fii.metric("Taxa exigida dos FIIs", f"{atuais.fii_taxa_exigida:.2%}")
         if atuais.data_curva is not None:
             st.caption(

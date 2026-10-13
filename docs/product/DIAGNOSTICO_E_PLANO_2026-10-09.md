@@ -1,4 +1,4 @@
-# Diagnóstico do Lastro e plano dos próximos ciclos (2026-10-11)
+# Diagnóstico do Lastro e plano dos próximos ciclos (2026-10-09)
 
 Avaliação honesta do estado do projeto logo depois do dia em que o módulo Ativos nasceu
 (`210b1df`), com a ordem de trabalho que o Raul aprovou. Complementa
@@ -6,7 +6,7 @@ Avaliação honesta do estado do projeto logo depois do dia em que o módulo Ati
 [`PLANO_LASTRO.md`](PLANO_LASTRO.md) (visão e princípios). Quando este plano e o roteiro
 divergirem na **ordem**, vale este documento.
 
-## Decisões do Raul (2026-10-11)
+## Decisões do Raul (2026-10-09)
 
 1. **Foco do próximo ciclo: confiança primeiro** (automação, qualidade de dados,
    calibração do valuation, vitrine), só depois novas telas.
@@ -31,11 +31,13 @@ divergirem na **ordem**, vale este documento.
 
 ### Críticos (afetam a confiança no que a tela mostra)
 
-1. **Premissas do valor estimado incoerentes.** Bazin usa 6% fixo (`ativos/core/premissas.py`,
-   `BAZIN_TAXA_PADRAO`) enquanto a taxa livre de risco é ~12,8% e o custo do capital próprio
-   ~17,8%. Efeito: 101 de 215 ações "acima da faixa" e 90 de 155 FIIs "abaixo". Quase metade
-   do mercado fora da faixa tira credibilidade, e **nada valida** o valuation contra
-   desfechos reais.
+1. **Premissas do valor estimado incoerentes — item 1.1 fechado em 2026-10-09.** Bazin
+   usava 6% fixos enquanto a taxa livre de risco era ~12,8%. Agora usa `rf × fator` (0,50
+   por padrão), com taxa resultante visível. ERP e `g` foram revisados e mantidos: sem
+   histórico ou DCF, mudá-los para caber na distribuição seria ajuste circular. A base
+   segue com 102 de 215 ações acima da faixa; isso permanece limitação dos modelos de
+   valor/renda, não motivo para calibrar contra o próprio preço. Evidência em
+   [`CALIBRACAO_VALUATION_2026-10-09.md`](../validation/CALIBRACAO_VALUATION_2026-10-09.md).
 2. **Modelos só de valor e renda.** Empresas de crescimento ficam bem abaixo do preço
    (WEGE3: faixa R$ 9–13 contra R$ 52). Há aviso na ficha (`modelos_valor_limitados`), mas
    falta o DCF.
@@ -54,7 +56,7 @@ divergirem na **ordem**, vale este documento.
 
 ### Processo e manutenção
 
-8. **Manutenção do código novo** (medido em 2026-10-11): `ativos/core/pipeline_acoes.py` tem
+8. **Manutenção do código novo** (medido em 2026-10-09): `ativos/core/pipeline_acoes.py` tem
    940 linhas em um módulo só; as duas páginas de busca somam ~900 linhas (481 + 417) com só
    133 de componente compartilhado (`componentes_tabela.py`); a suíte tem 7,9 mil linhas de
    teste contra 4,7 mil de código. ETFs seriam a terceira cópia.
@@ -67,7 +69,7 @@ divergirem na **ordem**, vale este documento.
     20/2021).
 12. **Fora do repo**: a remoção do card Finanças do SuperHub da Fits segue sem commit no hub.
 
-## 2b. Auditoria de código (2026-10-11, leitura sem execução)
+## 2b. Auditoria de código (2026-10-09, leitura sem execução)
 
 Feita por varredura (grep e leitura), não por revisão linha a linha. As duas alegações de
 maior peso foram conferidas à mão.
@@ -94,11 +96,11 @@ só grava em `~/.cache/lastro` e no repositório; sem segredos; sem `iterrows`.
 
 Ordem pelo caminho crítico: confiança → profundidade → inteligência.
 
-### Ciclo 1 — Confiança e operação (próximo)
+### Ciclo 1 — Confiança e operação (em andamento; próximo: 1.2)
 
 | # | Entrega | Detalhe | Gate |
 |---|---|---|---|
-| 1.1 | Calibrar o valuation | Bazin ligado à `rf` (ex.: `rf × fator`, editável) em vez de 6% fixo; revisar ERP e `g`; sanidade: distribuição de `situacao_faixa` entre 20% e 40% por lado, senão rever a premissa | distribuição documentada; golden tests atualizados |
+| 1.1 — concluído | Calibrar o valuation | Bazin ligado à `rf × 0,50`, fator editável; ERP 5% e `g` 4% mantidos. O padrão não foi ajustado aos preços atuais; a distribuição ficou 18,1% abaixo, 34,4% dentro e 47,4% acima | [distribuição documentada](../validation/CALIBRACAO_VALUATION_2026-10-09.md); goldens e suíte verdes |
 | 1.2 | Painel de qualidade de dados | Cobertura por coluna, alertas por tipo, pendências, data de cada fonte; separar "corrigido" de "atenção" na ficha | UI testada; números batem com o metadado |
 | 1.3 | Reconciliação automática | `scripts/reconciliar_referencias.py`: recalcula de forma independente lucro TTM, PL e DY de 6 tickers fixos direto do CSV e falha se divergir; roda no CI | teste e workflow verdes |
 | 1.4 | Atualização automática | `.github/workflows/atualizar-ativos.yml` (dias úteis, `actions/cache` para o bruto), publica Parquet e metadados como assets da release fixa `dados-ativos`; o app baixa os assets se não achar derivados locais | execução manual verde; app abre em pasta vazia |

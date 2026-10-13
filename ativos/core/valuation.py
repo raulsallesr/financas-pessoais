@@ -321,7 +321,10 @@ def tabela_modelos_acao(
                 "Modelo": "Bazin",
                 "Valor": registro.get("modelo_bazin"),
                 "Fórmula": "DPA dividido pela taxa mínima",
-                "Premissas": f"taxa mínima = {premissas.bazin_taxa:.2%}",
+                "Premissas": (
+                    f"rf = {premissas.rf:.2%}; fator = {premissas.bazin_fator_rf:.2f}; "
+                    f"taxa mínima = {premissas.bazin_taxa:.2%}"
+                ),
                 "Status": registro.get("status_bazin"),
             },
             {
