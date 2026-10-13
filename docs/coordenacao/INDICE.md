@@ -9,6 +9,7 @@ Gerado por `scripts/equipe.py indice` em 2026-10-13. Não edite.
 - Nenhuma.
 
 ## Últimas sessões
+- [Dados de mercado iguais nas duas maquinas: workflow diario publica a release dad](diario/2026-10-13_1333_trabalho-claude.md) — 2026-10-13T13:33; claude-trabalho; itens 0.2
 - [Descoberta e integração da sessão paralela (registro retroativo)](diario/2026-10-13_0826_trabalho-claude.md) — 2026-10-13T08:26; claude-trabalho; itens 1.1
 - [Calibração do valuation, item 1.1 (sessão paralela, registro retroativo)](diario/2026-10-09_1657_trabalho-ia-nao-identificada.md) — 2026-10-09T16:57; ia-nao-identificada-trabalho; itens 1.1
 - [Implementação do módulo Ativos B3 pelo Codex (registro retroativo)](diario/2026-10-09_1000_trabalho-codex.md) — 2026-10-09T10:00; codex-trabalho; itens 1.1
