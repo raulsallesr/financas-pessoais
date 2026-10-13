@@ -86,6 +86,49 @@ def test_robot_workflows_rebase_before_push_with_three_attempts() -> None:
         assert "contents: write" in text
 
 
+def test_workflow_atualizar_ativos_publica_release_com_guardas() -> None:
+    text = (ROOT / ".github" / "workflows" / "atualizar-ativos.yml").read_text(
+        encoding="utf-8"
+    )
+
+    for trecho in (
+        "schedule:",
+        'cron: "0 22 * * 1-5"',
+        "workflow_dispatch:",
+        "push:",
+        'paths:\n      - ".github/workflows/atualizar-ativos.yml"',
+        "contents: write",
+        "group: atualizar-ativos",
+        "cancel-in-progress: false",
+        "actions/setup-python@v5",
+        'python-version: "3.13"',
+        "cache-dependency-path: requirements.txt",
+        "actions/cache@v4",
+        "path: ${{ runner.temp }}/lastro/raw",
+        'echo "LASTRO_CACHE_DIR=$RUNNER_TEMP/lastro/raw" >> "$GITHUB_ENV"',
+        'echo "LASTRO_DADOS_DIR=$RUNNER_TEMP/lastro/derived" >> "$GITHUB_ENV"',
+        "lastro-raw-v1-${{ github.run_id }}",
+        "python -m pip install -r requirements.txt",
+        "python -m scripts.baixar_dados_ativos",
+        "python -m scripts.atualizar_ativos",
+        "gh release create dados-ativos",
+        "gh release upload dados-ativos",
+        "gh release edit dados-ativos",
+        "--prerelease",
+        "--latest=false",
+        "--clobber",
+        "len(acoes) < 100",
+        "len(fiis) < 50",
+    ):
+        assert trecho in text
+    assert "secrets." not in text
+    assert "pull_request_target" not in text
+    # O contexto `runner` não existe no `env` do job: o GitHub rejeita o arquivo inteiro.
+    job_env = text.split("    steps:", 1)[0].split("    timeout-minutes:", 1)[-1]
+    assert "runner." not in job_env
+    assert (chr(10) + "    env:") not in text.split("    steps:", 1)[0]
+
+
 def test_public_coordination_files_do_not_contain_secrets() -> None:
     paths = [
         path

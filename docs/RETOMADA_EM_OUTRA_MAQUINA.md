@@ -34,13 +34,23 @@ python -m pip install -r requirements-dev.txt
 
 ```powershell
 ruff check .
-python -m pytest tests -q --cov=.
+pytest tests/ -q --cov=.
 ```
 
 Esperado: ruff limpo e todos os testes passando, cobertura ≥ 85%. Os testes usam só
 dados sintéticos; se algum falhar aqui, o problema é de ambiente, não de dados.
 
-## 5. Baixar os dados públicos e gerar as tabelas
+## 5. Sincronizar as tabelas públicas
+
+O caminho rápido baixa os quatro derivados da release fixa `dados-ativos` (cerca de
+150 KB, normalmente em segundos):
+
+```powershell
+python -m scripts.sincronizar_dados
+```
+
+Para reconstruir tudo diretamente da CVM e da B3, use o caminho completo (cerca de
+300 MB e alguns minutos):
 
 ```powershell
 python -m scripts.baixar_dados_ativos      # ~300 MB, alguns minutos; mostra progresso
@@ -50,6 +60,8 @@ python -m scripts.atualizar_ativos         # gera acoes.parquet e fiis.parquet
 - Os brutos vão para `%USERPROFILE%\.cache\lastro\raw` e os derivados para
   `%USERPROFILE%\.cache\lastro\derived` (sobrescreva com `LASTRO_CACHE_DIR` e
   `LASTRO_DADOS_DIR`).
+- A sincronização compara `gerado_em` e não baixa o lote completo quando os dados locais
+  já são iguais ou mais novos. Use `--forcar` somente quando quiser substituir mesmo assim.
 - O download é idempotente: ano encerrado não baixa de novo; o corrente renova se
   passou de um dia. `--listar` mostra o plano sem baixar.
 - O resumo final do pipeline deve mostrar, em ordem de grandeza: ~244 ações (P/L ≈ 82%,
@@ -100,7 +112,7 @@ Sem as tabelas derivadas, as páginas de ativos mostram o comando para gerá-las
 | Sintoma | Causa e solução |
 |---|---|
 | `ModuleNotFoundError: pyarrow` | Instalou só `requirements.txt` sem o ambiente certo; rode `pip install -r requirements-dev.txt` |
-| Página de ativos pede para rodar o pipeline | Faltam os derivados; passos 5 |
+| Página de ativos pede dados derivados | Rode `python -m scripts.sincronizar_dados`; se a release estiver indisponível, use o caminho completo do passo 5 |
 | Pipeline diz que falta arquivo bruto | Rode `scripts.baixar_dados_ativos`; anos recentes podem ainda não existir (aviso é normal) |
 | `WinError 5` na limpeza de pasta temporária de teste | Ruído do Windows/OneDrive após os testes; ignore se o resultado foi "passed" |
 | Instalação do pip quebra no meio | Venv dentro do OneDrive; recrie em `%USERPROFILE%\.venvs` |

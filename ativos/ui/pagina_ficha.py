@@ -265,7 +265,9 @@ def render() -> None:
     fiis = _carregar_parquet(str(arquivo_fiis)) if arquivo_fiis.exists() else pd.DataFrame()
     if acoes.empty and fiis.empty:
         st.info(
-            "Nenhum derivado de ações ou FIIs foi encontrado. Execute "
+            "Nenhum derivado de ações ou FIIs foi encontrado. Sincronize em segundos com "
+            "`python -m scripts.sincronizar_dados`. Como alternativa, execute "
+            "`python -m scripts.baixar_dados_ativos` e depois "
             "`python -m scripts.atualizar_ativos --classe todos`."
         )
         return

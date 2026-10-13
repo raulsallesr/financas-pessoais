@@ -1,0 +1,119 @@
+name: Atualizar dados de Ativos B3
+
+on:
+  schedule:
+    # Dias úteis, 22:00 UTC (19:00 em Brasília), depois do fechamento da B3.
+    - cron: "0 22 * * 1-5"
+  workflow_dispatch:
+  push:
+    # Valida o workflow no commit que o cria; este gatilho pode sair depois da primeira execução.
+    paths:
+      - ".github/workflows/atualizar-ativos.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atualizar-ativos
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+
+      # O contexto `runner` não existe no `env` do job (só nos passos), então as pastas
+      # do cache bruto e dos derivados são exportadas aqui para os passos seguintes.
+      - name: Definir pastas de trabalho
+        shell: bash
+        run: |
+          echo "LASTRO_CACHE_DIR=$RUNNER_TEMP/lastro/raw" >> "$GITHUB_ENV"
+          echo "LASTRO_DADOS_DIR=$RUNNER_TEMP/lastro/derived" >> "$GITHUB_ENV"
+
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements.txt
+
+      - name: Instalar dependências do produto
+        run: python -m pip install -r requirements.txt
+
+      - name: Restaurar cache bruto mais recente
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/lastro/raw
+          key: lastro-raw-v1-${{ github.run_id }}
+          restore-keys: |
+            lastro-raw-v1-
+
+      - name: Baixar fontes públicas
+        run: python -m scripts.baixar_dados_ativos
+
+      - name: Gerar tabelas derivadas
+        run: python -m scripts.atualizar_ativos
+
+      - name: Validar lote antes da publicação
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          import pandas as pd
+
+          pasta = Path(os.environ["LASTRO_DADOS_DIR"])
+          nomes = ("acoes.parquet", "acoes_meta.json", "fiis.parquet", "fiis_meta.json")
+          ausentes = [nome for nome in nomes if not (pasta / nome).is_file()]
+          if ausentes:
+              raise SystemExit("Arquivos derivados ausentes: " + ", ".join(ausentes))
+
+          acoes = pd.read_parquet(pasta / "acoes.parquet")
+          fiis = pd.read_parquet(pasta / "fiis.parquet")
+          if len(acoes) < 100:
+              raise SystemExit(f"Guarda de sanidade: acoes.parquet tem {len(acoes)} linhas; mínimo 100")
+          if len(fiis) < 50:
+              raise SystemExit(f"Guarda de sanidade: fiis.parquet tem {len(fiis)} linhas; mínimo 50")
+
+          meta_acoes = json.loads((pasta / "acoes_meta.json").read_text(encoding="utf-8"))
+          meta_fiis = json.loads((pasta / "fiis_meta.json").read_text(encoding="utf-8"))
+          notas = (
+              "Dados públicos derivados da CVM e da B3.\n\n"
+              f"- Data da cotação — ações: {meta_acoes['data_cotacao']}; "
+              f"FIIs: {meta_fiis['data_cotacao']}\n"
+              f"- Gerado em — ações: {meta_acoes['gerado_em']}; "
+              f"FIIs: {meta_fiis['gerado_em']}\n"
+              f"- Contagens — ações: {len(acoes)}; FIIs: {len(fiis)}\n"
+          )
+          Path(os.environ["RUNNER_TEMP"], "dados-ativos-notas.md").write_text(
+              notas, encoding="utf-8"
+          )
+          print(notas)
+          PY
+
+      - name: Publicar release fixa
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view dados-ativos >/dev/null 2>&1; then
+            gh release create dados-ativos \
+              --prerelease \
+              --latest=false \
+              --title "Dados do Lastro (atualização diária)" \
+              --notes "Dados públicos derivados da CVM e da B3; atualizados em dias úteis."
+          fi
+          gh release upload dados-ativos \
+            "$LASTRO_DADOS_DIR/acoes.parquet" \
+            "$LASTRO_DADOS_DIR/acoes_meta.json" \
+            "$LASTRO_DADOS_DIR/fiis.parquet" \
+            "$LASTRO_DADOS_DIR/fiis_meta.json" \
+            --clobber
+          NOTAS="$(cat "$RUNNER_TEMP/dados-ativos-notas.md")"
+          gh release edit dados-ativos --notes "$NOTAS"

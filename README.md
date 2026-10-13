@@ -43,14 +43,22 @@ COTAHIST da B3.
 
 Já funcionam: **busca avançada de ações** (32 indicadores, filtros, presets, comparador e
 CSV), **busca de FIIs**, **valor estimado em faixa** (Graham, Bazin, Gordon, múltiplos do
-setor; FIIs por valor patrimonial e renda) com premissas editáveis e **ficha do ativo**.
-Próximos cortes: atualização automática, ETFs, DCF, score e otimização de carteira.
+setor; FIIs por valor patrimonial e renda) com premissas editáveis, **ficha do ativo** e
+sincronização dos derivados públicos entre máquinas. Próximos cortes: qualidade dos dados,
+ETFs, DCF, score e otimização de carteira.
 
 ```powershell
 python -m pip install -r requirements-dev.txt
-python -m scripts.baixar_dados_ativos      # dados públicos da CVM e da B3 (~300 MB)
-python -m scripts.atualizar_ativos         # gera as tabelas locais
+python -m scripts.sincronizar_dados        # caminho rápido: baixa os 4 derivados em segundos
 streamlit run app_financas.py              # menu no topo: Macro · Ativos B3
+```
+
+Se a release `dados-ativos` ainda não estiver disponível, ou para reconstruir tudo diretamente
+das fontes oficiais, use o caminho completo (cerca de 300 MB):
+
+```powershell
+python -m scripts.baixar_dados_ativos
+python -m scripts.atualizar_ativos
 ```
 
 Guia completo, do zero, em

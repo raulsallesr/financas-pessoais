@@ -439,11 +439,15 @@ def _data_lines(root: Path, now: datetime) -> list[str]:
         lines.append(f"Dados ativos: cotação {quote_date}; gerados {generated}")
         generated_at = parse_iso(str(generated))
         if generated_at is None or now - generated_at > timedelta(days=3):
-            lines.append("Dados ativos defasados; atualize com os comandos abaixo.")
+            lines.append("Dados ativos defasados; sincronize primeiro com:")
+            lines.append("  python -m scripts.sincronizar_dados")
+            lines.append("Alternativa completa (~300 MB):")
             lines.append("  python -m scripts.baixar_dados_ativos")
             lines.append("  python -m scripts.atualizar_ativos")
     else:
         lines.append(f"Dados ativos: metadados ausentes em {metadata_path}")
+        lines.append("  python -m scripts.sincronizar_dados")
+        lines.append("Alternativa completa (~300 MB):")
         lines.append("  python -m scripts.baixar_dados_ativos")
         lines.append("  python -m scripts.atualizar_ativos")
     curve = _read_json(root / "dados" / "curva_prefixada_cache.json")

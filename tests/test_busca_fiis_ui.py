@@ -77,6 +77,8 @@ def test_pagina_busca_fiis_sem_parquet_exibe_comando_claro(tmp_path, monkeypatch
     app = AppTest.from_file(str(APP_BUSCA_FIIS), default_timeout=20).run()
 
     assert not app.exception
+    assert "python -m scripts.sincronizar_dados" in app.info[0].value
+    assert "python -m scripts.baixar_dados_ativos" in app.info[0].value
     assert "--classe fiis" in app.info[0].value
 
 

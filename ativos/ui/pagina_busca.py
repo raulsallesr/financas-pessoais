@@ -413,8 +413,10 @@ def render() -> None:
     meta_path = caminho_meta_acoes()
     if not parquet.exists():
         st.info(
-            "A base derivada ainda não existe. Execute `python -m scripts.atualizar_ativos` "
-            "para gerar `acoes.parquet`."
+            "A base derivada ainda não existe. Sincronize em segundos com "
+            "`python -m scripts.sincronizar_dados`. Como alternativa, execute "
+            "`python -m scripts.baixar_dados_ativos` e depois "
+            "`python -m scripts.atualizar_ativos --classe acoes`."
         )
         return
     quadro = carregar_acoes(str(parquet))

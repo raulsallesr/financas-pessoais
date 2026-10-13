@@ -127,6 +127,8 @@ def test_ficha_sem_derivados_exibe_comando(tmp_path, monkeypatch):
     app = AppTest.from_file(str(APP_FICHA), default_timeout=20).run()
 
     assert not app.exception
+    assert "python -m scripts.sincronizar_dados" in app.info[0].value
+    assert "python -m scripts.baixar_dados_ativos" in app.info[0].value
     assert "--classe todos" in app.info[0].value
 
 

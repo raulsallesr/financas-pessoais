@@ -331,8 +331,10 @@ def render() -> None:
     meta_path = caminho_meta_fiis()
     if not parquet.exists():
         st.info(
-            "A base derivada de FIIs ainda não existe. Execute "
-            "`python -m scripts.atualizar_ativos --classe fiis` para gerar `fiis.parquet`."
+            "A base derivada de FIIs ainda não existe. Sincronize em segundos com "
+            "`python -m scripts.sincronizar_dados`. Como alternativa, execute "
+            "`python -m scripts.baixar_dados_ativos` e depois "
+            "`python -m scripts.atualizar_ativos --classe fiis`."
         )
         return
     quadro = carregar_fiis(str(parquet))

@@ -447,6 +447,36 @@ def test_iniciar_offline_without_remote_and_hook_failure_are_safe(
     assert capsys.readouterr().out == ""
 
 
+def test_iniciar_sugere_sincronizacao_para_dados_ausentes_ou_defasados(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    root, _ = make_repo(tmp_path)
+    derived = tmp_path / "derived"
+    monkeypatch.setenv("LASTRO_DADOS_DIR", str(derived))
+
+    ausentes = equipe._data_lines(root, datetime(2026, 10, 13, 12, 0))
+
+    assert "  python -m scripts.sincronizar_dados" in ausentes
+    assert ausentes.index("  python -m scripts.sincronizar_dados") < ausentes.index(
+        "  python -m scripts.baixar_dados_ativos"
+    )
+
+    derived.mkdir()
+    (derived / "acoes_meta.json").write_text(
+        json.dumps(
+            {
+                "data_cotacao": "2026-10-08",
+                "gerado_em": "2026-10-09T08:00:00-03:00",
+            }
+        ),
+        encoding="utf-8",
+    )
+    defasados = equipe._data_lines(root, datetime(2026, 10, 13, 12, 0))
+
+    assert any("defasados" in line for line in defasados)
+    assert "  python -m scripts.sincronizar_dados" in defasados
+
+
 def test_ideia_slug_suffix_decision_substitution_and_index_idempotence(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
