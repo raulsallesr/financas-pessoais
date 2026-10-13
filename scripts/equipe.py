@@ -693,18 +693,45 @@ def _rollback_commit(
             path.write_bytes(content)
 
 
-def _resolve_index_conflict(root: Path) -> bool:
+QuadroEdit = tuple[str, dict[str, str], set[str]]
+
+
+def _resolve_known_conflicts(root: Path, quadro_edits: Sequence[QuadroEdit]) -> bool:
+    """Resolve sozinho os conflitos de rebase que são só INDICE.md e QUADRO.md.
+
+    QUADRO.md: aceita a versão do remoto e reaplica somente as linhas que ESTA sessão
+    alterou (itens vizinhos na tabela colidem no git mesmo sendo linhas diferentes).
+    Se o remoto mostra o item com outro dono, é colisão real e a resolução desiste.
+    INDICE.md: é gerado, então basta regenerar.
+    """
     index_relative = (COORD / "INDICE.md").as_posix()
-    conflicts = _unmerged_paths(root)
-    if conflicts != [index_relative]:
-        return False
-    generate_index(root, current_time())
-    _git(root, "add", "--", index_relative, check=True)
-    committed = _git(root, "commit", "--no-verify", "-C", "REBASE_HEAD")
-    if committed.returncode:
-        return False
-    continued = _git(root, "rebase", "--continue")
-    return continued.returncode == 0
+    quadro_relative = (COORD / "QUADRO.md").as_posix()
+    for _ in range(6):
+        conflicts = _unmerged_paths(root)
+        if not conflicts or not set(conflicts) <= {index_relative, quadro_relative}:
+            return False
+        if quadro_relative in conflicts:
+            if not quadro_edits:
+                return False
+            quadro = root / quadro_relative
+            _git(root, "checkout", "--ours", "--", quadro_relative, check=True)
+            remote_rows = {row["ID"]: row for row in parse_quadro(quadro)}
+            for item, updates, allowed_owners in quadro_edits:
+                owner = remote_rows.get(item, {}).get("Dono", "")
+                if owner not in allowed_owners:
+                    return False
+                update_quadro_item(quadro, item, updates)
+            _git(root, "add", "--", quadro_relative, check=True)
+        if index_relative in conflicts or quadro_relative in conflicts:
+            generate_index(root, current_time())
+            _git(root, "add", "--", index_relative, check=True)
+        committed = _git(root, "commit", "--no-verify", "-C", "REBASE_HEAD")
+        if committed.returncode:
+            return False
+        continued = _git(root, "rebase", "--continue")
+        if continued.returncode == 0:
+            return True
+    return False
 
 
 def _exigir_main(root: Path) -> None:
@@ -731,6 +758,7 @@ def _sync_push(
     previous_head: str | None = None,
     originals: dict[Path, bytes | None] | None = None,
     resolve_index: bool = False,
+    quadro_edits: Sequence[QuadroEdit] = (),
 ) -> None:
     if not _has_remote(root):
         return
@@ -746,7 +774,7 @@ def _sync_push(
             ):
                 _rollback_commit(root, previous_head, originals)
                 raise EquipeError("colisão: outra IA reservou este item", 3)
-            if resolve_index and _resolve_index_conflict(root):
+            if (resolve_index or quadro_edits) and _resolve_known_conflicts(root, quadro_edits):
                 pass
             else:
                 _git(root, "rebase", "--abort")
@@ -828,6 +856,21 @@ def command_reservar(args: argparse.Namespace, root: Path) -> int:
             collision_path=_relative(reservation, root),
             previous_head=previous_head,
             originals=originals,
+            quadro_edits=(
+                [
+                    (
+                        args.item,
+                        {
+                            "Status": "em andamento",
+                            "Dono": f"{agent}-{machine}",
+                            "Atualizado": f"{now:%Y-%m-%d}",
+                        },
+                        {"", f"{agent}-{machine}"},
+                    )
+                ]
+                if updated
+                else []
+            ),
         )
     print(f"Item {args.item} reservado por {agent}-{machine} até {expiry:%Y-%m-%dT%H:%M}.")
     return 0
@@ -972,14 +1015,15 @@ def command_fechar(args: argparse.Namespace, root: Path) -> int:
     quadro = root / COORD / "QUADRO.md"
     quadro_changed = False
     removed: list[Path] = []
+    quadro_edits: list[QuadroEdit] = []
     for record in selected:
         item = str(record["item"])
         status = "pronto" if item in ready else "aberto"
-        quadro_changed = update_quadro_item(
-            quadro,
-            item,
-            {"Status": status, "Dono": "", "Atualizado": f"{now:%Y-%m-%d}"},
-        ) or quadro_changed
+        updates = {"Status": status, "Dono": "", "Atualizado": f"{now:%Y-%m-%d}"}
+        changed_row = update_quadro_item(quadro, item, updates)
+        quadro_changed = changed_row or quadro_changed
+        if changed_row:
+            quadro_edits.append((item, updates, {"", f"{agent}-{machine}"}))
         path = record["path"]
         if path.exists():
             removed.append(path)
@@ -989,7 +1033,7 @@ def command_fechar(args: argparse.Namespace, root: Path) -> int:
     paths = [journal, index] + ([quadro] if quadro_changed else []) + removed
     _commit_paths(root, paths, f"Equipe: diário da sessão {agent}-{machine}")
     if not args.sem_push:
-        _sync_push(root, resolve_index=True)
+        _sync_push(root, resolve_index=True, quadro_edits=quadro_edits)
     print(f"Sessão fechada: {journal.name} ({suite}; cobertura {coverage}).")
     return 0
 

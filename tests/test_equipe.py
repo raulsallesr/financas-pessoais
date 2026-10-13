@@ -84,6 +84,11 @@ def clone_repo(bare: Path, target: Path, name: str) -> Path:
     return target
 
 
+def quadro_por_id(root: Path) -> dict[str, dict[str, str]]:
+    quadro = root / "docs" / "coordenacao" / "QUADRO.md"
+    return {row["ID"]: row for row in equipe.parse_quadro(quadro)}
+
+
 def set_cli_env(monkeypatch: pytest.MonkeyPatch, root: Path, now: str = NOW) -> None:
     monkeypatch.setenv("EQUIPE_RAIZ", str(root))
     monkeypatch.setenv("EQUIPE_AGORA", now)
@@ -650,3 +655,110 @@ def test_iniciar_nao_toca_na_arvore_suja_de_outra_ia(
     assert "atrás 1" in saida
     assert (root / "code.py").read_text(encoding="utf-8").endswith("outra IA" + chr(10))
     assert not (root / "docs" / "coordenacao" / "reservas" / "1.2.md").exists()
+
+
+def test_fechar_resolve_conflito_do_quadro_entre_itens_vizinhos(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    casa, bare = make_repo(tmp_path, remote=True)
+    assert bare
+    trabalho = clone_repo(bare, tmp_path / "trabalho", "Trabalho")
+    reservou = call(monkeypatch, casa, "reservar", "0.1", "--agente", "claude", "--maquina", "casa")
+    assert reservou == 0
+    git(trabalho, "pull", "--rebase", "origin", "main")
+    original = equipe._sync_push
+    interposto = {"feito": False}
+
+    def interpor(root: Path, **kwargs: object) -> None:
+        if root == casa and not interposto["feito"]:
+            interposto["feito"] = True
+            resultado = call(
+                monkeypatch,
+                trabalho,
+                "reservar",
+                "1.2",
+                "--agente",
+                "codex",
+                "--maquina",
+                "trabalho",
+            )
+            assert resultado == 0
+            set_cli_env(monkeypatch, casa)
+        original(root, **kwargs)
+
+    monkeypatch.setattr(equipe, "_sync_push", interpor)
+
+    resultado = call(
+        monkeypatch,
+        casa,
+        "fechar",
+        "--agente",
+        "claude",
+        "--maquina",
+        "casa",
+        "--resumo",
+        "Item 0.1 concluido.",
+        "--proximo",
+        "Seguir.",
+        "--itens",
+        "0.1",
+        "--pronto",
+        "0.1",
+        "--sem-gate",
+    )
+
+    assert resultado == 0
+    assert interposto["feito"]
+    verificacao = clone_repo(bare, tmp_path / "verificacao", "Verificador")
+    linhas = quadro_por_id(verificacao)
+    assert linhas["0.1"]["Status"] == "pronto"
+    assert linhas["0.1"]["Dono"] == ""
+    assert linhas["1.2"]["Status"] == "em andamento"
+    assert linhas["1.2"]["Dono"] == "codex-trabalho"
+    reservas = verificacao / "docs" / "coordenacao" / "reservas"
+    assert (reservas / "1.2.md").exists()
+    assert not (reservas / "0.1.md").exists()
+    assert not (casa / ".git" / "rebase-merge").exists()
+
+
+def test_fechar_aborta_quando_o_remoto_mostra_outro_dono_no_mesmo_item(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    casa, bare = make_repo(tmp_path, remote=True)
+    assert bare
+    trabalho = clone_repo(bare, tmp_path / "trabalho", "Trabalho")
+    reservou = call(monkeypatch, casa, "reservar", "1.2", "--agente", "claude", "--maquina", "casa")
+    assert reservou == 0
+    git(trabalho, "pull", "--rebase", "origin", "main")
+    quadro = trabalho / "docs" / "coordenacao" / "QUADRO.md"
+    assert equipe.update_quadro_item(quadro, "1.2", {"Dono": "outra-pc", "Status": "em andamento"})
+    git(trabalho, "add", "docs/coordenacao/QUADRO.md")
+    git(trabalho, "commit", "-m", "edicao manual do quadro")
+    git(trabalho, "push", "origin", "main")
+    capsys.readouterr()
+
+    resultado = call(
+        monkeypatch,
+        casa,
+        "fechar",
+        "--agente",
+        "claude",
+        "--maquina",
+        "casa",
+        "--resumo",
+        "Item 1.2 concluido.",
+        "--proximo",
+        "Seguir.",
+        "--itens",
+        "1.2",
+        "--pronto",
+        "1.2",
+        "--sem-gate",
+    )
+
+    assert resultado == 3
+    assert "conflito de git" in capsys.readouterr().err
+    assert not (casa / ".git" / "rebase-merge").exists()
+    verificacao = clone_repo(bare, tmp_path / "verificacao", "Verificador")
+    linhas = quadro_por_id(verificacao)
+    assert linhas["1.2"]["Dono"] == "outra-pc"
