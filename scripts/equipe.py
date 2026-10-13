@@ -474,6 +474,29 @@ def _upstream_lines(root: Path) -> list[str]:
     return lines
 
 
+def _fast_forward_if_clean(root: Path) -> str | None:
+    """Traz commits novos de origin/main só se for seguro: sem trabalho local a proteger.
+
+    Árvore suja (fora de dados/) pode ser trabalho de outra IA e nunca é tocada.
+    """
+    if _branch(root) != "main" or _dirty_paths(root):
+        return None
+    counts = _git(root, "rev-list", "--left-right", "--count", "HEAD...origin/main")
+    try:
+        ahead, behind = (int(value) for value in counts.stdout.split())
+    except ValueError:
+        return None
+    if ahead or not behind:
+        return None
+    merged = _git(root, "merge", "--ff-only", "origin/main")
+    if merged.returncode:
+        return (
+            "Não sincronizei origin/main (alterações locais em dados/); "
+            "use git pull --rebase --autostash."
+        )
+    return f"Sincronizado: +{behind} commits de origin/main."
+
+
 def _iniciar_lines(root: Path, now: datetime, *, sem_rede: bool, hook: bool) -> list[str]:
     if not (root / ".git").exists():
         raise EquipeError(f"não é um repositório git: {root}")
@@ -486,7 +509,11 @@ def _iniciar_lines(root: Path, now: datetime, *, sem_rede: bool, hook: bool) -> 
         if fetched.returncode:
             fetch_warning = "Rede: git fetch indisponível; seguindo com o estado local."
 
+    sync_note = _fast_forward_if_clean(root) if should_fetch and not fetch_warning else None
+
     lines = [f"[EQUIPE] {now:%Y-%m-%d %H:%M} — branch {_branch(root)} @ {_head(root)}"]
+    if sync_note:
+        lines.append(sync_note)
     lines.extend(_upstream_lines(root))
     if fetch_warning:
         lines.append(fetch_warning)

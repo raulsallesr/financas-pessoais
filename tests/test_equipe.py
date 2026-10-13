@@ -607,3 +607,46 @@ def test_branch_so_registra_local_com_sem_push_e_com_permissao_explicita(
 
     assert sem_push == 0
     assert permitido == 0
+
+
+def test_iniciar_sincroniza_quando_limpo_e_mostra_a_reserva_de_outra_maquina(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root, bare = make_repo(tmp_path, remote=True)
+    assert bare
+    outra = clone_repo(bare, tmp_path / "outra", "Outra Maquina")
+    reservou = call(
+        monkeypatch, outra, "reservar", "1.2", "--agente", "claude", "--maquina", "casa"
+    )
+    assert reservou == 0
+    capsys.readouterr()
+
+    assert call(monkeypatch, root, "iniciar") == 0
+    saida = capsys.readouterr().out
+
+    assert "Sincronizado: +1 commits" in saida
+    assert "Reservas ativas:" in saida
+    assert "1.2 — claude-casa" in saida
+
+
+def test_iniciar_nao_toca_na_arvore_suja_de_outra_ia(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root, bare = make_repo(tmp_path, remote=True)
+    assert bare
+    outra = clone_repo(bare, tmp_path / "outra", "Outra Maquina")
+    reservou = call(
+        monkeypatch, outra, "reservar", "1.2", "--agente", "claude", "--maquina", "casa"
+    )
+    assert reservou == 0
+    codigo = "VALUE = 2  # trabalho de outra IA" + chr(10)
+    (root / "code.py").write_text(codigo, encoding="utf-8")
+    capsys.readouterr()
+
+    assert call(monkeypatch, root, "iniciar") == 0
+    saida = capsys.readouterr().out
+
+    assert "Sincronizado" not in saida
+    assert "atrás 1" in saida
+    assert (root / "code.py").read_text(encoding="utf-8").endswith("outra IA" + chr(10))
+    assert not (root / "docs" / "coordenacao" / "reservas" / "1.2.md").exists()
