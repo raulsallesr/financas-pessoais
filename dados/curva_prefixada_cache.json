@@ -1,58 +1,8 @@
 {
-  "atualizado_em": "2026-11-14",
+  "atualizado_em": "2026-11-17",
   "fonte": "https://www.tesourotransparente.gov.br/ckan/dataset/taxas-dos-titulos-ofertados-pelo-tesouro-direto",
   "licenca": "ODbL 1.0",
   "registros": [
-    {
-      "data_referencia": "2026-09-09",
-      "tipo_titulo": "Tesouro Prefixado",
-      "vencimento": "2027-01-01",
-      "taxa_compra": 13.55,
-      "taxa_venda": 13.67,
-      "pu_compra": 961.91,
-      "pu_venda": 961.11,
-      "fonte": "Tesouro Transparente"
-    },
-    {
-      "data_referencia": "2026-09-09",
-      "tipo_titulo": "Tesouro Prefixado",
-      "vencimento": "2028-01-01",
-      "taxa_compra": 13.56,
-      "taxa_venda": 13.68,
-      "pu_compra": 847.46,
-      "pu_venda": 845.86,
-      "fonte": "Tesouro Transparente"
-    },
-    {
-      "data_referencia": "2026-09-09",
-      "tipo_titulo": "Tesouro Prefixado",
-      "vencimento": "2029-01-01",
-      "taxa_compra": 13.81,
-      "taxa_venda": 13.93,
-      "pu_compra": 744.02,
-      "pu_venda": 741.85,
-      "fonte": "Tesouro Transparente"
-    },
-    {
-      "data_referencia": "2026-09-09",
-      "tipo_titulo": "Tesouro Prefixado",
-      "vencimento": "2031-01-01",
-      "taxa_compra": 14.03,
-      "taxa_venda": 14.15,
-      "pu_compra": 570.57,
-      "pu_venda": 567.71,
-      "fonte": "Tesouro Transparente"
-    },
-    {
-      "data_referencia": "2026-09-09",
-      "tipo_titulo": "Tesouro Prefixado",
-      "vencimento": "2032-01-01",
-      "taxa_compra": 14.11,
-      "taxa_venda": 14.23,
-      "pu_compra": 498.52,
-      "pu_venda": 495.5,
-      "fonte": "Tesouro Transparente"
-    },
     {
       "data_referencia": "2026-09-10",
       "tipo_titulo": "Tesouro Prefixado",
@@ -2251,6 +2201,56 @@
       "taxa_venda": 15.25,
       "pu_compra": 487.51,
       "pu_venda": 484.65,
+      "fonte": "Tesouro Transparente"
+    },
+    {
+      "data_referencia": "2026-11-13",
+      "tipo_titulo": "Tesouro Prefixado",
+      "vencimento": "2027-01-01",
+      "taxa_compra": 13.55,
+      "taxa_venda": 13.67,
+      "pu_compra": 983.99,
+      "pu_venda": 983.36,
+      "fonte": "Tesouro Transparente"
+    },
+    {
+      "data_referencia": "2026-11-13",
+      "tipo_titulo": "Tesouro Prefixado",
+      "vencimento": "2028-01-01",
+      "taxa_compra": 14.27,
+      "taxa_venda": 14.39,
+      "pu_compra": 860.87,
+      "pu_venda": 859.4,
+      "fonte": "Tesouro Transparente"
+    },
+    {
+      "data_referencia": "2026-11-13",
+      "tipo_titulo": "Tesouro Prefixado",
+      "vencimento": "2029-01-01",
+      "taxa_compra": 14.85,
+      "taxa_venda": 14.97,
+      "pu_compra": 746.95,
+      "pu_venda": 744.9,
+      "fonte": "Tesouro Transparente"
+    },
+    {
+      "data_referencia": "2026-11-13",
+      "tipo_titulo": "Tesouro Prefixado",
+      "vencimento": "2031-01-01",
+      "taxa_compra": 15.21,
+      "taxa_venda": 15.33,
+      "pu_compra": 559.99,
+      "pu_venda": 557.29,
+      "fonte": "Tesouro Transparente"
+    },
+    {
+      "data_referencia": "2026-11-13",
+      "tipo_titulo": "Tesouro Prefixado",
+      "vencimento": "2032-01-01",
+      "taxa_compra": 15.32,
+      "taxa_venda": 15.44,
+      "pu_compra": 483.7,
+      "pu_venda": 480.87,
       "fonte": "Tesouro Transparente"
     }
   ]
